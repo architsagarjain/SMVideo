@@ -29,8 +29,9 @@ CUES = [
     (3, 1.04, 2.20, BRAND),
     (3, 2.77, 3.95, "and honestly,"),
     (3, 4.28, 5.95, "it felt way more like me."),
-    (4, 2.70, 3.87, "And now there's someone"),
-    (4, 3.87, 6.10, "I get to spend my life with."),
+    (4, 1.10, 3.15, "And now…"),
+    (4, 3.20, 3.95, "there's someone"),
+    (4, 3.95, 6.10, "I get to spend my life with."),
 ]
 
 def main():

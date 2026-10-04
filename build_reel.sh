@@ -14,16 +14,23 @@ FPS=30
 # Cut list, in frames at 30 fps (start inclusive, end exclusive).
 #  1: start just before "I'm not gonna lie", end after the laugh on "terrifying"
 #  2: start just before "I didn't want that", end on her smile after "connect with"
-#  3: from "then..." through the held smile at the end of the take
-#  4: wedding scene + end card, trimmed before the dead tail
+#  3: from "then..." through the held smile at the end of the take (full clip)
+#  4: wedding scene (updated clip) + end card, trimmed before the dead tail
 C1_IN=32;  C1_OUT=257
 C2_IN=24;  C2_OUT=260
-C3_IN=0;   C3_OUT=198
+C3_IN=0;   C3_OUT=200
 C4_IN=0;   C4_OUT=342
 
-# Dissolve lengths (seconds). Short between the talking-head clips so the story
-# keeps moving; longer into the wedding scene so it feels like her imagining it.
-X12=0.35; X23=0.40; X34=0.80
+# Transition lengths (seconds). Short dissolves between the talking-head clips so
+# the story keeps moving. 3 -> 4 is a longer "warm light" dissolve (see below) that
+# marks the jump from her talking to the wedding.
+X12=0.35; X23=0.40; X34=0.90
+
+# 3 -> 4: an eased cross-dissolve that passes through a soft warm-cream glow, peaking
+# at ~40% halfway through. The picture never goes fully white, so it reads as
+# sunlight blooming rather than a flash. Values are limited-range BT.709 YUV for
+# RGB(255,247,238). P runs 1 -> 0 over the transition (A = outgoing clip).
+WARM_DISSOLVE="(A*(P*P*(3-2*P))+B*(1-P*P*(3-2*P)))*(1-0.4*sin(PI*P))+if(eq(PLANE,0),229,if(eq(PLANE,1),123,132))*0.4*sin(PI*P)"
 
 # Per-clip gain (dB) to bring the dialogue to an even level before the final
 # loudness pass (measured integrated loudness of each trimmed segment).
@@ -47,7 +54,7 @@ $(vtrim 2 $C3_IN $C3_OUT)[v3];
 $(vtrim 3 $C4_IN $C4_OUT)[v4];
 [v1][v2]xfade=transition=fade:duration=$X12:offset=$O1[v12];
 [v12][v3]xfade=transition=fade:duration=$X23:offset=$O2[v123];
-[v123][v4]xfade=transition=fade:duration=$X34:offset=$O3,format=yuv420p[vout];
+[v123][v4]xfade=transition=custom:expr='$WARM_DISSOLVE':duration=$X34:offset=$O3,format=yuv420p[vout];
 $(atrim 0 $C1_IN $C1_OUT),highpass=f=70,volume=${G1}dB,afade=t=in:d=0.08[a1];
 $(atrim 1 $C2_IN $C2_OUT),highpass=f=70,volume=${G2}dB[a2];
 $(atrim 2 $C3_IN $C3_OUT),highpass=f=70,volume=${G3}dB[a3];
