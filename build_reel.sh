@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# Builds the Shaadi Mangalam reel from clips/1-4.mp4 -> output/shaadi_mangalam_reel.mp4
-# Requires ffmpeg (tested with 6.1). Everything happens in one filter graph, so the
-# footage is decoded and encoded once.
+# Builds the Shaadi Mangalam reel from clips/1-4.mp4:
+#   output/shaadi_mangalam_reel.mp4               - with burned-in subtitles
+#   output/shaadi_mangalam_reel_no_subtitles.mp4  - clean version (use with subtitles/captions.srt)
+# Requires ffmpeg with libass (tested with 6.1) and python3. Everything happens in one
+# filter graph, so the footage is decoded and encoded once.
 set -euo pipefail
 cd "$(dirname "$0")"
 
 OUT=output/shaadi_mangalam_reel.mp4
+OUT_CLEAN=output/shaadi_mangalam_reel_no_subtitles.mp4
 FPS=30
 
 # Cut list, in frames at 30 fps (start inclusive, end exclusive).
@@ -53,6 +56,8 @@ $(atrim 3 $C4_IN $C4_OUT),volume=${G4}dB[a4];
 [a12][a3]acrossfade=d=$X23:c1=qsin:c2=qsin[a123];
 [a123][a4]acrossfade=d=$X34:c1=qsin:c2=qsin[amix]"
 
+python3 make_captions.py $C1_IN $C1_OUT $C2_IN $C2_OUT $C3_IN $C3_OUT $C4_IN $C4_OUT $X12 $X23 $X34
+
 INPUTS=(-i clips/1.mp4 -i clips/2.mp4 -i clips/3.mp4 -i clips/4.mp4)
 
 # Pass 1: measure loudness of the assembled mix.
@@ -65,12 +70,14 @@ get() { echo "$MEAS" | grep "\"$1\"" | sed -E 's/.*: "([^"]+)".*/\1/'; }
 # then a gentle fade at the very end.
 echo "Rendering..."
 mkdir -p output
+ENC_V=(-c:v libx264 -preset slow -crf 15 -profile:v high -level 4.2 -pix_fmt yuv420p
+  -r $FPS -g 60 -colorspace bt709 -color_primaries bt709 -color_trc bt709)
+ENC_A=(-c:a aac -b:a 320k -ar 48000 -ac 2)
 ffmpeg -hide_banner -y "${INPUTS[@]}" -filter_complex "$FILTER;
-[amix]loudnorm=I=-14:TP=-1.5:LRA=11:measured_I=$(get input_i):measured_TP=$(get input_tp):measured_LRA=$(get input_lra):measured_thresh=$(get input_thresh):offset=$(get target_offset):linear=true,aresample=48000,afade=t=out:st=$FADE_OUT_ST:d=0.6[aout]" \
-  -map "[vout]" -map "[aout]" \
-  -c:v libx264 -preset slow -crf 15 -profile:v high -level 4.2 -pix_fmt yuv420p \
-  -r $FPS -g 60 -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
-  -c:a aac -b:a 320k -ar 48000 -ac 2 \
-  -movflags +faststart -t "$TOTAL" "$OUT"
+[vout]split=2[vsub_in][vclean];
+[vsub_in]subtitles=subtitles/captions.ass:fontsdir=fonts[vsub];
+[amix]loudnorm=I=-14:TP=-1.5:LRA=11:measured_I=$(get input_i):measured_TP=$(get input_tp):measured_LRA=$(get input_lra):measured_thresh=$(get input_thresh):offset=$(get target_offset):linear=true,aresample=48000,afade=t=out:st=$FADE_OUT_ST:d=0.6,asplit=2[aout][aclean]" \
+  -map "[vsub]" -map "[aout]" "${ENC_V[@]}" "${ENC_A[@]}" -movflags +faststart -t "$TOTAL" "$OUT" \
+  -map "[vclean]" -map "[aclean]" "${ENC_V[@]}" "${ENC_A[@]}" -movflags +faststart -t "$TOTAL" "$OUT_CLEAN"
 
-echo "Done: $OUT (${TOTAL}s)"
+echo "Done: $OUT and $OUT_CLEAN (${TOTAL}s)"
