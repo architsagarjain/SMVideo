@@ -191,7 +191,7 @@ if MUSIC:
                 ph = rng.uniform(0, 2 * np.pi)
                 pad[:, c] += np.sin(2 * np.pi * f * tt + ph) + 0.18 * np.sin(4 * np.pi * f * tt + ph)
         bass = np.sin(2 * np.pi * midi(roots[k % 4]) * tt) * 0.9
-        pad = pad * 0.2 + bass[:, None] * 0.35
+        pad = pad * 0.2 + bass[:, None] * 0.1
         pad *= env[:, None]
         # sparse plucks on the off-beats, an octave up
         for b8 in range(8):
@@ -210,7 +210,7 @@ if MUSIC:
         if i0 < N:
             music[i0:i1] += pad[: i1 - i0]
         k += 1
-    b, a = signal.butter(2, 2600, btype="low", fs=SR)
+    b, a = signal.butter(2, 3800, btype="low", fs=SR)
     music = signal.lfilter(b, a, music, axis=0)
     # simple stereo echo for space
     dly = int(bar / 8 * 3 * SR)
@@ -250,7 +250,7 @@ meas = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", wav, "-af",
                        "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
                       capture_output=True, text=True).stderr
 j = json.loads(meas[meas.rindex("{"):meas.rindex("}") + 1])
-gain = -14.0 - float(j["input_i"])
+gain = -13.6 - float(j["input_i"])  # the limiter takes back ~0.4 LU
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", wav, "-af",
                 f"volume={gain:.2f}dB,alimiter=limit=0.80:attack=2:release=80:level=disabled:asc=1",
                 "-ar", str(SR), "-c:a", "pcm_s24le", out], check=True)

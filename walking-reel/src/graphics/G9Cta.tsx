@@ -14,7 +14,7 @@ const TYPED = '2026';
 export const G9Cta: React.FC = () => {
   const t = useCurrentFrame() / FPS;
   const toB = springAt(t, COMMENT, 22, 150);
-  const aOut = tween(t, COMMENT - 0.05, 0.28, EASE_IN);
+  const aOut = tween(t, COMMENT - 0.1, 0.2, EASE_IN);
   const height = lerp(toB, 300, 268);
 
   const typed = TYPED.slice(0, TYPED.split('').filter((_, i) => t >= 65.34 + i * 0.19).length);
@@ -68,12 +68,12 @@ export const G9Cta: React.FC = () => {
       ) : null}
 
       {/* B: comment prompt */}
-      {t > COMMENT ? (
+      {t > COMMENT + 0.1 ? (
         <div style={{position: 'absolute', inset: 0, padding: '38px 50px 0'}}>
-          <Rise at={COMMENT + 0.05}>
+          <Rise at={COMMENT + 0.12}>
             <Eyebrow>Comment</Eyebrow>
           </Rise>
-          <Rise at={COMMENT + 0.1} dist={22}>
+          <Rise at={COMMENT + 0.16} dist={22}>
             <div
               style={{
                 marginTop: 18,

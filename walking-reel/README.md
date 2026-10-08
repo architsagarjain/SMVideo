@@ -6,10 +6,11 @@
 | `src/` | Remotion project (React/TypeScript): every graphic, caption and camera move |
 | `scripts/` | Caption cleanup, caption data, sound design/mix, review stills |
 | `analysis/` | Whisper word timings and the per-frame position of the old burned-in captions |
-| `build.sh` | Rebuilds everything from the source video |
+| `footage/` | `source.mp4` (the original upload) and `clean_720.mp4` (the source with the old captions removed) |
+| `build.sh` | Rebuilds everything: `./build.sh footage/source.mp4` (add `--skip-clean` to reuse `clean_720.mp4`) |
 
 Open the project in Remotion Studio with `npm install && npm run studio`.
-`public/footage_clean_1080.mp4` is not in git because it is too large. `./build.sh <source.mp4> --skip-clean` recreates it from `footage/clean_720.mp4`.
+`public/footage_clean_1080.mp4` is not in git because it is too large. `./build.sh footage/source.mp4 --skip-clean` recreates it from `footage/clean_720.mp4`.
 
 ## What was done
 
