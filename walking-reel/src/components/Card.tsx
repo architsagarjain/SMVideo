@@ -21,7 +21,20 @@ export const Card: React.FC<{
   const s = springAt(t, inAt, 20, 140);
   const fadeIn = tween(t, inAt, 0.3);
   const out = tween(t, outAt, 0.36, EASE_IN);
+  const ty = (u: number) => lerp(springAt(u, inAt, 20, 140), 36, 0) - 18 * tween(u, outAt, 0.36, EASE_IN);
+
+  // vertical motion blur matched to how far the card moves this frame
+  const speed = Math.abs(ty(t) - ty(t - 1 / FPS));
+  const blurId = `card-mb-${Math.round(inAt * 1000)}`;
+  const softBlur = out > 0 ? 6 * out : fadeIn < 1 ? lerp(fadeIn, 8, 0) : 0;
+  const filters = [speed > 0.4 ? `url(#${blurId})` : '', softBlur > 0 ? `blur(${softBlur}px)` : ''].filter(Boolean).join(' ');
   return (
+    <>
+    <svg style={{position: 'absolute', width: 0, height: 0}}>
+      <filter id={blurId} x="-5%" y="-25%" width="110%" height="150%">
+        <feGaussianBlur stdDeviation={`0 ${(speed * 0.5).toFixed(2)}`} />
+      </filter>
+    </svg>
     <div
       style={{
         position: 'absolute',
@@ -37,7 +50,7 @@ export const Card: React.FC<{
         opacity: fadeIn * (1 - out),
         translate: `0px ${lerp(s, 36, 0) - 18 * out}px`,
         scale: lerp(s, 0.955, 1) - 0.02 * out,
-        filter: out > 0 ? `blur(${6 * out}px)` : fadeIn < 1 ? `blur(${lerp(fadeIn, 8, 0)}px)` : undefined,
+        filter: filters || undefined,
         overflow: 'hidden',
         fontFamily: SANS,
         color: C.ink,
@@ -45,6 +58,7 @@ export const Card: React.FC<{
     >
       {children}
     </div>
+    </>
   );
 };
 

@@ -27,8 +27,10 @@ if [[ "$SKIP_CLEAN" != "--skip-clean" ]]; then
   python3 scripts/compose_clean.py "$SRC" out/roi footage/clean_720.mp4
 fi
 
-echo "== 2/5 upscaling the clean footage to 1080x1920"
-ffmpeg -v error -y -i footage/clean_720.mp4 -vf "scale=1080:1920:flags=lanczos" \
+echo "== 2/5 grading and upscaling the clean footage to 1080x1920"
+# subtle grade: a little contrast and warmth, skin tones kept natural
+GRADE="eq=contrast=1.05:saturation=1.04:gamma=0.985,colorbalance=rs=0.02:bs=-0.02:rm=0.012:bm=-0.012:rh=0.005:bh=-0.01"
+ffmpeg -v error -y -i footage/clean_720.mp4 -vf "$GRADE,scale=1080:1920:flags=lanczos" \
   -c:v libx264 -preset slow -crf 10 -pix_fmt yuv420p -an public/footage_clean_1080.mp4
 
 echo "== 3/5 caption data"

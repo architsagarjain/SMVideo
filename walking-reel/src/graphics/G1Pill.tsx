@@ -4,8 +4,8 @@ import {Card, Count, Rise} from '../components/Card';
 import {Check, Pill} from '../components/Icons';
 import {C, FPS, SANS, lerp, springAt, tween} from '../theme';
 
-// 1.06 "pill" · 2.66 "death" · 3.14 "12%" · 5.08 "every extra pill" · 7.04 "another 12%" · 8.38 "no side effects"
-const IN = 1.0;
+// 0.25 hook · 1.06 "pill" · 2.66 "death" · 3.14 "12%" · 5.08 "every extra pill" · 7.04 "another 12%" · 8.38 "no side effects"
+const IN = 0.25; // hook: the pill is on screen within the first second
 const OUT = 9.45;
 const ROW2 = 5.08;
 const CHIP = 8.3;

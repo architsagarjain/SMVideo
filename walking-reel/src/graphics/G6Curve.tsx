@@ -84,7 +84,7 @@ export const G6Curve: React.FC = () => {
   const ticks = [0, 2000, 4000, 6000, 8000, 10000, 12000];
 
   return (
-    <Card inAt={IN} outAt={OUT} top={196} width={W} height={H}>
+    <Card inAt={IN} outAt={OUT} top={172} width={W} height={H}>
       <div style={{position: 'absolute', left: 48, top: 34}}>
         <Rise at={IN + 0.1}>
           <Eyebrow>

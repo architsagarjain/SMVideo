@@ -13,10 +13,11 @@ type Move = {
   outStart: number;
   outDur: number;
   from?: number; // starting scale (for the opening settle)
+  panel?: boolean; // shrink into a rounded panel over the paper background
 };
 
 const FACE: [number, number] = [540, 860];
-const TOP: [number, number] = [540, 0];
+const BOTTOM: [number, number] = [540, 1920];
 
 export const MOVES: Move[] = [
   // opening: settle from a slightly tighter frame
@@ -25,11 +26,13 @@ export const MOVES: Move[] = [
   {origin: FACE, inStart: 9.1, inDur: 0.75, scale: 1.1, outStart: 12.15, outDur: 0.8},
   // "And I used to think walking didn't count." - slow, quiet push
   {origin: FACE, inStart: 21.9, inDur: 2.6, scale: 1.055, outStart: 24.55, outDur: 0.75},
-  // reframe for the step-curve chart: zoom anchored at the top edge pushes her
-  // down in frame and opens room above her head
-  {origin: TOP, inStart: 40.75, inDur: 0.75, scale: 1.15, outStart: 52.65, outDur: 0.8},
-  // call to action
-  {origin: FACE, inStart: 62.75, inDur: 0.9, scale: 1.06, outStart: 999, outDur: 1},
+  // split layout for the step-curve chart: the footage shrinks into a rounded
+  // panel anchored to the bottom edge, the chart takes the top of the frame
+  {origin: BOTTOM, inStart: 40.7, inDur: 0.8, scale: 0.66, outStart: 52.6, outDur: 0.85, panel: true},
+  // "150 calories a day"
+  {origin: FACE, inStart: 55.85, inDur: 0.6, scale: 1.08, outStart: 58.0, outDur: 0.6},
+  // call to action; ends at the same 104.5% the video opens on, so the loop is seamless
+  {origin: FACE, inStart: 62.75, inDur: 0.9, scale: 1.045, outStart: 999, outDur: 1},
 ];
 
 export const cameraAt = (t: number) => {
@@ -39,9 +42,10 @@ export const cameraAt = (t: number) => {
     const inP = m.inDur > 0 ? tween(t, m.inStart, m.inDur, EASE_IN_OUT) : 1;
     const outP = tween(t, m.outStart, m.outDur, EASE_IN_OUT);
     const s = t < m.outStart ? lerp(inP, base, m.scale) : lerp(outP, m.scale, 1);
-    return {scale: s, ox: m.origin[0], oy: m.origin[1]};
+    const panel = m.panel ? (t < m.outStart ? inP : 1 - outP) : 0;
+    return {scale: s, ox: m.origin[0], oy: m.origin[1], panel};
   }
-  return {scale: 1, ox: FACE[0], oy: FACE[1]};
+  return {scale: 1, ox: FACE[0], oy: FACE[1], panel: 0};
 };
 
 /** Where a point of the un-zoomed frame ends up on screen at time t. */

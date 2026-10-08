@@ -116,21 +116,21 @@ SFX = {
 # (time s, sound, gain dB, pan -1..1). Times match the graphics in src/graphics.
 CUES = [
     # card entrances
-    (0.98, "whoosh", -27, -0.2), (13.24, "whoosh", -27, 0.2), (25.16, "whoosh", -27, -0.2),
-    (35.56, "whoosh", -27, 0.2), (41.05, "whoosh", -26, 0), (54.1, "whoosh", -27, -0.2),
+    (0.2, "whoosh", -27, -0.2), (13.24, "whoosh", -27, 0.2), (25.16, "whoosh", -27, -0.2),
+    (35.56, "whoosh", -27, 0.2), (41.05, "whoosh", -27, 0),
     (58.55, "whoosh", -27, 0.2), (62.86, "whoosh", -27, 0),
     # card state changes
     (2.96, "whoosh_s", -31, 0.25), (5.06, "whoosh_s", -32, -0.2), (14.16, "whoosh_s", -29, 0),
-    (15.84, "whoosh_s", -31, 0.2), (29.53, "whoosh_s", -32, -0.2), (65.02, "whoosh_s", -30, 0.2),
+    (15.82, "whoosh", -28, 0.2), (29.53, "whoosh_s", -32, -0.2), (65.02, "whoosh_s", -30, 0.2),
     # numbers landing / chips
     (3.14, "tick", -30, 0.1), (7.04, "tick", -30, 0.1), (8.32, "pop", -29, 0),
     (18.24, "tick", -30, 0.15), (29.84, "tick", -30, -0.1), (33.44, "thud", -27, 0.15),
     (39.46, "thud", -26, 0.1), (48.3, "tick_hi", -31, -0.2), (51.0, "tick_hi", -31, 0.2),
-    (54.42, "tick", -30, -0.1), (56.48, "tick", -30, 0.15), (61.5, "tick_hi", -33, 0),
+    (56.48, "tick", -32, 0.1), (61.5, "tick_hi", -33, 0),
     # bottle strike, walking reveal
     (13.74, "swipe", -30, 0.1),
     # camera moves (barely there)
-    (9.1, "swell", -33, 0), (40.75, "swell", -32, 0),
+    (9.1, "swell", -33, 0), (40.68, "whoosh", -27, 0), (52.58, "whoosh_s", -30, 0), (55.85, "swell", -34, 0),
     # comment field: typing + send
     (65.34, "key", -31, 0.05), (65.53, "key", -32, 0.05), (65.72, "key", -31, 0.05), (65.91, "key", -32, 0.05),
     (66.25, "pop", -31, 0.2),
