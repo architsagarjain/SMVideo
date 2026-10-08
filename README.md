@@ -16,7 +16,7 @@ To rebuild them from the source clips in `clips/` (1 → 2 → 3 → 4), run `./
 | 1 | 1.07–8.57 s | Dead air before "I'm not gonna lie" removed; ends on the laugh after "terrifying" |
 | 2 | 0.80–8.67 s | Starts just before "I didn't want that"; ends on her smile after "connect with" |
 | 3 | 0.00–6.67 s | Full take, held on the soft smile at the end |
-| 4 | 0.00–11.40 s | Updated wedding clip (pastel couple shot) and end card; the silent tail is trimmed |
+| 4 | 0.00–11.40 s | Updated wedding clip (close-up of the couple's hands) and end card; the silent tail is trimmed |
 
 - Transitions: 1→2 (0.35 s) and 2→3 (0.40 s) are soft cross-dissolves, both placed in natural pauses.
 - 3→4 is a "warm light" dissolve of 0.9 s. It starts just after "…like me." and passes through a soft warm-cream glow that peaks at about 40% halfway through. The picture never turns fully white, so it reads as a gentle sunlit bloom: a small time jump from her talking to the wedding, without being a flashy effect. It is defined as `WARM_DISSOLVE` in `build_reel.sh`, where the `0.4` sets the glow strength.
