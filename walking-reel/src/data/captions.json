@@ -1,0 +1,1516 @@
+[
+ {
+  "start": 0.0,
+  "end": 1.22,
+  "serif": false,
+  "words": [
+   {
+    "text": "If",
+    "accent": false,
+    "start": 0.0,
+    "end": 0.48
+   },
+   {
+    "text": "there",
+    "accent": false,
+    "start": 0.48,
+    "end": 0.68
+   },
+   {
+    "text": "was",
+    "accent": false,
+    "start": 0.68,
+    "end": 0.9
+   },
+   {
+    "text": "a",
+    "accent": false,
+    "start": 0.9,
+    "end": 1.06
+   },
+   {
+    "text": "pill",
+    "accent": false,
+    "start": 1.06,
+    "end": 1.22
+   }
+  ],
+  "hold": 1.22,
+  "coverHalfWidth": 132.0,
+  "textWidth": 342.4
+ },
+ {
+  "start": 1.22,
+  "end": 2.38,
+  "serif": false,
+  "words": [
+   {
+    "text": "that",
+    "accent": false,
+    "start": 1.22,
+    "end": 1.48
+   },
+   {
+    "text": "lowered",
+    "accent": false,
+    "start": 1.48,
+    "end": 1.9
+   },
+   {
+    "text": "your",
+    "accent": false,
+    "start": 1.9,
+    "end": 2.16
+   },
+   {
+    "text": "risk",
+    "accent": false,
+    "start": 2.16,
+    "end": 2.38
+   }
+  ],
+  "hold": 2.38,
+  "coverHalfWidth": 199.5,
+  "textWidth": 447.6
+ },
+ {
+  "start": 2.38,
+  "end": 4.14,
+  "serif": false,
+  "words": [
+   {
+    "text": "of",
+    "accent": false,
+    "start": 2.38,
+    "end": 2.66
+   },
+   {
+    "text": "death",
+    "accent": false,
+    "start": 2.66,
+    "end": 2.9
+   },
+   {
+    "text": "by",
+    "accent": false,
+    "start": 2.9,
+    "end": 3.14
+   },
+   {
+    "text": "12%",
+    "accent": true,
+    "start": 3.14,
+    "end": 4.14
+   }
+  ],
+  "hold": 4.14,
+  "coverHalfWidth": 133.5,
+  "textWidth": 322.6
+ },
+ {
+  "start": 4.14,
+  "end": 5.76,
+  "serif": false,
+  "words": [
+   {
+    "text": "and",
+    "accent": false,
+    "start": 4.14,
+    "end": 4.66
+   },
+   {
+    "text": "every",
+    "accent": false,
+    "start": 4.66,
+    "end": 5.08
+   },
+   {
+    "text": "extra",
+    "accent": false,
+    "start": 5.08,
+    "end": 5.46
+   },
+   {
+    "text": "pill",
+    "accent": false,
+    "start": 5.46,
+    "end": 5.76
+   }
+  ],
+  "hold": 5.76,
+  "coverHalfWidth": 208.5,
+  "textWidth": 386.5
+ },
+ {
+  "start": 5.76,
+  "end": 7.82,
+  "serif": false,
+  "words": [
+   {
+    "text": "lowered",
+    "accent": false,
+    "start": 5.76,
+    "end": 6.18
+   },
+   {
+    "text": "it",
+    "accent": false,
+    "start": 6.18,
+    "end": 6.4
+   },
+   {
+    "text": "by",
+    "accent": false,
+    "start": 6.4,
+    "end": 6.54
+   },
+   {
+    "text": "another",
+    "accent": false,
+    "start": 6.54,
+    "end": 7.04
+   },
+   {
+    "text": "12%",
+    "accent": true,
+    "start": 7.04,
+    "end": 7.82
+   }
+  ],
+  "hold": 7.82,
+  "coverHalfWidth": 199.5,
+  "textWidth": 528.0
+ },
+ {
+  "start": 7.82,
+  "end": 9.02,
+  "serif": false,
+  "words": [
+   {
+    "text": "with",
+    "accent": false,
+    "start": 7.82,
+    "end": 8.1
+   },
+   {
+    "text": "no",
+    "accent": false,
+    "start": 8.1,
+    "end": 8.38
+   },
+   {
+    "text": "side",
+    "accent": false,
+    "start": 8.38,
+    "end": 8.64
+   },
+   {
+    "text": "effects,",
+    "accent": false,
+    "start": 8.64,
+    "end": 9.02
+   }
+  ],
+  "hold": 9.16,
+  "coverHalfWidth": 183.0,
+  "textWidth": 417.7
+ },
+ {
+  "start": 9.16,
+  "end": 10.12,
+  "serif": false,
+  "words": [
+   {
+    "text": "how",
+    "accent": false,
+    "start": 9.16,
+    "end": 9.5
+   },
+   {
+    "text": "many",
+    "accent": false,
+    "start": 9.5,
+    "end": 9.72
+   },
+   {
+    "text": "would",
+    "accent": false,
+    "start": 9.72,
+    "end": 9.86
+   },
+   {
+    "text": "you",
+    "accent": false,
+    "start": 9.86,
+    "end": 9.94
+   },
+   {
+    "text": "take?",
+    "accent": false,
+    "start": 9.94,
+    "end": 10.12
+   }
+  ],
+  "hold": 10.82,
+  "coverHalfWidth": 181.5,
+  "textWidth": 551.6
+ },
+ {
+  "start": 10.82,
+  "end": 12.0,
+  "serif": true,
+  "words": [
+   {
+    "text": "That",
+    "accent": false,
+    "start": 10.82,
+    "end": 11.04
+   },
+   {
+    "text": "drug",
+    "accent": false,
+    "start": 11.04,
+    "end": 11.34
+   },
+   {
+    "text": "exists.",
+    "accent": false,
+    "start": 11.34,
+    "end": 12.0
+   }
+  ],
+  "hold": 12.4,
+  "coverHalfWidth": 142.5,
+  "textWidth": 355.7
+ },
+ {
+  "start": 12.4,
+  "end": 13.6,
+  "serif": false,
+  "words": [
+   {
+    "text": "It",
+    "accent": false,
+    "start": 12.4,
+    "end": 12.58
+   },
+   {
+    "text": "doesn't",
+    "accent": false,
+    "start": 12.58,
+    "end": 12.82
+   },
+   {
+    "text": "come",
+    "accent": false,
+    "start": 12.82,
+    "end": 13.08
+   },
+   {
+    "text": "in",
+    "accent": false,
+    "start": 13.08,
+    "end": 13.2
+   },
+   {
+    "text": "a",
+    "accent": false,
+    "start": 13.2,
+    "end": 13.38
+   },
+   {
+    "text": "bottle,",
+    "accent": false,
+    "start": 13.38,
+    "end": 13.6
+   }
+  ],
+  "hold": 13.8,
+  "coverHalfWidth": 174.0,
+  "textWidth": 544.4
+ },
+ {
+  "start": 13.8,
+  "end": 14.48,
+  "serif": true,
+  "words": [
+   {
+    "text": "it's",
+    "accent": false,
+    "start": 13.8,
+    "end": 14.22
+   },
+   {
+    "text": "walking.",
+    "accent": true,
+    "start": 14.22,
+    "end": 14.48
+   }
+  ],
+  "hold": 15.2,
+  "coverHalfWidth": 190.5,
+  "textWidth": 265.9
+ },
+ {
+  "start": 15.2,
+  "end": 17.06,
+  "serif": false,
+  "words": [
+   {
+    "text": "Every",
+    "accent": false,
+    "start": 15.2,
+    "end": 15.42
+   },
+   {
+    "text": "extra",
+    "accent": false,
+    "start": 15.42,
+    "end": 15.94
+   },
+   {
+    "text": "1,000",
+    "accent": true,
+    "start": 15.94,
+    "end": 16.36
+   },
+   {
+    "text": "steps",
+    "accent": true,
+    "start": 16.36,
+    "end": 16.7
+   },
+   {
+    "text": "a",
+    "accent": false,
+    "start": 16.7,
+    "end": 16.92
+   },
+   {
+    "text": "day",
+    "accent": false,
+    "start": 16.92,
+    "end": 17.06
+   }
+  ],
+  "hold": 17.06,
+  "coverHalfWidth": 135.0,
+  "textWidth": 592.3
+ },
+ {
+  "start": 17.06,
+  "end": 19.08,
+  "serif": false,
+  "words": [
+   {
+    "text": "is",
+    "accent": false,
+    "start": 17.06,
+    "end": 17.32
+   },
+   {
+    "text": "linked",
+    "accent": false,
+    "start": 17.32,
+    "end": 17.64
+   },
+   {
+    "text": "to",
+    "accent": false,
+    "start": 17.64,
+    "end": 18.0
+   },
+   {
+    "text": "about",
+    "accent": false,
+    "start": 18.0,
+    "end": 18.24
+   },
+   {
+    "text": "12%",
+    "accent": true,
+    "start": 18.24,
+    "end": 19.08
+   }
+  ],
+  "hold": 19.08,
+  "coverHalfWidth": 147.0,
+  "textWidth": 443.9
+ },
+ {
+  "start": 19.08,
+  "end": 20.5,
+  "serif": false,
+  "words": [
+   {
+    "text": "lower",
+    "accent": false,
+    "start": 19.08,
+    "end": 19.36
+   },
+   {
+    "text": "risk",
+    "accent": false,
+    "start": 19.36,
+    "end": 19.76
+   },
+   {
+    "text": "of",
+    "accent": false,
+    "start": 19.76,
+    "end": 20.2
+   },
+   {
+    "text": "dying",
+    "accent": false,
+    "start": 20.2,
+    "end": 20.5
+   }
+  ],
+  "hold": 20.5,
+  "coverHalfWidth": 147.0,
+  "textWidth": 371.8
+ },
+ {
+  "start": 20.5,
+  "end": 21.52,
+  "serif": false,
+  "words": [
+   {
+    "text": "from",
+    "accent": false,
+    "start": 20.5,
+    "end": 20.9
+   },
+   {
+    "text": "any",
+    "accent": false,
+    "start": 20.9,
+    "end": 21.2
+   },
+   {
+    "text": "cause.",
+    "accent": false,
+    "start": 21.2,
+    "end": 21.52
+   }
+  ],
+  "hold": 22.1,
+  "coverHalfWidth": 130.5,
+  "textWidth": 326.5
+ },
+ {
+  "start": 22.1,
+  "end": 23.26,
+  "serif": false,
+  "words": [
+   {
+    "text": "And",
+    "accent": false,
+    "start": 22.1,
+    "end": 22.24
+   },
+   {
+    "text": "I",
+    "accent": false,
+    "start": 22.24,
+    "end": 22.54
+   },
+   {
+    "text": "used",
+    "accent": false,
+    "start": 22.54,
+    "end": 22.9
+   },
+   {
+    "text": "to",
+    "accent": false,
+    "start": 22.9,
+    "end": 23.06
+   },
+   {
+    "text": "think",
+    "accent": false,
+    "start": 23.06,
+    "end": 23.26
+   }
+  ],
+  "hold": 23.26,
+  "coverHalfWidth": 184.5,
+  "textWidth": 380.3
+ },
+ {
+  "start": 23.26,
+  "end": 24.36,
+  "serif": false,
+  "words": [
+   {
+    "text": "walking",
+    "accent": false,
+    "start": 23.26,
+    "end": 23.74
+   },
+   {
+    "text": "didn't",
+    "accent": false,
+    "start": 23.74,
+    "end": 24.08
+   },
+   {
+    "text": "count.",
+    "accent": false,
+    "start": 24.08,
+    "end": 24.36
+   }
+  ],
+  "hold": 24.78,
+  "coverHalfWidth": 184.5,
+  "textWidth": 429.1
+ },
+ {
+  "start": 24.78,
+  "end": 25.66,
+  "serif": false,
+  "words": [
+   {
+    "text": "I",
+    "accent": false,
+    "start": 24.78,
+    "end": 24.88
+   },
+   {
+    "text": "do",
+    "accent": false,
+    "start": 24.88,
+    "end": 25.06
+   },
+   {
+    "text": "my",
+    "accent": false,
+    "start": 25.06,
+    "end": 25.3
+   },
+   {
+    "text": "workout",
+    "accent": false,
+    "start": 25.3,
+    "end": 25.66
+   }
+  ],
+  "hold": 25.66,
+  "coverHalfWidth": 208.5,
+  "textWidth": 323.2
+ },
+ {
+  "start": 25.66,
+  "end": 26.82,
+  "serif": false,
+  "words": [
+   {
+    "text": "then",
+    "accent": false,
+    "start": 25.66,
+    "end": 26.04
+   },
+   {
+    "text": "sit",
+    "accent": false,
+    "start": 26.04,
+    "end": 26.28
+   },
+   {
+    "text": "at",
+    "accent": false,
+    "start": 26.28,
+    "end": 26.46
+   },
+   {
+    "text": "a",
+    "accent": false,
+    "start": 26.46,
+    "end": 26.62
+   },
+   {
+    "text": "desk",
+    "accent": false,
+    "start": 26.62,
+    "end": 26.82
+   }
+  ],
+  "hold": 26.82,
+  "coverHalfWidth": 208.5,
+  "textWidth": 351.3
+ },
+ {
+  "start": 26.82,
+  "end": 27.72,
+  "serif": false,
+  "words": [
+   {
+    "text": "for",
+    "accent": false,
+    "start": 26.82,
+    "end": 27.16
+   },
+   {
+    "text": "9",
+    "accent": true,
+    "start": 27.16,
+    "end": 27.42
+   },
+   {
+    "text": "hours.",
+    "accent": true,
+    "start": 27.42,
+    "end": 27.72
+   }
+  ],
+  "hold": 28.06,
+  "coverHalfWidth": 139.5,
+  "textWidth": 234.6
+ },
+ {
+  "start": 28.06,
+  "end": 28.98,
+  "serif": false,
+  "words": [
+   {
+    "text": "I",
+    "accent": false,
+    "start": 28.06,
+    "end": 28.38
+   },
+   {
+    "text": "checked",
+    "accent": false,
+    "start": 28.38,
+    "end": 28.68
+   },
+   {
+    "text": "once",
+    "accent": false,
+    "start": 28.68,
+    "end": 28.98
+   }
+  ],
+  "hold": 28.98,
+  "coverHalfWidth": 184.5,
+  "textWidth": 309.1
+ },
+ {
+  "start": 28.98,
+  "end": 29.62,
+  "serif": false,
+  "words": [
+   {
+    "text": "and",
+    "accent": false,
+    "start": 28.98,
+    "end": 29.18
+   },
+   {
+    "text": "I",
+    "accent": false,
+    "start": 29.18,
+    "end": 29.34
+   },
+   {
+    "text": "was",
+    "accent": false,
+    "start": 29.34,
+    "end": 29.48
+   },
+   {
+    "text": "at",
+    "accent": false,
+    "start": 29.48,
+    "end": 29.62
+   }
+  ],
+  "hold": 29.62,
+  "coverHalfWidth": 138.0,
+  "textWidth": 239.5
+ },
+ {
+  "start": 29.62,
+  "end": 31.1,
+  "serif": false,
+  "words": [
+   {
+    "text": "about",
+    "accent": false,
+    "start": 29.62,
+    "end": 29.84
+   },
+   {
+    "text": "2,500",
+    "accent": true,
+    "start": 29.84,
+    "end": 30.42
+   },
+   {
+    "text": "steps.",
+    "accent": true,
+    "start": 30.42,
+    "end": 31.1
+   }
+  ],
+  "hold": 31.62,
+  "coverHalfWidth": 138.0,
+  "textWidth": 387.6
+ },
+ {
+  "start": 31.62,
+  "end": 32.56,
+  "serif": false,
+  "words": [
+   {
+    "text": "I",
+    "accent": false,
+    "start": 31.62,
+    "end": 31.68
+   },
+   {
+    "text": "trained",
+    "accent": false,
+    "start": 31.68,
+    "end": 32.04
+   },
+   {
+    "text": "every",
+    "accent": false,
+    "start": 32.04,
+    "end": 32.32
+   },
+   {
+    "text": "day",
+    "accent": false,
+    "start": 32.32,
+    "end": 32.56
+   }
+  ],
+  "hold": 32.56,
+  "coverHalfWidth": 174.0,
+  "textWidth": 374.8
+ },
+ {
+  "start": 32.56,
+  "end": 34.04,
+  "serif": false,
+  "words": [
+   {
+    "text": "and",
+    "accent": false,
+    "start": 32.56,
+    "end": 32.74
+   },
+   {
+    "text": "was",
+    "accent": false,
+    "start": 32.74,
+    "end": 32.94
+   },
+   {
+    "text": "basically",
+    "accent": false,
+    "start": 32.94,
+    "end": 33.46
+   },
+   {
+    "text": "sedentary",
+    "accent": true,
+    "start": 33.46,
+    "end": 34.04
+   }
+  ],
+  "hold": 34.04,
+  "coverHalfWidth": 232.5,
+  "textWidth": 578.6
+ },
+ {
+  "start": 34.04,
+  "end": 35.0,
+  "serif": false,
+  "words": [
+   {
+    "text": "the",
+    "accent": false,
+    "start": 34.04,
+    "end": 34.44
+   },
+   {
+    "text": "rest",
+    "accent": false,
+    "start": 34.44,
+    "end": 34.6
+   },
+   {
+    "text": "of",
+    "accent": false,
+    "start": 34.6,
+    "end": 34.72
+   },
+   {
+    "text": "it.",
+    "accent": false,
+    "start": 34.72,
+    "end": 35.0
+   }
+  ],
+  "hold": 35.68,
+  "coverHalfWidth": 232.5,
+  "textWidth": 265.8
+ },
+ {
+  "start": 35.68,
+  "end": 36.7,
+  "serif": false,
+  "words": [
+   {
+    "text": "The",
+    "accent": false,
+    "start": 35.68,
+    "end": 35.74
+   },
+   {
+    "text": "10,000",
+    "accent": true,
+    "start": 35.74,
+    "end": 36.32
+   },
+   {
+    "text": "number,",
+    "accent": false,
+    "start": 36.32,
+    "end": 36.7
+   }
+  ],
+  "hold": 36.76,
+  "coverHalfWidth": 175.5,
+  "textWidth": 410.1
+ },
+ {
+  "start": 36.76,
+  "end": 38.06,
+  "serif": false,
+  "words": [
+   {
+    "text": "it",
+    "accent": false,
+    "start": 36.76,
+    "end": 37.0
+   },
+   {
+    "text": "came",
+    "accent": false,
+    "start": 37.0,
+    "end": 37.28
+   },
+   {
+    "text": "from",
+    "accent": false,
+    "start": 37.28,
+    "end": 37.62
+   },
+   {
+    "text": "an",
+    "accent": false,
+    "start": 37.62,
+    "end": 37.76
+   },
+   {
+    "text": "old",
+    "accent": false,
+    "start": 37.76,
+    "end": 38.06
+   }
+  ],
+  "hold": 38.06,
+  "coverHalfWidth": 175.5,
+  "textWidth": 391.5
+ },
+ {
+  "start": 38.06,
+  "end": 39.48,
+  "serif": false,
+  "words": [
+   {
+    "text": "Japanese",
+    "accent": false,
+    "start": 38.06,
+    "end": 38.76
+   },
+   {
+    "text": "pedometer",
+    "accent": false,
+    "start": 38.76,
+    "end": 39.48
+   }
+  ],
+  "hold": 39.48,
+  "coverHalfWidth": 285.0,
+  "textWidth": 437.9
+ },
+ {
+  "start": 39.48,
+  "end": 40.7,
+  "serif": false,
+  "words": [
+   {
+    "text": "marketing",
+    "accent": true,
+    "start": 39.48,
+    "end": 40.14
+   },
+   {
+    "text": "campaign.",
+    "accent": true,
+    "start": 40.14,
+    "end": 40.7
+   }
+  ],
+  "hold": 41.22,
+  "coverHalfWidth": 243.0,
+  "textWidth": 437.0
+ },
+ {
+  "start": 41.22,
+  "end": 42.1,
+  "serif": false,
+  "words": [
+   {
+    "text": "The",
+    "accent": false,
+    "start": 41.22,
+    "end": 41.4
+   },
+   {
+    "text": "real",
+    "accent": false,
+    "start": 41.4,
+    "end": 41.6
+   },
+   {
+    "text": "benefit",
+    "accent": false,
+    "start": 41.6,
+    "end": 42.1
+   }
+  ],
+  "hold": 42.1,
+  "coverHalfWidth": 168.0,
+  "textWidth": 325.3
+ },
+ {
+  "start": 42.1,
+  "end": 43.2,
+  "serif": false,
+  "words": [
+   {
+    "text": "climbs",
+    "accent": false,
+    "start": 42.1,
+    "end": 42.58
+   },
+   {
+    "text": "fast",
+    "accent": false,
+    "start": 42.58,
+    "end": 43.2
+   }
+  ],
+  "hold": 43.2,
+  "coverHalfWidth": 168.0,
+  "textWidth": 225.6
+ },
+ {
+  "start": 43.2,
+  "end": 44.4,
+  "serif": false,
+  "words": [
+   {
+    "text": "at",
+    "accent": false,
+    "start": 43.2,
+    "end": 43.6
+   },
+   {
+    "text": "the",
+    "accent": false,
+    "start": 43.6,
+    "end": 43.78
+   },
+   {
+    "text": "low",
+    "accent": false,
+    "start": 43.78,
+    "end": 44.02
+   },
+   {
+    "text": "end",
+    "accent": false,
+    "start": 44.02,
+    "end": 44.4
+   }
+  ],
+  "hold": 44.4,
+  "coverHalfWidth": 106.5,
+  "textWidth": 290.1
+ },
+ {
+  "start": 44.4,
+  "end": 45.66,
+  "serif": false,
+  "words": [
+   {
+    "text": "and",
+    "accent": false,
+    "start": 44.4,
+    "end": 44.66
+   },
+   {
+    "text": "flattens",
+    "accent": false,
+    "start": 44.66,
+    "end": 45.28
+   },
+   {
+    "text": "around",
+    "accent": false,
+    "start": 45.28,
+    "end": 45.66
+   }
+  ],
+  "hold": 45.66,
+  "coverHalfWidth": 201.0,
+  "textWidth": 406.0
+ },
+ {
+  "start": 45.66,
+  "end": 47.5,
+  "serif": false,
+  "words": [
+   {
+    "text": "7,000",
+    "accent": true,
+    "start": 45.66,
+    "end": 46.46
+   },
+   {
+    "text": "to",
+    "accent": false,
+    "start": 46.46,
+    "end": 46.74
+   },
+   {
+    "text": "10,000.",
+    "accent": true,
+    "start": 46.74,
+    "end": 47.5
+   }
+  ],
+  "hold": 47.82,
+  "coverHalfWidth": 168.0,
+  "textWidth": 334.9
+ },
+ {
+  "start": 47.82,
+  "end": 49.8,
+  "serif": false,
+  "words": [
+   {
+    "text": "Going",
+    "accent": false,
+    "start": 47.82,
+    "end": 48.1
+   },
+   {
+    "text": "from",
+    "accent": false,
+    "start": 48.1,
+    "end": 48.38
+   },
+   {
+    "text": "3,000",
+    "accent": true,
+    "start": 48.38,
+    "end": 48.78
+   },
+   {
+    "text": "to",
+    "accent": false,
+    "start": 48.78,
+    "end": 49.14
+   },
+   {
+    "text": "5,000",
+    "accent": true,
+    "start": 49.14,
+    "end": 49.8
+   }
+  ],
+  "hold": 49.8,
+  "coverHalfWidth": 130.5,
+  "textWidth": 542.6
+ },
+ {
+  "start": 49.8,
+  "end": 51.0,
+  "serif": false,
+  "words": [
+   {
+    "text": "beats",
+    "accent": false,
+    "start": 49.8,
+    "end": 50.3
+   },
+   {
+    "text": "going",
+    "accent": false,
+    "start": 50.3,
+    "end": 50.7
+   },
+   {
+    "text": "from",
+    "accent": false,
+    "start": 50.7,
+    "end": 51.0
+   }
+  ],
+  "hold": 51.0,
+  "coverHalfWidth": 130.5,
+  "textWidth": 351.2
+ },
+ {
+  "start": 51.0,
+  "end": 52.64,
+  "serif": false,
+  "words": [
+   {
+    "text": "8,000",
+    "accent": false,
+    "start": 51.0,
+    "end": 51.42
+   },
+   {
+    "text": "to",
+    "accent": false,
+    "start": 51.42,
+    "end": 51.88
+   },
+   {
+    "text": "10,000.",
+    "accent": false,
+    "start": 51.88,
+    "end": 52.64
+   }
+  ],
+  "hold": 52.86,
+  "coverHalfWidth": 127.5,
+  "textWidth": 339.7
+ },
+ {
+  "start": 52.86,
+  "end": 53.8,
+  "serif": false,
+  "words": [
+   {
+    "text": "For",
+    "accent": false,
+    "start": 52.86,
+    "end": 53.18
+   },
+   {
+    "text": "fat",
+    "accent": false,
+    "start": 53.18,
+    "end": 53.48
+   },
+   {
+    "text": "loss,",
+    "accent": false,
+    "start": 53.48,
+    "end": 53.8
+   }
+  ],
+  "hold": 54.02,
+  "coverHalfWidth": 133.5,
+  "textWidth": 237.7
+ },
+ {
+  "start": 54.02,
+  "end": 55.58,
+  "serif": false,
+  "words": [
+   {
+    "text": "an",
+    "accent": false,
+    "start": 54.02,
+    "end": 54.1
+   },
+   {
+    "text": "extra",
+    "accent": false,
+    "start": 54.1,
+    "end": 54.42
+   },
+   {
+    "text": "4,000",
+    "accent": true,
+    "start": 54.42,
+    "end": 55.02
+   },
+   {
+    "text": "steps",
+    "accent": true,
+    "start": 55.02,
+    "end": 55.58
+   }
+  ],
+  "hold": 55.58,
+  "coverHalfWidth": 133.5,
+  "textWidth": 422.9
+ },
+ {
+  "start": 55.58,
+  "end": 56.48,
+  "serif": false,
+  "words": [
+   {
+    "text": "is",
+    "accent": false,
+    "start": 55.58,
+    "end": 55.98
+   },
+   {
+    "text": "roughly",
+    "accent": false,
+    "start": 55.98,
+    "end": 56.48
+   }
+  ],
+  "hold": 56.48,
+  "coverHalfWidth": 187.5,
+  "textWidth": 201.9
+ },
+ {
+  "start": 56.48,
+  "end": 58.16,
+  "serif": false,
+  "words": [
+   {
+    "text": "150",
+    "accent": true,
+    "start": 56.48,
+    "end": 57.16
+   },
+   {
+    "text": "calories",
+    "accent": true,
+    "start": 57.16,
+    "end": 57.62
+   },
+   {
+    "text": "a",
+    "accent": false,
+    "start": 57.62,
+    "end": 57.88
+   },
+   {
+    "text": "day.",
+    "accent": false,
+    "start": 57.88,
+    "end": 58.16
+   }
+  ],
+  "hold": 58.58,
+  "coverHalfWidth": 196.5,
+  "textWidth": 370.1
+ },
+ {
+  "start": 58.58,
+  "end": 59.74,
+  "serif": false,
+  "words": [
+   {
+    "text": "A",
+    "accent": false,
+    "start": 58.58,
+    "end": 58.76
+   },
+   {
+    "text": "walk",
+    "accent": false,
+    "start": 58.76,
+    "end": 59.0
+   },
+   {
+    "text": "after",
+    "accent": false,
+    "start": 59.0,
+    "end": 59.38
+   },
+   {
+    "text": "meal",
+    "accent": false,
+    "start": 59.38,
+    "end": 59.74
+   }
+  ],
+  "hold": 59.74,
+  "coverHalfWidth": 130.5,
+  "textWidth": 347.9
+ },
+ {
+  "start": 59.74,
+  "end": 61.06,
+  "serif": false,
+  "words": [
+   {
+    "text": "also",
+    "accent": false,
+    "start": 59.74,
+    "end": 60.24
+   },
+   {
+    "text": "softens",
+    "accent": false,
+    "start": 60.24,
+    "end": 61.06
+   }
+  ],
+  "hold": 61.06,
+  "coverHalfWidth": 183.0,
+  "textWidth": 253.5
+ },
+ {
+  "start": 61.06,
+  "end": 62.3,
+  "serif": false,
+  "words": [
+   {
+    "text": "the",
+    "accent": false,
+    "start": 61.06,
+    "end": 61.26
+   },
+   {
+    "text": "blood",
+    "accent": true,
+    "start": 61.26,
+    "end": 61.52
+   },
+   {
+    "text": "sugar",
+    "accent": true,
+    "start": 61.52,
+    "end": 61.78
+   },
+   {
+    "text": "spike.",
+    "accent": true,
+    "start": 61.78,
+    "end": 62.3
+   }
+  ],
+  "hold": 63.02,
+  "coverHalfWidth": 138.0,
+  "textWidth": 454.1
+ },
+ {
+  "start": 63.02,
+  "end": 64.68,
+  "serif": false,
+  "words": [
+   {
+    "text": "Add",
+    "accent": false,
+    "start": 63.02,
+    "end": 63.24
+   },
+   {
+    "text": "1,000",
+    "accent": true,
+    "start": 63.24,
+    "end": 63.72
+   },
+   {
+    "text": "steps",
+    "accent": true,
+    "start": 63.72,
+    "end": 64.1
+   },
+   {
+    "text": "this",
+    "accent": false,
+    "start": 64.1,
+    "end": 64.38
+   },
+   {
+    "text": "week.",
+    "accent": false,
+    "start": 64.38,
+    "end": 64.68
+   }
+  ],
+  "hold": 65.14,
+  "coverHalfWidth": 198.0,
+  "textWidth": 545.7
+ },
+ {
+  "start": 65.14,
+  "end": 66.14,
+  "serif": false,
+  "words": [
+   {
+    "text": "Comment",
+    "accent": false,
+    "start": 65.14,
+    "end": 65.3
+   },
+   {
+    "text": "2026",
+    "accent": true,
+    "start": 65.3,
+    "end": 66.14
+   }
+  ],
+  "hold": 66.14,
+  "coverHalfWidth": 198.0,
+  "textWidth": 320.9
+ },
+ {
+  "start": 66.14,
+  "end": 67.12,
+  "serif": false,
+  "words": [
+   {
+    "text": "for",
+    "accent": false,
+    "start": 66.14,
+    "end": 66.58
+   },
+   {
+    "text": "the",
+    "accent": false,
+    "start": 66.58,
+    "end": 66.7
+   },
+   {
+    "text": "full",
+    "accent": false,
+    "start": 66.7,
+    "end": 66.84
+   },
+   {
+    "text": "plan.",
+    "accent": false,
+    "start": 66.84,
+    "end": 67.12
+   }
+  ],
+  "hold": 67.52000000000001,
+  "coverHalfWidth": 106.5,
+  "textWidth": 323.3
+ }
+]
