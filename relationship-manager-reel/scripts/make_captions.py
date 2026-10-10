@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 """Builds src/data/captions.json (+ captions.srt) from the Whisper large-v3 word timings.
 
-Whisper's word onsets at the start of each breath group run 0.3-0.45 s early, so every
+Whisper's word onsets at the start of each breath group run 0.3-0.5 s early, so every
 phrase is linearly re-timed onto the speech region measured from the audio envelope
 (SPEECH below, -45 dBFS threshold). Display spelling is corrected where Whisper got it
-wrong ("Shadi" -> "Shaadi") and the spoken "5,100 rupees" is written as "Rs 5,100 + GST".
+wrong ("Shadi" -> "Shaadi"), "personalized" follows the brand's spelling ("personalised",
+as on the end screen), and the spoken "5,100 rupees" is captioned "Rs 5,100 + GST".
 """
 import json
 
 words = json.load(open("assets/whisper_words.json"))  # [start, end, word, prob]
 
 # (whisper span) -> (measured speech span), one per breath group.
-SPEECH = [((0.00, 3.50), (0.07, 3.81)), ((3.82, 5.12), (4.24, 5.32)), ((5.24, 7.58), (5.59, 7.90)),
-          ((7.96, 10.12), (8.32, 10.54)), ((10.46, 12.48), (10.82, 12.71)), ((12.64, 15.08), (13.06, 15.20)),
-          ((15.28, 17.80), (15.78, 18.17)), ((18.16, 20.78), (18.53, 21.24))]
+# The last group is split at the price: "Plans start at" 18.40-19.32, "five thousand one
+# hundred rupees" 19.35-21.07 (read off the envelope; Whisper gives the price no real span).
+SPEECH = [((0.00, 3.48), (0.12, 3.78)), ((3.80, 5.14), (4.29, 5.34)), ((5.28, 7.52), (5.58, 7.85)),
+          ((7.78, 9.98), (8.21, 10.38)), ((10.34, 12.44), (10.73, 12.65)), ((12.60, 15.04), (12.95, 15.13)),
+          ((15.26, 17.70), (15.71, 18.06)), ((18.04, 19.16), (18.40, 19.32)), ((19.16, 20.22), (19.35, 21.07))]
 
 def remap(t):
     for (a, b), (c, d) in SPEECH:
@@ -22,18 +25,18 @@ def remap(t):
     raise ValueError(t)
 
 w = [[remap(s), remap(e), txt.strip()] for s, e, txt, _ in words]
-# Merge Whisper's split tokens: "full" + "-time", "5" + ",100", then fold "rupees" into the price.
+# Merge Whisper's split tokens: "full" + "-time", "5" + ",100", then fold "Rs" + "5,100." into the price.
 merged = []
 for s, e, t in w:
     if merged and (t.startswith("-") or t.startswith(",")):
         merged[-1][1], merged[-1][2] = e, merged[-1][2] + t
     else:
         merged.append([s, e, t])
-fix = {"Shadi": "Shaadi"}
+fix = {"Shadi": "Shaadi", "personalized": "personalised"}
 PRICE = "Rs\u00a05,100\u00a0+\u00a0GST"  # one caption unit
 out = []
 for s, e, t in merged:
-    if t == "rupees.":
+    if t == "5,100." and out and out[-1][2] == "Rs":
         out[-1][1] = e; out[-1][2] = PRICE
         continue
     out.append([s, e, fix.get(t, t)])
@@ -43,7 +46,7 @@ PHRASES = [
     ("Finding the right person", None),
     ("shouldn't feel like | another *full-time *job.", None),
     ("With *Shaadi *Mangalam,", None),
-    ("you get a dedicated | *relationship *manager.", None),
+    ("you get personalised | *matchmaking *support.", None),
     ("A real person who listens,", None),
     ("who understands | what you're looking for,", None),
     ("and brings you matches", None),

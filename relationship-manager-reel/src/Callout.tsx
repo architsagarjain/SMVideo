@@ -11,18 +11,18 @@ const Stroke: React.FC<{d: string; draw: number}> = ({d, draw}) => (
   <path d={d} pathLength={PATH_LEN} strokeDasharray={PATH_LEN} strokeDashoffset={PATH_LEN * (1 - draw)} />
 );
 
-export const PersonIcon: React.FC<{draw: number}> = ({draw}) => (
-  <>
-    <Stroke draw={draw} d="M12 3.6a3.9 3.9 0 1 1 0 7.8a3.9 3.9 0 1 1 0-7.8z" />
-    <Stroke draw={draw} d="M4.2 20.6c0.4-4.3 3.6-7.1 7.8-7.1c1.3 0 2.5 0.3 3.5 0.8" />
-    <Stroke draw={draw} d="M18.4 14.6l1.05 2.15l2.35 0.35l-1.7 1.65l0.4 2.35l-2.1-1.1l-2.1 1.1l0.4-2.35l-1.7-1.65l2.35-0.35z" />
-  </>
-);
-
 export const HeartIcon: React.FC<{draw: number}> = ({draw}) => (
   <>
     <Stroke draw={draw} d="M12 20.4C7.6 17.6 3.6 14.2 3.6 9.7C3.6 7 5.6 5 8.1 5c1.6 0 3 0.8 3.9 2.1C12.9 5.8 14.3 5 15.9 5c2.5 0 4.5 2 4.5 4.7c0 4.5-4 7.9-8.4 10.7z" />
     <Stroke draw={draw} d="M8.9 11.2l2.1 2.1l4.1-4.1" />
+  </>
+);
+
+export const HandHeartIcon: React.FC<{draw: number}> = ({draw}) => (
+  <>
+    <Stroke draw={draw} d="M12 11.2C9.9 9.9 8.4 8.6 8.4 6.9c0-1.1 0.9-2 2-2c0.7 0 1.3 0.3 1.6 0.9c0.3-0.6 0.9-0.9 1.6-0.9c1.1 0 2 0.9 2 2c0 1.7-1.5 3-3.6 4.3z" />
+    <Stroke draw={draw} d="M2.8 14.6h2.9c1.5 0 2.4 0.9 3.8 0.9h3.1a1.25 1.25 0 0 1 0 2.5H9.4" />
+    <Stroke draw={draw} d="M12.6 18l5.1-2.4a1.35 1.35 0 0 1 1.4 2.3l-5.6 3.3c-0.9 0.5-2 0.6-3 0.3l-4.3-1.4H2.8" />
   </>
 );
 

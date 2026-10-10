@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, OffthreadVideo, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {easeInOut, progress} from './anim';
 import {CaptionScrim, Captions} from './Captions';
-import {Callout, HeartIcon, PersonIcon} from './Callout';
+import {Callout, HandHeartIcon, HeartIcon} from './Callout';
 import {EndScreen} from './EndScreen';
 import {loadFonts} from './fonts';
 import {ES_DISSOLVE, ES_START, FPS, VIDEO_END} from './timeline';
@@ -26,10 +26,10 @@ export const Reel: React.FC = () => (
       <Footage />
     </Sequence>
     <CaptionScrim />
-    {/* "…a dedicated relationship manager." - she is on screen from the cut at 6.33 s. */}
-    <Callout inAt={6.78} outAt={9.95} x={64} y={262} eyebrow="Dedicated" title="Relationship Manager" Icon={PersonIcon} />
+    {/* "…personalised matchmaking support." - lands on "matchmaking", just after the cut at 6.33 s. */}
+    <Callout inAt={6.7} outAt={9.95} x={64} y={262} eyebrow="Personalised" title="Matchmaking Support" Icon={HandHeartIcon} />
     {/* "…brings you matches that actually fit." */}
-    <Callout inAt={13.78} outAt={15.62} x={64} y={262} eyebrow="Curated" title="Matches" Icon={HeartIcon} />
+    <Callout inAt={13.65} outAt={15.62} x={64} y={262} eyebrow="Curated" title="Matches" Icon={HeartIcon} />
     <Captions />
     <EndScreen />
   </AbsoluteFill>

@@ -1,404 +1,397 @@
 [
  {
-  "start": 0.07,
-  "end": 1.374,
+  "start": 0.12,
+  "end": 1.403,
   "words": [
    {
     "text": "Finding",
-    "start": 0.07,
-    "end": 0.369,
+    "start": 0.12,
+    "end": 0.436,
     "accent": false,
     "line": 0
    },
    {
     "text": "the",
-    "start": 0.369,
-    "end": 0.604,
+    "start": 0.436,
+    "end": 0.688,
     "accent": false,
     "line": 0
    },
    {
     "text": "right",
-    "start": 0.604,
-    "end": 0.903,
+    "start": 0.688,
+    "end": 0.961,
     "accent": false,
     "line": 0
    },
    {
     "text": "person",
-    "start": 0.903,
-    "end": 1.374,
+    "start": 0.961,
+    "end": 1.403,
     "accent": false,
     "line": 0
    }
   ],
-  "show": 0.01,
-  "hide": 1.294
+  "show": 0.06,
+  "hide": 1.323
  },
  {
-  "start": 1.374,
-  "end": 3.81,
+  "start": 1.403,
+  "end": 3.78,
   "words": [
    {
     "text": "shouldn't",
-    "start": 1.374,
-    "end": 2.079,
+    "start": 1.403,
+    "end": 2.097,
     "accent": false,
     "line": 0
    },
    {
     "text": "feel",
-    "start": 2.079,
-    "end": 2.293,
+    "start": 2.097,
+    "end": 2.308,
     "accent": false,
     "line": 0
    },
    {
     "text": "like",
-    "start": 2.293,
-    "end": 2.549,
+    "start": 2.308,
+    "end": 2.56,
     "accent": false,
     "line": 0
    },
    {
     "text": "another",
-    "start": 2.549,
-    "end": 2.784,
+    "start": 2.56,
+    "end": 2.812,
     "accent": false,
     "line": 1
    },
    {
     "text": "full-time",
-    "start": 2.784,
-    "end": 3.468,
+    "start": 2.812,
+    "end": 3.443,
     "accent": true,
     "line": 1
    },
    {
     "text": "job.",
-    "start": 3.468,
-    "end": 3.81,
+    "start": 3.443,
+    "end": 3.78,
     "accent": true,
     "line": 1
    }
   ],
-  "show": 1.314,
-  "hide": 4.16
+  "show": 1.343,
+  "hide": 4.21
  },
  {
-  "start": 4.24,
-  "end": 5.32,
+  "start": 4.29,
+  "end": 5.34,
   "words": [
    {
     "text": "With",
-    "start": 4.24,
-    "end": 4.622,
+    "start": 4.29,
+    "end": 4.697,
     "accent": false,
     "line": 0
    },
    {
     "text": "Shaadi",
-    "start": 4.622,
-    "end": 4.971,
+    "start": 4.697,
+    "end": 5.011,
     "accent": true,
     "line": 0
    },
    {
     "text": "Mangalam,",
-    "start": 4.971,
-    "end": 5.32,
+    "start": 5.011,
+    "end": 5.34,
     "accent": true,
     "line": 0
    }
   ],
-  "show": 4.18,
-  "hide": 5.51
+  "show": 4.23,
+  "hide": 5.5
  },
  {
-  "start": 5.59,
-  "end": 7.9,
+  "start": 5.58,
+  "end": 7.85,
   "words": [
    {
     "text": "you",
-    "start": 5.59,
-    "end": 5.965,
+    "start": 5.58,
+    "end": 5.904,
     "accent": false,
     "line": 0
    },
    {
     "text": "get",
-    "start": 5.965,
-    "end": 6.182,
+    "start": 5.904,
+    "end": 6.107,
     "accent": false,
     "line": 0
    },
    {
-    "text": "a",
-    "start": 6.182,
-    "end": 6.34,
+    "text": "personalised",
+    "start": 6.107,
+    "end": 6.674,
     "accent": false,
     "line": 0
    },
    {
-    "text": "dedicated",
-    "start": 6.34,
-    "end": 6.794,
-    "accent": false,
-    "line": 0
-   },
-   {
-    "text": "relationship",
-    "start": 6.794,
-    "end": 7.268,
+    "text": "matchmaking",
+    "start": 6.674,
+    "end": 7.404,
     "accent": true,
     "line": 1
    },
    {
-    "text": "manager.",
-    "start": 7.268,
-    "end": 7.9,
+    "text": "support.",
+    "start": 7.404,
+    "end": 7.85,
     "accent": true,
     "line": 1
    }
   ],
-  "show": 5.53,
-  "hide": 8.24
+  "show": 5.52,
+  "hide": 8.13
  },
  {
-  "start": 8.32,
-  "end": 10.54,
+  "start": 8.21,
+  "end": 10.38,
   "words": [
    {
     "text": "A",
-    "start": 8.32,
-    "end": 8.69,
+    "start": 8.21,
+    "end": 8.644,
     "accent": false,
     "line": 0
    },
    {
     "text": "real",
-    "start": 8.69,
-    "end": 9.039,
+    "start": 8.644,
+    "end": 8.979,
     "accent": false,
     "line": 0
    },
    {
     "text": "person",
-    "start": 9.039,
-    "end": 9.574,
+    "start": 8.979,
+    "end": 9.473,
     "accent": false,
     "line": 0
    },
    {
     "text": "who",
-    "start": 9.574,
-    "end": 10.088,
+    "start": 9.473,
+    "end": 9.985,
     "accent": false,
     "line": 0
    },
    {
     "text": "listens,",
-    "start": 10.088,
-    "end": 10.54,
+    "start": 9.985,
+    "end": 10.38,
     "accent": false,
     "line": 0
    }
   ],
-  "show": 8.26,
-  "hide": 10.74
+  "show": 8.15,
+  "hide": 10.65
  },
  {
-  "start": 10.82,
-  "end": 12.71,
+  "start": 10.73,
+  "end": 12.65,
   "words": [
    {
     "text": "who",
-    "start": 10.82,
-    "end": 11.157,
+    "start": 10.73,
+    "end": 11.077,
     "accent": false,
     "line": 0
    },
    {
     "text": "understands",
-    "start": 11.157,
-    "end": 11.569,
+    "start": 11.077,
+    "end": 11.516,
     "accent": false,
     "line": 0
    },
    {
     "text": "what",
-    "start": 11.569,
-    "end": 11.999,
+    "start": 11.516,
+    "end": 11.973,
     "accent": false,
     "line": 1
    },
    {
     "text": "you're",
-    "start": 11.999,
-    "end": 12.186,
+    "start": 11.973,
+    "end": 12.138,
     "accent": false,
     "line": 1
    },
    {
     "text": "looking",
-    "start": 12.186,
-    "end": 12.373,
+    "start": 12.138,
+    "end": 12.321,
     "accent": false,
     "line": 1
    },
    {
     "text": "for,",
-    "start": 12.373,
-    "end": 12.71,
+    "start": 12.321,
+    "end": 12.65,
     "accent": false,
     "line": 1
    }
   ],
-  "show": 10.76,
-  "hide": 12.98
+  "show": 10.67,
+  "hide": 12.87
  },
  {
-  "start": 13.06,
-  "end": 14.13,
+  "start": 12.95,
+  "end": 14.004,
   "words": [
    {
     "text": "and",
-    "start": 13.06,
-    "end": 13.428,
+    "start": 12.95,
+    "end": 13.29,
     "accent": false,
     "line": 0
    },
    {
     "text": "brings",
-    "start": 13.428,
-    "end": 13.639,
+    "start": 13.29,
+    "end": 13.486,
     "accent": false,
     "line": 0
    },
    {
     "text": "you",
-    "start": 13.639,
-    "end": 13.832,
+    "start": 13.486,
+    "end": 13.7,
     "accent": false,
     "line": 0
    },
    {
     "text": "matches",
-    "start": 13.832,
-    "end": 14.13,
+    "start": 13.7,
+    "end": 14.004,
     "accent": false,
     "line": 0
    }
   ],
-  "show": 13.0,
-  "hide": 14.05
+  "show": 12.89,
+  "hide": 13.924
  },
  {
-  "start": 14.13,
-  "end": 15.2,
+  "start": 14.004,
+  "end": 15.13,
   "words": [
    {
     "text": "that",
-    "start": 14.13,
-    "end": 14.463,
+    "start": 14.004,
+    "end": 14.308,
     "accent": false,
     "line": 0
    },
    {
     "text": "actually",
-    "start": 14.463,
-    "end": 14.902,
+    "start": 14.308,
+    "end": 14.79,
     "accent": true,
     "line": 0
    },
    {
     "text": "fit.",
-    "start": 14.902,
-    "end": 15.2,
+    "start": 14.79,
+    "end": 15.13,
     "accent": true,
     "line": 0
    }
   ],
-  "show": 14.07,
-  "hide": 15.65
+  "show": 13.944,
+  "hide": 15.58
  },
  {
-  "start": 15.78,
-  "end": 18.17,
+  "start": 15.71,
+  "end": 18.06,
   "words": [
    {
     "text": "For",
-    "start": 15.78,
-    "end": 16.273,
+    "start": 15.71,
+    "end": 16.153,
     "accent": false,
     "line": 0
    },
    {
     "text": "professionals",
-    "start": 16.273,
-    "end": 16.785,
+    "start": 16.153,
+    "end": 16.673,
     "accent": false,
     "line": 0
    },
    {
     "text": "serious",
-    "start": 16.785,
-    "end": 17.316,
+    "start": 16.673,
+    "end": 17.174,
     "accent": false,
     "line": 1
    },
    {
     "text": "about",
-    "start": 17.316,
-    "end": 17.772,
+    "start": 17.174,
+    "end": 17.636,
     "accent": false,
     "line": 1
    },
    {
     "text": "marriage.",
-    "start": 17.772,
-    "end": 18.17,
+    "start": 17.636,
+    "end": 18.06,
     "accent": false,
     "line": 1
    }
   ],
-  "show": 15.72,
-  "hide": 18.45
+  "show": 15.65,
+  "hide": 18.32
  },
  {
-  "start": 18.53,
-  "end": 21.24,
+  "start": 18.4,
+  "end": 21.07,
   "words": [
    {
     "text": "Plans",
-    "start": 18.53,
-    "end": 19.151,
+    "start": 18.4,
+    "end": 18.893,
     "accent": false,
     "line": 0
    },
    {
     "text": "start",
-    "start": 19.151,
-    "end": 19.357,
+    "start": 18.893,
+    "end": 19.041,
     "accent": false,
     "line": 0
    },
    {
     "text": "at",
-    "start": 19.357,
-    "end": 19.688,
+    "start": 19.041,
+    "end": 19.32,
     "accent": false,
     "line": 0
    },
    {
     "text": "Rs 5,100 + GST",
-    "start": 19.688,
-    "end": 21.24,
+    "start": 19.32,
+    "end": 21.07,
     "accent": true,
     "line": 1
    }
   ],
-  "show": 18.47,
-  "hide": 21.69
+  "show": 18.34,
+  "hide": 21.52
  }
 ]

@@ -22,7 +22,7 @@ FluidR3_GM soundfont (`apt install fluidsynth fluid-soundfont-gm`) and Node 18+.
 ## The edit
 
 **Message.** Problem ("finding the right person shouldn't feel like another full-time job"), then the
-brand and its core offer (a dedicated Relationship Manager), then proof points (a real person who listens and
+brand and its core offer (personalised matchmaking support), then proof points (a real person who listens and
 curated matches), then the audience and the price, then the CTA end screen. Nothing was added to or removed
 from the script.
 
@@ -36,21 +36,21 @@ It gets a small warm-balance and brightness lift so the reel holds together. Eve
 untouched, and skin tones stay natural.
 
 **Subtitles.** Transcribed with Whisper large-v3 and verified against the audio. Each phrase is
-re-timed onto the speech envelope, because Whisper's onsets ran 0.3–0.45 s early. Corrections: "Shadi"
-becomes **Shaadi**, and the spoken "5,100 rupees" is captioned **Rs 5,100 + GST**, as requested.
+re-timed onto the speech envelope, because Whisper's onsets ran 0.3–0.5 s early. Corrections: "Shadi"
+becomes **Shaadi**, "personalized" follows the brand's spelling (**personalised**, as on the end screen), and the spoken "5,100 rupees" is captioned **Rs 5,100 + GST**, as requested.
 - Montserrat Bold 64 px, white, with a soft dark outline and shadow plus a faint radial scrim.
 - 2–6 words per phrase, at most two lines, centred at y≈1185. That is clear of every face, and above
   the bottom ~35% that the Reels and Meta ads UI covers.
 - Words fade and rise 16 px into place as they are spoken. Lines are laid out in advance, so nothing
   reflows.
 - Gold (#F7CD86) marks only the key words: *full-time job*, *Shaadi Mangalam*,
-  *relationship manager*, *actually fit* and *Rs 5,100 + GST*.
+  *matchmaking support*, *actually fit* and *Rs 5,100 + GST*.
 
 **Graphics (two, each tied to a line of the voiceover).**
-1. *"…a dedicated relationship manager"* (6.8–10.3 s): a small cream label card, "DEDICATED /
-   Relationship Manager", whose icon draws itself in. It names the person who has just appeared on
-   screen.
-2. *"…brings you matches that actually fit"* (13.8–16.0 s): the same card style, "CURATED / Matches".
+1. *"…personalised matchmaking support"* (6.7–10.3 s): a small cream label card, "PERSONALISED /
+   Matchmaking Support", with a hand-and-heart icon that draws itself in. It arrives on
+   "matchmaking", just as the Relationship Manager appears on screen.
+2. *"…brings you matches that actually fit"* (13.65–16.0 s): the same card style, "CURATED / Matches".
 
 Both cards use the end screen's own feature wording and palette (cream and maroon), so they set up the
 end screen.
