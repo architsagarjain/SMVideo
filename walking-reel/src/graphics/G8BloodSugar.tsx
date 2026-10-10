@@ -5,7 +5,7 @@ import {C, EASE_IN_OUT, FPS, SANS, tween} from '../theme';
 
 // 58.76 "walk after meal" · 60.24 "softens" · 61.52 "blood sugar spike"
 const IN = 58.6;
-const OUT = 62.4;
+const OUT = 61.98; // fully gone before the cut back to her (62.36)
 
 const W = 900;
 const H = 352;

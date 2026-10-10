@@ -8,30 +8,35 @@ export const HEIGHT = 1920;
 export const DURATION_FRAMES = 2017;
 
 // ---------------------------------------------------------------------------
-// Palette: warm off-white + charcoal, one accent (the coral-red from the poster
-// on her wall). ACCENT_ON_DARK is the same hue lifted for contrast on charcoal.
+// Palette: dark frosted glass + near-white type, one electric-lime accent.
+// `ink*` are the text tones used on glass; `dark` is for type on lime/light.
 // ---------------------------------------------------------------------------
 export const C = {
-  paper: '#F7F4EF',
-  paperEdge: 'rgba(23, 21, 19, 0.07)',
-  ink: '#161514',
-  inkSoft: 'rgba(22, 21, 20, 0.62)',
-  inkFaint: 'rgba(22, 21, 20, 0.38)',
-  hairline: 'rgba(22, 21, 20, 0.10)',
-  accent: '#E5502F',
-  accentOnDark: '#FF7556',
-  accentWash: 'rgba(229, 80, 47, 0.10)',
-  glass: 'rgba(17, 16, 15, 0.72)',
-  glassEdge: 'rgba(255, 255, 255, 0.10)',
-  onDark: '#F7F4EF',
+  glassCard: 'rgba(17, 18, 21, 0.86)',
+  glassCardEdge: 'rgba(255, 255, 255, 0.13)',
+  ink: '#F6F7F2',
+  inkSoft: 'rgba(246, 247, 242, 0.70)',
+  inkFaint: 'rgba(246, 247, 242, 0.46)',
+  hairline: 'rgba(255, 255, 255, 0.12)',
+  accent: '#C8F031',
+  accentOnDark: '#C8F031',
+  accentWash: 'rgba(200, 240, 49, 0.14)',
+  glass: 'rgba(14, 15, 17, 0.70)',
+  glassEdge: 'rgba(255, 255, 255, 0.12)',
+  onDark: '#F6F7F2',
+  dark: '#0F1012',
+  stage: '#0C0D0F',
 };
 
 export const SANS = 'Manrope';
 export const SERIF = 'Instrument Serif';
+export const JP = 'Noto Serif JP';
 
 loadFont({family: SANS, url: staticFile('fonts/Manrope-Variable.ttf'), weight: '200 800'});
 loadFont({family: SERIF, url: staticFile('fonts/InstrumentSerif-Italic.ttf'), style: 'italic'});
 loadFont({family: SERIF, url: staticFile('fonts/InstrumentSerif-Regular.ttf'), style: 'normal'});
+// subset to the three glyphs 万歩計 (manpo-kei)
+loadFont({family: JP, url: staticFile('fonts/NotoSerifJP-subset.ttf'), weight: '200 900'});
 
 // Caption type (keep in sync with scripts/build_captions.py, which measures it)
 export const CAPTION = {size: 44, weight: 620, letterSpacing: -0.3, serifSize: 60};

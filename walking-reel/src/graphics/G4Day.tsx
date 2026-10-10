@@ -5,7 +5,7 @@ import {Steps} from '../components/Icons';
 import {C, EASE_IN_OUT, FPS, lerp, springAt, tween} from '../theme';
 
 // 25.30 "workout" · 26.04 "sit at a desk" · 27.16 "9 hours" · 29.84 "2,500 steps" · 33.46 "sedentary"
-const IN = 25.2;
+const IN = 26.28; // after the treadmill cutaway
 const OUT = 34.4;
 const STEPS = 29.55;
 const SEDENTARY = 33.42;
@@ -18,19 +18,19 @@ export const G4Day: React.FC = () => {
   const row2 = springAt(t, STEPS, 22, 150);
   const height = 196 + row2 * 156;
 
-  const workout = tween(t, 25.3, 0.45, EASE_IN_OUT);
-  const desk = tween(t, 26.0, 1.6, EASE_IN_OUT);
+  const workout = tween(t, IN + 0.05, 0.4, EASE_IN_OUT);
+  const desk = tween(t, 26.55, 1.1, EASE_IN_OUT);
   const sed = springAt(t, SEDENTARY, 16, 170);
 
   return (
-    <Card inAt={IN} outAt={OUT} top={236} width={900} height={height}>
+    <Card inAt={IN} outAt={OUT} top={190} width={900} height={height}>
       <div style={{padding: '40px 44px 0'}}>
         <div style={{position: 'relative', height: 34}}>
-          <Rise at={25.3} style={{position: 'absolute', left: 0, fontSize: 24, fontWeight: 700, color: C.accent, letterSpacing: -0.2}}>
+          <Rise at={IN + 0.05} style={{position: 'absolute', left: 0, fontSize: 24, fontWeight: 700, color: C.accent, letterSpacing: -0.2}}>
             Workout
           </Rise>
         </div>
-        <div style={{position: 'relative', width: BAR_W, height: 66, marginTop: 10, borderRadius: 16, background: 'rgba(22,21,20,0.06)', overflow: 'hidden'}}>
+        <div style={{position: 'relative', width: BAR_W, height: 66, marginTop: 10, borderRadius: 16, background: 'rgba(255,255,255,0.08)', overflow: 'hidden'}}>
           <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: WORKOUT_W * workout, background: C.accent}} />
           <div
             style={{
@@ -50,16 +50,16 @@ export const G4Day: React.FC = () => {
               bottom: 0,
               display: 'flex',
               alignItems: 'center',
-              color: C.onDark,
+              color: C.dark,
               fontSize: 28,
               fontWeight: 650,
               letterSpacing: -0.2,
-              opacity: tween(t, 26.55, 0.4),
+              opacity: tween(t, 26.7, 0.35),
             }}
           >
             Desk
-            <span style={{opacity: tween(t, 27.1, 0.35), marginLeft: 14, color: 'rgba(247,244,239,0.6)'}}>
-              ·&nbsp;&nbsp;<span style={{color: C.onDark}}>9 hours</span>
+            <span style={{opacity: tween(t, 27.1, 0.35), marginLeft: 14, color: 'rgba(15,16,18,0.55)'}}>
+              ·&nbsp;&nbsp;<span style={{color: C.dark}}>9 hours</span>
             </span>
           </div>
         </div>

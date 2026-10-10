@@ -1,16 +1,16 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
-import {Card, Count, Eyebrow, MaskReveal, Rise} from '../components/Card';
+import {Card, Count, Eyebrow, Rise} from '../components/Card';
 import {ArrowRight} from '../components/Icons';
-import {C, EASE_IN, EASE_IN_OUT, FPS, SERIF, lerp, tween} from '../theme';
+import {C, EASE_IN_OUT, FPS, tween} from '../theme';
 
 // 13.38 "bottle" · 13.80 "it's" · 14.22 "walking." · 15.94 "1,000 steps a day"
 // 17.32 "linked" · 18.24 "12%" · 19.08 "lower risk of dying from any cause"
 const IN = 13.28;
-const WALK = 14.12;
+const WALK = 13.84;
 const STAT = 15.86;
 const OUT = 21.75;
-// "Walking." breaks out of the card system: full-width type on a frosted scrim
+// "Walking." itself is a full-screen cutaway (see Cutaways.tsx)
 
 const Bottle: React.FC<{draw: number; strike: number}> = ({draw, strike}) => {
   const d = {pathLength: 1, strokeDasharray: 1, strokeDashoffset: 1 - draw};
@@ -43,14 +43,11 @@ export const G2Walking: React.FC = () => {
   return (
     <>
       {/* A: the bottle, crossed out */}
-      <Card inAt={IN} outAt={WALK - 0.06} top={236} width={300} height={250}>
+      <Card inAt={IN} outAt={WALK} top={236} width={300} height={250}>
         <div style={{position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <Bottle draw={tween(t, IN + 0.02, 0.42, EASE_IN_OUT)} strike={tween(t, 13.74, 0.3, EASE_IN_OUT)} />
         </div>
       </Card>
-
-      {/* B: "Walking." */}
-      <WalkingType t={t} />
 
       {/* C: +1,000 steps -> ~12% lower risk */}
       <Card inAt={STAT} outAt={OUT} top={236} width={900} height={300}>
@@ -85,65 +82,6 @@ export const G2Walking: React.FC = () => {
           </div>
         </div>
       </Card>
-    </>
-  );
-};
-
-const WalkingType: React.FC<{t: number}> = ({t}) => {
-  if (t < WALK - 0.05 || t > STAT + 0.4) return null;
-  const scrim = tween(t, WALK, 0.35) * (1 - tween(t, STAT - 0.3, 0.3, EASE_IN));
-  const out = tween(t, STAT - 0.3, 0.24, EASE_IN);
-  const underline = tween(t, WALK + 0.45, 0.65, EASE_IN_OUT);
-  const drift = lerp(tween(t, WALK, STAT - WALK, EASE_IN_OUT), 0, -10);
-  return (
-    <>
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          height: 660,
-          opacity: scrim,
-          background: 'linear-gradient(to bottom, rgba(247,244,239,0.94) 0%, rgba(247,244,239,0.88) 50%, rgba(247,244,239,0) 100%)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          maskImage: 'linear-gradient(to bottom, black 58%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 58%, transparent 100%)',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 190,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          opacity: 1 - out,
-          translate: `0px ${drift - 20 * out}px`,
-          filter: out > 0 ? `blur(${out * 8}px)` : undefined,
-        }}
-      >
-        <MaskReveal at={WALK + 0.1} dur={0.7}>
-          <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 236, lineHeight: 1.02, letterSpacing: -5, color: C.ink, padding: '0 20px'}}>
-            Walking.
-          </div>
-        </MaskReveal>
-        <svg width={640} height={34} viewBox="0 0 420 26" style={{marginTop: -4}}>
-          <path
-            d="M6 16 C 120 6, 260 6, 414 14"
-            fill="none"
-            stroke={C.accent}
-            strokeWidth={4}
-            strokeLinecap="round"
-            pathLength={1}
-            strokeDasharray={1}
-            strokeDashoffset={1 - underline}
-          />
-        </svg>
-      </div>
     </>
   );
 };

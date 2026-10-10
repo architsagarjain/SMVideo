@@ -6,11 +6,11 @@ import {C, FPS, SANS, lerp, springAt, tween} from '../theme';
 
 // 0.25 hook · 1.06 "pill" · 2.66 "death" · 3.14 "12%" · 5.08 "every extra pill" · 7.04 "another 12%" · 8.38 "no side effects"
 const IN = 0.25; // hook: the pill is on screen within the first second
-const OUT = 9.45;
+const OUT = 8.95; // clears before the pill rain
 const ROW2 = 5.08;
 const CHIP = 8.3;
 
-const ROW_H = 128;
+const ROW_H = 116;
 
 const Row: React.FC<{icon: React.ReactNode; numAt: number; label: string; labelAt: number}> = ({icon, numAt, label, labelAt}) => {
   const t = useCurrentFrame() / FPS;
@@ -54,7 +54,7 @@ export const G1Pill: React.FC = () => {
   const p2b = pop(ROW2 + 0.32);
 
   return (
-    <Card inAt={IN} outAt={OUT} top={232} width={width} height={height}>
+    <Card inAt={IN} outAt={OUT} top={176} width={width} height={height}>
       <div style={{paddingTop: 24, fontFamily: SANS, width: 900}}>
         <Row
           icon={<Pill width={128} rotate={lerp(p1, -60, -28)} style={{scale: lerp(p1, 0.5, 1), opacity: Math.min(1, p1 * 1.5)}} />}

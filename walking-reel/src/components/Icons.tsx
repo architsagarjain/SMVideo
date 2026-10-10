@@ -23,11 +23,11 @@ export const Pill: React.FC<{width?: number; rotate?: number; style?: React.CSSP
       </defs>
       <g clipPath={`url(#pill-${width})`}>
         <rect x={0} y={0} width={width / 2} height={h} fill={C.accent} />
-        <rect x={width / 2} y={0} width={width / 2} height={h} fill="#FFFFFF" />
+        <rect x={width / 2} y={0} width={width / 2} height={h} fill="#F6F7F2" />
         <rect x={0} y={0} width={width} height={h} fill={`url(#pill-shade-${width})`} />
         <line x1={width / 2} y1={0} x2={width / 2} y2={h} stroke="rgba(0,0,0,0.12)" strokeWidth={1.5} />
       </g>
-      <rect x={0.75} y={0.75} width={width - 1.5} height={h - 1.5} rx={r - 0.75} fill="none" stroke="rgba(22,21,20,0.16)" strokeWidth={1.5} />
+      <rect x={0.75} y={0.75} width={width - 1.5} height={h - 1.5} rx={r - 0.75} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth={1.5} />
     </svg>
   );
 };

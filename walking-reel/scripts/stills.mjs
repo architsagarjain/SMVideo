@@ -10,7 +10,7 @@ const browserExecutable = process.env.REMOTION_BROWSER || null;
 const serveUrl = await bundle({entryPoint: path.resolve('src/index.ts')});
 const composition = await selectComposition({serveUrl, id: 'WalkingReel', browserExecutable});
 for (const f of frames) {
-  await renderStill({composition, serveUrl, frame: Number(f), output: path.join(outDir, `f${String(f).padStart(4, '0')}.png`), browserExecutable, chromiumOptions: {gl: 'swangle'}});
+  await renderStill({composition, serveUrl, frame: Number(f), output: path.join(outDir, `f${String(f).padStart(4, '0')}.png`), browserExecutable, chromiumOptions: {gl: process.env.REMOTION_GL || 'angle'}});
   process.stdout.write(f + ' ');
 }
 console.log('done');

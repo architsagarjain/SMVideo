@@ -25,10 +25,11 @@ export const MOVES: Move[] = [
   // "how many would you take?" ... "That drug exists."
   {origin: FACE, inStart: 9.1, inDur: 0.75, scale: 1.1, outStart: 12.15, outDur: 0.8},
   // "And I used to think walking didn't count." - slow, quiet push
-  {origin: FACE, inStart: 21.9, inDur: 2.6, scale: 1.055, outStart: 24.55, outDur: 0.75},
+  {origin: FACE, inStart: 21.9, inDur: 2.6, scale: 1.055, outStart: 24.76, outDur: 0.03}, // resets under the treadmill cutaway
   // split layout for the step-curve chart: the footage shrinks into a rounded
-  // panel anchored to the bottom edge, the chart takes the top of the frame
-  {origin: BOTTOM, inStart: 40.7, inDur: 0.8, scale: 0.66, outStart: 52.6, outDur: 0.85, panel: true},
+  // panel anchored to the bottom edge (her head breaks out of it), the chart
+  // takes the top of the frame
+  {origin: BOTTOM, inStart: 40.74, inDur: 0.7, scale: 0.72, outStart: 52.6, outDur: 0.85, panel: true},
   // "150 calories a day"
   {origin: FACE, inStart: 55.85, inDur: 0.6, scale: 1.08, outStart: 58.0, outDur: 0.6},
   // call to action; ends at the same 104.5% the video opens on, so the loop is seamless

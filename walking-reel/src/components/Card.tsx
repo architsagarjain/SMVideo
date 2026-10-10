@@ -43,10 +43,10 @@ export const Card: React.FC<{
         width,
         height,
         borderRadius: radius,
-        background: C.paper,
-        border: `1px solid ${C.paperEdge}`,
-        boxShadow:
-          '0 40px 80px -30px rgba(28, 20, 12, 0.45), 0 12px 24px -12px rgba(28, 20, 12, 0.18), inset 0 1px 0 rgba(255,255,255,0.9)',
+        // no backdrop-filter: it glitches in headless Chrome on large layers
+        background: `linear-gradient(160deg, rgba(44, 46, 51, 0.86) 0%, ${C.glassCard} 60%)`,
+        border: `1.5px solid ${C.glassCardEdge}`,
+        boxShadow: '0 40px 80px -30px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
         opacity: fadeIn * (1 - out),
         translate: `0px ${lerp(s, 36, 0) - 18 * out}px`,
         scale: lerp(s, 0.955, 1) - 0.02 * out,
@@ -71,7 +71,7 @@ export const Eyebrow: React.FC<{children: React.ReactNode; style?: React.CSSProp
       fontWeight: 700,
       letterSpacing: 3.2,
       textTransform: 'uppercase',
-      color: C.inkFaint,
+      color: C.accent,
       ...style,
     }}
   >

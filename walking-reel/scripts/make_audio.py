@@ -1,14 +1,16 @@
-"""Sound design + final audio mix.
+"""Sound design + final audio mix (v3).
 
-Everything here is synthesised from scratch (no samples), so there are no
-licensing questions: soft whooshes for card entrances, quiet UI ticks/pops when
-numbers or chips land, a few key clicks for the comment field, and a very quiet
-ambient pad (F major, 84 BPM) ducked under the voice.
+- Voice: left natural (already clean), 70 Hz high-pass.
+- Music: "Digital Lemonade" by Kevin MacLeod (incompetech.com), CC BY 4.0.
+  Two sections, each starting on a downbeat: the first puts a downbeat on the
+  cut to the walking clip (13.84 s); it tape-stops into a record scratch at the
+  freeze (39.44 s) and the second section drops back in at 40.74 s. Ducked
+  under the voice, lifted a little under the full-screen cutaways.
+- Effects (all synthesised): whooshes, cut impacts, UI ticks, footsteps synced
+  to the walking clip, a pill rattle, record scratch, stamps, key clicks.
+- Master: linear gain to -14 LUFS, transparent limiter at -1.5 dBFS.
 
-The voice is left natural (it is already clean): high-pass at 70 Hz only.
-The final mix is loudness-normalised to -14 LUFS / -1.5 dBTP with ffmpeg.
-
-Usage: python3 scripts/make_audio.py <source video> <out.wav> [--no-music]
+Usage: python3 scripts/make_audio.py <source video> <out.wav> [--no-music] [--stems]
 """
 import json, os, subprocess, sys
 import numpy as np
@@ -101,6 +103,53 @@ def swipe(d=0.16):
     return whoosh(d, lo=1500, hi=6000, peak_at=0.4)
 
 
+def footstep(d=0.22):
+    tt = t_axis(d)
+    body = np.sin(2 * np.pi * np.cumsum(70 + 60 * np.exp(-tt / 0.02)) / SR) * np.exp(-tt / 0.035)
+    n = rng.standard_normal(len(tt))
+    b, a = signal.butter(2, [350, 2600], btype="band", fs=SR)
+    scuff = signal.lfilter(b, a, n) * np.exp(-tt / 0.045) * np.minimum(1, tt / 0.006)
+    b2, a2 = signal.butter(2, [2500, 8000], btype="band", fs=SR)
+    click = signal.lfilter(b2, a2, n) * np.exp(-tt / 0.004)
+    y = 0.9 * body + 0.55 * scuff + 0.25 * click
+    return y / np.abs(y).max()
+
+
+def rattle(d=1.1, n_hits=70):
+    """Pills tumbling: many tiny plastic ticks, thinning out."""
+    y = np.zeros(int(d * SR))
+    times = np.sort(rng.beta(1.2, 2.2, n_hits) * (d - 0.06))
+    for t0 in times:
+        f = rng.uniform(2200, 5200)
+        tt = t_axis(0.03)
+        hit = np.sin(2 * np.pi * f * tt) * np.exp(-tt / 0.004) * rng.uniform(0.3, 1.0)
+        i = int(t0 * SR)
+        y[i:i + len(hit)] += hit[: len(y) - i]
+    return y / np.abs(y).max()
+
+
+def impact(d=0.6):
+    """Cut accent: short sub thump + air."""
+    tt = t_axis(d)
+    sub = np.sin(2 * np.pi * np.cumsum(48 + 70 * np.exp(-tt / 0.05)) / SR) * np.exp(-tt / 0.18)
+    air = whoosh(d, lo=900, hi=5000, peak_at=0.08)
+    y = sub + 0.45 * air[: len(sub)]
+    return y / np.abs(y).max()
+
+
+def scratch(d=0.42):
+    """Record scratch: a band-limited buzz whose pitch whips down, up, down."""
+    tt = t_axis(d)
+    rate = np.interp(tt, [0, 0.12, 0.2, 0.32, d], [1.0, -0.3, 0.9, -0.6, 0.0])
+    ph = np.cumsum(rate) / SR
+    saw = 2 * ((ph * 180) % 1) - 1
+    n = rng.standard_normal(len(tt)) * np.abs(rate)
+    b, a = signal.butter(2, [600, 5000], btype="band", fs=SR)
+    y = signal.lfilter(b, a, 0.6 * saw * np.abs(rate) + 0.8 * n)
+    y *= np.minimum(1, tt / 0.005) * np.clip((d - tt) / 0.05, 0, 1)
+    return y / np.abs(y).max()
+
+
 SFX = {
     "whoosh": whoosh(0.5),
     "whoosh_s": whoosh(0.32, lo=600, hi=3000, peak_at=0.5),
@@ -111,32 +160,41 @@ SFX = {
     "key": key(),
     "swell": swell(),
     "swipe": swipe(),
+    "step": footstep(),
+    "rattle": rattle(),
+    "impact": impact(),
+    "scratch": scratch(),
 }
 
-# (time s, sound, gain dB, pan -1..1). Times match the graphics in src/graphics.
+# (time s, sound, gain dB, pan -1..1). Times match src/graphics and src/timeline.ts.
 CUES = [
     # card entrances
-    (0.2, "whoosh", -27, -0.2), (13.24, "whoosh", -27, 0.2), (25.16, "whoosh", -27, -0.2),
-    (35.56, "whoosh", -27, 0.2), (41.05, "whoosh", -27, 0),
-    (58.55, "whoosh", -27, 0.2), (62.86, "whoosh", -27, 0),
+    (0.2, "whoosh", -27, -0.2), (13.24, "whoosh_s", -30, 0.2), (15.8, "whoosh", -28, 0.2), (26.26, "whoosh", -28, -0.2),
+    (40.74, "whoosh", -25, 0), (58.6, "whoosh_s", -30, 0.2), (62.86, "whoosh", -27, 0),
     # card state changes
-    (2.96, "whoosh_s", -31, 0.25), (5.06, "whoosh_s", -32, -0.2), (14.16, "whoosh_s", -29, 0),
-    (15.82, "whoosh", -28, 0.2), (29.53, "whoosh_s", -32, -0.2), (65.02, "whoosh_s", -30, 0.2),
-    # numbers landing / chips
+    (2.96, "whoosh_s", -31, 0.25), (5.06, "whoosh_s", -32, -0.2), (29.53, "whoosh_s", -32, -0.2),
+    # numbers landing / chips / stamps
     (3.14, "tick", -30, 0.1), (7.04, "tick", -30, 0.1), (8.32, "pop", -29, 0),
     (18.24, "tick", -30, 0.15), (29.84, "tick", -30, -0.1), (33.44, "thud", -27, 0.15),
-    (39.46, "thud", -26, 0.1), (48.3, "tick_hi", -31, -0.2), (51.0, "tick_hi", -31, 0.2),
-    (56.48, "tick", -32, 0.1), (61.5, "tick_hi", -33, 0),
-    # bottle strike, walking reveal
+    (48.3, "tick_hi", -31, -0.2), (51.0, "tick_hi", -31, 0.2), (56.48, "tick", -32, 0.1), (61.5, "tick_hi", -33, 0),
     (13.74, "swipe", -30, 0.1),
-    # camera moves (barely there)
-    (9.1, "swell", -33, 0), (40.68, "whoosh", -27, 0), (52.58, "whoosh_s", -30, 0), (55.85, "swell", -34, 0),
-    # comment field: typing + send
-    (65.34, "key", -31, 0.05), (65.53, "key", -32, 0.05), (65.72, "key", -31, 0.05), (65.91, "key", -32, 0.05),
-    (66.25, "pop", -31, 0.2),
+    # hard cuts to full-screen clips, and back
+    (13.84, "impact", -24, 0), (24.76, "impact", -25, 0), (37.56, "impact", -25, 0), (58.52, "impact", -25, 0),
+    (26.3, "whoosh_s", -31, 0), (62.36, "whoosh_s", -31, 0),
+    # footsteps synced to the walking clip
+    (14.29, "step", -22, -0.15), (14.89, "step", -23, 0.15), (15.49, "step", -22, -0.15),
+    # pill rain
+    (9.14, "rattle", -26, 0), (9.1, "swell", -32, 0),
+    # giant type behind her
+    (23.16, "whoosh", -28, 0), (24.0, "swipe", -29, 0), (35.64, "whoosh", -28, 0),
+    # myth-busted freeze
+    (39.44, "scratch", -21, 0), (39.56, "thud", -23, 0.1),
+    (55.85, "swell", -34, 0),
+    # comment chip + typing 2026
+    (65.05, "pop", -29, 0), (65.32, "key", -29, 0.05), (65.51, "key", -30, 0.05), (65.7, "key", -29, 0.05), (65.89, "key", -30, 0.05),
 ]
-# pedometer LCD counting up (very quiet)
-CUES += [(35.76 + i * 0.075, "tick_hi", -40, -0.3) for i in range(11)]
+# 万歩計 characters landing
+CUES += [(37.78 + i * 0.12, "tick", -33 - i, 0.2 * (i - 1)) for i in range(3)]
 # week dots lighting up
 CUES += [(64.05 + i * 0.09, "tick_hi", -38 + i * 0.3, -0.45 + i * 0.15) for i in range(7)]
 
@@ -164,78 +222,60 @@ mix += sfx_bus
 
 
 # --------------------------------------------------------------------------
-# Music bed: soft pad + sparse plucks, F major, 84 BPM
+# Music: Digital Lemonade (Kevin MacLeod, CC BY 4.0), cut on downbeats
 # --------------------------------------------------------------------------
-def midi(m):
-    return 440 * 2 ** ((m - 69) / 12)
-
-
+MUSIC_FILE = os.path.join(ROOT, "music", "digital_lemonade_kevin_macleod.mp3")
+BEAT = 60 / 123.05          # measured tempo
+FIRST_DOWNBEAT = 0.0697     # first downbeat in the track (s)
+FREEZE_AT, RESUME_AT = 39.44, 40.74
+music = np.zeros((N, 2))
 if MUSIC:
-    bpm = 84
-    bar = 4 * 60 / bpm
-    chords = [[53, 57, 60, 64], [57, 60, 64, 67], [50, 57, 60, 65], [46, 53, 57, 62]]  # Fmaj7 Am7 Dm7 Bbmaj7
-    roots = [41, 45, 38, 46 - 12]
-    music = np.zeros((N, 2))
-    total = N / SR
-    k = 0
-    while k * bar < total + bar:
-        start = k * bar
-        notes = chords[k % 4]
-        d = bar + 1.2
-        tt = t_axis(d)
-        env = np.minimum(1, tt / 0.9) * np.where(tt > bar, np.cos(np.pi / 2 * np.clip((tt - bar) / 1.2, 0, 1)) ** 2, 1)
-        pad = np.zeros((len(tt), 2))
-        for j, m in enumerate(notes):
-            for c, det in ((0, -4), (1, 4)):
-                f = midi(m) * 2 ** (det / 1200)
-                ph = rng.uniform(0, 2 * np.pi)
-                pad[:, c] += np.sin(2 * np.pi * f * tt + ph) + 0.18 * np.sin(4 * np.pi * f * tt + ph)
-        bass = np.sin(2 * np.pi * midi(roots[k % 4]) * tt) * 0.9
-        pad = pad * 0.2 + bass[:, None] * 0.1
-        pad *= env[:, None]
-        # sparse plucks on the off-beats, an octave up
-        for b8 in range(8):
-            if b8 % 2 == 0 and b8 not in (2, 6):
-                continue
-            m = notes[(b8 * 3 + k) % 4] + 12
-            p0 = int(b8 * bar / 8 * SR)
-            pt = t_axis(0.6)
-            pl = (np.sin(2 * np.pi * midi(m) * pt) + 0.3 * np.sin(4 * np.pi * midi(m) * pt)) * np.exp(-pt / 0.18) * np.minimum(1, pt / 0.004)
-            pan = 0.3 if b8 % 4 == 1 else -0.3
-            seg = pad[p0:p0 + len(pl)]
-            seg[:, 0] += pl[: len(seg)] * 0.12 * (1 - pan)
-            seg[:, 1] += pl[: len(seg)] * 0.12 * (1 + pan)
-        i0 = int(start * SR)
-        i1 = min(N, i0 + len(pad))
-        if i0 < N:
-            music[i0:i1] += pad[: i1 - i0]
-        k += 1
-    b, a = signal.butter(2, 3800, btype="low", fs=SR)
-    music = signal.lfilter(b, a, music, axis=0)
-    # simple stereo echo for space
-    dly = int(bar / 8 * 3 * SR)
-    echo = np.zeros_like(music)
-    echo[dly:] = music[:-dly] * 0.22
-    echo[dly:, [0, 1]] = echo[dly:, [1, 0]]
-    music += echo
-    # fades
+    mraw = subprocess.run(["ffmpeg", "-v", "error", "-i", MUSIC_FILE, "-ac", "2", "-ar", str(SR), "-f", "f32le", "-"],
+                          capture_output=True, check=True).stdout
+    track = np.frombuffer(mraw, dtype=np.float32).reshape(-1, 2).astype(np.float64)
+    downbeat = lambda k: FIRST_DOWNBEAT + 4 * BEAT * k
+    # section A: bar 22 of the track lands on the walking cut (13.84 s)
+    off_a = downbeat(22) - 13.84
+    # section B: bar 70 drops in when the split layout opens
+    off_b = downbeat(70) - RESUME_AT
+
+    def place(t0, t1, offset):
+        i0, i1 = int(t0 * SR), min(N, int(t1 * SR))
+        j0 = int((t0 + offset) * SR)
+        music[i0:i1] = track[j0:j0 + (i1 - i0)]
+
+    place(0, FREEZE_AT, off_a)
+    place(RESUME_AT, N / SR, off_b)
+    # tape-stop into the freeze: the last 0.35 s slows to a halt
+    ts = int(0.35 * SR)
+    i_end = int(FREEZE_AT * SR)
+    seg_src = track[int((FREEZE_AT - 0.35 + off_a) * SR):]
+    pos = np.cumsum(np.linspace(1.0, 0.0, ts))  # playback position, decelerating
+    for c in range(2):
+        music[i_end - ts:i_end, c] = np.interp(pos, np.arange(len(seg_src)), seg_src[:, c]) * np.linspace(1, 0.2, ts)
     tt = np.arange(N) / SR
-    music *= (np.minimum(1, tt / 1.5) * np.clip((total - tt) / 1.2, 0, 1))[:, None]
-    # duck under the voice (smoothed voice envelope)
+    # fade in over the hook, fade out at the very end, soft attack on the drop-in
+    fades = np.minimum(1, tt / 0.6) * np.clip((N / SR - tt) / 0.9, 0, 1)
+    fades *= np.where(tt >= RESUME_AT, np.minimum(1, (tt - RESUME_AT) / 0.05 + 0.0), 1)
+    music *= fades[:, None]
+    # duck under the voice; lift under the full-screen cutaways
     env = np.abs(voice).mean(axis=1)
-    win = int(0.25 * SR)
+    win = int(0.2 * SR)
     env = np.convolve(env, np.ones(win) / win, mode="same")
     speaking = np.clip(env / (np.percentile(env, 70) + 1e-9), 0, 1)
-    duck = db(-5 * speaking)
-    music *= duck[:, None]
-    # level: about 21 dB under the voice (RMS)
+    cut_lift = np.zeros(N)
+    for a0, a1 in [(13.84, 15.78), (24.76, 26.3), (37.56, 39.44), (58.52, 62.36)]:
+        cut_lift = np.maximum(cut_lift, np.clip(np.minimum((tt - a0) / 0.08, (a1 - tt) / 0.3), 0, 1))
+    gain_db = -7 * speaking + 3.5 * cut_lift
+    music *= db(gain_db)[:, None]
+    # overall: about 15 dB under the voice
     vr = np.sqrt((voice ** 2).mean())
     mr = np.sqrt((music ** 2).mean())
-    music *= vr / mr * db(-21)
+    music *= vr / mr * db(-15)
     mix += music
 
 if "--stems" in sys.argv:
-    np.save(out.replace(".wav", "_stems.npy"), np.stack([voice.mean(1), sfx_bus.mean(1), music.mean(1) if MUSIC else np.zeros(N)]).astype(np.float32))
+    np.save(out.replace(".wav", "_stems.npy"), np.stack([voice.mean(1), sfx_bus.mean(1), music.mean(1)]).astype(np.float32))
 
 wav = out.replace(".wav", "_premaster.wav")
 mix = np.clip(mix * 0.5, -1, 1)  # 6 dB of headroom in the premaster

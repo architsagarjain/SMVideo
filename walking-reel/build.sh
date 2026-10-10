@@ -33,6 +33,14 @@ GRADE="eq=contrast=1.05:saturation=1.04:gamma=0.985,colorbalance=rs=0.02:bs=-0.0
 ffmpeg -v error -y -i footage/clean_720.mp4 -vf "$GRADE,scale=1080:1920:flags=lanczos" \
   -c:v libx264 -preset slow -crf 10 -pix_fmt yuv420p -an public/footage_clean_1080.mp4
 
+echo "== 2b cut-out of the speaker (RVM matte) and cutaway clips"
+# matte: needs torch + the RVM repo/weights (see scripts/matte.py); reused if present
+if [[ ! -f footage/alpha_720.mp4 ]]; then
+  python3 scripts/matte.py "${RVM_CODE:?set RVM_CODE to a RobustVideoMatting checkout}" "${RVM_WEIGHTS:?set RVM_WEIGHTS to rvm_resnet50.pth}" footage/clean_720.mp4 footage/alpha_720.mp4
+fi
+scripts/make_subject.sh public/footage_clean_1080.mp4 footage/alpha_720.mp4 public/subject_1080.webm
+scripts/prep_broll.sh
+
 echo "== 3/5 caption data"
 python3 scripts/build_captions.py > /dev/null
 
@@ -43,6 +51,6 @@ npx remotion render WalkingReel out/video_only.mp4 --muted ${REMOTION_BROWSER:+-
 echo "== 5/5 sound design, mix and final encode"
 python3 scripts/make_audio.py "$SRC" out/mix.wav
 ffmpeg -v error -y -i out/video_only.mp4 -i out/mix.wav -map 0:v -map 1:a \
-  -c:v libx264 -preset slow -crf 16 -profile:v high -level 4.2 -pix_fmt yuv420p -r 30 \
+  -c:v libx264 -preset slow -crf 17 -profile:v high -level 4.2 -pix_fmt yuv420p -r 30 \
   -c:a aac -b:a 320k -ar 48000 -movflags +faststart -shortest ../output/walking_reel_final.mp4
 echo "done: ../output/walking_reel_final.mp4"

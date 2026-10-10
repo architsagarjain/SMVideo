@@ -5,15 +5,15 @@ import {C, EASE_IN_OUT, FPS, SANS, lerp, tween} from '../theme';
 
 // 41.40 "real benefit climbs fast at the low end" · 44.66 "flattens around 7,000 to 10,000"
 // 48.38 "from 3,000 to 5,000" · 49.80 "beats" · 51.00 "8,000 to 10,000"
-const IN = 41.1;
+const IN = 40.95;
 const OUT = 52.7;
 
 const W = 940;
-const H = 444;
+const H = 560;
 const X0 = 86;
 const X1 = 892;
-const YB = 352; // baseline
-const YT = 104; // top of plot
+const YB = 462; // baseline
+const YT = 118; // top of plot
 const MAX = 12000;
 
 // Illustrative diminishing-returns shape (no values are plotted or claimed).
@@ -36,7 +36,7 @@ const Segment: React.FC<{a: number; b: number; at: number; color: string; label:
   const t = useCurrentFrame() / FPS;
   const p = tween(t, at, 0.7, EASE_IN_OUT);
   const end = lerp(p, a, b);
-  const dot = (s: number, o: number) => <circle cx={X(s)} cy={Y(s)} r={8 * o} fill={color} stroke={C.paper} strokeWidth={3} />;
+  const dot = (s: number, o: number) => <circle cx={X(s)} cy={Y(s)} r={8 * o} fill={color} stroke={C.dark} strokeWidth={3} />;
   const lp = tween(t, at + 0.35, 0.4);
   const mid = (a + b) / 2;
   const lx = X(mid);
@@ -84,7 +84,7 @@ export const G6Curve: React.FC = () => {
   const ticks = [0, 2000, 4000, 6000, 8000, 10000, 12000];
 
   return (
-    <Card inAt={IN} outAt={OUT} top={172} width={W} height={H}>
+    <Card inAt={IN} outAt={OUT} top={176} width={W} height={H}>
       <div style={{position: 'absolute', left: 48, top: 34}}>
         <Rise at={IN + 0.1}>
           <Eyebrow>
