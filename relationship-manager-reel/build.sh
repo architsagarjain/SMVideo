@@ -26,8 +26,17 @@ python3 scripts/make_endscreen_layers.py assets/end_screen_original.webp public/
 python3 scripts/make_captions.py
 
 echo "== 2/6 Colour: warm the cooler office shot (frames 190-347) to sit with the golden-hour shots"
-GRADE="colorbalance=rm=0.03:gm=0.005:bm=-0.035:rh=0.02:bh=-0.025:enable='between(n,190,347)',eq=brightness=0.018:contrast=1.02:saturation=1.05:enable='between(n,190,347)'"
-ffmpeg -v error -y -i "$SRC" -an -vf "$GRADE" -c:v libx264 -preset medium -crf 4 -pix_fmt yuv420p \
+# Only that segment goes through RGB (with explicit BT.709 conversions); the other
+# frames stay in YUV, so they match the source exactly apart from the lossless-ish re-encode.
+TO_RGB="scale=in_color_matrix=bt709:in_range=tv:out_range=pc,format=gbrp"
+TO_YUV="scale=out_color_matrix=bt709:in_range=pc:out_range=tv,format=yuv420p"
+BALANCE="colorbalance=rm=0.03:gm=0.005:bm=-0.035:rh=0.02:bh=-0.025"      # in RGB
+LIFT="eq=brightness=0.018:contrast=1.02:saturation=1.05"                 # in YUV
+ffmpeg -v error -y -i "$SRC" -an -filter_complex "[0:v]split=3[a][b][c];\
+[a]trim=end_frame=190,setpts=PTS-STARTPTS[a1];\
+[b]trim=start_frame=190:end_frame=348,setpts=PTS-STARTPTS,$TO_RGB,$BALANCE,$TO_YUV,$LIFT[b1];\
+[c]trim=start_frame=348,setpts=PTS-STARTPTS[c1];[a1][b1][c1]concat=n=3:v=1:a=0[v]" -map "[v]" \
+  -c:v libx264 -preset medium -crf 4 -pix_fmt yuv420p -r 30 \
   -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv public/source_graded.mp4
 
 echo "== 3/6 Music: compose and render the original score"
