@@ -1,0 +1,404 @@
+[
+ {
+  "start": 0.07,
+  "end": 1.374,
+  "words": [
+   {
+    "text": "Finding",
+    "start": 0.07,
+    "end": 0.369,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "the",
+    "start": 0.369,
+    "end": 0.604,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "right",
+    "start": 0.604,
+    "end": 0.903,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "person",
+    "start": 0.903,
+    "end": 1.374,
+    "accent": false,
+    "line": 0
+   }
+  ],
+  "show": 0.01,
+  "hide": 1.294
+ },
+ {
+  "start": 1.374,
+  "end": 3.81,
+  "words": [
+   {
+    "text": "shouldn't",
+    "start": 1.374,
+    "end": 2.079,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "feel",
+    "start": 2.079,
+    "end": 2.293,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "like",
+    "start": 2.293,
+    "end": 2.549,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "another",
+    "start": 2.549,
+    "end": 2.784,
+    "accent": false,
+    "line": 1
+   },
+   {
+    "text": "full-time",
+    "start": 2.784,
+    "end": 3.468,
+    "accent": true,
+    "line": 1
+   },
+   {
+    "text": "job.",
+    "start": 3.468,
+    "end": 3.81,
+    "accent": true,
+    "line": 1
+   }
+  ],
+  "show": 1.314,
+  "hide": 4.16
+ },
+ {
+  "start": 4.24,
+  "end": 5.32,
+  "words": [
+   {
+    "text": "With",
+    "start": 4.24,
+    "end": 4.622,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "Shaadi",
+    "start": 4.622,
+    "end": 4.971,
+    "accent": true,
+    "line": 0
+   },
+   {
+    "text": "Mangalam,",
+    "start": 4.971,
+    "end": 5.32,
+    "accent": true,
+    "line": 0
+   }
+  ],
+  "show": 4.18,
+  "hide": 5.51
+ },
+ {
+  "start": 5.59,
+  "end": 7.9,
+  "words": [
+   {
+    "text": "you",
+    "start": 5.59,
+    "end": 5.965,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "get",
+    "start": 5.965,
+    "end": 6.182,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "a",
+    "start": 6.182,
+    "end": 6.34,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "dedicated",
+    "start": 6.34,
+    "end": 6.794,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "relationship",
+    "start": 6.794,
+    "end": 7.268,
+    "accent": true,
+    "line": 1
+   },
+   {
+    "text": "manager.",
+    "start": 7.268,
+    "end": 7.9,
+    "accent": true,
+    "line": 1
+   }
+  ],
+  "show": 5.53,
+  "hide": 8.24
+ },
+ {
+  "start": 8.32,
+  "end": 10.54,
+  "words": [
+   {
+    "text": "A",
+    "start": 8.32,
+    "end": 8.69,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "real",
+    "start": 8.69,
+    "end": 9.039,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "person",
+    "start": 9.039,
+    "end": 9.574,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "who",
+    "start": 9.574,
+    "end": 10.088,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "listens,",
+    "start": 10.088,
+    "end": 10.54,
+    "accent": false,
+    "line": 0
+   }
+  ],
+  "show": 8.26,
+  "hide": 10.74
+ },
+ {
+  "start": 10.82,
+  "end": 12.71,
+  "words": [
+   {
+    "text": "who",
+    "start": 10.82,
+    "end": 11.157,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "understands",
+    "start": 11.157,
+    "end": 11.569,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "what",
+    "start": 11.569,
+    "end": 11.999,
+    "accent": false,
+    "line": 1
+   },
+   {
+    "text": "you're",
+    "start": 11.999,
+    "end": 12.186,
+    "accent": false,
+    "line": 1
+   },
+   {
+    "text": "looking",
+    "start": 12.186,
+    "end": 12.373,
+    "accent": false,
+    "line": 1
+   },
+   {
+    "text": "for,",
+    "start": 12.373,
+    "end": 12.71,
+    "accent": false,
+    "line": 1
+   }
+  ],
+  "show": 10.76,
+  "hide": 12.98
+ },
+ {
+  "start": 13.06,
+  "end": 14.13,
+  "words": [
+   {
+    "text": "and",
+    "start": 13.06,
+    "end": 13.428,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "brings",
+    "start": 13.428,
+    "end": 13.639,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "you",
+    "start": 13.639,
+    "end": 13.832,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "matches",
+    "start": 13.832,
+    "end": 14.13,
+    "accent": false,
+    "line": 0
+   }
+  ],
+  "show": 13.0,
+  "hide": 14.05
+ },
+ {
+  "start": 14.13,
+  "end": 15.2,
+  "words": [
+   {
+    "text": "that",
+    "start": 14.13,
+    "end": 14.463,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "actually",
+    "start": 14.463,
+    "end": 14.902,
+    "accent": true,
+    "line": 0
+   },
+   {
+    "text": "fit.",
+    "start": 14.902,
+    "end": 15.2,
+    "accent": true,
+    "line": 0
+   }
+  ],
+  "show": 14.07,
+  "hide": 15.65
+ },
+ {
+  "start": 15.78,
+  "end": 18.17,
+  "words": [
+   {
+    "text": "For",
+    "start": 15.78,
+    "end": 16.273,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "professionals",
+    "start": 16.273,
+    "end": 16.785,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "serious",
+    "start": 16.785,
+    "end": 17.316,
+    "accent": false,
+    "line": 1
+   },
+   {
+    "text": "about",
+    "start": 17.316,
+    "end": 17.772,
+    "accent": false,
+    "line": 1
+   },
+   {
+    "text": "marriage.",
+    "start": 17.772,
+    "end": 18.17,
+    "accent": false,
+    "line": 1
+   }
+  ],
+  "show": 15.72,
+  "hide": 18.45
+ },
+ {
+  "start": 18.53,
+  "end": 21.24,
+  "words": [
+   {
+    "text": "Plans",
+    "start": 18.53,
+    "end": 19.151,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "start",
+    "start": 19.151,
+    "end": 19.357,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "at",
+    "start": 19.357,
+    "end": 19.688,
+    "accent": false,
+    "line": 0
+   },
+   {
+    "text": "₹5,100.",
+    "start": 19.688,
+    "end": 21.24,
+    "accent": true,
+    "line": 0
+   }
+  ],
+  "show": 18.47,
+  "hide": 21.69
+ }
+]
