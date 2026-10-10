@@ -4,7 +4,7 @@
 Whisper's word onsets at the start of each breath group run 0.3-0.45 s early, so every
 phrase is linearly re-timed onto the speech region measured from the audio envelope
 (SPEECH below, -45 dBFS threshold). Display spelling is corrected where Whisper got it
-wrong ("Shadi" -> "Shaadi") and the spoken "5,100 rupees" is written as "₹5,100".
+wrong ("Shadi" -> "Shaadi") and the spoken "5,100 rupees" is written as "Rs 5,100 + GST".
 """
 import json
 
@@ -30,10 +30,11 @@ for s, e, t in w:
     else:
         merged.append([s, e, t])
 fix = {"Shadi": "Shaadi"}
+PRICE = "Rs\u00a05,100\u00a0+\u00a0GST"  # one caption unit
 out = []
 for s, e, t in merged:
     if t == "rupees.":
-        out[-1][1] = e; out[-1][2] = "₹" + out[-1][2] + "."
+        out[-1][1] = e; out[-1][2] = PRICE
         continue
     out.append([s, e, fix.get(t, t)])
 
@@ -48,12 +49,12 @@ PHRASES = [
     ("and brings you matches", None),
     ("that *actually *fit.", None),
     ("For professionals | serious about marriage.", None),
-    ("Plans start at *₹5,100.", None),
+    ("Plans start at | *" + PRICE, None),
 ]
 i = 0
 phrases = []
 for spec, _ in PHRASES:
-    lines = [l.split() for l in spec.split("|")]
+    lines = [[x for x in l.split(" ") if x] for l in spec.split("|")]  # plain spaces only
     pw = []
     for li, line in enumerate(lines):
         for tok in line:
@@ -80,7 +81,7 @@ with open("output/captions.srt", "w") as f:
     for n, p in enumerate(phrases, 1):
         lines = {}
         for x in p["words"]:
-            lines.setdefault(x["line"], []).append(x["text"])
+            lines.setdefault(x["line"], []).append(x["text"].replace("\u00a0", " "))
         f.write(f"{n}\n{ts(p['show'])} --> {ts(p['hide'])}\n" + "\n".join(" ".join(v) for v in lines.values()) + "\n\n")
 for p in phrases:
     print(f"{p['show']:6.2f}-{p['hide']:6.2f}  " + " ".join(("*" if x["accent"] else "") + x["text"] for x in p["words"]))

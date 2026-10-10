@@ -40,5 +40,6 @@ serious about marriage.
 
 10
 00:00:18,470 --> 00:00:21,690
-Plans start at ₹5,100.
+Plans start at
+Rs 5,100 + GST
 

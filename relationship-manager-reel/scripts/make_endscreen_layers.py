@@ -121,20 +121,6 @@ def main():
         layers[name] = {"x": x0, "y": y0, "w": x1 - x0, "h": y1 - y0}
     json.dump(layers, open(f"{OUT}/layers.json", "w"), indent=2)
 
-    # Keyed logo for the in-video brand moment: the original logo pixels un-mixed from
-    # the cream background (alpha from ink density, colour = (I - (1-a)*bg) / a), so it
-    # can sit on footage without a cream fringe. Shape and colour are unchanged.
-    n, x0, y0, x1, y1 = to_px(TEXT_BOXES[0])
-    crop = img[y0:y1, x0:x1].astype(np.float32)
-    bg = np.dstack([cv2.morphologyEx(img[..., c], cv2.MORPH_CLOSE,
-                    cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (41, 41)))[y0:y1, x0:x1] for c in range(3)]).astype(np.float32)
-    d = (bg.mean(2) - crop.mean(2))
-    core = np.percentile(d[d > 40], 90)
-    a = np.clip((d - 14) / (core - 14), 0, 1)
-    col = (crop - (1 - a[..., None]) * bg) / np.maximum(a[..., None], 1e-3)
-    col = np.clip(col, 0, 255)
-    Image.fromarray(np.dstack([col, a * 255]).astype(np.uint8), "RGBA").save(f"{OUT}/brand_logo.png")
-    print("brand logo", x1 - x0, "x", y1 - y0, "ink core", round(float(core), 1))
 
     # Check: plate + all layers at rest should reproduce the original image.
     comp = plate.astype(np.float32)

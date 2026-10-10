@@ -37,23 +37,20 @@ untouched, and skin tones stay natural.
 
 **Subtitles.** Transcribed with Whisper large-v3 and verified against the audio. Each phrase is
 re-timed onto the speech envelope, because Whisper's onsets ran 0.3–0.45 s early. Corrections: "Shadi"
-becomes **Shaadi**, and the spoken "5,100 rupees" is written as **₹5,100**.
+becomes **Shaadi**, and the spoken "5,100 rupees" is captioned **Rs 5,100 + GST**, as requested.
 - Montserrat Bold 64 px, white, with a soft dark outline and shadow plus a faint radial scrim.
 - 2–6 words per phrase, at most two lines, centred at y≈1185. That is clear of every face, and above
   the bottom ~35% that the Reels and Meta ads UI covers.
 - Words fade and rise 16 px into place as they are spoken. Lines are laid out in advance, so nothing
   reflows.
 - Gold (#F7CD86) marks only the key words: *full-time job*, *Shaadi Mangalam*,
-  *relationship manager*, *actually fit* and *₹5,100*.
+  *relationship manager*, *actually fit* and *Rs 5,100 + GST*.
 
-**Graphics (three in total, each tied to a line of the voiceover).**
-1. *"With Shaadi Mangalam"* (4.3–6.3 s): the Shaadi Mangalam logo settles onto the empty wall above
-   her in shot 2. This puts the brand on screen in the first 5 seconds. The logo is the original
-   artwork, keyed off its background, and is otherwise unchanged.
-2. *"…a dedicated relationship manager"* (6.8–10.3 s): a small cream label card, "DEDICATED /
+**Graphics (two, each tied to a line of the voiceover).**
+1. *"…a dedicated relationship manager"* (6.8–10.3 s): a small cream label card, "DEDICATED /
    Relationship Manager", whose icon draws itself in. It names the person who has just appeared on
    screen.
-3. *"…brings you matches that actually fit"* (13.8–16.0 s): the same card style, "CURATED / Matches".
+2. *"…brings you matches that actually fit"* (13.8–16.0 s): the same card style, "CURATED / Matches".
 
 Both cards use the end screen's own feature wording and palette (cream and maroon), so they set up the
 end screen.
