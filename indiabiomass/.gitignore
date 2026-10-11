@@ -1,0 +1,9 @@
+film/node_modules/
+film/out/
+film/public/clips/
+film/public/geo/india-osm.geojson
+footage/raw/
+footage/contact/
+audio/sfx/raw/
+audio/vo_candidates/*.json.bak
+__pycache__/

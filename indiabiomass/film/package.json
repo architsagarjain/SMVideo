@@ -1,0 +1,17 @@
+{
+  "name": "indiabiomass-brand-film",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render src/index.ts BrandFilm out/film_video.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.534",
+    "@types/react": "^18.3.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.534",
+    "typescript": "^5.9.3"
+  }
+}
