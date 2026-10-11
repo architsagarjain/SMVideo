@@ -53,7 +53,7 @@ export const Kinetic: React.FC<{
                       transform: `translateY(${(1 - t) * 105}%) rotate(${(1 - t) * 6}deg)`,
                       opacity: t,
                       color: glow > 0 ? mix(color, C.harvest, glow) : color,
-                      textShadow: glow > 0 ? `0 0 ${24 * glow}px rgba(232,176,75,${0.55 * glow})` : undefined,
+                      textShadow: glow > 0 ? `0 0 ${24 * glow}px rgba(232,176,75,${0.55 * glow}), 0 4px 30px rgba(0,0,0,0.35)` : '0 4px 30px rgba(0,0,0,0.35)',
                     }}
                   >
                     {ch === ' ' ? ' ' : ch}

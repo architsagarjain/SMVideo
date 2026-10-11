@@ -15,7 +15,7 @@ export const S7Finale: React.FC = () => {
   const draw = lerp(f, [0, END - 6], [0, 1], E.inOut);
   const card = lerp(f, [END - 8, END + 6], [0, 1], E.inOut);
   const cx = MAP_W * 0.47, cy = MAP_H * 0.52;
-  const cam = { cx: 480, cy: 600, zoom: 2.4 - E.out(Math.min(1, f / (END + 30))) * 1.75, tilt: 40 * (1 - card), rot: -8 * (1 - card), oy: -60 * card };
+  const cam = { cx: 480, cy: 560, zoom: 3.2 - E.inOut(Math.min(1, f / (END + 4))) * 2.25, tilt: 40 * (1 - card), rot: -8 * (1 - card), oy: -60 * card };
   const ctaT = (d: number) => lerp(f, [END + d, END + d + 16], [0, 1], E.out);
   return (
     <AbsoluteFill style={{ background: C.night }}>

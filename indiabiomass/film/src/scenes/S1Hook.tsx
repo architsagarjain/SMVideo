@@ -33,7 +33,7 @@ export const S1Hook: React.FC = () => {
       <Genesis split={14} launch={46} bloom={bloom} />
       <AbsoluteFill style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,236,200,1) 0%, rgba(255,200,120,0.6) 35%, rgba(255,180,90,0) 70%)', opacity: flash, mixBlendMode: 'screen' }} />
       {/* readability wash behind the headline */}
-      <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(4,20,12,0.55) 0%, rgba(4,20,12,0.15) 45%, rgba(0,0,0,0) 60%)', opacity: lerp(f, [100, 112, 170, 180], [0, 1, 1, 0]) }} />
+      <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(4,20,12,0.78) 0%, rgba(4,20,12,0.5) 22%, rgba(4,20,12,0.12) 42%, rgba(0,0,0,0) 55%)', opacity: lerp(f, [100, 112, 170, 180], [0, 1, 1, 0]) }} />
       <div style={{ position: 'absolute', left: 60, right: 60, top: 330 }}>
         <Kinetic lines={['AN INDUSTRY OF', 'POSSIBILITIES.']} at={104} out={170} size={92} sweep stagger={1.1} />
       </div>
