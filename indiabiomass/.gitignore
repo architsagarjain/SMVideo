@@ -9,3 +9,7 @@ audio/vo_candidates/*.json.bak
 __pycache__/
 audio/sfx/*.wav
 audio/sfx/spec/
+# build outputs, committed at final delivery
+audio/*.wav
+audio/stems/
+audio/vo_candidates/
