@@ -211,8 +211,8 @@ add(F(1410 + 176), shimmer(1.5, density=50, lo=2500, hi=8000, seed=31), 1.0)
 # =========================================================== S7 00:55-01:00
 add(55.0, whoosh(1.6, 100, 2500, 0.8, 0, 0), 0.6)                     # rising above the land
 add(55.0, crackle(1.6, 10, 140, seed=13), 0.9)
-add_rec_or(56.73, ['impact_trailer_epic.wav'], lambda: np.zeros(10), 0.4, dur=3.0, fade=0.01)
-add_rec_or(56.73, ['sub_futuristic_bass_hit.wav'], lambda: np.zeros(10), 0.3)
+add_rec_or(56.533, ['impact_trailer_epic.wav'], lambda: np.zeros(10), 0.4, dur=3.0, fade=0.01)
+add_rec_or(56.533, ['sub_futuristic_bass_hit.wav'], lambda: np.zeros(10), 0.3)
 
 sfx = S.buf[:, :N]
 sfx = sfx * np.interp(np.arange(N) / SR, [0, 14.97, 15.0, 15.03, 60], [1, 1, 0.08, 1, 1])  # tails stop at the cut
@@ -224,7 +224,7 @@ vo = vo[:N]
 music, sr2 = sf.read(os.path.join(ROOT, 'stems', 'music.wav'), always_2d=True)
 music = music.T[:, :N]
 # dramatic dynamics: hard cut to near-silence at 15.0, short suck-outs before the two big hits
-auto_t = [0, 14.96, 14.99, 15.45, 16.2, 19.80, 19.87, 19.985, 20.0, 56.58, 56.65, 56.718, 56.733, 60]
+auto_t = [0, 14.96, 14.99, 15.45, 16.2, 19.80, 19.87, 19.985, 20.0, 56.38, 56.45, 56.518, 56.533, 60]
 auto_g = [1, 1,     0.03,  0.03,  1,    1,     0.12,  0.12,   1,    1,     0.12,  0.12,   1,      1]
 music = music * np.interp(np.arange(N) / SR, auto_t, auto_g)
 vo_proc = fx(vo.astype(np.float32), Pedalboard([

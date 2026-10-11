@@ -22,7 +22,7 @@ PLACE = [
     ('L03', 0, 2, 10.75),   # Prices are unclear.
     ('L03', 3, 5, 12.70),   # Opportunities are scattered.
     ('L04', 0, 6, 15.72),   # What if the entire ecosystem could connect?
-    ('L05', 0, 1, 19.02),   # Introducing IndiaBiomass.  ("IndiaBiomass" hits the logo at 20.0)
+    ('L05', 0, 1, 19.12),   # Introducing IndiaBiomass.  ("IndiaBiomass" hits the logo at 20.0)
     ('L06', 0, 4, 23.50),   # Connecting verified buyers and sellers
     ('L06', 5, 7, 26.70),   # of biomass fuels,
     ('L06', 8, 9, 30.70),   # raw materials,
@@ -97,7 +97,11 @@ for line, a, b, text, hl in CUES:
     ws = words[line]['words']
     s = offset[(line, a)] + ws[a]['start'] - 0.06
     e = offset[(line, b)] + ws[b]['end'] + 0.30
-    cues.append({'s': int(round(s * FPS)), 'e': int(round(e * FPS)), 't': text, 'hl': hl})
+    # per-word frame times for the karaoke-style highlight (display words map 1:1 to spoken words)
+    shown = text.split()
+    spoken = ws[a:b + 1]
+    wt = [int(round((offset[(line, a + i)] + spoken[min(i, len(spoken) - 1)]['start']) * FPS)) for i in range(len(shown))]
+    cues.append({'s': int(round(s * FPS)), 'e': int(round(e * FPS)), 't': text, 'hl': hl, 'w': wt})
 for i in range(len(cues) - 1):  # never overlap the next cue
     cues[i]['e'] = min(cues[i]['e'], cues[i + 1]['s'])
 json.dump({'voice': VOICE, 'phrases': placed, 'cues': cues},

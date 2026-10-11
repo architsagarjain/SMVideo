@@ -63,10 +63,19 @@ const Exploded: React.FC<{ at: number; cx: number; cy: number; labels: string[];
   const stroke = blueprint ? '#BFE3D0' : '#FFE2A8';
   return (
     <svg width={1080} height={1920} style={{ position: 'absolute', inset: 0 }}>
+      <defs>
+        <radialGradient id={`halo${at}`}>
+          <stop offset="0" stopColor="#04140C" stopOpacity={0.05} />
+          <stop offset="0.55" stopColor="#04140C" stopOpacity={0.42} />
+          <stop offset="1" stopColor="#04140C" stopOpacity={0} />
+        </radialGradient>
+        <filter id={`ts${at}`} x="-20%" y="-50%" width="140%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#000" floodOpacity="0.8" /></filter>
+      </defs>
+      <circle cx={cx} cy={cy} r={470} fill={`url(#halo${at})`} opacity={t} />
       {[150, 230, 330].map((rad, i) => {
         const c = 2 * Math.PI * rad;
         return (
-          <circle key={i} cx={cx} cy={cy} r={rad * (0.7 + 0.3 * t)} fill="none" stroke={stroke} strokeOpacity={0.55 - i * 0.12} strokeWidth={i === 0 ? 2.5 : 1.5}
+          <circle key={i} cx={cx} cy={cy} r={rad * (0.7 + 0.3 * t)} fill="none" stroke={stroke} strokeOpacity={0.85 - i * 0.15} strokeWidth={i === 0 ? 3.5 : 2.2}
             strokeDasharray={i === 1 ? '4 10' : `${c * t} ${c}`} transform={`rotate(${f * spin * (i % 2 ? -1 : 1) - 90} ${cx} ${cy})`} />
         );
       })}
@@ -90,15 +99,15 @@ const Exploded: React.FC<{ at: number; cx: number; cy: number; labels: string[];
       {labels.map((l, i) => {
         const lt = lerp(f, [10 + i * 8, 30 + i * 8], [0, 1], E.out);
         const ang = -0.9 + i * 1.6;
-        const x0 = cx + Math.cos(ang) * 230, y0 = cy + Math.sin(ang) * 230;
-        const x1 = cx + Math.cos(ang) * 360, y1 = cy + Math.sin(ang) * 360;
+        const x0 = cx + Math.cos(ang) * 200, y0 = cy + Math.sin(ang) * 200;
+        const x1 = cx + Math.cos(ang) * 285, y1 = cy + Math.sin(ang) * 285;
         const right = Math.cos(ang) > 0;
-        const x2 = x1 + (right ? 70 : -70) * lt;
+        const x2 = x1 + (right ? 40 : -40) * lt;
         return (
           <g key={l} opacity={lt}>
             <circle cx={x0} cy={y0} r={5} fill={stroke} />
-            <polyline points={`${x0},${y0} ${x0 + (x1 - x0) * lt},${y0 + (y1 - y0) * lt} ${x2},${y1}`} fill="none" stroke={stroke} strokeWidth={1.8} />
-            <text x={x2 + (right ? 10 : -10)} y={y1 + 8} textAnchor={right ? 'start' : 'end'} fill="#fff" fontFamily={F.label} fontSize={24} letterSpacing="0.16em" fontWeight={600}>{l.toUpperCase()}</text>
+            <polyline points={`${x0},${y0} ${x0 + (x1 - x0) * lt},${y0 + (y1 - y0) * lt} ${x2},${y1}`} fill="none" stroke={stroke} strokeWidth={2.4} />
+            <text x={x2 + (right ? 10 : -10)} y={y1 + 8} textAnchor={right ? 'start' : 'end'} fill="#fff" filter={`url(#ts${at})`} fontFamily={F.label} fontSize={24} letterSpacing="0.12em" fontWeight={600}>{l.toUpperCase()}</text>
           </g>
         );
       })}

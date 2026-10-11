@@ -8,7 +8,7 @@ import { lerp, E } from '../lib';
 import { C, F } from '../theme';
 
 // 00:55-01:00  local 0-150. Rise above the land; the network draws India; end card.
-export const END = 52;
+export const END = 46;
 
 export const S7Finale: React.FC = () => {
   const f = useCurrentFrame();

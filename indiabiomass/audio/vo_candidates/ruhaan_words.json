@@ -1,0 +1,439 @@
+{
+ "L01": {
+  "duration": 2.74,
+  "words": [
+   {
+    "w": "India",
+    "start": 0.03,
+    "end": 0.37
+   },
+   {
+    "w": "has",
+    "start": 0.32,
+    "end": 0.75
+   },
+   {
+    "w": "biomass",
+    "start": 0.7,
+    "end": 1.58
+   },
+   {
+    "w": "Plenty",
+    "start": 1.87,
+    "end": 2.19
+   },
+   {
+    "w": "of",
+    "start": 2.14,
+    "end": 2.55
+   },
+   {
+    "w": "it",
+    "start": 2.5,
+    "end": 2.71
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L02": {
+  "duration": 3.27,
+  "words": [
+   {
+    "w": "But",
+    "start": 0.03,
+    "end": 0.395
+   },
+   {
+    "w": "buyers",
+    "start": 0.395,
+    "end": 0.765
+   },
+   {
+    "w": "and",
+    "start": 0.715,
+    "end": 0.985
+   },
+   {
+    "w": "suppliers",
+    "start": 0.935,
+    "end": 1.405
+   },
+   {
+    "w": "don't",
+    "start": 1.355,
+    "end": 1.885
+   },
+   {
+    "w": "always",
+    "start": 1.835,
+    "end": 2.365
+   },
+   {
+    "w": "find",
+    "start": 2.315,
+    "end": 2.705
+   },
+   {
+    "w": "each",
+    "start": 2.655,
+    "end": 2.965
+   },
+   {
+    "w": "other",
+    "start": 2.915,
+    "end": 3.24
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L03": {
+  "duration": 3.21,
+  "words": [
+   {
+    "w": "Prices",
+    "start": 0.03,
+    "end": 0.235
+   },
+   {
+    "w": "are",
+    "start": 0.235,
+    "end": 0.705
+   },
+   {
+    "w": "unclear",
+    "start": 0.655,
+    "end": 1.29
+   },
+   {
+    "w": "Opportunities",
+    "start": 1.56,
+    "end": 2.345
+   },
+   {
+    "w": "are",
+    "start": 2.295,
+    "end": 2.605
+   },
+   {
+    "w": "scattered",
+    "start": 2.555,
+    "end": 3.18
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L04": {
+  "duration": 2.48,
+  "words": [
+   {
+    "w": "What",
+    "start": 0.03,
+    "end": 0.195
+   },
+   {
+    "w": "if",
+    "start": 0.195,
+    "end": 0.385
+   },
+   {
+    "w": "the",
+    "start": 0.385,
+    "end": 0.565
+   },
+   {
+    "w": "entire",
+    "start": 0.515,
+    "end": 1.145
+   },
+   {
+    "w": "ecosystem",
+    "start": 1.095,
+    "end": 1.705
+   },
+   {
+    "w": "could",
+    "start": 1.655,
+    "end": 2.14
+   },
+   {
+    "w": "connect",
+    "start": 2.125,
+    "end": 2.45
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L05": {
+  "duration": 2.09,
+  "words": [
+   {
+    "w": "Introducing",
+    "start": 0.03,
+    "end": 0.785
+   },
+   {
+    "w": "IndiaBiomass",
+    "start": 0.835,
+    "end": 2.06
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L06": {
+  "duration": 5.305,
+  "words": [
+   {
+    "w": "Connecting",
+    "start": 0.03,
+    "end": 0.5
+   },
+   {
+    "w": "verified",
+    "start": 0.5,
+    "end": 0.91
+   },
+   {
+    "w": "buyers",
+    "start": 0.86,
+    "end": 1.43
+   },
+   {
+    "w": "and",
+    "start": 1.38,
+    "end": 1.65
+   },
+   {
+    "w": "sellers",
+    "start": 1.6,
+    "end": 1.97
+   },
+   {
+    "w": "of",
+    "start": 1.92,
+    "end": 2.305
+   },
+   {
+    "w": "biomass",
+    "start": 2.29,
+    "end": 2.81
+   },
+   {
+    "w": "fuels",
+    "start": 2.76,
+    "end": 3.365
+   },
+   {
+    "w": "raw",
+    "start": 3.5,
+    "end": 3.79
+   },
+   {
+    "w": "materials",
+    "start": 3.74,
+    "end": 4.21
+   },
+   {
+    "w": "and",
+    "start": 4.16,
+    "end": 4.67
+   },
+   {
+    "w": "machinery",
+    "start": 4.62,
+    "end": 5.275
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L07": {
+  "duration": 1.225,
+  "words": [
+   {
+    "w": "Discover",
+    "start": 0.03,
+    "end": 0.415
+   },
+   {
+    "w": "tenders",
+    "start": 0.415,
+    "end": 1.195
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L08": {
+  "duration": 1.505,
+  "words": [
+   {
+    "w": "Follow",
+    "start": 0.03,
+    "end": 0.305
+   },
+   {
+    "w": "regional",
+    "start": 0.305,
+    "end": 0.795
+   },
+   {
+    "w": "prices",
+    "start": 0.745,
+    "end": 1.475
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L09": {
+  "duration": 3.51,
+  "words": [
+   {
+    "w": "Track",
+    "start": 0.03,
+    "end": 0.425
+   },
+   {
+    "w": "supply",
+    "start": 0.425,
+    "end": 0.875
+   },
+   {
+    "w": "and",
+    "start": 0.825,
+    "end": 1.225
+   },
+   {
+    "w": "policies",
+    "start": 1.21,
+    "end": 1.89
+   },
+   {
+    "w": "All",
+    "start": 2.13,
+    "end": 2.415
+   },
+   {
+    "w": "in",
+    "start": 2.365,
+    "end": 2.675
+   },
+   {
+    "w": "one",
+    "start": 2.625,
+    "end": 2.955
+   },
+   {
+    "w": "place",
+    "start": 2.905,
+    "end": 3.48
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L10": {
+  "duration": 3.84,
+  "words": [
+   {
+    "w": "Our",
+    "start": 0.03,
+    "end": 0.19
+   },
+   {
+    "w": "mission",
+    "start": 0.19,
+    "end": 0.68
+   },
+   {
+    "w": "Simpler",
+    "start": 1.015,
+    "end": 1.675
+   },
+   {
+    "w": "more",
+    "start": 1.77,
+    "end": 2.08
+   },
+   {
+    "w": "transparent",
+    "start": 2.03,
+    "end": 2.76
+   },
+   {
+    "w": "biomass",
+    "start": 2.71,
+    "end": 3.32
+   },
+   {
+    "w": "trade",
+    "start": 3.27,
+    "end": 3.81
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L11": {
+  "duration": 2.945,
+  "words": [
+   {
+    "w": "Our",
+    "start": 0.03,
+    "end": 0.205
+   },
+   {
+    "w": "vision",
+    "start": 0.205,
+    "end": 0.705
+   },
+   {
+    "w": "A",
+    "start": 1.02,
+    "end": 1.21
+   },
+   {
+    "w": "connected",
+    "start": 1.2,
+    "end": 1.59
+   },
+   {
+    "w": "biomass",
+    "start": 1.615,
+    "end": 2.295
+   },
+   {
+    "w": "economy",
+    "start": 2.245,
+    "end": 2.915
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ },
+ "L12": {
+  "duration": 3.675,
+  "words": [
+   {
+    "w": "IndiaBiomass",
+    "start": 0.03,
+    "end": 0.98
+   },
+   {
+    "w": "Connecting",
+    "start": 1.395,
+    "end": 1.975
+   },
+   {
+    "w": "India's",
+    "start": 1.995,
+    "end": 2.53
+   },
+   {
+    "w": "biomass",
+    "start": 2.515,
+    "end": 2.95
+   },
+   {
+    "w": "economy",
+    "start": 2.9,
+    "end": 3.645
+   }
+  ],
+  "timing_source": "faster-whisper small.en + energy-gated edges"
+ }
+}

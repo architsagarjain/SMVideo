@@ -121,7 +121,7 @@ export const S5Intel: React.FC = () => {
   const p1 = (1 - whip1);
   const st = india.states as unknown as Record<string, [number, number]>;
   const mapIn = lerp(f, [R0, R0 + 24], [0, 1], E.out);
-  const cam = { cx: 480, cy: 560, ox: 50 * (1 - one), zoom: 0.70 + mapIn * 0.06 - one * 0.12, tilt: 34, rot: -4 + (f - R0) * 0.04, oy: -40 - one * 120 };
+  const cam = { cx: 480, cy: 560, ox: 50 * (1 - one), zoom: 0.70 + mapIn * 0.06 - one * 0.14, tilt: 34 - one * 10, rot: (-4 + (f - R0) * 0.04) * (1 - one), oy: -40 - one * 100 };
   return (
     <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 40%, #0E2A1D 0%, ${C.night} 70%)` }}>
       <Grid />
@@ -164,6 +164,19 @@ export const S5Intel: React.FC = () => {
           </div>
         </div>
       </AbsoluteFill>
+      {/* "all in one place": the panels lock into a single IndiaBiomass window */}
+      {one > 0 && (
+        <div
+          style={{
+            position: 'absolute', left: 50, top: 548, width: 980, height: 820, borderRadius: 26, overflow: 'hidden',
+            border: '2px solid rgba(232,176,75,0.55)', boxShadow: '0 0 0 1px rgba(0,0,0,0.4), 0 40px 120px rgba(0,0,0,0.55), 0 0 60px rgba(232,176,75,0.18)',
+            opacity: one, transform: `scale(${1.14 - 0.14 * one})`, transformOrigin: '50% 50%', pointerEvents: 'none',
+          }}
+        >
+          <Img src={staticFile('ui/home_nav.png')} style={{ width: 980, display: 'block' }} />
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 76, height: 2, background: 'rgba(232,176,75,0.35)' }} />
+        </div>
+      )}
       <div style={{ position: 'absolute', left: 80, right: 80, top: 300 }}>
         <Slam text="TENDERS." at={8} out={Q0 - 12} size={120} />
       </div>

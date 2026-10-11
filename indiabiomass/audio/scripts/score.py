@@ -10,7 +10,7 @@ audio/stems/music.wav (48 kHz stereo float).
   23-37  confident main rhythm: Bb-F-C-Dm, lead motif, mechanical textures for machinery
   37-47  16th-note arps, four-on-the-floor, filter opening, riser into 47
   47-55  expansive half-time, wide pads, brass-like motif, toms
-  55-60  build, final hit at 56.73 on D major, three-note sonic signature, natural decay
+  55-60  build, final hit at 56.53 on D major, three-note sonic signature, natural decay
 """
 import os
 import numpy as np
@@ -20,7 +20,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR = 60.0
 B = 0.5  # one beat at 120 BPM
 TIMES = dict(reveal=2.6, s2=6.0, s3=15.0, wave=16.13, condense=18.93, logo=20.0, s4=23.0,
-             a=26.5, b=30.5, c=34.0, s5=37.0, q=40.5, r=43.0, s6=47.0, s7=55.0, end=56.733)
+             a=26.5, b=30.5, c=34.0, s5=37.0, q=40.5, r=43.0, s6=47.0, s7=55.0, end=56.533)
 
 drums, bass, pads, keys, lead, fxb = (Track(DUR) for _ in range(6))
 

@@ -5,9 +5,12 @@
 #   3. render picture with Remotion, then mux the final mix (AAC 320k)
 set -euo pipefail
 cd "$(dirname "$0")"
-VOICE=${VOICE:-prabhat}
+VOICE=${VOICE:-ruhaan}
 
 python3 film/scripts/prep_footage.py
+if [ "$VOICE" = ruhaan ]; then  # single-take ElevenLabs narration -> per-line takes
+  python3 audio/scripts/split_vo.py ruhaan audio/vo_source/ruhaan_full.wav audio/vo_source/ruhaan_whisper_words.json
+fi
 python3 audio/scripts/build_vo.py "$VOICE"
 python3 audio/scripts/score.py
 python3 audio/scripts/mix.py

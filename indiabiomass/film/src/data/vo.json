@@ -1,189 +1,246 @@
 {
- "voice": "prabhat",
+ "voice": "ruhaan",
  "phrases": [
   {
    "line": "L01",
    "text": "India has biomass",
    "start": 0.6,
-   "end": 2.169
+   "end": 2.15
   },
   {
    "line": "L01",
    "text": "Plenty of it",
    "start": 2.62,
-   "end": 3.509
+   "end": 3.46
   },
   {
    "line": "L02",
    "text": "But buyers and suppliers don't always find each other",
    "start": 6.18,
-   "end": 10.513
+   "end": 9.39
   },
   {
    "line": "L03",
    "text": "Prices are unclear",
    "start": 10.75,
-   "end": 12.361
+   "end": 12.01
   },
   {
    "line": "L03",
    "text": "Opportunities are scattered",
    "start": 12.7,
-   "end": 14.7
+   "end": 14.32
   },
   {
    "line": "L04",
    "text": "What if the entire ecosystem could connect",
    "start": 15.72,
-   "end": 18.526
+   "end": 18.14
   },
   {
    "line": "L05",
    "text": "Introducing IndiaBiomass",
-   "start": 19.02,
-   "end": 21.062
+   "start": 19.12,
+   "end": 21.15
   },
   {
    "line": "L06",
    "text": "Connecting verified buyers and sellers",
    "start": 23.5,
-   "end": 26.361
+   "end": 25.44
   },
   {
    "line": "L06",
    "text": "of biomass fuels",
    "start": 26.7,
-   "end": 28.117
+   "end": 28.145
   },
   {
    "line": "L06",
    "text": "raw materials",
    "start": 30.7,
-   "end": 31.631
+   "end": 31.41
   },
   {
    "line": "L06",
    "text": "and machinery",
    "start": 34.2,
-   "end": 35.131
+   "end": 35.315
   },
   {
    "line": "L07",
    "text": "Discover tenders",
    "start": 37.4,
-   "end": 38.622
+   "end": 38.565
   },
   {
    "line": "L08",
    "text": "Follow regional prices",
    "start": 40.6,
-   "end": 42.197
+   "end": 42.045
   },
   {
    "line": "L09",
-   "text": "Track supply and policies all in one place",
+   "text": "Track supply and policies All in one place",
    "start": 43.12,
-   "end": 46.856
+   "end": 46.57
   },
   {
    "line": "L10",
-   "text": "Our mission simpler more transparent biomass trade",
+   "text": "Our mission Simpler more transparent biomass trade",
    "start": 47.2,
-   "end": 51.464
+   "end": 50.98
   },
   {
    "line": "L11",
-   "text": "Our vision a connected biomass economy",
+   "text": "Our vision A connected biomass economy",
    "start": 51.62,
-   "end": 54.62
+   "end": 54.505
   },
   {
    "line": "L12",
    "text": "IndiaBiomass",
    "start": 55.25,
-   "end": 56.417
+   "end": 56.2
   },
   {
    "line": "L12",
    "text": "Connecting India's biomass economy",
    "start": 56.85,
-   "end": 59.363
+   "end": 59.1
   }
  ],
  "cues": [
   {
    "s": 16,
-   "e": 74,
+   "e": 73,
    "t": "India has biomass.",
    "hl": [
     "biomass"
+   ],
+   "w": [
+    18,
+    27,
+    38
    ]
   },
   {
    "s": 77,
-   "e": 114,
+   "e": 113,
    "t": "Plenty of it.",
-   "hl": []
-  },
-  {
-   "s": 184,
-   "e": 244,
-   "t": "But buyers and suppliers",
-   "hl": []
-  },
-  {
-   "s": 244,
-   "e": 321,
-   "t": "don't always find each other.",
-   "hl": []
-  },
-  {
-   "s": 321,
-   "e": 379,
-   "t": "Prices are unclear.",
-   "hl": []
-  },
-  {
-   "s": 379,
-   "e": 450,
-   "t": "Opportunities are scattered.",
-   "hl": []
-  },
-  {
-   "s": 470,
-   "e": 532,
-   "t": "What if the entire ecosystem",
-   "hl": []
-  },
-  {
-   "s": 532,
-   "e": 565,
-   "t": "could connect?",
-   "hl": [
-    "connect"
+   "hl": [],
+   "w": [
+    79,
+    87,
+    98
    ]
   },
   {
-   "s": 569,
-   "e": 641,
+   "s": 184,
+   "e": 223,
+   "t": "But buyers and suppliers",
+   "hl": [],
+   "w": [
+    185,
+    196,
+    206,
+    213
+   ]
+  },
+  {
+   "s": 223,
+   "e": 291,
+   "t": "don't always find each other.",
+   "hl": [],
+   "w": [
+    225,
+    240,
+    254,
+    264,
+    272
+   ]
+  },
+  {
+   "s": 321,
+   "e": 369,
+   "t": "Prices are unclear.",
+   "hl": [],
+   "w": [
+    322,
+    329,
+    341
+   ]
+  },
+  {
+   "s": 379,
+   "e": 439,
+   "t": "Opportunities are scattered.",
+   "hl": [],
+   "w": [
+    381,
+    403,
+    411
+   ]
+  },
+  {
+   "s": 470,
+   "e": 519,
+   "t": "What if the entire ecosystem",
+   "hl": [],
+   "w": [
+    472,
+    477,
+    482,
+    486,
+    504
+   ]
+  },
+  {
+   "s": 519,
+   "e": 553,
+   "t": "could connect?",
+   "hl": [
+    "connect"
+   ],
+   "w": [
+    520,
+    534
+   ]
+  },
+  {
+   "s": 572,
+   "e": 644,
    "t": "Introducing IndiaBiomass.",
    "hl": [
     "IndiaBiomass"
+   ],
+   "w": [
+    574,
+    598
    ]
   },
   {
    "s": 703,
-   "e": 742,
+   "e": 728,
    "t": "Connecting verified",
    "hl": [
     "verified"
+   ],
+   "w": [
+    705,
+    719
    ]
   },
   {
-   "s": 742,
-   "e": 799,
+   "s": 728,
+   "e": 772,
    "t": "buyers and sellers",
-   "hl": []
+   "hl": [],
+   "w": [
+    730,
+    745,
+    752
+   ]
   },
   {
    "s": 799,
@@ -191,68 +248,113 @@
    "t": "of biomass fuels,",
    "hl": [
     "fuels"
+   ],
+   "w": [
+    801,
+    812,
+    826
    ]
   },
   {
    "s": 919,
-   "e": 958,
+   "e": 951,
    "t": "raw materials,",
    "hl": [
     "materials"
+   ],
+   "w": [
+    921,
+    928
    ]
   },
   {
    "s": 1024,
-   "e": 1063,
+   "e": 1068,
    "t": "and machinery.",
    "hl": [
     "machinery"
+   ],
+   "w": [
+    1026,
+    1040
    ]
   },
   {
    "s": 1120,
-   "e": 1168,
+   "e": 1166,
    "t": "Discover tenders.",
    "hl": [
     "tenders"
+   ],
+   "w": [
+    1122,
+    1134
    ]
   },
   {
    "s": 1216,
-   "e": 1275,
+   "e": 1270,
    "t": "Follow regional prices.",
    "hl": [
     "prices"
+   ],
+   "w": [
+    1218,
+    1226,
+    1239
    ]
   },
   {
    "s": 1292,
-   "e": 1360,
+   "e": 1355,
    "t": "Track supply and policies,",
-   "hl": []
+   "hl": [],
+   "w": [
+    1294,
+    1305,
+    1317,
+    1329
+   ]
   },
   {
-   "s": 1360,
-   "e": 1414,
+   "s": 1355,
+   "e": 1406,
    "t": "all in one place.",
    "hl": [
     "one",
     "place"
+   ],
+   "w": [
+    1357,
+    1364,
+    1371,
+    1380
    ]
   },
   {
    "s": 1414,
-   "e": 1473,
+   "e": 1466,
    "t": "Our mission: simpler,",
    "hl": [
     "mission"
+   ],
+   "w": [
+    1416,
+    1421,
+    1446
    ]
   },
   {
-   "s": 1473,
-   "e": 1547,
+   "s": 1466,
+   "e": 1538,
    "t": "more transparent biomass trade.",
-   "hl": []
+   "hl": [],
+   "w": [
+    1468,
+    1476,
+    1496,
+    1513
+   ]
   },
   {
    "s": 1547,
@@ -260,27 +362,46 @@
    "t": "Our vision:",
    "hl": [
     "vision"
+   ],
+   "w": [
+    1549,
+    1554
    ]
   },
   {
    "s": 1576,
-   "e": 1648,
+   "e": 1644,
    "t": "a connected biomass economy.",
-   "hl": []
+   "hl": [],
+   "w": [
+    1578,
+    1584,
+    1596,
+    1615
+   ]
   },
   {
    "s": 1656,
-   "e": 1702,
+   "e": 1695,
    "t": "IndiaBiomass.",
    "hl": [
     "IndiaBiomass"
+   ],
+   "w": [
+    1658
    ]
   },
   {
    "s": 1704,
-   "e": 1790,
+   "e": 1782,
    "t": "Connecting India's biomass economy.",
-   "hl": []
+   "hl": [],
+   "w": [
+    1706,
+    1723,
+    1739,
+    1751
+   ]
   }
  ]
 }

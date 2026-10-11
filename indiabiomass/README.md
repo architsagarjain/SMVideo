@@ -25,7 +25,7 @@
 | 47–55 s | Mission/Vision | A gold thread runs through field → supplier → industry and into the national network. |
 | 55–60 s | Finale | **Hero 3:** rising over farmland, connections radiate out and trace the outline of India. The final hit lands on the end card: logo with descriptor, "Connecting India's biomass economy.", "Explore IndiaBiomass", indiabiomass.com. A three-note sonic signature (D–A–D/F♯) closes it. |
 
-Section changes fall on the 120 BPM grid, and the score was composed to the picture: hard cut at 15.0 s, logo hit at 20.0 s, final hit at 56.73 s.
+Section changes fall on the 120 BPM grid, and the score was composed to the picture: hard cut at 15.0 s, logo hit at 20.0 s, final hit at 56.53 s. Subtitles light up word by word in time with the narration. Warm light leaks carry the cuts into the offer, mission and finale sections.
 
 ## Rebuild
 
@@ -37,7 +37,7 @@ Needs ffmpeg, Python 3 (`numpy scipy soundfile pedalboard pyloudnorm`), Node 22.
 
 - **Preview/edit visuals:** `cd film && npx remotion studio`. Scenes are in `film/src/scenes/S1…S7`. Scene boundaries are in `film/src/Film.tsx`.
 - **Change wording or timing of the narration:** edit `PLACE`/`CUES` in `audio/scripts/build_vo.py`. Subtitles regenerate from word timings.
-- **Swap the voice:** drop new takes into `audio/vo_candidates/<voice>_LNN.wav` with a `<voice>_words.json`, then run `VOICE=<voice> ./build_film.sh`.
+- **Swap the voice:** for a single take, use `audio/scripts/split_vo.py` (see the narration note below). For per-line takes, drop them into `audio/vo_candidates/<voice>_LNN.wav` with a `<voice>_words.json`, then run `VOICE=<voice> ./build_film.sh`.
 - **Interface captures:** run `film/scripts/capture_ui.js` against the live site.
 
 ## Brand compliance
@@ -46,7 +46,7 @@ Needs ffmpeg, Python 3 (`numpy scipy soundfile pedalboard pyloudnorm`), Node 22.
 - **Voice:** calm, specific, no hype, no exclamation marks.
 
 ## Honest notes and limitations
-1. **Narration licensing.** The voice is Microsoft's en-IN-PrabhatNeural via `edge-tts`, chosen because all 12 lines transcribed correctly, including "IndiaBiomass". Microsoft publishes no commercial terms for that free service. Before a paid campaign, re-render the same script through **Azure AI Speech** or record a human narrator. The pipeline places new takes automatically.
+1. **Narration.** This is your ElevenLabs "Ruhaan" take. `audio/scripts/split_vo.py` splits it into lines and finds word timings, so the word-by-word subtitles follow your read exactly. Commercial use requires the generating ElevenLabs account to be on a paid plan. To swap in a new read, replace `audio/vo_source/ruhaan_elevenlabs.mp3`, regenerate its WAV and word timings, then run `./build_film.sh`.
 2. **Interface data is sample data.** The site labels its listings, tender values and prices as sample data, so the film tags these moments "Interface preview · sample data/listings". No figures were invented.
 3. **Footage.** All licensed stock: Mixkit/Coverr free licences, plus Wikimedia Commons CC0 and one CC BY 3.0 DE photo, credited in the manifest. Free libraries have no pellet or bale *video*, so pellets, briquettes and bales are high-resolution photographs with camera moves. The round-bale photo was only available at 1280 px, so it is slightly soft when full-frame. Most clips are 1080p sources cropped to 9:16 and upscaled about 1.8x. No AI-generated video or imagery is used.
 4. **Map.** The India outline follows the Survey of India boundary (DataMeet composite, CC BY 4.0). The network itself is illustrative.
