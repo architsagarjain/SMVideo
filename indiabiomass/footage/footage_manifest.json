@@ -233,6 +233,23 @@
     "size_mb": 0.2
   },
   {
+    "file": "raw/06_photo_sawdust_briquettes_b.jpg",
+    "shot_category": 6,
+    "description": "PHOTO, native vertical 1920x2560 (Commons 1920px rendition of a 1944x2592 original - effectively full res). Close-up of many stacked round biomass briquettes made of sawdust (light beige) and darker charcoal-type briquettes on a tiled floor, shallow depth of field, soft indoor light. Taken in Indonesia. Good for a 9:16 still with slow push-in.",
+    "source_page_url": "https://commons.wikimedia.org/wiki/File:Biomass_Briquette_made_of_Sawdust.jpg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Biomass_Briquette_made_of_Sawdust.jpg/1920px-Biomass_Briquette_made_of_Sawdust.jpg",
+    "license_name": "CC0 1.0 Public Domain Dedication",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "attribution_required": false,
+    "author": "Adien Gunarta (Wikimedia Commons)",
+    "width": 1920,
+    "height": 2560,
+    "duration_s": null,
+    "fps": null,
+    "media_type": "photo",
+    "size_mb": 0.7
+  },
+  {
     "file": "raw/06_sawdust_falling_into_machine_a.mp4",
     "shot_category": 6,
     "description": "NATIVE VERTICAL 1080x1920. Close-up of a woodworking machine table piled with fresh pale wood shavings, plank passing, shavings/sawdust flying and falling; worker in blue partially visible top-right after ~5s. Best 0-5s (no person). Closest available to raw biomass feedstock in motion.",
