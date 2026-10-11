@@ -130,14 +130,14 @@ add(0.0, rumble(3.0), 0.6)
 add(0.12, bell(96, 1.5) * 0.25)                                  # the first point of light
 add(0.45, shimmer(2.3, density=55, lo=5000, hi=11000, seed=11) * 0.6)  # it multiplies
 add(1.4, whoosh(1.3, f0=120, f1=5000, peak=0.85, pan_from=0, pan_to=0), 0.45)  # acceleration
-add_rec_or(2.48, ['whoosh_cinematic_a.wav', 'whoosh_a.wav'], lambda: whoosh(0.5, 400, 6000, 0.4), 0.8)
+add_rec_or(2.48, ['whoosh_cinematic_fast.wav'], lambda: whoosh(0.5, 400, 6000, 0.4), 0.5)
 add(2.6, impact(2.0, 0.5), 0.35)
-add_rec_or(2.6, ['wind_field_a.wav', 'wind_a.wav'], lambda: wind(3.6), 0.9, dur=3.6, fade=0.4)
-add_rec_or(3.85, ['rustle_a.wav', 'grass_rustle_a.wav'], lambda: np.zeros(10), 0.7, dur=1.4, fade=0.3)
+add_rec_or(2.6, ['amb_wind_wild_land.wav'], lambda: wind(3.6), 0.35, dur=3.6, fade=0.5)
+add_rec_or(3.85, ['rustle_grass_handling.wav'], lambda: np.zeros(10), 0.6, start=1.0, dur=1.6, fade=0.4)
 add(3.9, rustle_to_data(2.2), 1.0)                                 # hero moment 1 in sound
 
 # =========================================================== S2 00:06-00:15
-add_rec_or(5.95, ['whoosh_b.wav', 'swoosh_a.wav'], lambda: whoosh(0.45, 300, 4000, 0.5, 0.8, -0.8), 0.8)
+add_rec_or(5.95, ['whoosh_air_quick.wav'], lambda: whoosh(0.45, 300, 4000, 0.5, 0.8, -0.8), 0.45)
 add(6.0, impact(1.2, 0.4), 0.3)
 for i in range(9):  # reaching lines, each one failing
     t0 = 6.0 + F(18 + i * 19 + (i * 7 % 8))
@@ -145,11 +145,12 @@ for i in range(9):  # reaching lines, each one failing
     add(t0 + 0.75, pan(fail_fizzle(i), 0.6 if i % 2 == 0 else -0.6), 0.55)
 for i, tn in enumerate([6.9, 7.6, 8.3, 9.1, 9.8, 10.6, 11.4, 12.1]):  # fragments: paper + notification shards
     if i % 2 == 0:
-        add_rec_or(tn, ['paper_a.wav', 'paper_b.wav'], lambda: hp(noise(int(0.25 * SR)), 2000) * np.exp(-np.arange(int(0.25 * SR)) / SR * 14) * 0.15, 0.35, dur=0.5)
+        add_rec_or(tn, ['paper_moving_wrinkling.wav'], lambda: hp(noise(int(0.25 * SR)), 2000) * np.exp(-np.arange(int(0.25 * SR)) / SR * 14) * 0.15, 0.9, start=i * 0.6, dur=0.6, fade=0.08)
     else:
         add(tn, pan(blip(88 + i, 0.1), (i % 3 - 1) * 0.7), 0.4)
 for tn in [F(180 + 44), F(180 + 142), F(180 + 200)]:  # word slams
-    add(tn, glitch(0.18, seed=int(tn * 10)), 0.6)
+    add(tn, glitch(0.18, seed=int(tn * 10)), 0.4)
+    add_rec_or(tn, ['glitch_static_electric.wav'], lambda: np.zeros(10), 0.3)
     add(tn, kick(0.6, 0.25, 120, 60), 0.25)
 add(F(180 + 196), whoosh(0.6, 200, 3000, 0.4, -0.9, 0.9), 0.7)  # panels part, map appears
 add(F(180 + 236), whoosh(1.0, 150, 9000, 0.92, 0, 0), 0.95)       # the dive
@@ -162,7 +163,8 @@ add(F(450 + 46), zap(0.5, 1400, 2800), 0.6)
 add(F(450 + 52), crackle(F(66), 12, 160), 1.0)
 add(F(450 + 118), whoosh(1.0, 3000, 200, 0.85, 0, 0), 0.6)      # everything condenses inward
 add(20.0, shimmer(2.0, density=40, lo=3000, hi=10000, seed=21), 1.2)
-add_rec_or(19.99, ['impact_deep_a.wav', 'boom_a.wav'], lambda: np.zeros(10), 0.45, dur=3.0, fade=0.01)
+add_rec_or(19.99, ['impact_big_cinematic.wav'], lambda: np.zeros(10), 0.4, dur=4.0, fade=0.01)
+add_rec_or(20.0, ['sparkle_light_sweep.wav'], lambda: np.zeros(10), 0.25)
 
 # =========================================================== S4 00:23-00:37
 add(23.0, whoosh(0.5, 300, 4000, 0.5, 0, 0), 0.6)
@@ -174,19 +176,21 @@ for tn in [26.5, 30.5, 34.0]:                                          # iris ma
     add(tn - 0.32, whoosh(0.55, 200, 5000, 0.6, -0.5, 0.5), 0.75)
 for tn in [F(690 + 105 + 50), F(690 + 225 + 44), F(690 + 330 + 44)]:  # product cards
     add(tn, whoosh(0.35, 800, 6000, 0.4, 0.3, -0.3), 0.35)
-    add(tn + 0.3, tick(2400, 0.04), 0.5)
-add_rec_or(34.0, ['machine_a.wav', 'industrial_a.wav'], lambda: np.zeros(10), 0.35, dur=2.9, fade=0.3)
-add_rec_or(34.0, ['clank_a.wav', 'metal_a.wav'], lambda: metal(48, 0.6) * 0.8, 0.5)
+    add_rec_or(tn + 0.3, ['ui_select_modern.wav'], lambda: tick(2400, 0.04), 0.5)
+add_rec_or(34.0, ['ind_machine_engine_hum_loop.wav'], lambda: np.zeros(10), 0.5, dur=2.9, fade=0.3)
+add_rec_or(34.0, ['ind_gear_lock.wav'], lambda: np.zeros(10), 0.5)
+add_rec_or(26.45, ['ind_pour_gravel_avalanche.wav'], lambda: np.zeros(10), 0.9)
+add_rec_or(34.0, ['ind_factory_metal_hit.wav'], lambda: metal(48, 0.6) * 0.8, 0.35)
 add(36.55, whoosh(0.45, 4000, 150, 0.3, 0, 0), 0.5)                  # drop into the dark interface world
 
 # =========================================================== S5 00:37-00:47
 add(37.0, whoosh(0.7, 150, 3500, 0.6, 0, 0), 0.6)
 for i in range(3):                                                     # tender rows land
     tn = F(1110 + 20 + i * 10) + 0.35
-    add(tn, tick(2600 + i * 300), 0.6)
+    add_rec_or(tn, ['ui_click_device.wav'], lambda: tick(2600 + i * 300), 0.4)
     add(tn, pan(blip(84 + i * 3, 0.12), -0.3 + i * 0.3), 0.35)
 for tn in [F(1110 + 105) - 0.3, F(1110 + 180) - 0.3]:                 # whip pans
-    add_rec_or(tn, ['whip_a.wav', 'swish_a.wav'], lambda: whoosh(0.35, 500, 7000, 0.45, 0.9, -0.9), 0.75)
+    add_rec_or(tn, ['whippan_fast_swipe_zoom.wav'], lambda: whoosh(0.35, 500, 7000, 0.45, 0.9, -0.9), 0.45)
 add(F(1110 + 113), zap(1.3, 300, 1500) * 0.6, 0.6)                    # chart line drawing
 add(F(1110 + 113), crackle(1.2, 30, 60, seed=9) * 0.6, 1.0)
 for i in range(6):                                                     # supply markers
@@ -196,18 +200,19 @@ add(F(1110 + 262), whoosh(0.8, 5000, 300, 0.75, 0, 0), 0.5)         # all in one
 add(F(1110 + 286), tick(1800, 0.05), 0.6)
 
 # =========================================================== S6 00:47-00:55
-add_rec_or(47.0, ['wind_field_a.wav', 'wind_a.wav'], lambda: wind(2.0, seed=3), 0.6, start=2.0, dur=2.0, fade=0.4)
+add_rec_or(47.0, ['amb_wind_wild_land.wav'], lambda: wind(2.0, seed=3), 0.28, start=5.0, dur=2.0, fade=0.5)
 for i in range(4):
     add(47.0 + ((i + 1) / 5) * F(172), bell(86 + [0, 5, 7, 12][i], 1.2) * 0.35, 0.6)
 add(49.0, whoosh(0.4, 300, 3000, 0.5, -0.6, 0.6), 0.4)
 add(51.0, whoosh(0.4, 300, 3000, 0.5, 0.6, -0.6), 0.4)
-add_rec_or(51.0, ['fire_boiler_a.wav', 'fire_a.wav', 'industrial_a.wav'], lambda: lp(noise(int(2 * SR)), 400) * 0.1, 0.25, dur=1.9, fade=0.3)
+add_rec_or(51.0, ['fire_big_flame_burning.wav'], lambda: lp(noise(int(2 * SR)), 400) * 0.1, 0.35, dur=1.9, fade=0.3)
 add(F(1410 + 176), shimmer(1.5, density=50, lo=2500, hi=8000, seed=31), 1.0)
 
 # =========================================================== S7 00:55-01:00
 add(55.0, whoosh(1.6, 100, 2500, 0.8, 0, 0), 0.6)                     # rising above the land
 add(55.0, crackle(1.6, 10, 140, seed=13), 0.9)
-add_rec_or(56.73, ['impact_deep_a.wav', 'boom_a.wav'], lambda: np.zeros(10), 0.5, dur=3.2, fade=0.01)
+add_rec_or(56.73, ['impact_trailer_epic.wav'], lambda: np.zeros(10), 0.4, dur=3.0, fade=0.01)
+add_rec_or(56.73, ['sub_futuristic_bass_hit.wav'], lambda: np.zeros(10), 0.3)
 
 sfx = S.buf[:, :N]
 sfx = fx(sfx.astype(np.float32), Pedalboard([Reverb(room_size=0.5, wet_level=0.12, dry_level=1.0, width=1.0)]))

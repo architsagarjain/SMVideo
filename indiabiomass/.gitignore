@@ -7,3 +7,5 @@ footage/contact/
 audio/sfx/raw/
 audio/vo_candidates/*.json.bak
 __pycache__/
+audio/sfx/*.wav
+audio/sfx/spec/
