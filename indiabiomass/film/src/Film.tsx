@@ -29,7 +29,7 @@ export const Film: React.FC = () => {
       <Sequence from={S.s5} durationInFrames={S.s6 - S.s5}><S5Intel /></Sequence>
       <Sequence from={S.s6} durationInFrames={S.s7 - S.s6}><S6Purpose /></Sequence>
       <Sequence from={S.s7} durationInFrames={S.end - S.s7}><S7Finale /></Sequence>
-      <LightLeak at={S.s4} dur={18} from="left" strength={0.7} />
+      <LightLeak at={S.s4 + 8} dur={16} from="left" strength={0.7} />
       <LightLeak at={S.s6} dur={22} from="right" strength={0.9} />
       <LightLeak at={S.s7} dur={20} from="left" strength={0.75} />
       <Vignette strength={f > S.s7 + END ? 0.25 : 0.5} />
