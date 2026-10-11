@@ -1,13 +1,13 @@
 import { AbsoluteFill, Sequence, useCurrentFrame } from 'remotion';
 import { Footage } from '../components/Footage';
-import { SiteCard, SampleTag } from '../components/Card';
+import { SiteCard } from '../components/Card';
 import { Label, Slam } from '../components/Type';
 import { clip } from '../clips';
 import { lerp, E, rng } from '../lib';
 import { C, F } from '../theme';
 
-// 00:23-00:37  local frames 0-420.
-export const A0 = 105, B0 = 225, C0 = 330;
+// 00:23-00:33  local frames 0-300.
+export const A0 = 75, B0 = 150, C0 = 225, S4_END = 300;
 
 const Verified: React.FC<{ text: string; at: number }> = ({ text, at }) => {
   const f = useCurrentFrame();
@@ -22,16 +22,16 @@ const Verified: React.FC<{ text: string; at: number }> = ({ text, at }) => {
 /** Callback to scene 2: the same two worlds, now joined. */
 const Joined: React.FC = () => {
   const f = useCurrentFrame();
-  const enter = lerp(f, [0, 16], [0, 1], E.out);
-  const close = lerp(f, [84, 100], [0, 1], E.in);
-  const line = lerp(f, [18, 40], [0, 1], E.inOut);
-  const pulse = ((f - 40) % 26) / 26;
+  const enter = lerp(f, [0, 12], [0, 1], E.out);
+  const close = lerp(f, [60, 75], [0, 1], E.in);
+  const line = lerp(f, [10, 26], [0, 1], E.inOut);
+  const pulse = ((f - 26) % 22) / 22;
   const y1 = 980, y2 = 980;
   return (
     <AbsoluteFill style={{ background: C.night }}>
       {(['L', 'R'] as const).map((side) => (
         <div key={side} style={{ position: 'absolute', top: 0, height: 1920, width: 534, left: side === 'L' ? 0 : 546, overflow: 'hidden', transform: `translateY(${(side === 'L' ? -1 : 1) * (1 - enter) * 1920}px) scaleX(${1 - close})`, transformOrigin: side === 'L' ? '100% 50%' : '0% 50%' }}>
-          <Footage src={clip(side === 'L' ? 's4_left' : 's4_right')} dur={100} from={[1.12, 0, 0]} to={[1.2, 0, 0]} grade={side === 'L' ? 'warm' : 'neutral'} />
+          <Footage src={clip(side === 'L' ? 's4_left' : 's4_right')} dur={75} from={[1.12, 0, 0]} to={[1.2, 0, 0]} grade={side === 'L' ? 'warm' : 'neutral'} />
           <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(10,17,13,0.6) 0%, rgba(10,17,13,0.1) 35%, rgba(10,17,13,0.2) 70%, rgba(10,17,13,0.75) 100%)' }} />
         </div>
       ))}
@@ -43,11 +43,11 @@ const Joined: React.FC = () => {
         <circle cx={930} cy={y2} r={10} fill={C.harvest} opacity={line > 0.98 ? 1 : 0.3} />
         <line x1={150} y1={y1} x2={150 + 780 * line} y2={y2} stroke="url(#jl)" strokeWidth={5} />
         <line x1={150} y1={y1} x2={150 + 780 * line} y2={y2} stroke={C.harvest} strokeWidth={18} strokeOpacity={0.18} />
-        {f > 40 && <circle cx={150 + 780 * pulse} cy={y1} r={9} fill="#FFF3D6" />}
-        {line > 0.98 && <circle cx={930} cy={y2} r={10 + lerp(f, [40, 60], [0, 50])} fill="none" stroke={C.harvest} strokeOpacity={lerp(f, [40, 60], [0.8, 0])} strokeWidth={3} />}
+        {f > 26 && <circle cx={150 + 780 * pulse} cy={y1} r={9} fill="#FFF3D6" />}
+        {line > 0.98 && <circle cx={930} cy={y2} r={10 + lerp(f, [26, 46], [0, 50])} fill="none" stroke={C.harvest} strokeOpacity={lerp(f, [26, 46], [0.8, 0])} strokeWidth={3} />}
       </svg>
-      <div style={{ position: 'absolute', left: 40, top: 1050 }}><Verified text="Verified supplier" at={30} /></div>
-      <div style={{ position: 'absolute', right: 40, top: 840 }}><Verified text="OTP-verified buyer" at={44} /></div>
+      <div style={{ position: 'absolute', left: 40, top: 1050 }}><Verified text="Verified supplier" at={18} /></div>
+      <div style={{ position: 'absolute', right: 40, top: 840 }}><Verified text="OTP-verified buyer" at={26} /></div>
       <div style={{ position: 'absolute', left: 48, top: 270 }}><Label text="Suppliers" at={4} color="#fff" size={24} /></div>
       <div style={{ position: 'absolute', right: 48, top: 270 }}><Label text="Buyers" at={8} color="#fff" size={24} /></div>
     </AbsoluteFill>
@@ -130,13 +130,12 @@ const Iris: React.FC<{ at: number; children: React.ReactNode; cx?: number; cy?: 
 
 const CardIn: React.FC<{ at: number; out: number; card: string; media: string; mediaStart?: number; h?: number }> = ({ at, out, card, media, mediaStart, h }) => {
   const f = useCurrentFrame();
-  const t = lerp(f, [at, at + 20], [0, 1], E.out);
+  const t = lerp(f, [at, at + 14], [0, 1], E.out);
   const o = lerp(f, [out, out + 10], [0, 1], E.in);
   if (f < at || f > out + 12) return null;
   return (
-    <div style={{ position: 'absolute', left: 266, top: 690, transformOrigin: '50% 100%', transform: `perspective(1400px) translateY(${(1 - t) * 500 - o * 60}px) rotateX(${(1 - t) * 30}deg) rotateY(${-8 + t * 4}deg) rotateZ(${(1 - t) * -6}deg) scale(${0.76 + o * 0.08})`, opacity: t * (1 - o) }}>
+    <div style={{ position: 'absolute', left: 266, top: 690, transformOrigin: '50% 100%', transform: `perspective(1400px) translateY(${(1 - t) * 120 - o * 60}px) rotateX(${(1 - t) * 30}deg) rotateY(${-8 + t * 4}deg) rotateZ(${(1 - t) * -6}deg) scale(${0.76 + o * 0.08})`, opacity: t * t * (1 - o) }}>
       <SiteCard card={card} media={media} mediaStart={mediaStart} h={h} />
-      <div style={{ marginTop: 20, textAlign: 'center' }}><SampleTag /></div>
     </div>
   );
 };
@@ -152,7 +151,7 @@ export const S4Offer: React.FC = () => {
       <Sequence from={A0 - 14} durationInFrames={B0 - A0 + 30}>
         <Iris at={14} cy={780}>
           <Footage src={clip('s4_pellets')} dur={B0 - A0 + 16} from={[1.3, 0, 0]} to={[1.08, 0, 0]} grade="warm" />
-          <Sequence from={72}>
+          <Sequence from={52}>
             <Footage src={clip('s4_briq')} dur={B0 - A0 - 44} from={[1.18, 0, 0]} to={[1.06, 0, -30]} grade="warm" />
           </Sequence>
           {shade(0.6)}
@@ -168,17 +167,17 @@ export const S4Offer: React.FC = () => {
         </Iris>
       </Sequence>
       {/* C. Machinery: the bale's circle becomes a machine part */}
-      <Sequence from={C0 - 14} durationInFrames={420 - C0 + 14}>
+      <Sequence from={C0 - 14} durationInFrames={S4_END - C0 + 14}>
         <Iris at={14} cy={780}>
-          <Footage src={clip('s4_machine')} dur={420 - C0} from={[1.25, 0, 0]} to={[1.06, 0, 0]} grade="industrial" />
+          <Footage src={clip('s4_machine')} dur={S4_END - C0} from={[1.25, 0, 0]} to={[1.06, 0, 0]} grade="industrial" />
           {shade(0.65)}
           <Exploded at={20} cx={540} cy={780} labels={['Pellet mills', 'Balers']} blueprint spin={0.8} />
         </Iris>
       </Sequence>
 
-      <CardIn at={A0 + 50} out={B0 - 18} card="card_cofiring" media={clip('s4_pellets')} />
-      <CardIn at={B0 + 44} out={C0 - 18} card="card_roundbales" media={clip('s4_bales')} />
-      <CardIn at={C0 + 44} out={400} card="card_pelletmill" media={clip('s2_pellets')} h={710} />
+      <CardIn at={A0 + 24} out={B0 - 13} card="card_cofiring" media={clip('s4_pellets')} />
+      <CardIn at={B0 + 24} out={C0 - 13} card="card_roundbales" media={clip('s4_bales')} />
+      <CardIn at={C0 + 24} out={S4_END - 18} card="card_pelletmill" media={clip('s2_pellets')} h={710} />
 
       <div style={{ position: 'absolute', left: 80, right: 80, top: 300 }}>
         <Label text="01" at={A0 + 6} out={B0 - 10} color={C.harvest} size={24} />
@@ -191,12 +190,12 @@ export const S4Offer: React.FC = () => {
         <Slam text="RAW MATERIALS" at={B0 + 8} out={C0 - 10} size={96} />
       </div>
       <div style={{ position: 'absolute', left: 80, right: 80, top: 300 }}>
-        <Label text="03" at={C0 + 6} out={404} color={C.harvest} size={24} />
+        <Label text="03" at={C0 + 6} out={S4_END - 16} color={C.harvest} size={24} />
         <div style={{ height: 18 }} />
-        <Slam text="MACHINERY" at={C0 + 8} out={404} size={96} />
+        <Slam text="MACHINERY" at={C0 + 8} out={S4_END - 16} size={96} />
       </div>
       {/* exit: everything drops into the dark interface world */}
-      <AbsoluteFill style={{ background: C.night, opacity: lerp(f, [404, 420], [0, 1], E.in) }} />
+      <AbsoluteFill style={{ background: C.night, opacity: lerp(f, [S4_END - 16, S4_END], [0, 1], E.in) }} />
     </AbsoluteFill>
   );
 };

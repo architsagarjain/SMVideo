@@ -13,7 +13,7 @@ import pyloudnorm as pyln
 from synth import *  # noqa
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR = 60.0
+DUR = 54.5
 N = int(DUR * SR)
 fps = 30.0
 F = lambda frame: frame / fps  # film frame -> seconds
@@ -166,56 +166,58 @@ add(20.0, shimmer(2.0, density=40, lo=3000, hi=10000, seed=21), 1.2)
 add_rec_or(19.99, ['impact_big_cinematic.wav'], lambda: np.zeros(10), 0.4, dur=4.0, fade=0.01)
 add_rec_or(20.0, ['sparkle_light_sweep.wav'], lambda: np.zeros(10), 0.25)
 
-# =========================================================== S4 00:23-00:37
+# =========================================================== S4 00:23-00:33
 add(23.0, whoosh(0.5, 300, 4000, 0.5, 0, 0), 0.6)
-add(F(690 + 18), zap(0.8, 400, 2400), 0.55)                          # the bridge forms
-add(F(690 + 40), bell(91, 1.0) * 0.4 + 0, 0.6)                        # ...and locks
-add(F(690 + 30), pan(pop(), -0.6), 0.6)                                # verified badges
-add(F(690 + 44), pan(pop(), 0.6), 0.6)
-for tn in [26.5, 30.5, 34.0]:                                          # iris match cuts
+END = 1485 + 46  # end-card hit frame (S7 starts at frame 1485)
+add(F(690 + 10), zap(0.8, 400, 2400), 0.55)                          # the bridge forms
+add(F(690 + 26), bell(91, 1.0) * 0.4 + 0, 0.6)                        # ...and locks
+add(F(690 + 18), pan(pop(), -0.6), 0.6)                                # verified badges
+add(F(690 + 26), pan(pop(), 0.6), 0.6)
+for tn in [25.5, 28.0, 30.5]:                                          # iris match cuts
     add(tn - 0.32, whoosh(0.55, 200, 5000, 0.6, -0.5, 0.5), 0.75)
-for tn in [F(690 + 105 + 50), F(690 + 225 + 44), F(690 + 330 + 44)]:  # product cards
+for tn in [F(690 + 75 + 26), F(690 + 150 + 26), F(690 + 225 + 26)]:   # product cards
     add(tn, whoosh(0.35, 800, 6000, 0.4, 0.3, -0.3), 0.35)
     add_rec_or(tn + 0.3, ['ui_select_modern.wav'], lambda: tick(2400, 0.04), 0.5)
-add_rec_or(34.0, ['ind_machine_engine_hum_loop.wav'], lambda: np.zeros(10), 0.5, dur=2.9, fade=0.3)
-add_rec_or(34.0, ['ind_gear_lock.wav'], lambda: np.zeros(10), 0.5)
-add_rec_or(26.45, ['ind_pour_gravel_avalanche.wav'], lambda: np.zeros(10), 0.9)
-add_rec_or(34.0, ['ind_factory_metal_hit.wav'], lambda: metal(48, 0.6) * 0.8, 0.35)
-add(36.55, whoosh(0.45, 4000, 150, 0.3, 0, 0), 0.5)                  # drop into the dark interface world
+add_rec_or(30.5, ['ind_machine_engine_hum_loop.wav'], lambda: np.zeros(10), 0.5, dur=2.4, fade=0.3)
+add_rec_or(30.5, ['ind_gear_lock.wav'], lambda: np.zeros(10), 0.5)
+add_rec_or(25.45, ['ind_pour_gravel_avalanche.wav'], lambda: np.zeros(10), 0.9)
+add_rec_or(30.5, ['ind_factory_metal_hit.wav'], lambda: metal(48, 0.6) * 0.8, 0.35)
+add(32.55, whoosh(0.45, 4000, 150, 0.3, 0, 0), 0.5)                  # drop into the dark interface world
 
-# =========================================================== S5 00:37-00:47
-add(37.0, whoosh(0.7, 150, 3500, 0.6, 0, 0), 0.6)
+# =========================================================== S5 00:33-00:41.5
+add(33.0, whoosh(0.7, 150, 3500, 0.6, 0, 0), 0.6)
 for i in range(3):                                                     # tender rows land
-    tn = F(1110 + 20 + i * 10) + 0.35
+    tn = F(990 + 10 + i * 6) + 0.4
     add_rec_or(tn, ['ui_click_device.wav'], lambda: tick(2600 + i * 300), 0.4)
     add(tn, pan(blip(84 + i * 3, 0.12), -0.3 + i * 0.3), 0.35)
-for tn in [F(1110 + 105) - 0.3, F(1110 + 180) - 0.3]:                 # whip pans
+for tn in [F(990 + 75) - 0.3, F(990 + 135) - 0.3]:                   # whip pans
     add_rec_or(tn, ['whippan_fast_swipe_zoom.wav'], lambda: whoosh(0.35, 500, 7000, 0.45, 0.9, -0.9), 0.45)
-add(F(1110 + 113), zap(1.3, 300, 1500) * 0.6, 0.6)                    # chart line drawing
-add(F(1110 + 113), crackle(1.2, 30, 60, seed=9) * 0.6, 1.0)
-for i in range(6):                                                     # supply markers
-    add(F(1110 + 180 + 14 + i * 5), pan(blip(76 + [0, 3, 7, 10, 12, 15][i], 0.15), -0.5 + i * 0.2), 0.45)
-add(F(1110 + 220), whoosh(0.4, 900, 5000, 0.5, 0.4, -0.2), 0.35)
-add(F(1110 + 262), whoosh(0.8, 5000, 300, 0.75, 0, 0), 0.5)         # all in one place
-add(F(1110 + 286), tick(1800, 0.05), 0.6)
+add(F(990 + 81), zap(1.1, 300, 1500) * 0.6, 0.6)                      # chart line drawing
+add(F(990 + 81), crackle(1.0, 30, 60, seed=9) * 0.6, 1.0)
+add(F(990 + 135), whoosh(0.4, 900, 5000, 0.5, 0.4, -0.2), 0.35)       # the window opens
+for i in range(6):                                                     # supply markers + rows
+    add(F(990 + 150 + i * 4), pan(blip(76 + [0, 3, 7, 10, 12, 15][i], 0.15), -0.5 + i * 0.2), 0.45)
+add(F(990 + 168), whoosh(0.4, 900, 5000, 0.5, 0.4, -0.2), 0.35)       # policy card
+add(F(990 + 196), whoosh(0.8, 5000, 300, 0.75, 0, 0), 0.5)           # all in one place
+add(F(990 + 212), tick(1800, 0.05), 0.6)
 
-# =========================================================== S6 00:47-00:55
-add_rec_or(47.0, ['amb_wind_wild_land.wav'], lambda: wind(2.0, seed=3), 0.28, start=5.0, dur=2.0, fade=0.5)
+# =========================================================== S6 00:41.5-00:49.5
+add_rec_or(41.5, ['amb_wind_wild_land.wav'], lambda: wind(2.0, seed=3), 0.28, start=5.0, dur=2.0, fade=0.5)
 for i in range(4):
-    add(47.0 + ((i + 1) / 5) * F(172), bell(86 + [0, 5, 7, 12][i], 1.2) * 0.35, 0.6)
-add(49.0, whoosh(0.4, 300, 3000, 0.5, -0.6, 0.6), 0.4)
-add(51.0, whoosh(0.4, 300, 3000, 0.5, 0.6, -0.6), 0.4)
-add_rec_or(51.0, ['fire_big_flame_burning.wav'], lambda: lp(noise(int(2 * SR)), 400) * 0.1, 0.35, dur=1.9, fade=0.3)
-add(F(1410 + 176), shimmer(1.5, density=50, lo=2500, hi=8000, seed=31), 1.0)
+    add(41.5 + ((i + 1) / 5) * F(172), bell(86 + [0, 5, 7, 12][i], 1.2) * 0.35, 0.6)
+add(43.5, whoosh(0.4, 300, 3000, 0.5, -0.6, 0.6), 0.4)
+add(45.5, whoosh(0.4, 300, 3000, 0.5, 0.6, -0.6), 0.4)
+add_rec_or(45.5, ['fire_big_flame_burning.wav'], lambda: lp(noise(int(2 * SR)), 400) * 0.1, 0.35, dur=1.9, fade=0.3)
+add(F(1245 + 176), shimmer(1.5, density=50, lo=2500, hi=8000, seed=31), 1.0)
 
-# =========================================================== S7 00:55-01:00
-add(55.0, whoosh(1.6, 100, 2500, 0.8, 0, 0), 0.6)                     # rising above the land
-add(55.0, crackle(1.6, 10, 140, seed=13), 0.9)
-add_rec_or(56.533, ['impact_trailer_epic.wav'], lambda: np.zeros(10), 0.4, dur=3.0, fade=0.01)
-add_rec_or(56.533, ['sub_futuristic_bass_hit.wav'], lambda: np.zeros(10), 0.3)
+# =========================================================== S7 00:49.5-00:54.5
+add(49.5, whoosh(1.6, 100, 2500, 0.8, 0, 0), 0.6)                     # rising above the land
+add(49.5, crackle(1.5, 10, 140, seed=13), 0.9)
+add_rec_or(F(END), ['impact_trailer_epic.wav'], lambda: np.zeros(10), 0.4, dur=3.0, fade=0.01)
+add_rec_or(F(END), ['sub_futuristic_bass_hit.wav'], lambda: np.zeros(10), 0.3)
 
 sfx = S.buf[:, :N]
-sfx = sfx * np.interp(np.arange(N) / SR, [0, 14.97, 15.0, 15.03, 60], [1, 1, 0.08, 1, 1])  # tails stop at the cut
+sfx = sfx * np.interp(np.arange(N) / SR, [0, 14.97, 15.0, 15.03, DUR], [1, 1, 0.08, 1, 1])  # tails stop at the cut
 sfx = fx(sfx.astype(np.float32), Pedalboard([Reverb(room_size=0.5, wet_level=0.12, dry_level=1.0, width=1.0)]))
 
 # =========================================================== mix
@@ -224,7 +226,8 @@ vo = vo[:N]
 music, sr2 = sf.read(os.path.join(ROOT, 'stems', 'music.wav'), always_2d=True)
 music = music.T[:, :N]
 # dramatic dynamics: hard cut to near-silence at 15.0, short suck-outs before the two big hits
-auto_t = [0, 14.96, 14.99, 15.45, 16.2, 19.80, 19.87, 19.985, 20.0, 56.38, 56.45, 56.518, 56.533, 60]
+h = F(END)
+auto_t = [0, 14.96, 14.99, 15.45, 16.2, 19.80, 19.87, 19.985, 20.0, h - 0.153, h - 0.083, h - 0.015, h, DUR]
 auto_g = [1, 1,     0.03,  0.03,  1,    1,     0.12,  0.12,   1,    1,     0.12,  0.12,   1,      1]
 music = music * np.interp(np.arange(N) / SR, auto_t, auto_g)
 vo_proc = fx(vo.astype(np.float32), Pedalboard([

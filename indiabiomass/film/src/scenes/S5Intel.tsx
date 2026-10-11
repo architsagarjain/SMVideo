@@ -1,13 +1,12 @@
 import { AbsoluteFill, Img, staticFile, useCurrentFrame } from 'remotion';
 import { Slam } from '../components/Type';
-import { SampleTag } from '../components/Card';
 import { MapCanvas } from '../components/MapCanvas';
 import india from '../data/india.json';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
 
-// 00:37-00:47  local frames 0-300. The platform as a market terminal.
-export const P0 = 0, Q0 = 105, R0 = 180;
+// 00:33-00:41.5  local frames 0-255. The platform as a market terminal.
+export const P0 = 0, Q0 = 75, R0 = 135, S5_END = 255;
 
 const Grid: React.FC = () => {
   const f = useCurrentFrame();
@@ -68,7 +67,7 @@ const TREND = [0.18, 0.3, 0.36, 0.5, 0.46, 0.62, 0.66, 0.92];
 
 const Chart: React.FC<{ at: number }> = ({ at }) => {
   const f = useCurrentFrame();
-  const t = lerp(f, [at + 8, at + 44], [0, 1], E.inOut);
+  const t = lerp(f, [at + 6, at + 34], [0, 1], E.inOut);
   const enter = lerp(f, [at, at + 16], [0, 1], E.out);
   const W = 900, Hh = 420;
   const pts = TREND.map((v, i) => [40 + (i / (TREND.length - 1)) * (W - 80), Hh - 50 - v * (Hh - 120)] as const);
@@ -111,100 +110,136 @@ const Chart: React.FC<{ at: number }> = ({ at }) => {
   );
 };
 
-const STATES: [string, string][] = [['Punjab', 'Available'], ['Haryana', 'Available'], ['Uttar Pradesh', 'Available'], ['Gujarat', 'Available'], ['Maharashtra', 'Available'], ['Tamil Nadu', 'Limited']];
+
+// Supply board row for "Agro pellets" on the live site (Punjab ... Tamil Nadu).
+const SUPPLY: [string, 'Available' | 'Limited'][] = [
+  ['Punjab', 'Available'], ['Haryana', 'Available'], ['Uttar Pradesh', 'Available'],
+  ['Gujarat', 'Available'], ['Maharashtra', 'Available'], ['Tamil Nadu', 'Limited'],
+];
+const GREEN = 'rgba(120,220,160,1)';
+const AMBER = 'rgba(232,176,75,1)';
+
+// window geometry (screen px)
+const WX = 50, WY = 548, WW = 980, WH = 830;
+// flat map placement inside the window
+const MAP_ZOOM = 0.36, MAP_SX = 300, MAP_SY = 905;
+
+const Chip: React.FC<{ status: string }> = ({ status }) => {
+  const ok = status === 'Available';
+  return (
+    <span style={{ fontFamily: F.text, fontSize: 24, fontWeight: 600, padding: '6px 14px', borderRadius: 8, background: ok ? '#E3EFE7' : '#FBEBD0', color: ok ? C.leaf : '#8A5A0B' }}>
+      {status}
+    </span>
+  );
+};
+
+/** Market intelligence: one IndiaBiomass window holding supply (map + list) and policy. */
+const Intelligence: React.FC<{ m: number }> = ({ m }) => {
+  const st = india.states as unknown as Record<string, [number, number]>;
+  const win = lerp(m, [0, 14], [0, 1], E.out);
+  const settle = lerp(m, [60, 80], [0, 1], E.inOut); // "all in one place"
+  const glow = lerp(m, [60, 70, 100], [0, 1, 0.35], E.soft);
+  const cam = { cx: 500, cy: 560, zoom: MAP_ZOOM, tilt: 0, rot: 0, ox: MAP_SX - 540, oy: MAP_SY - 960 };
+  const mapA = lerp(m, [6, 18], [0, 1], E.out);
+  const listTop = 690, rowH = 66;
+  return (
+    <AbsoluteFill style={{ transform: `scale(${(1.06 - 0.06 * win) * (1 - 0.03 * settle)})`, opacity: win, transformOrigin: '50% 52%' }}>
+      {/* the window */}
+      <div
+        style={{
+          position: 'absolute', left: WX, top: WY, width: WW, height: WH, borderRadius: 26, overflow: 'hidden',
+          background: 'linear-gradient(180deg, #0C2419 0%, #0A1A12 100%)',
+          border: `2px solid rgba(232,176,75,${0.35 + 0.45 * glow})`,
+          boxShadow: `0 40px 120px rgba(0,0,0,0.6), 0 0 ${30 + 70 * glow}px rgba(232,176,75,${0.12 + 0.3 * glow})`,
+        }}
+      >
+        <Img src={staticFile('ui/home_nav.png')} style={{ width: WW, display: 'block' }} />
+        <div style={{ height: 2, background: 'rgba(232,176,75,0.35)' }} />
+        <div style={{ position: 'absolute', left: 40, top: 100, fontFamily: F.label, fontSize: 22, fontWeight: 600, letterSpacing: '0.18em', color: C.harvest, opacity: mapA }}>
+          SUPPLY BOARD · AGRO PELLETS · THIS WEEK
+        </div>
+      </div>
+      {/* flat India map with supply markers */}
+      <AbsoluteFill style={{ opacity: mapA }}>
+        <MapCanvas
+          cam={cam}
+          draw={({ P, glow: g, land, ctx }) => {
+            land('rgba(30,90,60,1)', 0.75, 'rgba(232,176,75,1)', 0.85, 1.8, 0.25);
+            ctx.globalCompositeOperation = 'lighter';
+            SUPPLY.forEach(([n, s], i) => {
+              const a = lerp(m, [14 + i * 4, 22 + i * 4], [0, 1]);
+              const [x, y] = P(st[n][0], st[n][1]);
+              const pulse = 1 + 0.25 * Math.sin((m - i * 4) * 0.35);
+              g(x, y, 34 * pulse, s === 'Available' ? GREEN : AMBER, a * 0.95);
+            });
+            ctx.globalCompositeOperation = 'source-over';
+          }}
+        />
+      </AbsoluteFill>
+      {/* list: state + status, in the site's chip style */}
+      {SUPPLY.map(([n, s], i) => {
+        const a = lerp(m, [16 + i * 4, 28 + i * 4], [0, 1], E.out);
+        return (
+          <div key={n} style={{ position: 'absolute', left: 560, width: 440, top: listTop + i * rowH, height: rowH - 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: a, transform: `translateX(${(1 - a) * 40}px)`, borderBottom: i < SUPPLY.length - 1 ? '1px solid rgba(255,255,255,0.08)' : undefined }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: F.text, fontSize: 31, fontWeight: 600, color: '#fff' }}>
+              <span style={{ width: 14, height: 14, borderRadius: 7, background: s === 'Available' ? '#78DCA0' : C.harvest, boxShadow: `0 0 12px ${s === 'Available' ? '#78DCA0' : C.harvest}` }} />
+              {n}
+            </span>
+            <Chip status={s} />
+          </div>
+        );
+      })}
+      {/* policy tracker card */}
+      {(() => {
+        const a = lerp(m, [32, 48], [0, 1], E.out);
+        return (
+          <div style={{ position: 'absolute', left: WX + 30, width: WW - 60, top: 1118, background: '#fff', borderRadius: 18, padding: '22px 28px', boxShadow: '0 24px 60px rgba(0,0,0,0.45)', opacity: a, transform: `translateY(${(1 - a) * 60}px)`, fontFamily: F.text }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontFamily: F.label, fontSize: 19, fontWeight: 600, letterSpacing: '0.16em', color: C.ochre, marginRight: 8 }}>POLICY TRACKER</span>
+              <span style={{ fontSize: 20, fontWeight: 600, padding: '4px 10px', borderRadius: 6, background: '#E3EFE7', color: C.leaf }}>In force</span>
+              <span style={{ fontSize: 20, fontWeight: 600, padding: '4px 10px', borderRadius: 6, background: C.sand, color: C.slate }}>Central</span>
+            </div>
+            <div style={{ fontSize: 33, fontWeight: 600, color: C.ink, lineHeight: 1.22, marginTop: 12, letterSpacing: '-0.01em' }}>Mandatory biomass co-firing in coal-based thermal power plants</div>
+            <div style={{ fontSize: 22, color: C.slate, marginTop: 8 }}>Ministry of Power</div>
+          </div>
+        );
+      })()}
+    </AbsoluteFill>
+  );
+};
 
 export const S5Intel: React.FC = () => {
   const f = useCurrentFrame();
   const whip1 = lerp(f, [Q0 - 10, Q0 + 4], [0, 1], E.inOut);
   const whip2 = lerp(f, [R0 - 10, R0 + 4], [0, 1], E.inOut);
-  const one = lerp(f, [262, 286], [0, 1], E.inOut); // "all in one place"
-  const p1 = (1 - whip1);
-  const st = india.states as unknown as Record<string, [number, number]>;
-  const mapIn = lerp(f, [R0, R0 + 24], [0, 1], E.out);
-  const cam = { cx: 480, cy: 560, ox: 50 * (1 - one), zoom: 0.70 + mapIn * 0.06 - one * 0.14, tilt: 34 - one * 10, rot: (-4 + (f - R0) * 0.04) * (1 - one), oy: -40 - one * 100 };
+  const p1 = 1 - whip1;
+  const blur = (w: number) => (w > 0 && w < 1 ? `blur(${Math.sin(w * Math.PI) * 18}px)` : undefined);
   return (
     <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 40%, #0E2A1D 0%, ${C.night} 70%)` }}>
       <Grid />
       {/* TENDERS */}
-      <AbsoluteFill style={{ transform: `translateX(${-whip1 * 1200}px)`, filter: whip1 > 0 && whip1 < 1 ? `blur(${Math.sin(whip1 * Math.PI) * 18}px)` : undefined, opacity: f < Q0 + 6 ? 1 : 0 }}>
-        <Screen src="home_tenders" w={1500} x={-120} y={lerp(f, [0, 30], [700, 560], E.out)} ry={22} rx={8} z={lerp(f, [0, 30], [-1400, -500], E.out)} crop={980} o={lerp(f, [0, 12], [0, 0.55]) * p1} />
-        {[0, 1, 2].map((i) => <TenderRow key={i} i={i} at={20 + i * 10} />)}
+      <AbsoluteFill style={{ transform: `translateX(${-whip1 * 1200}px)`, filter: blur(whip1), opacity: f < Q0 + 6 ? 1 : 0 }}>
+        <Screen src="home_tenders" w={1500} x={-120} y={lerp(f, [0, 22], [700, 560], E.out)} ry={22} rx={8} z={lerp(f, [0, 22], [-1400, -500], E.out)} crop={980} o={lerp(f, [0, 10], [0, 0.55]) * p1} />
+        {[0, 1, 2].map((i) => <TenderRow key={i} i={i} at={8 + i * 6} />)}
       </AbsoluteFill>
       {/* PRICES */}
-      <AbsoluteFill style={{ transform: `translateX(${(1 - whip1) * 1200 - whip2 * 1200}px)`, filter: (whip1 > 0 && whip1 < 1) || (whip2 > 0 && whip2 < 1) ? `blur(${Math.sin((whip1 < 1 ? whip1 : whip2) * Math.PI) * 18}px)` : undefined, opacity: f >= Q0 - 12 && f < R0 + 6 ? 1 : 0 }}>
+      <AbsoluteFill style={{ transform: `translateX(${(1 - whip1) * 1200 - whip2 * 1200}px)`, filter: blur(whip1 < 1 ? whip1 : whip2), opacity: f >= Q0 - 12 && f < R0 + 6 ? 1 : 0 }}>
         <Screen src="md_price" w={1500} x={-60} y={1130} ry={-20} rx={12} z={-600} crop={830} o={0.5} />
         <Chart at={Q0} />
       </AbsoluteFill>
-      {/* MARKET INTELLIGENCE: supply map + policy */}
-      <AbsoluteFill style={{ opacity: f >= R0 - 12 ? 1 : 0, transform: `translateX(${(1 - whip2) * 1200}px)` }}>
-        <Screen src="md_supply" w={1400} x={-160 + one * 150} y={1220 - one * 180} ry={18} rx={10} z={-700 + one * 300} crop={844 * 1400 / 2560} o={0.55 * (1 - one * 0.2)} />
-        <MapCanvas
-          cam={cam}
-          draw={({ P, glow, land, ctx }) => {
-            land('rgba(30,90,60,1)', 0.5, 'rgba(232,176,75,1)', 0.7, 1.6, 0.3);
-            ctx.globalCompositeOperation = 'lighter';
-            STATES.forEach(([n, s], i) => {
-              const [x, y] = P(st[n][0], st[n][1]);
-              const a = lerp(f, [R0 + 14 + i * 5, R0 + 24 + i * 5], [0, 1]);
-              const col = s === 'Available' ? 'rgba(120,220,160,1)' : 'rgba(232,176,75,1)';
-              glow(x, y, 46 * (1 + 0.15 * Math.sin(f * 0.3 + i)), col, a * 0.9);
-            });
-            ctx.globalCompositeOperation = 'source-over';
-          }}
-        />
-        {STATES.map(([n, s], i) => {
-          // label chips track the projected marker positions (approximate overlay)
-          const a = lerp(f, [R0 + 16 + i * 5, R0 + 28 + i * 5], [0, 1], E.out);
-          const pos: Record<string, [number, number]> = { Punjab: [-1, 0], Haryana: [1, 0], 'Uttar Pradesh': [1, 0], Gujarat: [-1, 0], Maharashtra: [1, 0], 'Tamil Nadu': [-1, 0] };
-          return <StateChip key={n} name={n} status={s} a={a * (1 - one)} side={pos[n][0]} cam={cam} pt={st[n]} />;
-        })}
-        <div style={{ position: 'absolute', left: 560 - one * 470, top: 1150 + one * 10, width: 460 + one * 440, opacity: lerp(f, [R0 + 40, R0 + 56], [0, 1]), transform: `perspective(1400px) rotateY(${-14 * (1 - one)}deg)` }}>
-          <div style={{ borderRadius: 18, overflow: 'hidden', boxShadow: '0 40px 90px rgba(0,0,0,0.6)' }}>
-            <Img src={staticFile('ui/md_policy1.png')} style={{ width: '100%', display: 'block' }} />
-          </div>
-        </div>
+      {/* MARKET INTELLIGENCE */}
+      <AbsoluteFill style={{ opacity: f >= R0 - 12 ? 1 : 0, transform: `translateX(${(1 - whip2) * 1200}px)`, filter: blur(whip2) }}>
+        <Intelligence m={f - R0} />
       </AbsoluteFill>
-      {/* "all in one place": the panels lock into a single IndiaBiomass window */}
-      {one > 0 && (
-        <div
-          style={{
-            position: 'absolute', left: 50, top: 548, width: 980, height: 820, borderRadius: 26, overflow: 'hidden',
-            border: '2px solid rgba(232,176,75,0.55)', boxShadow: '0 0 0 1px rgba(0,0,0,0.4), 0 40px 120px rgba(0,0,0,0.55), 0 0 60px rgba(232,176,75,0.18)',
-            opacity: one, transform: `scale(${1.14 - 0.14 * one})`, transformOrigin: '50% 50%', pointerEvents: 'none',
-          }}
-        >
-          <Img src={staticFile('ui/home_nav.png')} style={{ width: 980, display: 'block' }} />
-          <div style={{ position: 'absolute', left: 0, right: 0, top: 76, height: 2, background: 'rgba(232,176,75,0.35)' }} />
-        </div>
-      )}
       <div style={{ position: 'absolute', left: 80, right: 80, top: 300 }}>
-        <Slam text="TENDERS." at={8} out={Q0 - 12} size={120} />
+        <Slam text="TENDERS." at={4} out={Q0 - 12} size={120} />
       </div>
       <div style={{ position: 'absolute', left: 80, right: 80, top: 300 }}>
         <Slam text="PRICES." at={Q0 + 2} out={R0 - 12} size={120} />
       </div>
       <div style={{ position: 'absolute', left: 80, right: 80, top: 300 }}>
-        <Slam text={'MARKET\nINTELLIGENCE.'} at={R0 + 2} out={290} size={100} />
-      </div>
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 1360, display: 'flex', justifyContent: 'center' }}>
-        <SampleTag text="Interface preview · sample data" color="rgba(255,255,255,0.55)" />
+        <Slam text={'MARKET\nINTELLIGENCE.'} at={R0 + 2} out={S5_END - 8} size={100} />
       </div>
     </AbsoluteFill>
-  );
-};
-
-const StateChip: React.FC<{ name: string; status: string; a: number; side: number; cam: any; pt: [number, number] }> = ({ name, status, a, side, cam, pt }) => {
-  // same projection as MapCanvas (kept in sync manually)
-  const D = 1700, t = (cam.tilt * Math.PI) / 180, rr = (cam.rot * Math.PI) / 180;
-  const X = (pt[0] - cam.cx) * cam.zoom, Y = (pt[1] - cam.cy) * cam.zoom;
-  const X2 = X * Math.cos(rr) - Y * Math.sin(rr), Y2 = X * Math.sin(rr) + Y * Math.cos(rr);
-  const s = D / (D + Y2 * Math.sin(t));
-  const x = 540 + (cam.ox ?? 0) + X2 * s, y = 960 + (cam.oy ?? 0) + Y2 * Math.cos(t) * s;
-  const avail = status === 'Available';
-  return (
-    <div style={{ position: 'absolute', left: x, top: y, opacity: a, transform: `translate(${side < 0 ? 'calc(-100% - 34px)' : '34px'}, -50%) scale(${0.8 + a * 0.2})`, display: 'flex', gap: 8, alignItems: 'center', fontFamily: F.text, whiteSpace: 'nowrap' }}>
-      <span style={{ fontSize: 30, fontWeight: 600, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>{name}</span>
-      <span style={{ fontSize: 23, fontWeight: 600, padding: '5px 12px', borderRadius: 7, background: avail ? '#E3EFE7' : '#FBEBD0', color: avail ? C.leaf : '#9A6B12' }}>{status}</span>
-    </div>
   );
 };

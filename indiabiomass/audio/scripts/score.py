@@ -1,4 +1,4 @@
-"""Original score for the IndiaBiomass brand film (60 s, 120 BPM, D minor).
+"""Original score for the IndiaBiomass brand film (54.5 s, 120 BPM, D minor).
 
 Every section boundary sits on a picture event (see TIMES). Output:
 audio/stems/music.wav (48 kHz stereo float).
@@ -7,20 +7,20 @@ audio/stems/music.wav (48 kHz stereo float).
   6-15   tension: pulsing bass, ticking percussion, Dm-Bb-Gm-A, cut dead at 15.0
   15-20  near silence, then a pinging arpeggio that accelerates as the network connects
   20     first impact on the logo; the groove arrives
-  23-37  confident main rhythm: Bb-F-C-Dm, lead motif, mechanical textures for machinery
-  37-47  16th-note arps, four-on-the-floor, filter opening, riser into 47
-  47-55  expansive half-time, wide pads, brass-like motif, toms
-  55-60  build, final hit at 56.53 on D major, three-note sonic signature, natural decay
+  23-33  confident main rhythm: Bb-F-C-Dm, lead motif, mechanical textures for machinery
+  33-41.5 16th-note arps, four-on-the-floor, riser into the mission section
+  41.5-49.5 expansive half-time, wide pads, brass-like motif, toms
+  49.5-54.5 build, final hit at 51.03 on D major, three-note sonic signature, natural decay
 """
 import os
 import numpy as np
 from synth import *  # noqa
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR = 60.0
+DUR = 54.5
 B = 0.5  # one beat at 120 BPM
 TIMES = dict(reveal=2.6, s2=6.0, s3=15.0, wave=16.13, condense=18.93, logo=20.0, s4=23.0,
-             a=26.5, b=30.5, c=34.0, s5=37.0, q=40.5, r=43.0, s6=47.0, s7=55.0, end=56.533)
+             a=25.5, b=28.0, c=30.5, s5=33.0, q=35.5, r=37.5, s6=41.5, s7=49.5, end=49.5 + 46 / 30, total=54.5)
 
 drums, bass, pads, keys, lead, fxb = (Track(DUR) for _ in range(6))
 
@@ -167,70 +167,72 @@ def motif(t0, gain=0.2, brass=False, transpose=0):
             lead.add(t0 + bt * B, y * gain)
 
 
-# ------------------------------------------------------------------ 23-37 main
-seqD = ['Bb', 'F', 'C', 'Dm', 'Bb', 'F', 'C']
-chords(seqD, 23.0, gain=0.2)
-bassline(seqD, 23.0, gain=0.42)
-groove(23.0, 2, intensity=0.8)
-groove(27.0, 5, intensity=1.0)
-arps(['C', 'Dm', 'Bb', 'F', 'C'], 27.0, rate=2, gain=0.12, bright=0.5)
-for t0 in (26.5, 30.5):
+# ------------------------------------------------------------------ 23-33 main
+T = TIMES
+seqD = ['Bb', 'F', 'C', 'Dm', 'Bb']
+chords(seqD, T['s4'], gain=0.2)
+bassline(seqD, T['s4'], gain=0.42)
+groove(T['s4'], 1, intensity=0.8)
+groove(T['s4'] + 2, 4, intensity=1.0)
+arps(['F', 'C', 'Dm', 'Bb'], T['s4'] + 2, rate=2, gain=0.12, bright=0.5)
+for t0 in (T['a'], T['b']):
     motif(t0, gain=0.24)
-motif(34.0, gain=0.2, transpose=0)
+motif(T['c'], gain=0.2)
 # machinery: metallic 16ths and clanks
-for s_ in range(int(3.0 / (B / 4))):
-    tn = 34.0 + s_ * B / 4
+for s_ in range(int((T['s5'] - T['c']) / (B / 4))):
+    tn = T['c'] + s_ * B / 4
     drums.add(tn, metal(96 + (s_ % 3) * 2, 0.12, seed=s_) * (0.16 if s_ % 4 else 0.3))
-for tn in (34.0, 35.0, 36.0):
+for tn in (T['c'], T['c'] + 1.0, T['c'] + 2.0):
     drums.add(tn, metal(48, 0.6, seed=int(tn)) * 0.4)
 # granular textures on the match cuts
-for tn in (TIMES['a'], TIMES['b'], TIMES['c']):
+for tn in (T['a'], T['b'], T['c']):
     fxb.add(tn - 0.02, shimmer(0.8, density=60, lo=1500, hi=6000, seed=int(tn)) * 1.2)
 
-# ------------------------------------------------------------------ 37-47 drive
-seqE = ['Dm', 'Bb', 'F', 'C']
-chords(seqE, 37.0, gain=0.18)
-pads.add(45.0, supersaw([m(n) for n in CH['Asus']], 1.05, a=0.05, r=0.1) * 0.12)
-pads.add(46.0, supersaw([m(n) for n in CH['A']], 1.02, a=0.05, r=0.1) * 0.13)
-bassline(seqE + ['A'], 37.0, gain=0.45, pattern=(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5))
-groove(37.0, 4, intensity=1.0, four=True)
-arps(seqE, 37.0, rate=4, gain=0.15, bright=0.7)
-arps(['A'], 45.0, rate=4, gain=0.16, bright=0.8)
+# ------------------------------------------------------------------ 33-41.5 drive
+S5, S6 = T['s5'], T['s6']
+seqE = ['Dm', 'Bb', 'F']
+chords(seqE, S5, gain=0.18)
+pads.add(S5 + 6, supersaw([m(n) for n in CH['Asus']], 1.05, a=0.05, r=0.1) * 0.12)
+pads.add(S5 + 7, supersaw([m(n) for n in CH['A']], S6 - S5 - 7 + 0.02, a=0.05, r=0.1) * 0.13)
+bassline(seqE + ['A'], S5, gain=0.45, pattern=(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5))
+groove(S5, 3, intensity=1.0, four=True)
+arps(seqE, S5, rate=4, gain=0.15, bright=0.7)
+arps(['A'], S5 + 6, rate=4, gain=0.16, bright=0.8)
 for i in range(16):  # snare roll into the expansive section
-    drums.add(45.0 + i * B / 4, snare(0.15) * (0.12 + 0.03 * i))
+    drums.add(S6 - 2.0 + i * B / 4, snare(0.15) * (0.12 + 0.03 * i))
 for i in range(8):
-    drums.add(46.0 + i * B / 8 + 0.5, snare(0.1) * (0.2 + 0.02 * i))
-fxb.add(45.0, riser(2.0, f0=300, f1=12000, curve=2.0) * 0.8)
-fxb.add(47.0 - 1.0, reverse_swell(1.0) * 0.7)
+    drums.add(S6 - 0.5 + i * B / 8, snare(0.1) * (0.2 + 0.02 * i))
+fxb.add(S6 - 2.0, riser(2.0, f0=300, f1=12000, curve=2.0) * 0.8)
+fxb.add(S6 - 1.0, reverse_swell(1.0) * 0.7)
 
-# ------------------------------------------------------------------ 47-55 expansive
+# ------------------------------------------------------------------ 41.5-49.5 expansive
 seqF = ['Bb', 'F', 'Gm', 'C']
-fxb.add(47.0, impact(3.0, 0.7) * 0.7)
-chords(seqF, 47.0, gain=0.3, a=0.35, r=0.6, detune=0.2)
-chords(seqF, 47.0, gain=0.15, a=0.6, r=0.6, detune=0.25, octave=1)
+fxb.add(S6, impact(3.0, 0.7) * 0.7)
+chords(seqF, S6, gain=0.3, a=0.35, r=0.6, detune=0.2)
+chords(seqF, S6, gain=0.15, a=0.6, r=0.6, detune=0.25, octave=1)
 for k, c in enumerate(seqF):
-    bass.add(47.0 + k * 2, sub(m(ROOTN[c]), 2.0, a=0.01, r=0.2, drive=0.4) * 0.28)
-groove(47.0, 4, intensity=1.0, half=True)
-motif(47.0, gain=0.5, brass=True)
-motif(51.0, gain=0.52, brass=True, transpose=-2)
-arps(seqF, 47.0, rate=2, gain=0.13, bright=0.5)
+    bass.add(S6 + k * 2, sub(m(ROOTN[c]), 2.0, a=0.01, r=0.2, drive=0.4) * 0.28)
+groove(S6, 4, intensity=1.0, half=True)
+motif(S6, gain=0.5, brass=True)
+motif(S6 + 4, gain=0.52, brass=True, transpose=-2)
+arps(seqF, S6, rate=2, gain=0.13, bright=0.5)
 for i, nt in enumerate(['A2', 'F2', 'D2', 'A1', 'F2', 'D2', 'A1', 'D1']):  # tom fill
-    drums.add(53.0 + 1.0 + i * B / 4 + 0.5, tom(m(nt) + 12) * 0.5)
+    drums.add(S6 + 7.5 + i * B / 4, tom(m(nt) + 12) * 0.5)
 
-# ------------------------------------------------------------------ 55-60 finale
-END = TIMES['end']
-pads.add(55.0, supersaw([m(n) for n in CH['Asus']], END - 55.0, a=0.2, r=0.05, detune=0.22) * 0.32)
-bass.add(55.0, sub(m('A1'), END - 55.0, a=0.1, r=0.05) * 0.28)
-for i in range(int((END - 55.1) / (B / 4))):
-    drums.add(55.0 + i * B / 4, snare(0.12) * (0.06 + 0.03 * i))
-for i in range(4):
-    drums.add(55.0 + i * B, kick(0.9) * 0.7)
-fxb.add(END - 1.7, riser(1.7, f0=400, f1=14000, curve=2.5) * 0.55)
+# ------------------------------------------------------------------ finale
+END, S7 = T['end'], T['s7']
+pads.add(S7, supersaw([m(n) for n in CH['Asus']], END - S7, a=0.2, r=0.05, detune=0.22) * 0.32)
+bass.add(S7, sub(m('A1'), END - S7, a=0.1, r=0.05) * 0.28)
+for i in range(int((END - S7 - 0.1) / (B / 4))):
+    drums.add(S7 + i * B / 4, snare(0.12) * (0.06 + 0.03 * i))
+for i in range(3):
+    drums.add(S7 + i * B, kick(0.9) * 0.7)
+fxb.add(END - 1.5, riser(1.5, f0=400, f1=14000, curve=2.5) * 0.55)
 fxb.add(END - 1.0, reverse_swell(1.0) * 0.9)
 # the hit + D major resolution + sonic signature (D, A, then D/F# together)
 fxb.add(END, impact(3.4, 1.25) * 1.7)
-pads.add(END, supersaw(mm(['D3', 'A3', 'D4', 'F#4', 'A4', 'E5']), 60.0 - END, a=0.01, r=2.6, detune=0.2) * 0.45)
-bass.add(END, sub(m('D1'), 60.0 - END, a=0.005, r=2.6, drive=0.6) * 0.42)
+pads.add(END, supersaw(mm(['D3', 'A3', 'D4', 'F#4', 'A4', 'E5']), DUR - END, a=0.01, r=2.6, detune=0.2) * 0.45)
+bass.add(END, sub(m('D1'), DUR - END, a=0.005, r=2.6, drive=0.6) * 0.42)
 SIG = END + 0.38
 keys.add(SIG, bell(m('D5'), 2.6) * 0.42)
 keys.add(SIG + 0.19, bell(m('A5'), 2.4) * 0.36)
@@ -255,7 +257,7 @@ mix = d * 0.8 + b_ * 0.8 + p * 1.5 + k * 1.2 + l * 1.3 + x * 0.85
 mix = fx(mix, Pedalboard([Compressor(threshold_db=-10, ratio=2, attack_ms=20, release_ms=200)]))
 n = int(DUR * SR)
 mix = mix[:, :n]
-ramp_t = [0, 6, 15, 20, 23, 37, 47, 55, 56.7, 60]
+ramp_t = [0, 6, 15, 20, 23, 33, 41.5, 49.5, 51.0, 54.5]
 ramp_g = [0.95, 0.9, 0.9, 1.0, 0.82, 0.9, 1.0, 1.0, 1.12, 1.12]
 mix = mix * np.interp(np.arange(n) / SR, ramp_t, ramp_g)
 # natural fade at the very end

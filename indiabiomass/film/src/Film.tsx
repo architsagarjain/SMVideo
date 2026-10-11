@@ -13,7 +13,7 @@ import { S7Finale, END } from './scenes/S7Finale';
 import vo from './data/vo.json';
 
 // Scene boundaries in frames (30 fps). Shared with the audio build via data/timeline.json.
-export const SCENES = { s1: 0, s2: 180, s3: 450, s4: 690, s5: 1110, s6: 1410, s7: 1650, end: 1800 };
+export const SCENES = { s1: 0, s2: 180, s3: 450, s4: 690, s5: 990, s6: 1245, s7: 1485, end: 1635 };
 
 export const Film: React.FC = () => {
   useBrandFonts();

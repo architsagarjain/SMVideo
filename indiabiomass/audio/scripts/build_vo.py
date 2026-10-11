@@ -2,7 +2,7 @@
 
 Each line is cut at word boundaries into phrases, and each phrase is placed at an
 absolute time chosen to land on the picture (see PLACE). Writes:
-  audio/narration.wav           48 kHz mono, 60 s
+  audio/narration.wav           48 kHz mono, 54.5 s
   film/src/data/vo.json         subtitle cues in frames + phrase placement
 """
 import json, os, sys
@@ -12,7 +12,7 @@ import soundfile as sf
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VOICE = sys.argv[1] if len(sys.argv) > 1 else 'prabhat'
 SRC = os.path.join(ROOT, 'vo_candidates')
-SR, DUR, FPS = 48000, 60.0, 30
+SR, DUR, FPS = 48000, 54.5, 30
 
 # (line, first word idx, last word idx inclusive, start time of first word in film seconds)
 PLACE = [
@@ -23,17 +23,17 @@ PLACE = [
     ('L03', 3, 5, 12.70),   # Opportunities are scattered.
     ('L04', 0, 6, 15.72),   # What if the entire ecosystem could connect?
     ('L05', 0, 1, 19.12),   # Introducing IndiaBiomass.  ("IndiaBiomass" hits the logo at 20.0)
-    ('L06', 0, 4, 23.50),   # Connecting verified buyers and sellers
-    ('L06', 5, 7, 26.70),   # of biomass fuels,
-    ('L06', 8, 9, 30.70),   # raw materials,
-    ('L06', 10, 11, 34.20), # and machinery.
-    ('L07', 0, 1, 37.40),   # Discover tenders.
-    ('L08', 0, 2, 40.60),   # Follow regional prices.
-    ('L09', 0, 7, 43.12),   # Track supply and policies, all in one place.
-    ('L10', 0, 6, 47.20),   # Our mission: simpler, more transparent biomass trade.
-    ('L11', 0, 5, 51.62),   # Our vision: a connected biomass economy.
-    ('L12', 0, 0, 55.25),   # IndiaBiomass.
-    ('L12', 1, 4, 56.85),   # Connecting India's biomass economy.
+    ('L06', 0, 4, 23.30),   # Connecting verified buyers and sellers
+    ('L06', 5, 7, 25.70),   # of biomass fuels,
+    ('L06', 8, 9, 28.20),   # raw materials,
+    ('L06', 10, 11, 30.70), # and machinery.
+    ('L07', 0, 1, 33.30),   # Discover tenders.
+    ('L08', 0, 2, 35.65),   # Follow regional prices.
+    ('L09', 0, 7, 37.70),   # Track supply and policies, all in one place.
+    ('L10', 0, 6, 41.70),   # Our mission: simpler, more transparent biomass trade.
+    ('L11', 0, 5, 46.12),   # Our vision: a connected biomass economy.
+    ('L12', 0, 0, 49.75),   # IndiaBiomass.
+    ('L12', 1, 4, 51.35),   # Connecting India's biomass economy.
 ]
 
 # Subtitle phrases: (line, first word, last word, display text, highlight words)
