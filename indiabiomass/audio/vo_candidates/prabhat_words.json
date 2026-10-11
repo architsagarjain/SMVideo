@@ -1,0 +1,439 @@
+{
+ "L01": {
+  "duration": 3.54,
+  "words": [
+   {
+    "w": "India",
+    "start": 0.03,
+    "end": 0.433
+   },
+   {
+    "w": "has",
+    "start": 0.447,
+    "end": 0.808
+   },
+   {
+    "w": "biomass",
+    "start": 0.808,
+    "end": 1.599
+   },
+   {
+    "w": "Plenty",
+    "start": 2.577,
+    "end": 2.994
+   },
+   {
+    "w": "of",
+    "start": 2.994,
+    "end": 3.244
+   },
+   {
+    "w": "it",
+    "start": 3.244,
+    "end": 3.466
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L02": {
+  "duration": 4.465,
+  "words": [
+   {
+    "w": "But",
+    "start": 0.03,
+    "end": 0.294
+   },
+   {
+    "w": "buyers",
+    "start": 0.294,
+    "end": 0.891
+   },
+   {
+    "w": "and",
+    "start": 0.974,
+    "end": 1.197
+   },
+   {
+    "w": "suppliers",
+    "start": 1.197,
+    "end": 2.002
+   },
+   {
+    "w": "don't",
+    "start": 2.058,
+    "end": 2.502
+   },
+   {
+    "w": "always",
+    "start": 2.586,
+    "end": 3.197
+   },
+   {
+    "w": "find",
+    "start": 3.197,
+    "end": 3.572
+   },
+   {
+    "w": "each",
+    "start": 3.669,
+    "end": 3.961
+   },
+   {
+    "w": "other",
+    "start": 3.974,
+    "end": 4.363
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L03": {
+  "duration": 4.72,
+  "words": [
+   {
+    "w": "Prices",
+    "start": 0.03,
+    "end": 0.572
+   },
+   {
+    "w": "are",
+    "start": 0.641,
+    "end": 0.905
+   },
+   {
+    "w": "unclear",
+    "start": 0.988,
+    "end": 1.641
+   },
+   {
+    "w": "Opportunities",
+    "start": 2.661,
+    "end": 3.661
+   },
+   {
+    "w": "are",
+    "start": 3.716,
+    "end": 3.966
+   },
+   {
+    "w": "scattered",
+    "start": 3.966,
+    "end": 4.661
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L04": {
+  "duration": 2.93,
+  "words": [
+   {
+    "w": "What",
+    "start": 0.03,
+    "end": 0.308
+   },
+   {
+    "w": "if",
+    "start": 0.391,
+    "end": 0.544
+   },
+   {
+    "w": "the",
+    "start": 0.544,
+    "end": 0.711
+   },
+   {
+    "w": "entire",
+    "start": 0.711,
+    "end": 1.28
+   },
+   {
+    "w": "ecosystem",
+    "start": 1.377,
+    "end": 2.099
+   },
+   {
+    "w": "could",
+    "start": 2.099,
+    "end": 2.322
+   },
+   {
+    "w": "connect",
+    "start": 2.336,
+    "end": 2.836
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L05": {
+  "duration": 2.135,
+  "words": [
+   {
+    "w": "Introducing",
+    "start": 0.03,
+    "end": 0.808
+   },
+   {
+    "w": "IndiaBiomass",
+    "start": 0.863,
+    "end": 2.072
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L06": {
+  "duration": 6.69,
+  "words": [
+   {
+    "w": "Connecting",
+    "start": 0.03,
+    "end": 0.669
+   },
+   {
+    "w": "verified",
+    "start": 0.669,
+    "end": 1.336
+   },
+   {
+    "w": "buyers",
+    "start": 1.336,
+    "end": 1.933
+   },
+   {
+    "w": "and",
+    "start": 2.044,
+    "end": 2.28
+   },
+   {
+    "w": "sellers",
+    "start": 2.28,
+    "end": 2.891
+   },
+   {
+    "w": "of",
+    "start": 2.905,
+    "end": 3.099
+   },
+   {
+    "w": "biomass",
+    "start": 3.099,
+    "end": 3.808
+   },
+   {
+    "w": "fuels",
+    "start": 3.808,
+    "end": 4.322
+   },
+   {
+    "w": "raw",
+    "start": 4.724,
+    "end": 4.877
+   },
+   {
+    "w": "materials",
+    "start": 4.877,
+    "end": 5.655
+   },
+   {
+    "w": "and",
+    "start": 5.724,
+    "end": 5.974
+   },
+   {
+    "w": "machinery",
+    "start": 5.974,
+    "end": 6.655
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L07": {
+  "duration": 1.335,
+  "words": [
+   {
+    "w": "Discover",
+    "start": 0.03,
+    "end": 0.655
+   },
+   {
+    "w": "tenders",
+    "start": 0.655,
+    "end": 1.252
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L08": {
+  "duration": 1.67,
+  "words": [
+   {
+    "w": "Follow",
+    "start": 0.03,
+    "end": 0.419
+   },
+   {
+    "w": "regional",
+    "start": 0.419,
+    "end": 0.961
+   },
+   {
+    "w": "prices",
+    "start": 0.961,
+    "end": 1.627
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L09": {
+  "duration": 3.78,
+  "words": [
+   {
+    "w": "Track",
+    "start": 0.03,
+    "end": 0.349
+   },
+   {
+    "w": "supply",
+    "start": 0.349,
+    "end": 0.974
+   },
+   {
+    "w": "and",
+    "start": 1.03,
+    "end": 1.294
+   },
+   {
+    "w": "policies",
+    "start": 1.294,
+    "end": 2.044
+   },
+   {
+    "w": "all",
+    "start": 2.308,
+    "end": 2.641
+   },
+   {
+    "w": "in",
+    "start": 2.711,
+    "end": 2.905
+   },
+   {
+    "w": "one",
+    "start": 2.905,
+    "end": 3.224
+   },
+   {
+    "w": "place",
+    "start": 3.224,
+    "end": 3.766
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L10": {
+  "duration": 4.385,
+  "words": [
+   {
+    "w": "Our",
+    "start": 0.03,
+    "end": 0.252
+   },
+   {
+    "w": "mission",
+    "start": 0.252,
+    "end": 0.794
+   },
+   {
+    "w": "simpler",
+    "start": 0.961,
+    "end": 1.655
+   },
+   {
+    "w": "more",
+    "start": 1.974,
+    "end": 2.322
+   },
+   {
+    "w": "transparent",
+    "start": 2.336,
+    "end": 3.183
+   },
+   {
+    "w": "biomass",
+    "start": 3.183,
+    "end": 3.836
+   },
+   {
+    "w": "trade",
+    "start": 3.836,
+    "end": 4.294
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L11": {
+  "duration": 3.135,
+  "words": [
+   {
+    "w": "Our",
+    "start": 0.03,
+    "end": 0.252
+   },
+   {
+    "w": "vision",
+    "start": 0.252,
+    "end": 0.78
+   },
+   {
+    "w": "a",
+    "start": 1.002,
+    "end": 1.086
+   },
+   {
+    "w": "connected",
+    "start": 1.099,
+    "end": 1.711
+   },
+   {
+    "w": "biomass",
+    "start": 1.711,
+    "end": 2.363
+   },
+   {
+    "w": "economy",
+    "start": 2.433,
+    "end": 3.03
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ },
+ "L12": {
+  "duration": 4.78,
+  "words": [
+   {
+    "w": "IndiaBiomass",
+    "start": 0.03,
+    "end": 1.197
+   },
+   {
+    "w": "Connecting",
+    "start": 2.161,
+    "end": 2.786
+   },
+   {
+    "w": "India's",
+    "start": 2.841,
+    "end": 3.341
+   },
+   {
+    "w": "biomass",
+    "start": 3.341,
+    "end": 3.994
+   },
+   {
+    "w": "economy",
+    "start": 4.063,
+    "end": 4.674
+   }
+  ],
+  "timing_source": "edge-tts WordBoundary, first word anchored to detected onset"
+ }
+}
