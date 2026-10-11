@@ -157,7 +157,7 @@ add(F(180 + 236), whoosh(1.0, 150, 9000, 0.92, 0, 0), 0.95)       # the dive
 
 # =========================================================== S3 00:15-00:23
 for k in range(2):  # the seed node pulses in the silence
-    add(15.05 + k * 0.33, sub(m('D2'), 0.25, a=0.005, r=0.2), 0.18)
+    add(15.05 + k * 0.33, sub(m('D2'), 0.16, a=0.004, r=0.12), 0.05)
 add(F(450 + 34), zap(0.5, 1200, 2400), 0.7)
 add(F(450 + 46), zap(0.5, 1400, 2800), 0.6)
 add(F(450 + 52), crackle(F(66), 12, 160), 1.0)
@@ -215,6 +215,7 @@ add_rec_or(56.73, ['impact_trailer_epic.wav'], lambda: np.zeros(10), 0.4, dur=3.
 add_rec_or(56.73, ['sub_futuristic_bass_hit.wav'], lambda: np.zeros(10), 0.3)
 
 sfx = S.buf[:, :N]
+sfx = sfx * np.interp(np.arange(N) / SR, [0, 14.97, 15.0, 15.03, 60], [1, 1, 0.08, 1, 1])  # tails stop at the cut
 sfx = fx(sfx.astype(np.float32), Pedalboard([Reverb(room_size=0.5, wet_level=0.12, dry_level=1.0, width=1.0)]))
 
 # =========================================================== mix
@@ -222,6 +223,10 @@ vo, sr = sf.read(os.path.join(ROOT, 'narration.wav'))
 vo = vo[:N]
 music, sr2 = sf.read(os.path.join(ROOT, 'stems', 'music.wav'), always_2d=True)
 music = music.T[:, :N]
+# dramatic dynamics: hard cut to near-silence at 15.0, short suck-outs before the two big hits
+auto_t = [0, 14.96, 14.99, 15.45, 16.2, 19.80, 19.87, 19.985, 20.0, 56.58, 56.65, 56.718, 56.733, 60]
+auto_g = [1, 1,     0.03,  0.03,  1,    1,     0.12,  0.12,   1,    1,     0.12,  0.12,   1,      1]
+music = music * np.interp(np.arange(N) / SR, auto_t, auto_g)
 vo_proc = fx(vo.astype(np.float32), Pedalboard([
     HighpassFilter(cutoff_frequency_hz=80),
     Compressor(threshold_db=-20, ratio=3, attack_ms=5, release_ms=80),

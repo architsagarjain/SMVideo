@@ -41,7 +41,7 @@ const OUT = 'public/ui/';
   await shot('Biomass tenders', 'h2', 'section', 'home_tenders');
   for (const [t, n] of [['Co-firing pellets', 'card_cofiring'], ['Paddy straw pellets', 'card_paddypellets'], ['Mustard stalk briquettes', 'card_briquettes'], ['Wood pellets', 'card_wood'],
                         ['Ring-die pellet mill 2 TPH', 'card_pelletmill'], ['Square baler', 'card_baler'], ['Biomass boiler 6 TPH', 'card_boiler'],
-                        ['Paddy straw square bales', 'card_bales'], ['Rice husk (loose)', 'card_ricehusk']]) {
+                        ['Paddy straw square bales', 'card_bales'], ['Paddy straw round bales', 'card_roundbales'], ['Rice husk (loose)', 'card_ricehusk']]) {
     await shot(t, 'h3', 'article', n);
   }
   await shot('How it works', 'h2', 'section', 'home_how');

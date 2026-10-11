@@ -4,7 +4,7 @@ import { rng, lerp } from '../lib';
 
 /** Floating, disconnected scraps of trade information (no real figures). */
 type Kind = 'tender' | 'price' | 'pin' | 'date' | 'doc';
-const KINDS: Kind[] = ['tender', 'price', 'pin', 'doc', 'date', 'pin', 'price', 'tender', 'pin', 'doc', 'date', 'pin'];
+const KINDS: Kind[] = ['tender', 'price', 'pin', 'doc', 'date', 'pin', 'tender'];
 
 const Frag: React.FC<{ kind: Kind }> = ({ kind }) => {
   const base: React.CSSProperties = { fontFamily: F.label, color: C.ink, background: 'rgba(247,246,242,0.94)', borderRadius: 12, boxShadow: '0 10px 30px rgba(0,0,0,0.35)' };
@@ -49,8 +49,8 @@ export const Fragments: React.FC<{ start: number; end: number; seed?: number }> 
   const f = useCurrentFrame();
   const r = rng(seed);
   const items = KINDS.map((k, i) => ({
-    k, x: 60 + r() * 880, y: 380 + r() * 980, vx: (r() - 0.5) * 2.4, vy: (r() - 0.5) * 1.6, rot: (r() - 0.5) * 24, vr: (r() - 0.5) * 0.5,
-    z: 0.55 + r() * 0.6, in: start + 8 + i * 9 + r() * 6, life: 70 + r() * 70,
+    k, x: 90 + r() * 860, y: i % 2 ? 400 + r() * 340 : 1110 + r() * 220, vx: (r() - 0.5) * 2.4, vy: (r() - 0.5) * 1.6, rot: (r() - 0.5) * 24, vr: (r() - 0.5) * 0.5,
+    z: 0.55 + r() * 0.6, in: start + 8 + i * 14 + r() * 6, life: 70 + r() * 70,
   }));
   return (
     <>

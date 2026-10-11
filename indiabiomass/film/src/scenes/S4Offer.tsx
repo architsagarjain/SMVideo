@@ -125,7 +125,7 @@ const CardIn: React.FC<{ at: number; out: number; card: string; media: string; m
   const o = lerp(f, [out, out + 10], [0, 1], E.in);
   if (f < at || f > out + 12) return null;
   return (
-    <div style={{ position: 'absolute', left: 266, top: 860, transformOrigin: '50% 100%', transform: `perspective(1400px) translateY(${(1 - t) * 500 - o * 60}px) rotateX(${(1 - t) * 30}deg) rotateY(${-8 + t * 4}deg) rotateZ(${(1 - t) * -6}deg) scale(${0.76 + o * 0.08})`, opacity: t * (1 - o) }}>
+    <div style={{ position: 'absolute', left: 266, top: 690, transformOrigin: '50% 100%', transform: `perspective(1400px) translateY(${(1 - t) * 500 - o * 60}px) rotateX(${(1 - t) * 30}deg) rotateY(${-8 + t * 4}deg) rotateZ(${(1 - t) * -6}deg) scale(${0.76 + o * 0.08})`, opacity: t * (1 - o) }}>
       <SiteCard card={card} media={media} mediaStart={mediaStart} h={h} />
       <div style={{ marginTop: 20, textAlign: 'center' }}><SampleTag /></div>
     </div>
@@ -142,7 +142,10 @@ export const S4Offer: React.FC = () => {
       {/* A. Biomass fuels */}
       <Sequence from={A0 - 14} durationInFrames={B0 - A0 + 30}>
         <Iris at={14} cy={780}>
-          <Footage src={clip('s4_pellets')} dur={B0 - A0 + 16} from={[1.25, 0, 0]} to={[1.05, 0, 0]} grade="warm" />
+          <Footage src={clip('s4_pellets')} dur={B0 - A0 + 16} from={[1.3, 0, 0]} to={[1.08, 0, 0]} grade="warm" />
+          <Sequence from={72}>
+            <Footage src={clip('s4_briq')} dur={B0 - A0 - 44} from={[1.18, 0, 0]} to={[1.06, 0, -30]} grade="warm" />
+          </Sequence>
           {shade(0.6)}
           <Exploded at={20} cx={540} cy={780} labels={['Pellets', 'Briquettes']} />
         </Iris>
@@ -165,8 +168,8 @@ export const S4Offer: React.FC = () => {
       </Sequence>
 
       <CardIn at={A0 + 50} out={B0 - 18} card="card_cofiring" media={clip('s4_pellets')} />
-      <CardIn at={B0 + 44} out={C0 - 18} card="card_bales" media={clip('s4_bales')} />
-      <CardIn at={C0 + 44} out={400} card="card_pelletmill" media={clip('s4_machine')} h={710} />
+      <CardIn at={B0 + 44} out={C0 - 18} card="card_roundbales" media={clip('s4_bales')} />
+      <CardIn at={C0 + 44} out={400} card="card_pelletmill" media={clip('s2_pellets')} h={710} />
 
       <div style={{ position: 'absolute', left: 80, right: 80, top: 300 }}>
         <Label text="01" at={A0 + 6} out={B0 - 10} color={C.harvest} size={24} />

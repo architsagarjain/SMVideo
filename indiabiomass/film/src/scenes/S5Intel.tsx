@@ -121,7 +121,7 @@ export const S5Intel: React.FC = () => {
   const p1 = (1 - whip1);
   const st = india.states as unknown as Record<string, [number, number]>;
   const mapIn = lerp(f, [R0, R0 + 24], [0, 1], E.out);
-  const cam = { cx: 480, cy: 560, zoom: 0.62 + mapIn * 0.06 - one * 0.1, tilt: 34, rot: -4 + (f - R0) * 0.04, oy: -40 - one * 120 };
+  const cam = { cx: 480, cy: 560, ox: 50 * (1 - one), zoom: 0.70 + mapIn * 0.06 - one * 0.12, tilt: 34, rot: -4 + (f - R0) * 0.04, oy: -40 - one * 120 };
   return (
     <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 40%, #0E2A1D 0%, ${C.night} 70%)` }}>
       <Grid />
@@ -155,10 +155,10 @@ export const S5Intel: React.FC = () => {
         {STATES.map(([n, s], i) => {
           // label chips track the projected marker positions (approximate overlay)
           const a = lerp(f, [R0 + 16 + i * 5, R0 + 28 + i * 5], [0, 1], E.out);
-          const pos: Record<string, [number, number]> = { Punjab: [-1, 0], Haryana: [1, 0], 'Uttar Pradesh': [1, 0], Gujarat: [-1, 0], Maharashtra: [1, 0], 'Tamil Nadu': [1, 0] };
+          const pos: Record<string, [number, number]> = { Punjab: [-1, 0], Haryana: [1, 0], 'Uttar Pradesh': [1, 0], Gujarat: [-1, 0], Maharashtra: [1, 0], 'Tamil Nadu': [-1, 0] };
           return <StateChip key={n} name={n} status={s} a={a * (1 - one)} side={pos[n][0]} cam={cam} pt={st[n]} />;
         })}
-        <div style={{ position: 'absolute', left: 560 - one * 470, top: 1080 - one * 40, width: 460 + one * 440, opacity: lerp(f, [R0 + 40, R0 + 56], [0, 1]), transform: `perspective(1400px) rotateY(${-14 * (1 - one)}deg)` }}>
+        <div style={{ position: 'absolute', left: 560 - one * 470, top: 1150 + one * 10, width: 460 + one * 440, opacity: lerp(f, [R0 + 40, R0 + 56], [0, 1]), transform: `perspective(1400px) rotateY(${-14 * (1 - one)}deg)` }}>
           <div style={{ borderRadius: 18, overflow: 'hidden', boxShadow: '0 40px 90px rgba(0,0,0,0.6)' }}>
             <Img src={staticFile('ui/md_policy1.png')} style={{ width: '100%', display: 'block' }} />
           </div>
@@ -186,12 +186,12 @@ const StateChip: React.FC<{ name: string; status: string; a: number; side: numbe
   const X = (pt[0] - cam.cx) * cam.zoom, Y = (pt[1] - cam.cy) * cam.zoom;
   const X2 = X * Math.cos(rr) - Y * Math.sin(rr), Y2 = X * Math.sin(rr) + Y * Math.cos(rr);
   const s = D / (D + Y2 * Math.sin(t));
-  const x = 540 + X2 * s, y = 960 + (cam.oy ?? 0) + Y2 * Math.cos(t) * s;
+  const x = 540 + (cam.ox ?? 0) + X2 * s, y = 960 + (cam.oy ?? 0) + Y2 * Math.cos(t) * s;
   const avail = status === 'Available';
   return (
     <div style={{ position: 'absolute', left: x, top: y, opacity: a, transform: `translate(${side < 0 ? 'calc(-100% - 34px)' : '34px'}, -50%) scale(${0.8 + a * 0.2})`, display: 'flex', gap: 8, alignItems: 'center', fontFamily: F.text, whiteSpace: 'nowrap' }}>
-      <span style={{ fontSize: 24, fontWeight: 600, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>{name}</span>
-      <span style={{ fontSize: 19, fontWeight: 600, padding: '4px 10px', borderRadius: 7, background: avail ? '#E3EFE7' : '#FBEBD0', color: avail ? C.leaf : '#9A6B12' }}>{status}</span>
+      <span style={{ fontSize: 30, fontWeight: 600, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>{name}</span>
+      <span style={{ fontSize: 23, fontWeight: 600, padding: '5px 12px', borderRadius: 7, background: avail ? '#E3EFE7' : '#FBEBD0', color: avail ? C.leaf : '#9A6B12' }}>{status}</span>
     </div>
   );
 };

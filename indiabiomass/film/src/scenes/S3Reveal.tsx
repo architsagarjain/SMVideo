@@ -44,6 +44,20 @@ export const S3Reveal: React.FC = () => {
       <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 45%, ${C.deep} 0%, ${C.night} 72%)` }} />
       {/* brand field behind the logo */}
       <AbsoluteFill style={{ opacity: brand, background: `radial-gradient(ellipse 90% 60% at 50% 46%, #0B5537 0%, ${C.forest} 45%, #032517 100%)` }} />
+      {f > LOGO && (
+        <AbsoluteFill style={{ opacity: lerp(f, [LOGO, LOGO + 30], [0, 0.13]), mixBlendMode: 'screen' }}>
+          <MapCanvas
+            cam={{ cx: 480, cy: 600, zoom: 1.5 + (f - LOGO) * 0.002, tilt: 45, rot: -10 + (f - LOGO) * 0.03, oy: 120 }}
+            draw={({ P, line, glow }) => {
+              for (const [a, b] of edges) {
+                const A = P(nodes[a][0], nodes[a][1]), B = P(nodes[b][0], nodes[b][1]);
+                line([A[0], A[1]], [B[0], B[1]], GOLD, 0.8, 1.2);
+              }
+              nodes.forEach((n) => { const [x, y] = P(n[0], n[1]); glow(x, y, 8, GOLD, 0.9); });
+            }}
+          />
+        </AbsoluteFill>
+      )}
       <AbsoluteFill style={{ opacity: netAlpha }}>
         <MapCanvas
           cam={cam}
@@ -125,7 +139,7 @@ export const S3Reveal: React.FC = () => {
         <Label text="Introducing" at={CONDENSE + 4} color={C.harvest} size={28} rule={false} />
       </div>
       {f >= LOGO - 1 && (
-        <div style={{ position: 'absolute', top: 810, left: 90, width: 900 }}>
+        <div style={{ position: 'absolute', top: 810, left: 90, width: 900, transform: `scale(${lerp(f, [LOGO + 40, 240], [1, 1.035])})`, transformOrigin: '50% 50%' }}>
           <Logo id="s3" at={LOGO - 1} width={900} mode="reveal" />
         </div>
       )}

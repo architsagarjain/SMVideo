@@ -15,7 +15,7 @@ export const S7Finale: React.FC = () => {
   const draw = lerp(f, [0, END - 6], [0, 1], E.inOut);
   const card = lerp(f, [END - 8, END + 6], [0, 1], E.inOut);
   const cx = MAP_W * 0.47, cy = MAP_H * 0.52;
-  const cam = { cx: 480, cy: 560, zoom: 3.2 - E.inOut(Math.min(1, f / (END + 4))) * 2.25, tilt: 40 * (1 - card), rot: -8 * (1 - card), oy: -60 * card };
+  const cam = { cx: 480, cy: 560, zoom: 2.0 - E.inOut(Math.min(1, f / (END + 4))) * 1.05, tilt: 40 * (1 - card), rot: -8 * (1 - card), oy: -60 * card };
   const ctaT = (d: number) => lerp(f, [END + d, END + d + 16], [0, 1], E.out);
   return (
     <AbsoluteFill style={{ background: C.night }}>
@@ -29,7 +29,7 @@ export const S7Finale: React.FC = () => {
           cam={cam}
           draw={({ P, glow, line, ctx }) => {
             ctx.globalCompositeOperation = 'lighter';
-            const fade = 1 - card * 0.86; // network stays as a quiet texture behind the end card
+            const fade = 1 - card * 0.9; // network stays as a quiet texture behind the end card
             // lines radiate from the centre: each edge lights when the wavefront passes it
             for (const [a, b] of edges) {
               const na = nodes[a];

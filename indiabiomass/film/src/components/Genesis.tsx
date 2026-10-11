@@ -79,6 +79,23 @@ export const Genesis: React.FC<{ split: number; launch: number; bloom: number }>
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(sx, sy, r0 * 4, 0, Math.PI * 2); ctx.fill();
     }
+    // the first point of light: anamorphic streak + breathing halo (attention in the first second)
+    const fl = lerp(f, [0, 8, 40, 60], [0, 1, 0.8, 0]);
+    if (fl > 0) {
+      const br = 0.85 + 0.15 * Math.sin(f * 0.35);
+      const w = 520 * fl * br;
+      const g = ctx.createLinearGradient(540 - w, 0, 540 + w, 0);
+      g.addColorStop(0, 'rgba(255,200,120,0)');
+      g.addColorStop(0.5, `rgba(255,236,200,${0.85 * fl})`);
+      g.addColorStop(1, 'rgba(255,200,120,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(540 - w, 960 - 2.5, w * 2, 5);
+      const h = ctx.createRadialGradient(540, 960, 0, 540, 960, 180 * br);
+      h.addColorStop(0, `rgba(255,226,168,${0.55 * fl})`);
+      h.addColorStop(1, 'rgba(255,226,168,0)');
+      ctx.fillStyle = h;
+      ctx.beginPath(); ctx.arc(540, 960, 180 * br, 0, Math.PI * 2); ctx.fill();
+    }
     ctx.globalCompositeOperation = 'source-over';
   });
 
