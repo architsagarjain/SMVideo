@@ -1,0 +1,432 @@
+[
+{
+"w": "5",
+"start": 0.0,
+"end": 0.36
+},
+{
+"w": "words",
+"start": 0.36,
+"end": 0.64
+},
+{
+"w": "you'll",
+"start": 0.64,
+"end": 1.02
+},
+{
+"w": "see",
+"start": 1.02,
+"end": 1.22
+},
+{
+"w": "in",
+"start": 1.22,
+"end": 1.5
+},
+{
+"w": "every",
+"start": 1.5,
+"end": 1.98
+},
+{
+"w": "biomass",
+"start": 1.98,
+"end": 2.42
+},
+{
+"w": "tender.",
+"start": 2.42,
+"end": 2.84
+},
+{
+"w": "And",
+"start": 3.4,
+"end": 3.56
+},
+{
+"w": "what",
+"start": 3.56,
+"end": 3.76
+},
+{
+"w": "they",
+"start": 3.76,
+"end": 3.98
+},
+{
+"w": "actually",
+"start": 3.98,
+"end": 4.46
+},
+{
+"w": "mean.",
+"start": 4.46,
+"end": 4.94
+},
+{
+"w": "E",
+"start": 5.72,
+"end": 5.72
+},
+{
+"w": "-M",
+"start": 5.72,
+"end": 6.06
+},
+{
+"w": "-D.",
+"start": 6.06,
+"end": 6.52
+},
+{
+"w": "Earnest",
+"start": 7.16,
+"end": 7.46
+},
+{
+"w": "money",
+"start": 7.46,
+"end": 7.72
+},
+{
+"w": "deposit.",
+"start": 7.72,
+"end": 8.22
+},
+{
+"w": "A",
+"start": 8.68,
+"end": 8.86
+},
+{
+"w": "refundable",
+"start": 8.86,
+"end": 9.42
+},
+{
+"w": "security",
+"start": 9.42,
+"end": 9.86
+},
+{
+"w": "you",
+"start": 9.86,
+"end": 10.26
+},
+{
+"w": "submit",
+"start": 10.26,
+"end": 10.6
+},
+{
+"w": "with",
+"start": 10.6,
+"end": 10.84
+},
+{
+"w": "your",
+"start": 10.84,
+"end": 11.04
+},
+{
+"w": "bid.",
+"start": 11.04,
+"end": 11.26
+},
+{
+"w": "G",
+"start": 11.88,
+"end": 12.18
+},
+{
+"w": "-C",
+"start": 12.18,
+"end": 12.52
+},
+{
+"w": "-V.",
+"start": 12.52,
+"end": 12.94
+},
+{
+"w": "Gross",
+"start": 13.64,
+"end": 13.7
+},
+{
+"w": "calorific",
+"start": 13.7,
+"end": 14.32
+},
+{
+"w": "value.",
+"start": 14.32,
+"end": 14.78
+},
+{
+"w": "How",
+"start": 15.2,
+"end": 15.36
+},
+{
+"w": "much",
+"start": 15.36,
+"end": 15.56
+},
+{
+"w": "heat",
+"start": 15.56,
+"end": 15.84
+},
+{
+"w": "your",
+"start": 15.84,
+"end": 16.12
+},
+{
+"w": "fuel",
+"start": 16.12,
+"end": 16.4
+},
+{
+"w": "gives",
+"start": 16.4,
+"end": 16.7
+},
+{
+"w": "per",
+"start": 16.7,
+"end": 17.02
+},
+{
+"w": "kilo.",
+"start": 17.02,
+"end": 17.48
+},
+{
+"w": "Buyers",
+"start": 17.96,
+"end": 18.26
+},
+{
+"w": "always",
+"start": 18.26,
+"end": 18.72
+},
+{
+"w": "set",
+"start": 18.72,
+"end": 19.04
+},
+{
+"w": "a",
+"start": 19.04,
+"end": 19.16
+},
+{
+"w": "minimum.",
+"start": 19.16,
+"end": 19.44
+},
+{
+"w": "L",
+"start": 20.04,
+"end": 20.24
+},
+{
+"w": "-1.",
+"start": 20.24,
+"end": 20.68
+},
+{
+"w": "The",
+"start": 21.1,
+"end": 21.24
+},
+{
+"w": "lowest",
+"start": 21.24,
+"end": 21.64
+},
+{
+"w": "qualified",
+"start": 21.64,
+"end": 22.2
+},
+{
+"w": "bidder.",
+"start": 22.2,
+"end": 22.56
+},
+{
+"w": "In",
+"start": 23.02,
+"end": 23.16
+},
+{
+"w": "most",
+"start": 23.16,
+"end": 23.4
+},
+{
+"w": "tenders,",
+"start": 23.4,
+"end": 23.82
+},
+{
+"w": "L",
+"start": 24.08,
+"end": 24.32
+},
+{
+"w": "-1",
+"start": 24.32,
+"end": 24.64
+},
+{
+"w": "wins.",
+"start": 24.64,
+"end": 24.94
+},
+{
+"w": "M",
+"start": 25.54,
+"end": 25.92
+},
+{
+"w": "-S",
+"start": 25.92,
+"end": 26.22
+},
+{
+"w": "-E.",
+"start": 26.22,
+"end": 26.74
+},
+{
+"w": "Exemption.",
+"start": 27.18,
+"end": 27.72
+},
+{
+"w": "Registered",
+"start": 28.6,
+"end": 28.6
+},
+{
+"w": "small",
+"start": 28.6,
+"end": 29.0
+},
+{
+"w": "businesses",
+"start": 29.0,
+"end": 29.4
+},
+{
+"w": "can",
+"start": 29.4,
+"end": 29.76
+},
+{
+"w": "often",
+"start": 29.76,
+"end": 30.14
+},
+{
+"w": "skip",
+"start": 30.14,
+"end": 30.48
+},
+{
+"w": "the",
+"start": 30.48,
+"end": 30.7
+},
+{
+"w": "deposit.",
+"start": 30.7,
+"end": 31.12
+},
+{
+"w": "Reverse",
+"start": 32.08,
+"end": 32.16
+},
+{
+"w": "auction.",
+"start": 32.16,
+"end": 32.62
+},
+{
+"w": "After",
+"start": 33.28,
+"end": 33.38
+},
+{
+"w": "qualifying,",
+"start": 33.38,
+"end": 34.0
+},
+{
+"w": "bidders",
+"start": 34.54,
+"end": 34.7
+},
+{
+"w": "cut",
+"start": 34.7,
+"end": 34.98
+},
+{
+"w": "their",
+"start": 34.98,
+"end": 35.2
+},
+{
+"w": "prices",
+"start": 35.2,
+"end": 35.58
+},
+{
+"w": "live",
+"start": 35.58,
+"end": 36.1
+},
+{
+"w": "online.",
+"start": 36.1,
+"end": 36.8
+},
+{
+"w": "Save",
+"start": 37.48,
+"end": 37.58
+},
+{
+"w": "this",
+"start": 37.58,
+"end": 37.82
+},
+{
+"w": "for",
+"start": 37.82,
+"end": 38.04
+},
+{
+"w": "your",
+"start": 38.04,
+"end": 38.16
+},
+{
+"w": "next",
+"start": 38.16,
+"end": 38.44
+},
+{
+"w": "bid.",
+"start": 38.44,
+"end": 38.66
+}
+]

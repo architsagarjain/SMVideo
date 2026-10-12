@@ -1,0 +1,377 @@
+[
+{
+"w": "Every",
+"start": 0.0,
+"end": 0.46
+},
+{
+"w": "coal",
+"start": 0.46,
+"end": 0.72
+},
+{
+"w": "power",
+"start": 0.72,
+"end": 0.98
+},
+{
+"w": "plant",
+"start": 0.98,
+"end": 1.26
+},
+{
+"w": "in",
+"start": 1.26,
+"end": 1.44
+},
+{
+"w": "India",
+"start": 1.44,
+"end": 1.9
+},
+{
+"w": "must",
+"start": 1.9,
+"end": 2.22
+},
+{
+"w": "now",
+"start": 2.22,
+"end": 2.6
+},
+{
+"w": "burn",
+"start": 2.6,
+"end": 2.88
+},
+{
+"w": "biomass",
+"start": 2.88,
+"end": 3.5
+},
+{
+"w": "along",
+"start": 3.5,
+"end": 3.98
+},
+{
+"w": "with",
+"start": 3.98,
+"end": 4.2
+},
+{
+"w": "coal.",
+"start": 4.2,
+"end": 4.52
+},
+{
+"w": "It's",
+"start": 4.98,
+"end": 5.18
+},
+{
+"w": "called",
+"start": 5.18,
+"end": 5.44
+},
+{
+"w": "co",
+"start": 5.44,
+"end": 5.78
+},
+{
+"w": "-firing.",
+"start": 5.78,
+"end": 6.14
+},
+{
+"w": "And",
+"start": 6.66,
+"end": 6.74
+},
+{
+"w": "from",
+"start": 6.74,
+"end": 6.9
+},
+{
+"w": "this",
+"start": 6.9,
+"end": 7.16
+},
+{
+"w": "year,",
+"start": 7.16,
+"end": 7.42
+},
+{
+"w": "the",
+"start": 7.72,
+"end": 7.82
+},
+{
+"w": "target",
+"start": 7.82,
+"end": 8.08
+},
+{
+"w": "is",
+"start": 8.08,
+"end": 8.44
+},
+{
+"w": "7%.",
+"start": 8.44,
+"end": 8.8
+},
+{
+"w": "That",
+"start": 9.42,
+"end": 9.98
+},
+{
+"w": "one",
+"start": 9.98,
+"end": 10.34
+},
+{
+"w": "rule",
+"start": 10.34,
+"end": 10.7
+},
+{
+"w": "creates",
+"start": 10.7,
+"end": 11.16
+},
+{
+"w": "huge",
+"start": 11.16,
+"end": 11.66
+},
+{
+"w": "repeating",
+"start": 11.66,
+"end": 12.32
+},
+{
+"w": "demand.",
+"start": 12.32,
+"end": 12.74
+},
+{
+"w": "An",
+"start": 13.18,
+"end": 13.4
+},
+{
+"w": "estimated",
+"start": 13.4,
+"end": 13.8
+},
+{
+"w": "15",
+"start": 13.8,
+"end": 14.44
+},
+{
+"w": "to",
+"start": 14.44,
+"end": 14.66
+},
+{
+"w": "20",
+"start": 14.66,
+"end": 15.44
+},
+{
+"w": "million",
+"start": 15.44,
+"end": 15.76
+},
+{
+"w": "tons",
+"start": 15.76,
+"end": 16.06
+},
+{
+"w": "of",
+"start": 16.06,
+"end": 16.32
+},
+{
+"w": "biomass",
+"start": 16.32,
+"end": 16.74
+},
+{
+"w": "pellets",
+"start": 16.74,
+"end": 17.12
+},
+{
+"w": "every",
+"start": 17.12,
+"end": 17.74
+},
+{
+"w": "year.",
+"start": 17.74,
+"end": 18.12
+},
+{
+"w": "Today,",
+"start": 18.58,
+"end": 18.9
+},
+{
+"w": "India",
+"start": 19.34,
+"end": 19.54
+},
+{
+"w": "makes",
+"start": 19.54,
+"end": 19.78
+},
+{
+"w": "only",
+"start": 19.78,
+"end": 20.12
+},
+{
+"w": "around",
+"start": 20.12,
+"end": 20.44
+},
+{
+"w": "2",
+"start": 20.44,
+"end": 20.66
+},
+{
+"w": ".5",
+"start": 20.66,
+"end": 21.12
+},
+{
+"w": "million.",
+"start": 21.12,
+"end": 21.38
+},
+{
+"w": "That",
+"start": 21.86,
+"end": 22.26
+},
+{
+"w": "gap",
+"start": 22.26,
+"end": 22.52
+},
+{
+"w": "is",
+"start": 22.52,
+"end": 22.94
+},
+{
+"w": "the",
+"start": 22.94,
+"end": 23.14
+},
+{
+"w": "opportunity.",
+"start": 23.14,
+"end": 23.62
+},
+{
+"w": "For",
+"start": 24.14,
+"end": 24.34
+},
+{
+"w": "pellet",
+"start": 24.34,
+"end": 24.64
+},
+{
+"w": "makers,",
+"start": 24.64,
+"end": 25.06
+},
+{
+"w": "straw",
+"start": 25.4,
+"end": 25.7
+},
+{
+"w": "aggregators",
+"start": 25.7,
+"end": 26.34
+},
+{
+"w": "and",
+"start": 26.34,
+"end": 26.78
+},
+{
+"w": "machinery",
+"start": 26.78,
+"end": 27.18
+},
+{
+"w": "builders.",
+"start": 27.18,
+"end": 27.68
+},
+{
+"w": "India",
+"start": 27.68,
+"end": 28.52
+},
+{
+"w": "biomass",
+"start": 28.52,
+"end": 28.98
+},
+{
+"w": "is",
+"start": 28.98,
+"end": 29.32
+},
+{
+"w": "being",
+"start": 29.32,
+"end": 29.54
+},
+{
+"w": "built",
+"start": 29.54,
+"end": 29.92
+},
+{
+"w": "to",
+"start": 29.92,
+"end": 30.32
+},
+{
+"w": "help",
+"start": 30.32,
+"end": 30.58
+},
+{
+"w": "you",
+"start": 30.58,
+"end": 30.8
+},
+{
+"w": "reach",
+"start": 30.8,
+"end": 31.08
+},
+{
+"w": "it.",
+"start": 31.08,
+"end": 31.36
+}
+]
