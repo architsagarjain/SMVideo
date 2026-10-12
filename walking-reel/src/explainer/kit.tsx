@@ -146,9 +146,9 @@ export const Marker: React.FC<{at: number; x: number; y: number; dir: 'up' | 'do
 // ---------------------------------------------------------------------------
 // Tick / cross marks
 // ---------------------------------------------------------------------------
-export const Tick: React.FC<{at: number; x: number; y: number; size?: number; color?: string}> = ({at, x, y, size = 60, color = X.green}) => {
+export const Tick: React.FC<{at: number; x: number; y: number; size?: number; color?: string; out?: number}> = ({at, x, y, size = 60, color = X.green, out}) => {
   const t = useT();
-  if (t < at) return null;
+  if (t < at || (out !== undefined && t > out)) return null;
   const d = tween(t, at, 0.25, EASE_OUT);
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" style={{position: 'absolute', left: x - size / 2, top: y - size / 2, scale: lerp(pop(t, at), 0.6, 1)}}>

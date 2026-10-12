@@ -1,11 +1,14 @@
 import {Composition} from 'remotion';
 import {WalkingReel} from './WalkingReel';
 import {ExplainerReel} from './explainer/ExplainerReel';
+import {Reel2} from './reel2/Reel2';
+import {DURATION_FRAMES_2} from './reel2/timeline';
 import {DURATION_FRAMES, FPS, HEIGHT, WIDTH} from './theme';
 
 export const Root: React.FC = () => {
   return (
     <>
+    <Composition id="Reel2" component={Reel2} durationInFrames={DURATION_FRAMES_2} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition
       id="ExplainerReel"
       component={ExplainerReel}

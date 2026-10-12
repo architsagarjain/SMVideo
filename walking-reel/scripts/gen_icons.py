@@ -2,7 +2,9 @@
 import json, re
 NAMES = ['pill', 'skull', 'brain', 'heart', 'footprints', 'person', 'person-simple-walk', 'desk', 'office-chair', 'armchair',
          'hourglass-medium', 'barbell', 'sneaker-move', 'fire', 'bowl-food', 'megaphone', 'question', 'arrow-right',
-         'device-mobile', 'calendar-check', 'drop', 'timer', 'watch', 'trend-up', 'trend-down', 'person-simple-run']
+         'device-mobile', 'calendar-check', 'drop', 'timer', 'watch', 'trend-up', 'trend-down', 'person-simple-run',
+         'graduation-cap', 'briefcase', 'calendar-blank', 'calendar-x', 'file-text', 'scales', 'users-three',
+         'video-camera', 'person-arms-spread', 'clipboard-text', 'moon', 'note-pencil', 'list-checks']
 out = {}
 for n in NAMES:
     s = open(f'node_modules/@phosphor-icons/core/assets/fill/{n}-fill.svg').read()
