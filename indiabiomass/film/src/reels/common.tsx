@@ -6,6 +6,7 @@ import { Logo } from '../components/Logo';
 import { MapCanvas } from '../components/MapCanvas';
 import { nodes, edges, CITY_COUNT } from '../components/graph';
 import { lerp, E } from '../lib';
+import { Label, Slam } from '../components/Type';
 import { C, F } from '../theme';
 
 export type ReelData = { reel: string; offset: number; frames: number; words: { w: string; s: number; e: number }[]; cues: Cue[] };
@@ -79,3 +80,23 @@ export const wordAt = (data: ReelData, w: string, nth = 0) => {
   if (!hits[nth]) throw new Error(`word not found: ${w}#${nth}`);
   return hits[nth].s;
 };
+
+/** Centred section title: small spaced label + big wipe-in headline (the reels' one alignment system). */
+export const CenterTitle: React.FC<{ label?: string; text: string; at: number; out: number; size?: number; color?: string; top?: number }> = ({ label, text, at, out, size = 104, color = '#fff', top = 300 }) => {
+  const f = useCurrentFrame();
+  const o = lerp(f, [out - 8, out], [1, 0]);
+  return (
+    <div style={{ position: 'absolute', left: 60, right: 60, top, textAlign: 'center', opacity: o }}>
+      {label && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+          <Label text={label} at={at - 4} color={C.harvest} size={26} rule={false} />
+        </div>
+      )}
+      <Slam text={text} at={at} out={out + 40} size={size} color={color} />
+    </div>
+  );
+};
+
+export const Glass: React.FC<{ style?: React.CSSProperties; children?: React.ReactNode }> = ({ style, children }) => (
+  <div style={{ background: 'rgba(5,26,17,0.78)', border: '1.5px solid rgba(232,176,75,0.32)', borderRadius: 30, boxShadow: '0 30px 90px rgba(0,0,0,0.5)', ...style }}>{children}</div>
+);

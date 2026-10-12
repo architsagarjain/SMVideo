@@ -1,7 +1,7 @@
-import { AbsoluteFill, Sequence, useCurrentFrame } from 'remotion';
-import { ReelShell, BrandBg, EndCard, ReelData, wordAt } from './common';
+import { AbsoluteFill, Sequence, staticFile, useCurrentFrame } from 'remotion';
+import { ReelShell, BrandBg, EndCard, ReelData, wordAt, CenterTitle, Glass } from './common';
 import { Footage } from '../components/Footage';
-import { Kinetic, Label, Slam } from '../components/Type';
+import { Kinetic, Label } from '../components/Type';
 import { MapCanvas } from '../components/MapCanvas';
 import { LightLeak } from '../components/LightLeak';
 import { nodes, edges, outline, CITY_COUNT, MAP_W, MAP_H, nodeSeed } from '../components/graph';
@@ -11,8 +11,9 @@ import { lerp, E } from '../lib';
 import { C, F } from '../theme';
 import data from '../data/reel1.json';
 
+// Reel 1, "Co-firing". Everything is centre-aligned on one grid:
+// titles from y=300, the main graphic in the 600-1300 band, subtitles at 1430.
 const D = data as unknown as ReelData;
-// beat frames, all taken from the narration's word timings
 const T = {
   burn: wordAt(D, 'burn'),
   cofiring: wordAt(D, 'its'),
@@ -20,7 +21,6 @@ const T = {
   rule: wordAt(D, 'that'),
   estimated: wordAt(D, 'an'),
   fifteen: wordAt(D, '15'),
-  today: wordAt(D, 'today'),
   twoFive: wordAt(D, '2.5'),
   gap: wordAt(D, 'that', 1),
   pellet: wordAt(D, 'pellet'),
@@ -29,143 +29,193 @@ const T = {
   brand: wordAt(D, 'india', 2),
   end: D.words[D.words.length - 1].e + 10,
 };
+const shade = (top = 0.78, mid = 0.18, bottom = 0.7) =>
+  `linear-gradient(180deg, rgba(4,20,12,${top}) 0%, rgba(4,20,12,${mid}) 38%, rgba(4,20,12,${mid}) 62%, rgba(4,20,12,${bottom}) 100%)`;
 
+// ------------------------------------------------------------------ 1. hook
 const Hook: React.FC = () => {
   const f = useCurrentFrame();
-  const wipe = lerp(f, [T.burn - 4, T.burn + 14], [0, 1], E.inOut);
+  const fire = lerp(f, [T.burn - 6, T.burn + 8], [0, 1], E.inOut);
   return (
     <AbsoluteFill>
-      <Sequence><Footage src={clip('s2_plant')} dur={T.cofiring} from={[1.25, 0, 0]} to={[1.08, 0, -20]} grade="industrial" /></Sequence>
-      {/* biomass arrives: pellets wipe in on a diagonal */}
-      <AbsoluteFill style={{ clipPath: `polygon(${100 - wipe * 140}% 0, 100% 0, 100% 100%, ${140 - wipe * 140}% 100%)` }}>
-        <Sequence from={T.burn - 6}><Footage src={clip('s4_pellets')} dur={T.cofiring} from={[1.2, 0, 0]} to={[1.1, 0, 0]} grade="warm" /></Sequence>
+      <Sequence><Footage src={clip('r_plant_sunset')} dur={T.cofiring} from={[1.22, 0, 0]} to={[1.06, 0, -30]} grade="golden" /></Sequence>
+      <AbsoluteFill style={{ opacity: fire }}>
+        <Sequence from={T.burn - 6}><Footage src={clip('r_sparks')} dur={T.cofiring - T.burn + 6} from={[1.15, 0, 0]} to={[1.05, 0, 0]} grade="warm" /></Sequence>
       </AbsoluteFill>
-      <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(4,20,12,0.8) 0%, rgba(4,20,12,0.2) 40%, rgba(4,20,12,0.1) 60%, rgba(4,20,12,0.6) 100%)' }} />
-      <div style={{ position: 'absolute', left: 70, right: 70, top: 300 }}>
-        <Kinetic lines={['EVERY COAL PLANT', 'IN INDIA']} at={4} out={T.cofiring - 6} size={96} align="left" stagger={0.9} />
+      <AbsoluteFill style={{ background: shade(0.8, 0.12, 0.65) }} />
+      <div style={{ position: 'absolute', left: 60, right: 60, top: 300 }}>
+        <Kinetic lines={['EVERY COAL PLANT', 'IN INDIA']} at={4} out={T.cofiring - 6} size={100} align="center" stagger={0.9} />
       </div>
-      <div style={{ position: 'absolute', left: 70, top: 560 }}>
-        <Slam text="+ BIOMASS" at={T.burn + 4} out={T.cofiring - 6} size={120} color={C.harvest} />
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 560, display: 'flex', justifyContent: 'center', opacity: lerp(f, [T.burn, T.burn + 8], [0, 1]) * lerp(f, [T.cofiring - 8, T.cofiring], [1, 0]) }}>
+        <div style={{ background: 'rgba(4,20,12,0.82)', border: `2px solid ${C.harvest}`, borderRadius: 999, padding: '18px 40px', transform: `scale(${lerp(f, [T.burn, T.burn + 12], [0.85, 1], E.back)})` }}>
+          <span style={{ fontFamily: F.display, fontWeight: 800, fontSize: 56, letterSpacing: '-0.02em', color: C.harvest }}>MUST NOW BURN BIOMASS</span>
+        </div>
       </div>
     </AbsoluteFill>
+  );
+};
+
+// ------------------------------------------------------------------ 2. co-firing + the 7 % grid
+const CELL = 54, GAP = 9, N = 10;
+const Waffle: React.FC = () => {
+  const f = useCurrentFrame();
+  const W = N * CELL + (N - 1) * GAP;
+  const left = (1080 - W) / 2, top = 640;
+  const base = T.pct - 16; // builds only after the definition has faded out
+  const tex = staticFile('reels/pellet_tex.jpg');
+  return (
+    <div style={{ position: 'absolute', left, top, width: W, height: W }}>
+      {Array.from({ length: N * N }, (_, i) => {
+        const r = Math.floor(i / N), c = i % N;
+        const isBio = i >= N * N - 7; // the last 7 cells: biomass
+        const appear = lerp(f, [base + (r + c) * 0.9, base + (r + c) * 0.9 + 8], [0, 1], E.out);
+        const lit = isBio ? lerp(f, [T.pct - 4 + (i - 93) * 2, T.pct + 6 + (i - 93) * 2], [0, 1], E.back) : 0;
+        return (
+          <div key={i} style={{
+            position: 'absolute', left: c * (CELL + GAP), top: r * (CELL + GAP), width: CELL, height: CELL, borderRadius: 10,
+            opacity: appear, transform: `scale(${(0.6 + 0.4 * appear) * (1 + 0.12 * lit * (1 - lit) * 4)})`,
+            background: isBio && lit > 0 ? `url(${tex}) ${(c * 37) % 100}% ${(r * 53) % 100}% / 340px` : '#3A403C',
+            boxShadow: lit > 0 ? `0 0 0 3px ${C.harvest}, 0 0 ${22 * lit}px rgba(232,176,75,0.8)` : 'inset 0 0 0 1px rgba(255,255,255,0.06)',
+          }} />
+        );
+      })}
+    </div>
   );
 };
 
 const CoFiring: React.FC = () => {
   const f = useCurrentFrame();
-  const g = lerp(f, [T.pct - 8, T.pct + 26], [0, 0.07], E.out); // gauge fill to 7 %
-  const pctShown = Math.round(lerp(f, [T.pct - 8, T.pct + 20], [0, 7], E.out));
-  const R = 250, CIRC = 2 * Math.PI * R;
-  const gaugeIn = lerp(f, [T.pct - 14, T.pct], [0, 1], E.out);
+  const swap = lerp(f, [T.pct - 30, T.pct - 18], [0, 1], E.inOut);
+  return (
+    <AbsoluteFill>
+      <Sequence from={T.cofiring}><Footage src={clip('r_furnace')} dur={T.rule - T.cofiring} from={[1.15, 0, 0]} to={[1.05, 0, 0]} grade="warm" /></Sequence>
+      <AbsoluteFill style={{ background: `rgba(3,22,14,${0.62 + 0.25 * swap})` }} />
+      <div style={{ opacity: 1 - swap }}>
+        <CenterTitle label="It's called" text="CO-FIRING" at={T.cofiring + 4} out={T.pct - 24} size={150} />
+        <div style={{ position: 'absolute', left: 120, right: 120, top: 640, textAlign: 'center', fontFamily: F.text, fontWeight: 500, fontSize: 46, lineHeight: 1.3, color: 'rgba(255,255,255,0.9)', opacity: lerp(f, [T.cofiring + 16, T.cofiring + 28], [0, 1]) }}>
+          Burning biomass together with coal in power plants
+        </div>
+      </div>
+      {f >= T.pct - 40 && (
+        <>
+          <CenterTitle text="7%" at={T.pct - 2} out={T.rule + 40} size={200} color={C.harvest} top={250} />
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 500, textAlign: 'center', fontFamily: F.text, fontWeight: 600, fontSize: 40, color: '#fff', opacity: lerp(f, [T.pct + 4, T.pct + 14], [0, 1]) }}>
+            biomass in the fuel mix
+          </div>
+          <Waffle />
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 1300, display: 'flex', justifyContent: 'center', opacity: lerp(f, [T.pct + 8, T.pct + 18], [0, 1]) }}>
+            <Label text="7 in every 100 parts · target from FY 2025–26" at={T.pct + 8} color={C.harvest} size={28} rule={false} />
+          </div>
+        </>
+      )}
+    </AbsoluteFill>
+  );
+};
+
+// ------------------------------------------------------------------ 3. demand vs supply, one block = 1 million tonnes
+const B = 70, G = 12, COLS = 4;
+const Blocks: React.FC<{ x: number; count: number; solid: number; at: number; color: string; ghostTo?: number; ghostAt?: number }> = ({ x, count, solid, at, color, ghostTo = 0, ghostAt = 0 }) => {
+  const f = useCurrentFrame();
+  const baseY = 1180;
+  const cells = Math.max(Math.ceil(count), ghostTo);
+  return (
+    <>
+      {Array.from({ length: cells }, (_, i) => {
+        const r = Math.floor(i / COLS), c = i % COLS;
+        const y = baseY - (r + 1) * B - r * G;
+        const isReal = i < Math.ceil(count);
+        const frac = isReal ? Math.min(1, count - i) : 0;
+        const a = isReal ? lerp(f, [at + i * 1.4, at + i * 1.4 + 8], [0, 1], E.back) : lerp(f, [ghostAt + (i - Math.ceil(count)) * 0.8, ghostAt + (i - Math.ceil(count)) * 0.8 + 8], [0, 1], E.out);
+        const range = isReal && i >= solid; // 15-20: the upper five are the range
+        return (
+          <div key={i} style={{ position: 'absolute', left: x + c * (B + G), top: y, width: B, height: B, transform: `scale(${a})`, opacity: Math.min(1, a * 1.4) }}>
+            {isReal ? (
+              <div style={{ position: 'absolute', left: 0, bottom: 0, width: B * frac, height: B, borderRadius: 12, background: range ? 'transparent' : color, border: range ? `3px dashed ${color}` : undefined, boxSizing: 'border-box' }} />
+            ) : (
+              <div style={{ position: 'absolute', inset: 0, borderRadius: 12, border: `3px dashed ${C.harvest}`, background: 'rgba(232,176,75,0.12)', boxShadow: '0 0 18px rgba(232,176,75,0.35)' }} />
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+const Demand: React.FC = () => {
+  const f = useCurrentFrame();
+  const gridIn = lerp(f, [T.estimated - 6, T.estimated + 6], [0, 1], E.out);
+  const GW = COLS * B + (COLS - 1) * G, SP = 130;
+  const xL = (1080 - (GW * 2 + SP)) / 2, xR = xL + GW + SP;
+  const gap = f >= T.gap - 2;
+  return (
+    <AbsoluteFill>
+      {/* "huge, repeating demand": trucks on the road, every year */}
+      <AbsoluteFill style={{ opacity: 1 - gridIn }}>
+        <Sequence from={T.rule}><Footage src={clip('r_trucks')} dur={T.estimated - T.rule + 10} from={[1.2, 0, 0]} to={[1.05, 0, 40]} grade="golden" /></Sequence>
+        <AbsoluteFill style={{ background: shade(0.8, 0.15, 0.7) }} />
+        <CenterTitle text={'HUGE,\nREPEATING\nDEMAND.'} at={T.rule + 2} out={T.estimated - 4} size={120} />
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 820, display: 'flex', justifyContent: 'center', opacity: lerp(f, [T.rule + 20, T.rule + 32], [0, 1]) }}>
+          <svg width={200} height={200} viewBox="0 0 200 200" style={{ transform: `rotate(${f * 4}deg)` }}>
+            <path d="M100 30 A70 70 0 1 1 30 100" fill="none" stroke={C.harvest} strokeWidth={12} strokeLinecap="round" />
+            <path d="M14 84 L30 112 L52 88" fill="none" stroke={C.harvest} strokeWidth={12} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 1040, textAlign: 'center', fontFamily: F.label, fontWeight: 600, fontSize: 30, letterSpacing: '0.2em', color: '#fff', opacity: lerp(f, [T.rule + 26, T.rule + 38], [0, 1]) }}>EVERY YEAR</div>
+      </AbsoluteFill>
+      {/* the blocks */}
+      <AbsoluteFill style={{ opacity: gridIn }}>
+        <BrandBg />
+        {!gap && <CenterTitle label="Biomass pellets per year" text="NEEDED VS MADE" at={T.estimated} out={T.gap - 2} size={84} />}
+        {gap && <CenterTitle text={'THE GAP IS THE\nOPPORTUNITY.'} at={T.gap} out={T.pellet + 30} size={86} color={C.harvest} />}
+        <Blocks x={xL} count={20} solid={15} at={T.fifteen - 4} color={C.harvest} />
+        <Blocks x={xR} count={2.5} solid={3} at={T.twoFive - 6} color="#78DCA0" ghostTo={17} ghostAt={T.gap + 4} />
+        {[[xL, '15–20', C.harvest, T.fifteen, 'Needed'], [xR, '~2.5', '#78DCA0', T.twoFive, 'Made today']].map(([x, num, col, at, lab]) => {
+          const a = lerp(f, [(at as number) - 2, (at as number) + 10], [0, 1], E.out);
+          return (
+            <div key={lab as string} style={{ position: 'absolute', left: (x as number) - 40, width: GW + 80, top: 1200, textAlign: 'center', opacity: a }}>
+              <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 64, color: col as string, letterSpacing: '-0.03em', lineHeight: 1 }}>{num as string}</div>
+              <div style={{ fontFamily: F.text, fontWeight: 600, fontSize: 28, color: '#fff', marginTop: 8 }}>{lab as string}</div>
+            </div>
+          );
+        })}
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 560, display: 'flex', justifyContent: 'center', opacity: lerp(f, [T.fifteen, T.fifteen + 12], [0, 1]) * (gap ? 0 : 1) }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 12, fontFamily: F.text, fontSize: 26, color: 'rgba(255,255,255,0.75)' }}>
+            <span style={{ width: 26, height: 26, borderRadius: 6, background: C.harvest }} /> = 1 million tonnes
+          </span>
+        </div>
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
+// ------------------------------------------------------------------ 4. who it's for: three cards that build a list
+const WHO: [string, string][] = [['r_pellets_hands', 'Pellet makers'], ['r_bales_field', 'Straw aggregators'], ['r_lathe', 'Machinery builders']];
+const Who: React.FC = () => {
+  const f = useCurrentFrame();
+  const ats = [T.pellet - 4, T.straw - 4, T.machinery - 4];
   return (
     <AbsoluteFill>
       <BrandBg />
-      <div style={{ position: 'absolute', left: 70, right: 70, top: 300, opacity: lerp(f, [T.pct - 16, T.pct - 6], [1, 0]) }}>
-        <Label text="It's called" at={T.cofiring} color={C.harvest} size={26} />
-        <div style={{ height: 22 }} />
-        <Slam text="CO-FIRING" at={T.cofiring + 6} out={T.pct - 16} size={150} />
-        <div style={{ fontFamily: F.text, fontSize: 42, color: 'rgba(255,255,255,0.85)', marginTop: 26, opacity: lerp(f, [T.cofiring + 18, T.cofiring + 30], [0, 1]) }}>
-          Burning biomass together with coal in power plants.
-        </div>
-      </div>
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 520, display: 'flex', justifyContent: 'center', opacity: gaugeIn, transform: `scale(${0.9 + 0.1 * gaugeIn})` }}>
-        <svg width={620} height={620} viewBox="0 0 620 620">
-          <circle cx={310} cy={310} r={R} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={34} />
-          <circle cx={310} cy={310} r={R} fill="none" stroke={C.harvest} strokeWidth={34} strokeLinecap="round"
-            strokeDasharray={`${CIRC * g} ${CIRC}`} transform="rotate(-90 310 310)" style={{ filter: 'drop-shadow(0 0 18px rgba(232,176,75,0.7))' }} />
-          <text x={310} y={350} textAnchor="middle" fontFamily={F.display} fontWeight={800} fontSize={190} fill="#fff" letterSpacing="-6">{pctShown}%</text>
-        </svg>
-      </div>
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 1170, display: 'flex', justifyContent: 'center', opacity: lerp(f, [T.pct + 6, T.pct + 18], [0, 1]) }}>
-        <Label text="Co-firing target · from FY 2025–26" at={T.pct + 6} color={C.harvest} size={28} rule={false} />
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-/** Demand vs production bars, then the gap. */
-const Gap: React.FC = () => {
-  const f = useCurrentFrame();
-  const BASE = 1290, X1 = 200, X2 = 620, BW = 260, TALL = 600;
-  const demand = lerp(f, [T.fifteen - 6, T.fifteen + 24], [0, 1], E.out);
-  const made = lerp(f, [T.twoFive - 10, T.twoFive + 14], [0, 1], E.out);
-  const madeH = TALL * (2.5 / 17.5);
-  const gapGlow = lerp(f, [T.gap - 4, T.gap + 12], [0, 1], E.out);
-  const intro = lerp(f, [T.rule, T.rule + 14], [0, 1], E.out);
-  const fadeIntro = lerp(f, [T.estimated - 10, T.estimated], [1, 0]);
-  const numA = lerp(f, [T.fifteen - 2, T.fifteen + 12], [0, 1], E.out);
-  return (
-    <AbsoluteFill>
-      <Sequence from={T.rule}><Footage src={clip('s4_pellets')} dur={T.pellet - T.rule} from={[1.35, 0, 0]} to={[1.15, 0, 0]} grade="warm" /></Sequence>
-      <AbsoluteFill style={{ background: 'rgba(3,22,14,0.82)' }} />
-      {/* "huge, repeating demand": the same order returning every year */}
-      <div style={{ position: 'absolute', left: 70, right: 70, top: 300, opacity: intro * fadeIntro }}>
-        <Slam text={'HUGE,\nREPEATING\nDEMAND.'} at={T.rule + 2} out={T.estimated - 10} size={118} />
-      </div>
-      <div style={{ position: 'absolute', left: 70, top: 300, opacity: lerp(f, [T.estimated - 4, T.estimated + 8], [0, 1]) * lerp(f, [T.gap - 8, T.gap], [1, 0]) }}>
-        <Label text="Biomass pellets · per year" at={T.estimated - 4} color={C.harvest} size={26} />
-      </div>
-      <svg width={1080} height={1920} style={{ position: 'absolute', inset: 0 }}>
-        {/* demand bar */}
-        <rect x={X1} y={BASE - TALL * demand} width={BW} height={TALL * demand} rx={16} fill={C.harvest} opacity={0.95} />
-        {/* production bar */}
-        <rect x={X2} y={BASE - madeH * made} width={BW} height={madeH * made} rx={16} fill="#78DCA0" opacity={0.95} />
-        <line x1={120} x2={960} y1={BASE} y2={BASE} stroke="rgba(255,255,255,0.35)" strokeWidth={3} />
-        {/* the gap bracket */}
-        <g opacity={gapGlow}>
-          <line x1={X2 + BW / 2} x2={X2 + BW / 2} y1={BASE - TALL + 8} y2={BASE - madeH - 170} stroke={C.harvest} strokeWidth={6} strokeDasharray="14 12" />
-          <line x1={X1 + BW + 10} x2={X2 + BW + 20} y1={BASE - TALL} y2={BASE - TALL} stroke={C.harvest} strokeWidth={3} strokeDasharray="6 8" />
-          <rect x={X2 - 20} y={BASE - TALL} width={BW + 40} height={TALL - madeH - 6} rx={18} fill={C.harvest} opacity={0.12 + 0.08 * Math.sin(f * 0.25)} />
-        </g>
-      </svg>
-      <div style={{ position: 'absolute', left: X1 - 40, width: BW + 80, top: BASE - TALL - 150, textAlign: 'center', opacity: numA }}>
-        <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 92, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1 }}>15–20</div>
-        <div style={{ fontFamily: F.label, fontWeight: 600, fontSize: 24, letterSpacing: '0.14em', color: C.harvest, marginTop: 8 }}>MILLION TONNES</div>
-      </div>
-      <div style={{ position: 'absolute', left: X1 - 40, width: BW + 80, top: BASE + 26, textAlign: 'center', fontFamily: F.text, fontWeight: 600, fontSize: 30, color: '#fff', opacity: numA }}>Needed</div>
-      <div style={{ position: 'absolute', left: X2 - 40, width: BW + 80, top: BASE - madeH - 150, textAlign: 'center', opacity: made }}>
-        <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 92, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1 }}>~2.5</div>
-        <div style={{ fontFamily: F.label, fontWeight: 600, fontSize: 24, letterSpacing: '0.14em', color: '#78DCA0', marginTop: 8 }}>MILLION TONNES</div>
-      </div>
-      <div style={{ position: 'absolute', left: X2 - 40, width: BW + 80, top: BASE + 26, textAlign: 'center', fontFamily: F.text, fontWeight: 600, fontSize: 30, color: '#fff', opacity: made }}>Made today</div>
-      <div style={{ position: 'absolute', left: 70, right: 70, top: 300, opacity: gapGlow }}>
-        <Slam text={'THE GAP IS THE\nOPPORTUNITY.'} at={T.gap} out={T.pellet - 8} size={78} color={C.harvest} />
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-const WHO: [string, string, number, number][] = [
-  ['s2_pellets', 'PELLET MAKERS', 0, 0],
-  ['s4_bales', 'STRAW AGGREGATORS', 1, 0],
-  ['s4_machine', 'MACHINERY BUILDERS', 2, 0],
-];
-
-const Who: React.FC = () => {
-  const f = useCurrentFrame();
-  const starts = [T.pellet - 4, T.straw - 4, T.machinery - 4, T.brand - 6];
-  return (
-    <AbsoluteFill>
+      <CenterTitle label="Built for" text="THE BIOMASS TRADE" at={T.pellet - 6} out={T.brand} size={72} />
       {WHO.map(([role, label], i) => {
-        const a = starts[i], b = starts[i + 1];
-        if (f < a || f >= b) return null;
+        const a = lerp(f, [ats[i], ats[i] + 12], [0, 1], E.out);
+        const active = f >= ats[i] && (i === 2 || f < ats[i + 1]);
         return (
-          <AbsoluteFill key={role}>
-            <Sequence from={a}><Footage src={clip(role)} dur={b - a + 10} from={[1.18, 0, 0]} to={[1.06, 0, 0]} grade={i === 2 ? 'industrial' : 'warm'} /></Sequence>
-            <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(4,20,12,0.75) 0%, rgba(4,20,12,0.1) 40%, rgba(4,20,12,0.2) 70%, rgba(4,20,12,0.7) 100%)' }} />
-            <div style={{ position: 'absolute', left: 70, right: 70, top: 300 }}>
-              <Label text={`0${i + 1} · For`} at={a + 2} color={C.harvest} size={24} />
-              <div style={{ height: 18 }} />
-              <Slam text={label} at={a + 3} out={b - 4} size={label.length > 14 ? 88 : 104} />
+          <div key={role} style={{ position: 'absolute', left: 90, width: 900, top: 560 + i * 260, height: 230, borderRadius: 28, overflow: 'hidden', opacity: a, transform: `translateY(${(1 - a) * 50}px) scale(${active ? 1 : 0.97})`, boxShadow: active ? `0 0 0 3px ${C.harvest}, 0 30px 80px rgba(0,0,0,0.5)` : '0 20px 60px rgba(0,0,0,0.4)' }}>
+            <Sequence from={ats[i]}><Footage src={clip(role)} dur={T.brand - ats[i]} from={[1.2, 0, 0]} to={[1.08, 0, 0]} grade="warm" /></Sequence>
+            <div style={{ position: 'absolute', inset: 0, background: `rgba(3,22,14,${active ? 0.42 : 0.62})` }} />
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+              <div style={{ fontFamily: F.label, fontWeight: 600, fontSize: 22, letterSpacing: '0.2em', color: C.harvest }}>0{i + 1}</div>
+              <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 64, color: '#fff', letterSpacing: '-0.02em', textShadow: '0 4px 24px rgba(0,0,0,0.5)' }}>{label}</div>
             </div>
-          </AbsoluteFill>
+          </div>
         );
       })}
     </AbsoluteFill>
   );
 };
 
-/** IndiaBiomass: the network draws India, then the logo. */
+// ------------------------------------------------------------------ 5. the road ahead: network draws India, then the logo
 const Brand: React.FC = () => {
   const f = useCurrentFrame();
   const L = T.end - T.brand;
@@ -175,10 +225,14 @@ const Brand: React.FC = () => {
   const card = lerp(f, [logoAt - 6, logoAt + 8], [0, 1], E.inOut);
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 42%, #0A5034 0%, ${C.forest} 45%, #032116 100%)` }} />
+      <AbsoluteFill style={{ opacity: 1 - card }}>
+        <Sequence from={T.brand - 6}><Footage src={clip('r_road_sunset')} dur={L + 10} from={[1.3, 0, 60]} to={[1.05, 0, -40]} grade="golden" /></Sequence>
+        <AbsoluteFill style={{ background: 'rgba(4,38,26,0.55)' }} />
+      </AbsoluteFill>
+      <AbsoluteFill style={{ opacity: card, background: `radial-gradient(ellipse 100% 70% at 50% 42%, #0A5034 0%, ${C.forest} 45%, #032116 100%)` }} />
       <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 1 - card * 0.85 }}>
         <MapCanvas
-          cam={{ cx: 480, cy: 580, zoom: 1.15 - draw * 0.15, tilt: 30 * (1 - card), rot: -6 * (1 - card) }}
+          cam={{ cx: 480, cy: 580, zoom: 1.15 - draw * 0.15, tilt: 30 * (1 - card), rot: 0 }}
           draw={({ P, glow, line, ctx }) => {
             ctx.globalCompositeOperation = 'lighter';
             for (const [a, b] of edges) {
@@ -186,8 +240,8 @@ const Brand: React.FC = () => {
               const d = Math.hypot(na[0] - cx, na[1] - cy) / 700 + nodeSeed[a] * 0.12;
               const g = lerp(draw, [d * 0.8, d * 0.8 + 0.18], [0, 1]);
               if (g <= 0) continue;
-              const A = P(na[0], na[1]), B = P(nodes[b][0], nodes[b][1]);
-              line([A[0], A[1]], [A[0] + (B[0] - A[0]) * g, A[1] + (B[1] - A[1]) * g], 'rgba(232,176,75,1)', 0.6, 1.4);
+              const A = P(na[0], na[1]), Bp = P(nodes[b][0], nodes[b][1]);
+              line([A[0], A[1]], [A[0] + (Bp[0] - A[0]) * g, A[1] + (Bp[1] - A[1]) * g], 'rgba(232,176,75,1)', 0.65, 1.4);
             }
             ctx.beginPath();
             const n = Math.floor(outline.length * lerp(draw, [0.2, 1], [0, 1]));
@@ -217,8 +271,8 @@ export const Reel1: React.FC = () => {
     <ReelShell data={D} endAt={T.end}>
       {f < T.cofiring && <Hook />}
       {f >= T.cofiring && f < T.rule && <CoFiring />}
-      {f >= T.rule && f < T.pellet - 4 && <Gap />}
-      {f >= T.pellet - 4 && f < T.brand - 6 && <Who />}
+      {f >= T.rule && f < T.pellet - 6 && <Demand />}
+      {f >= T.pellet - 6 && f < T.brand - 6 && <Who />}
       {f >= T.brand - 6 && <Brand />}
       <EndCard at={T.end} logo={false} bg={false} note="Figures are approximate. Sources: Ministry of Power biomass co-firing policy; industry estimates." />
       <LightLeak at={T.cofiring} dur={16} from="left" strength={0.6} />
