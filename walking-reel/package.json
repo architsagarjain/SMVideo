@@ -9,6 +9,7 @@
     "still": "remotion still WalkingReel"
   },
   "dependencies": {
+    "@phosphor-icons/core": "2.1.1",
     "@remotion/cli": "4.0.534",
     "@remotion/fonts": "4.0.534",
     "@remotion/google-fonts": "4.0.534",
