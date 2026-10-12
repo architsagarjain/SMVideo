@@ -14,8 +14,9 @@ fi
 python3 audio/scripts/build_vo.py "$VOICE"
 python3 audio/scripts/score.py
 python3 audio/scripts/mix.py
+mkdir -p film/public/audio && cp audio/final_mix.wav film/public/audio/final_mix.wav  # for Studio previews
 
-(cd film && npx remotion render src/index.ts BrandFilm out/picture.mp4 --log=error \
+(cd film && npx remotion render src/index.ts BrandFilm out/picture.mp4 --muted --log=error \
   --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=4)
 
 mkdir -p output

@@ -1,4 +1,4 @@
-import { AbsoluteFill, Sequence, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame } from 'remotion';
 import { useBrandFonts } from './components/Fonts';
 import { Grain, Vignette } from './components/Overlays';
 import { LightLeak } from './components/LightLeak';
@@ -22,6 +22,9 @@ export const Film: React.FC = () => {
   const cues = (vo.cues as Cue[]).filter((c) => c.s < S.s7 + END - 4).map((c) => ({ ...c, e: Math.min(c.e, S.s7 + END - 4) }));
   return (
     <AbsoluteFill style={{ background: '#000' }}>
+      {/* final mix (narration + score + sound design) so Studio previews play with sound;
+          the delivery render is made muted and the same mix is muxed in by build_film.sh */}
+      <Audio src={staticFile('audio/final_mix.wav')} />
       <Sequence from={S.s1} durationInFrames={S.s2 - S.s1}><S1Hook /></Sequence>
       <Sequence from={S.s2} durationInFrames={S.s3 - S.s2}><S2Problem /></Sequence>
       <Sequence from={S.s3} durationInFrames={S.s4 - S.s3}><S3Reveal /></Sequence>
