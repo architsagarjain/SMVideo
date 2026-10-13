@@ -12,7 +12,8 @@ Modelled on the reference reel's soundtrack:
   * effects and music sit close under the voice, as in the reference
 Everything is synthesised here (no samples). Master: -14 LUFS, peaks -1.5 dBFS.
 
-Usage: python3 scripts/make_audio_reel2.py <source video> <out.wav> [--stems]
+Usage: python3 scripts/make_audio_reel2.py <source video> <out.wav> [--stems] [--no-music]
+  --no-music: voice + sound effects only (music gets added later in Instagram)
 """
 import json, subprocess, sys, wave
 import numpy as np
@@ -359,6 +360,8 @@ for a0, a1 in GFX:
 music *= db(-3 * speaking + 3 * in_gfx)
 vr = np.sqrt((voice ** 2).mean())
 music *= vr / np.sqrt((music ** 2).mean()) * db(-7)
+if "--no-music" in sys.argv:
+    music[:] = 0
 mix = voice + (music + sfx)[:, None] * np.array([1.0, 1.0])
 
 if "--stems" in sys.argv:

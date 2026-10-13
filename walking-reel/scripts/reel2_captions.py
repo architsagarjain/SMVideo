@@ -1,7 +1,8 @@
 """Caption chunks (1-3 words) for reel 2 from the Whisper word timings.
 
 Words were cross-checked with a second model (large-v3). Fixes applied here:
-"I am" -> "I'm", "meta -analysis" -> "meta-analysis", "year -end" -> "year-end".
+"I am" -> "I'm", "meta -analysis" -> "meta-analysis", "year -end" -> "year-end",
+"Then add track" -> "Then track" (confirmed by the client).
 Usage: python3 scripts/reel2_captions.py
 """
 import json, os, re
@@ -20,6 +21,8 @@ for w in words:
 assert ws[0]["text"] == "I" and ws[1]["text"] == "am"
 ws[1] = {"text": "I'm", "start": ws[1]["start"] - 0.08, "end": ws[1]["end"]}
 ws.pop(0)
+# "Then add track completed sets": she meant "Then track ..."
+ws = [w for w in ws if not (w["text"] == "add" and abs(w["start"] - 50.76) < 0.05)]
 
 # chunk: break after punctuation, before a long pause, or at 3 words
 chunks, cur = [], []

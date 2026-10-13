@@ -645,22 +645,17 @@
    "end": 50.76
   },
   {
-   "text": "add",
-   "start": 50.76,
-   "end": 51.08
-  },
-  {
    "text": "track",
    "start": 51.08,
    "end": 51.44
-  }
- ],
- [
+  },
   {
    "text": "completed",
    "start": 51.44,
    "end": 52.06
-  },
+  }
+ ],
+ [
   {
    "text": "sets,",
    "start": 52.06,
