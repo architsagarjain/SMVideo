@@ -1,0 +1,941 @@
+[
+ [
+  {
+   "text": "After",
+   "start": 1.04,
+   "end": 1.64
+  },
+  {
+   "text": "going",
+   "start": 1.64,
+   "end": 1.88
+  },
+  {
+   "text": "through",
+   "start": 1.88,
+   "end": 2.06
+  }
+ ],
+ [
+  {
+   "text": "my",
+   "start": 2.06,
+   "end": 2.32
+  },
+  {
+   "text": "own",
+   "start": 2.32,
+   "end": 2.6
+  },
+  {
+   "text": "weight",
+   "start": 2.6,
+   "end": 2.84
+  }
+ ],
+ [
+  {
+   "text": "loss",
+   "start": 2.84,
+   "end": 3.04
+  },
+  {
+   "text": "journey,",
+   "start": 3.04,
+   "end": 3.38
+  }
+ ],
+ [
+  {
+   "text": "I've",
+   "start": 3.64,
+   "end": 3.66
+  },
+  {
+   "text": "become",
+   "start": 3.82,
+   "end": 4.0
+  },
+  {
+   "text": "very",
+   "start": 4.0,
+   "end": 4.4
+  }
+ ],
+ [
+  {
+   "text": "suspicious",
+   "start": 4.4,
+   "end": 5.0
+  },
+  {
+   "text": "of",
+   "start": 5.0,
+   "end": 5.4
+  },
+  {
+   "text": "the",
+   "start": 5.4,
+   "end": 5.48
+  }
+ ],
+ [
+  {
+   "text": "word",
+   "start": 5.48,
+   "end": 5.7
+  },
+  {
+   "text": "\"light\"",
+   "start": 5.7,
+   "end": 6.0
+  },
+  {
+   "text": "on",
+   "start": 6.0,
+   "end": 6.2
+  }
+ ],
+ [
+  {
+   "text": "food.",
+   "start": 6.2,
+   "end": 6.44
+  }
+ ],
+ [
+  {
+   "text": "Because",
+   "start": 7.02,
+   "end": 7.44
+  },
+  {
+   "text": "a",
+   "start": 7.44,
+   "end": 7.74
+  },
+  {
+   "text": "meal",
+   "start": 7.74,
+   "end": 7.88
+  }
+ ],
+ [
+  {
+   "text": "can",
+   "start": 7.88,
+   "end": 8.18
+  },
+  {
+   "text": "feel",
+   "start": 8.18,
+   "end": 8.46
+  },
+  {
+   "text": "light",
+   "start": 8.46,
+   "end": 8.72
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 8.72,
+   "end": 8.96
+  },
+  {
+   "text": "still",
+   "start": 8.96,
+   "end": 9.24
+  },
+  {
+   "text": "give",
+   "start": 9.24,
+   "end": 9.44
+  }
+ ],
+ [
+  {
+   "text": "you",
+   "start": 9.44,
+   "end": 9.62
+  },
+  {
+   "text": "very",
+   "start": 9.62,
+   "end": 9.98
+  },
+  {
+   "text": "little",
+   "start": 9.98,
+   "end": 10.36
+  }
+ ],
+ [
+  {
+   "text": "protein.",
+   "start": 10.36,
+   "end": 10.74
+  }
+ ],
+ [
+  {
+   "text": "Take",
+   "start": 11.32,
+   "end": 11.56
+  },
+  {
+   "text": "sabudana",
+   "start": 11.56,
+   "end": 12.22
+  },
+  {
+   "text": "during",
+   "start": 12.22,
+   "end": 12.52
+  }
+ ],
+ [
+  {
+   "text": "Navratri.",
+   "start": 12.52,
+   "end": 13.14
+  }
+ ],
+ [
+  {
+   "text": "Plain,",
+   "start": 13.68,
+   "end": 14.02
+  }
+ ],
+ [
+  {
+   "text": "dry",
+   "start": 14.28,
+   "end": 14.54
+  },
+  {
+   "text": "tapioca",
+   "start": 14.54,
+   "end": 15.18
+  },
+  {
+   "text": "pearls",
+   "start": 15.18,
+   "end": 15.66
+  }
+ ],
+ [
+  {
+   "text": "contain",
+   "start": 15.66,
+   "end": 16.26
+  },
+  {
+   "text": "roughly",
+   "start": 16.26,
+   "end": 16.78
+  },
+  {
+   "text": "89",
+   "start": 16.78,
+   "end": 17.52
+  }
+ ],
+ [
+  {
+   "text": "grams",
+   "start": 17.52,
+   "end": 17.86
+  },
+  {
+   "text": "of",
+   "start": 17.86,
+   "end": 18.18
+  },
+  {
+   "text": "carbohydrate",
+   "start": 18.18,
+   "end": 18.7
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 18.7,
+   "end": 19.38
+  },
+  {
+   "text": "only",
+   "start": 19.38,
+   "end": 19.7
+  },
+  {
+   "text": "0.2",
+   "start": 19.7,
+   "end": 20.64
+  }
+ ],
+ [
+  {
+   "text": "grams",
+   "start": 20.64,
+   "end": 20.98
+  },
+  {
+   "text": "of",
+   "start": 20.98,
+   "end": 21.26
+  },
+  {
+   "text": "protein",
+   "start": 21.26,
+   "end": 21.6
+  }
+ ],
+ [
+  {
+   "text": "per",
+   "start": 21.6,
+   "end": 22.0
+  },
+  {
+   "text": "100",
+   "start": 22.0,
+   "end": 22.32
+  },
+  {
+   "text": "grams.",
+   "start": 22.32,
+   "end": 22.7
+  }
+ ],
+ [
+  {
+   "text": "So",
+   "start": 23.3,
+   "end": 23.54
+  },
+  {
+   "text": "if",
+   "start": 23.54,
+   "end": 23.84
+  },
+  {
+   "text": "I'm",
+   "start": 23.84,
+   "end": 24.04
+  }
+ ],
+ [
+  {
+   "text": "looking",
+   "start": 24.1,
+   "end": 24.28
+  },
+  {
+   "text": "at",
+   "start": 24.28,
+   "end": 24.44
+  },
+  {
+   "text": "a",
+   "start": 24.44,
+   "end": 24.58
+  }
+ ],
+ [
+  {
+   "text": "plate",
+   "start": 24.58,
+   "end": 24.78
+  },
+  {
+   "text": "of",
+   "start": 24.78,
+   "end": 25.08
+  },
+  {
+   "text": "sabudana",
+   "start": 25.08,
+   "end": 25.5
+  }
+ ],
+ [
+  {
+   "text": "khichdi,",
+   "start": 25.5,
+   "end": 25.98
+  }
+ ],
+ [
+  {
+   "text": "my",
+   "start": 26.38,
+   "end": 26.56
+  },
+  {
+   "text": "first",
+   "start": 26.56,
+   "end": 26.96
+  },
+  {
+   "text": "question",
+   "start": 26.96,
+   "end": 27.38
+  }
+ ],
+ [
+  {
+   "text": "is",
+   "start": 27.38,
+   "end": 27.82
+  },
+  {
+   "text": "where",
+   "start": 27.82,
+   "end": 28.24
+  },
+  {
+   "text": "is",
+   "start": 28.24,
+   "end": 28.54
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 28.54,
+   "end": 28.72
+  },
+  {
+   "text": "protein",
+   "start": 28.72,
+   "end": 28.98
+  },
+  {
+   "text": "coming",
+   "start": 28.98,
+   "end": 29.32
+  }
+ ],
+ [
+  {
+   "text": "from?",
+   "start": 29.32,
+   "end": 29.86
+  }
+ ],
+ [
+  {
+   "text": "The",
+   "start": 30.5,
+   "end": 30.6
+  },
+  {
+   "text": "peanuts",
+   "start": 30.6,
+   "end": 30.96
+  },
+  {
+   "text": "contribute",
+   "start": 30.96,
+   "end": 31.56
+  }
+ ],
+ [
+  {
+   "text": "some",
+   "start": 31.56,
+   "end": 32.3
+  },
+  {
+   "text": "but",
+   "start": 32.3,
+   "end": 32.62
+  },
+  {
+   "text": "the",
+   "start": 32.62,
+   "end": 32.82
+  }
+ ],
+ [
+  {
+   "text": "quantity",
+   "start": 32.82,
+   "end": 33.12
+  },
+  {
+   "text": "matters.",
+   "start": 33.12,
+   "end": 33.66
+  }
+ ],
+ [
+  {
+   "text": "The",
+   "start": 34.32,
+   "end": 34.42
+  },
+  {
+   "text": "potatoes",
+   "start": 34.42,
+   "end": 34.84
+  },
+  {
+   "text": "add",
+   "start": 34.84,
+   "end": 35.4
+  }
+ ],
+ [
+  {
+   "text": "carbohydrate.",
+   "start": 35.4,
+   "end": 36.0
+  }
+ ],
+ [
+  {
+   "text": "The",
+   "start": 36.68,
+   "end": 36.78
+  },
+  {
+   "text": "cooking",
+   "start": 36.78,
+   "end": 37.04
+  },
+  {
+   "text": "fat",
+   "start": 37.04,
+   "end": 37.44
+  }
+ ],
+ [
+  {
+   "text": "adds",
+   "start": 37.44,
+   "end": 38.08
+  },
+  {
+   "text": "energy.",
+   "start": 38.08,
+   "end": 38.62
+  }
+ ],
+ [
+  {
+   "text": "Soaking",
+   "start": 39.24,
+   "end": 39.7
+  },
+  {
+   "text": "the",
+   "start": 39.7,
+   "end": 39.88
+  },
+  {
+   "text": "sabudana",
+   "start": 39.88,
+   "end": 40.4
+  }
+ ],
+ [
+  {
+   "text": "adds",
+   "start": 40.4,
+   "end": 40.76
+  },
+  {
+   "text": "water",
+   "start": 40.76,
+   "end": 41.18
+  },
+  {
+   "text": "and",
+   "start": 41.18,
+   "end": 41.64
+  }
+ ],
+ [
+  {
+   "text": "not",
+   "start": 41.64,
+   "end": 41.96
+  },
+  {
+   "text": "protein.",
+   "start": 41.96,
+   "end": 42.36
+  }
+ ],
+ [
+  {
+   "text": "If",
+   "start": 43.14,
+   "end": 43.42
+  },
+  {
+   "text": "dairy",
+   "start": 43.42,
+   "end": 43.86
+  },
+  {
+   "text": "fits",
+   "start": 43.86,
+   "end": 44.34
+  }
+ ],
+ [
+  {
+   "text": "your",
+   "start": 44.34,
+   "end": 44.76
+  },
+  {
+   "text": "fasting",
+   "start": 44.76,
+   "end": 45.2
+  },
+  {
+   "text": "practice,",
+   "start": 45.2,
+   "end": 45.76
+  }
+ ],
+ [
+  {
+   "text": "I'd",
+   "start": 46.18,
+   "end": 46.38
+  },
+  {
+   "text": "build",
+   "start": 46.38,
+   "end": 46.58
+  },
+  {
+   "text": "the",
+   "start": 46.58,
+   "end": 47.06
+  }
+ ],
+ [
+  {
+   "text": "meal",
+   "start": 47.06,
+   "end": 47.28
+  },
+  {
+   "text": "with",
+   "start": 47.28,
+   "end": 47.58
+  },
+  {
+   "text": "an",
+   "start": 47.58,
+   "end": 47.7
+  }
+ ],
+ [
+  {
+   "text": "appropriate",
+   "start": 47.7,
+   "end": 48.28
+  },
+  {
+   "text": "serving",
+   "start": 48.28,
+   "end": 48.66
+  },
+  {
+   "text": "of",
+   "start": 48.66,
+   "end": 48.96
+  }
+ ],
+ [
+  {
+   "text": "paneer",
+   "start": 48.96,
+   "end": 49.34
+  },
+  {
+   "text": "or",
+   "start": 49.34,
+   "end": 49.76
+  },
+  {
+   "text": "curd",
+   "start": 49.76,
+   "end": 50.4
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 50.4,
+   "end": 50.64
+  },
+  {
+   "text": "check",
+   "start": 50.64,
+   "end": 51.0
+  },
+  {
+   "text": "what",
+   "start": 51.0,
+   "end": 51.5
+  }
+ ],
+ [
+  {
+   "text": "that",
+   "start": 51.5,
+   "end": 52.02
+  },
+  {
+   "text": "portion",
+   "start": 52.02,
+   "end": 52.38
+  },
+  {
+   "text": "actually",
+   "start": 52.38,
+   "end": 52.72
+  }
+ ],
+ [
+  {
+   "text": "provides.",
+   "start": 52.72,
+   "end": 53.22
+  }
+ ],
+ [
+  {
+   "text": "I",
+   "start": 54.06,
+   "end": 54.06
+  },
+  {
+   "text": "wouldn't",
+   "start": 54.06,
+   "end": 54.52
+  },
+  {
+   "text": "remove",
+   "start": 54.52,
+   "end": 54.86
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 54.86,
+   "end": 55.14
+  },
+  {
+   "text": "food",
+   "start": 55.14,
+   "end": 55.3
+  },
+  {
+   "text": "you",
+   "start": 55.3,
+   "end": 55.5
+  }
+ ],
+ [
+  {
+   "text": "enjoy",
+   "start": 55.5,
+   "end": 55.94
+  },
+  {
+   "text": "before",
+   "start": 55.94,
+   "end": 56.46
+  },
+  {
+   "text": "understanding",
+   "start": 56.46,
+   "end": 57.14
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 57.14,
+   "end": 57.52
+  },
+  {
+   "text": "plate.",
+   "start": 57.52,
+   "end": 57.78
+  }
+ ],
+ [
+  {
+   "text": "That's",
+   "start": 58.5,
+   "end": 58.9
+  },
+  {
+   "text": "the",
+   "start": 58.9,
+   "end": 59.04
+  },
+  {
+   "text": "approach",
+   "start": 59.04,
+   "end": 59.38
+  }
+ ],
+ [
+  {
+   "text": "I",
+   "start": 59.38,
+   "end": 59.68
+  },
+  {
+   "text": "want",
+   "start": 59.68,
+   "end": 59.96
+  },
+  {
+   "text": "you",
+   "start": 59.96,
+   "end": 60.28
+  }
+ ],
+ [
+  {
+   "text": "to",
+   "start": 60.28,
+   "end": 60.5
+  },
+  {
+   "text": "learn.",
+   "start": 60.5,
+   "end": 60.72
+  }
+ ],
+ [
+  {
+   "text": "Identify",
+   "start": 61.22,
+   "end": 61.84
+  },
+  {
+   "text": "what",
+   "start": 61.84,
+   "end": 62.08
+  },
+  {
+   "text": "the",
+   "start": 62.08,
+   "end": 62.24
+  }
+ ],
+ [
+  {
+   "text": "meal",
+   "start": 62.24,
+   "end": 62.38
+  },
+  {
+   "text": "provides",
+   "start": 62.38,
+   "end": 62.94
+  },
+  {
+   "text": "then",
+   "start": 62.94,
+   "end": 63.52
+  }
+ ],
+ [
+  {
+   "text": "fill",
+   "start": 63.52,
+   "end": 63.8
+  },
+  {
+   "text": "the",
+   "start": 63.8,
+   "end": 64.0
+  },
+  {
+   "text": "gap.",
+   "start": 64.0,
+   "end": 64.28
+  }
+ ],
+ [
+  {
+   "text": "Comment",
+   "start": 64.88,
+   "end": 65.12
+  },
+  {
+   "text": "guide",
+   "start": 65.12,
+   "end": 65.5
+  },
+  {
+   "text": "and",
+   "start": 65.5,
+   "end": 65.96
+  }
+ ],
+ [
+  {
+   "text": "I'll",
+   "start": 65.96,
+   "end": 66.2
+  },
+  {
+   "text": "send",
+   "start": 66.2,
+   "end": 66.3
+  },
+  {
+   "text": "you",
+   "start": 66.3,
+   "end": 66.46
+  }
+ ],
+ [
+  {
+   "text": "my",
+   "start": 66.46,
+   "end": 66.62
+  },
+  {
+   "text": "free",
+   "start": 66.62,
+   "end": 67.0
+  },
+  {
+   "text": "fat",
+   "start": 67.0,
+   "end": 67.34
+  }
+ ],
+ [
+  {
+   "text": "loss",
+   "start": 67.34,
+   "end": 67.56
+  },
+  {
+   "text": "guide.",
+   "start": 67.56,
+   "end": 67.86
+  }
+ ]
+]
