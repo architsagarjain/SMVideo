@@ -149,7 +149,7 @@ const PearlsScene: React.FC = () => {
   const t = useT();
   return (
     <Stage w={S.pearls}>
-      <Canvas keys={[{t: S.pearls.start, x: 540, y: 560, s: 1.25}, {t: 16.0, x: 540, y: 620, s: 1.15}, {t: 16.7, x: 540, y: 960, s: 1.0}]}>
+      <Canvas keys={[{t: S.pearls.start, x: 540, y: 560, s: 1.25}, {t: 16.0, x: 540, y: 620, s: 1.15}, {t: 16.7, x: 540, y: 960, s: 1.0}, {t: 17.4, x: 540, y: 960, s: 1.0}, {t: S.pearls.end, x: 540, y: 1040, s: 1.12}]}>
         <Scramble text="PLAIN, DRY" at={13.68} x={540} y={300} size={48} color={X.greyText} />
         <Scramble text="TAPIOCA PEARLS" at={14.54} x={540} y={370} size={64} color={X.ink} />
         <PearlRain start={14.6} n={70} />
@@ -175,7 +175,8 @@ const BuildScene: React.FC = () => {
   const fill = lerp(tween(t, 49.9, 1.0, EASE_OUT), 0.06, 0.55);
   return (
     <Stage w={S.build}>
-      <Canvas keys={[{t: S.build.start, x: 540, y: 560, s: 1.15}, {t: 46.0, x: 540, y: 640, s: 1.05}, {t: 46.7, x: 540, y: 860, s: 1.0}, {t: 50.3, x: 540, y: 860, s: 1.0}, {t: 50.9, x: 540, y: 1180, s: 1.0}]}>
+      <Canvas keys={[{t: S.build.start, x: 540, y: 470, s: 1.3}, {t: 46.0, x: 540, y: 640, s: 1.05}, {t: 46.7, x: 540, y: 860, s: 1.0}, {t: 50.3, x: 540, y: 830, s: 1.07}, {t: 50.9, x: 540, y: 1180, s: 1.0}, {t: S.build.end, x: 540, y: 1230, s: 1.08}]}>
+        <Icon name="drop" at={43.0} size={120} x={540} y={290} color={X.blue} />
         <Scramble text="IF DAIRY FITS" at={43.42} x={540} y={420} size={60} color={X.ink} />
         <Scramble text="YOUR FASTING PRACTICE" at={44.76} x={540} y={500} size={42} color={X.greyText} per={0.02} />
         <Icon name="bowl-food" at={46.38} size={260} x={540} y={800} rot={0} />

@@ -60,6 +60,7 @@ def cues(cue, rng):
     cue(41.64, "chirp", -30)
     cue(41.7, "buzz", -24)
     # build the meal: paneer + curd go in, protein meter rises, check the portion
+    cue(43.0, "drop", -24)  # milk drop
     cue(43.42, "chirp_big", -26)
     cue(44.76, "chirp", -30)
     cue(46.38, "pop", -20)
