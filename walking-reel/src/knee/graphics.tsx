@@ -30,7 +30,7 @@ export const KneeBehind: React.FC = () => {
       <Icon name="calendar-blank" at={13.66} size={180} x={880} y={760} rot={10} out={16.6} />
       <Scramble text="DEC" at={13.8} x={880} y={890} size={50} color={X.pink} out={16.6} />
       <Giant text="DEADLINE" at={15.55} y={330} size={210} color={X.pink} stagger={0.04} out={16.65} />
-      <Cross at={16.0} x={180} y={760} size={150} />
+      <Cross at={16.0} x={180} y={760} size={150} out={16.65} />
 
       {/* "You can use the end of 2026 to motivate you," */}
       <Chip at={58.9} x={540} y={150} text="THE END OF" bg={X.ink} size={44} out={61.6} />
@@ -125,8 +125,8 @@ export const KneePanel: React.FC = () => {
       <Label text="WEIGHT" x={CX0 + 10} y={CY0 - 60} size={30} at={39.4} />
       <Label text="WEEKS" x={CX1 - 50} y={800} size={30} at={39.4} />
       <Scramble text="FIXED CALCULATION" at={39.88} x={700} y={760 - 30} size={34} color={X.ink} />
-      <Scramble text="ACTUAL" at={42.3} x={880} y={predicted(0) + 220} size={40} color={X.blue} />
-      <Scramble text="OVER-PREDICTS" at={42.54} x={760} y={590} size={48} color={X.pink} />
+      <Scramble text="ACTUAL" at={42.3} x={860} y={505} size={40} color={X.blue} />
+      <Scramble text="OVER-PREDICTS" at={42.54} x={540} y={915} size={52} color={X.pink} />
       <Label text="ILLUSTRATIVE" x={190} y={840} size={24} at={40.0} />
     </AbsoluteFill>
   );

@@ -157,9 +157,9 @@ export const Tick: React.FC<{at: number; x: number; y: number; size?: number; co
   );
 };
 
-export const Cross: React.FC<{at: number; x: number; y: number; size?: number; color?: string}> = ({at, x, y, size = 56, color = X.red}) => {
+export const Cross: React.FC<{at: number; x: number; y: number; size?: number; color?: string; out?: number}> = ({at, x, y, size = 56, color = X.red, out}) => {
   const t = useT();
-  if (t < at) return null;
+  if (t < at || (out !== undefined && t > out)) return null;
   const a = tween(t, at, 0.14, EASE_OUT);
   const b = tween(t, at + 0.1, 0.14, EASE_OUT);
   return (

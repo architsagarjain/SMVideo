@@ -136,10 +136,10 @@ const PearlRain: React.FC<{start: number; n: number}> = ({start, n}) => {
         // land in a heap inside the bowl (bowl rim at y ~ 640, x 330..750)
         const tx = 360 + random(`px${i}`) * 360;
         const heap = 610 - Math.sin(((tx - 360) / 360) * Math.PI) * 70 - random(`py${i}`) * 40;
-        const y = Math.min(heap, -60 + 0.5 * 3200 * dt * dt);
+        const y = Math.min(heap, 425 + 0.5 * 1800 * dt * dt); // spawn under the title
         const x = tx + (random(`pd${i}`) - 0.5) * 80 * Math.max(0, 1 - dt * 2);
         const r = 13 + random(`pr${i}`) * 6;
-        return <div key={i} style={{position: 'absolute', left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: r, background: '#FFFFFF', border: `3px solid ${X.ink}`}} />;
+        return <div key={i} style={{position: 'absolute', left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: r, background: '#FFFFFF', border: `3px solid ${X.ink}`, opacity: Math.min(1, dt / 0.1)}} />;
       })}
     </>
   );
