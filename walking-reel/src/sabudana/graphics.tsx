@@ -96,8 +96,8 @@ export const SabudanaPanel: React.FC = () => {
         );
       })}
       <Scramble text="QUANTITY MATTERS" at={32.82} x={980} y={272} size={28} color={X.greyText} align="right" />
-      <Scramble text="NOT PROTEIN" at={41.64} x={980} y={727} size={30} color={X.pink} align="right" />
-      <Cross at={41.7} x={700} y={715} size={56} />
+      <Scramble text="NOT PROTEIN" at={41.64} x={980} y={767} size={30} color={X.pink} align="right" />
+      <Cross at={41.7} x={745} y={765} size={42} />
     </AbsoluteFill>
   );
 };
