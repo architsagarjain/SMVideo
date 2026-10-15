@@ -4,18 +4,20 @@ import json, os, re, sys
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(R, 'film', 'scripts'))
 from prep_footage import ROLES  # noqa
+sys.path.insert(0, os.path.join(R, 'reels', 'scripts'))
+from prep_reel_clips import ROLES as REEL_ROLES  # noqa
 
 foot = {e['file'].split('/')[-1]: e for e in json.load(open(f'{R}/footage/footage_manifest.json'))}
 sfx = {e['file']: e for e in json.load(open(f'{R}/audio/sfx/sfx_manifest.json'))}
-mix_src = open(f'{R}/audio/scripts/mix.py').read()
+mix_src = open(f'{R}/audio/scripts/mix.py').read() + open(f'{R}/reels/scripts/reel_audio.py').read()
 sfx_used = sorted({n for n in re.findall(r"'([a-z0-9_]+\.wav)'", mix_src) if n in sfx})
 
-L = ['# Asset manifest: IndiaBiomass brand film', '',
-     'Every third-party asset in `output/IndiaBiomass_BrandFilm_60s.mp4`, with its source and licence.', '']
+L = ['# Asset manifest: IndiaBiomass brand film and reels', '',
+     'Every third-party asset in `output/IndiaBiomass_BrandFilm_60s.mp4` and the two reels in `output/`, with its source and licence. Reel-only clips start with `r_`.', '']
 
 L += ['## Footage', '', '| Used as | File | Source clip | Licence | Attribution |', '|---|---|---|---|---|']
 by_src = {}
-for role, (src, start, dur, *_rest) in ROLES.items():
+for role, (src, start, dur, *_rest) in {**ROLES, **REEL_ROLES}.items():
     by_src.setdefault(src, []).append(f'{role} ({start:g}-{start + dur:g} s)')
 for src, roles in by_src.items():
     e = foot[src]

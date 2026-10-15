@@ -52,3 +52,14 @@ Needs ffmpeg, Python 3 (`numpy scipy soundfile pedalboard pyloudnorm`), Node 22.
 4. **Map.** The India outline follows the Survey of India boundary (DataMeet composite, CC BY 4.0). The network itself is illustrative.
 5. **Music** is an original synthesised score. Production-library or session-recorded music would add more orchestral realism; the stems make it easy to replace.
 6. **Remotion licence.** Remotion is free for individuals and companies of up to 3 people. A larger company rendering this project needs a Remotion company licence.
+
+## Reels (9:16, approx. 35 s and 40 s)
+
+| Reel | Composition | Final file |
+|---|---|---|
+| 1 · Co-firing: why every coal plant now needs biomass | `Reel1-CoFiring` | `output/IndiaBiomass_Reel1_CoFiring.mp4` + `.srt` |
+| 2 · Tender words: EMD, GCV, L1, MSE exemption, reverse auction | `Reel2-TenderWords` | `output/IndiaBiomass_Reel2_TenderWords.mp4` + `.srt` |
+
+- **Workflow.** Voice is your ElevenLabs take, in `reels/audio/vo/`. Run `reels/scripts/build_reel_vo.py` to make the word timings and subtitle cues, and `reels/scripts/reel_audio.py` to build the music, SFX and voice mix. Review with half-res drafts in `reels/previews/`. After approval, `./build_reels.sh` renders the finals: 1080x1920, two-pass x264 at 8 Mbps, AAC 320k, -14 LUFS.
+- **Layout.** Every element is centred: titles from y=300, graphics at y=600-1330, subtitles at y=1430. The code is in `film/src/reels/`.
+- **Figures.** Reel 1 says 7% co-firing from FY 2025-26, about 15-20 Mt of pellets needed a year, and about 2.5 Mt made today. Verify these against current Ministry of Power and industry sources before publishing. Reel 2 diagrams show shapes only, with no prices or values.

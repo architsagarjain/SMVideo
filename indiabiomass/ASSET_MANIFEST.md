@@ -1,6 +1,6 @@
-# Asset manifest: IndiaBiomass brand film
+# Asset manifest: IndiaBiomass brand film and reels
 
-Every third-party asset in `output/IndiaBiomass_BrandFilm_60s.mp4`, with its source and licence.
+Every third-party asset in `output/IndiaBiomass_BrandFilm_60s.mp4` and the two reels in `output/`, with its source and licence. Reel-only clips start with `r_`.
 
 ## Footage
 
@@ -10,11 +10,11 @@ Every third-party asset in `output/IndiaBiomass_BrandFilm_60s.mp4`, with its sou
 | s1_straw (3-4.3 s) | `02_golden_reeds_wind_closeup_a.mp4` | [@rubenvelasco (Mixkit)](https://mixkit.co/free-stock-video/golden-leaves-being-moved-by-the-wind-2076/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
 | s1_hand (5.4-6.5 s) | `03_hands_soil_backlit_sun_b.mp4` | [Coverr](https://coverr.co/videos/hands-dropping-dirt-j8unuelr9d) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
 | s1_overhead (0.5-1.7 s) | `04_aerial_wheat_field_topdown_b.mp4` | [@vreel (Mixkit)](https://mixkit.co/free-stock-video/immense-wheat-field-seen-from-the-air-5010/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
-| s2_bales (0-2.5 s) | `05_photo_round_hay_bales_field_c.jpg` | [DimiTalen (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:Round_hay_bales_on_a_field,_with_hawkweed_in_the_foreground,_near_Durnal,_Yvoir,_2025.jpg) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | not required |
+| s2_bales (0-2.5 s), r_bales_field (0-3 s) | `05_photo_round_hay_bales_field_c.jpg` | [DimiTalen (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:Round_hay_bales_on_a_field,_with_hawkweed_in_the_foreground,_near_Durnal,_Yvoir,_2025.jpg) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | not required |
 | s2_pellets (1-3.5 s) | `06_sawdust_falling_into_machine_a.mp4` | [@edgarfernandez (Mixkit)](https://mixkit.co/free-stock-video/sawdust-falling-into-a-machine-in-a-carpentry-39690/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
-| s2_tractor (4-7.8 s) | `10_aerial_truck_road_harvested_fields_a.mp4` | [Coverr](https://coverr.co/videos/road-near-a-field-99deg5kknk) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
-| s2_boiler (2-5 s) | `07_roaring_fire_furnace_d.mp4` | [Coverr](https://coverr.co/videos/a-roaring-fire-whvghgknu6) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
-| s2_buyer (3-5.5 s) | `07_power_plant_smoke_stacks_a.mp4` | [@dubassy (Mixkit)](https://mixkit.co/free-stock-video/smoke-from-power-plant-4362/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
+| s2_tractor (4-7.8 s), r_trucks (8.5-12.5 s) | `10_aerial_truck_road_harvested_fields_a.mp4` | [Coverr](https://coverr.co/videos/road-near-a-field-99deg5kknk) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
+| s2_boiler (2-5 s), r_furnace (6-11 s) | `07_roaring_fire_furnace_d.mp4` | [Coverr](https://coverr.co/videos/a-roaring-fire-whvghgknu6) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
+| s2_buyer (3-5.5 s), r_plant_sunset (12-16 s) | `07_power_plant_smoke_stacks_a.mp4` | [@dubassy (Mixkit)](https://mixkit.co/free-stock-video/smoke-from-power-plant-4362/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
 | s2_plant (1-4.3 s), s6_industry (5.5-7.9 s) | `07_power_plant_chimneys_b.mp4` | [@dubassy (Mixkit)](https://mixkit.co/free-stock-video/power-plant-working-4319/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
 | s4_left (2-5.8 s) | `03_paddy_field_harvesters_golden_d.mp4` | [Coverr](https://coverr.co/videos/rice-field-icadjxnx2a) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
 | s4_right (1-4.8 s) | `10_woodpiles_warehouse_storage_d.mp4` | [Coverr](https://coverr.co/videos/woodpiles-in-storage-jioqzosyer) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
@@ -25,6 +25,12 @@ Every third-party asset in `output/IndiaBiomass_BrandFilm_60s.mp4`, with its sou
 | s6_field (2-4.4 s) | `03_rice_harvest_workers_field_c.mp4` | [Coverr](https://coverr.co/videos/harvesting-rice-anertcl2vf) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
 | s6_supplier (4.5-6.9 s) | `03_hands_harvesting_rice_sickle_a.mp4` | [Coverr](https://coverr.co/videos/harvesting-in-a-rice-field-ixabimxryo) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
 | s7_aerial (0.5-3.1 s) | `01_aerial_barley_field_sunset_b.mp4` | [Coverr](https://coverr.co/videos/sun-setting-over-a-barley-crop-field-tho30foset) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
+| r_sparks (1.5-4.5 s) | `12_bonfire_sparks_a.mp4` | [Coverr](https://coverr.co/videos/sparks-from-a-bonfire-9fn96jxjjh) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
+| r_lathe (2-5 s) | `08_lathe_cutting_cylinder_b.mp4` | [@edgarfernandez (Mixkit)](https://mixkit.co/free-stock-video/lathe-cutting-a-cylinder-2241/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
+| r_embers (2-8 s) | `12_fire_particles_embers_b.mp4` | [@edgarfernandez (Mixkit)](https://mixkit.co/free-stock-video/fire-particles-on-dark-background-3460/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
+| r_shavings (4-7 s) | `06_factory_machine_wood_shavings_b.mp4` | [Coverr](https://coverr.co/videos/factory-machine-vslriawadu) | [Coverr License (free for commercial use)](https://coverr.co/license) | not required |
+| r_pellets_hands (0-3 s) | `06_photo_pellets_in_hands_c.jpg` | [Tom Bruton (Wikimedia Commons)](https://commons.wikimedia.org/wiki/File:Pellets_hand.jpg) | [Public domain (PD-author, released by author)](https://commons.wikimedia.org/wiki/Template:PD-author) | not required |
+| r_road_sunset (1-6 s) | `11_aerial_road_sunset_symmetrical_a.mp4` | [@rubenvelasco (Mixkit)](https://mixkit.co/free-stock-video/symmetrical-landscape-around-a-road-at-sunset-50266/) | [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) | not required |
 
 ## Sound effects (Mixkit)
 
