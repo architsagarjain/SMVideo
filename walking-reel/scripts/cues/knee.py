@@ -7,7 +7,9 @@ BROLL = [(3.6, 6.0), (50.35, 53.9), (53.9, 57.55)]
 
 def cues(cue, rng):
     # hook
-    cue(0.2, "pop", -21)  # bandaid icon
+    cue(0.77, "whoosh", -22)  # first-frame zoom snap
+    cue(0.77, "pop", -18)  # hook title
+    cue(3.16, "pop", -21)  # bandaid icon
     for i in range(3):  # "+15" characters rising
         cue(1.62 + i * 0.12, "click", -24)
     cue(1.62, "thump", -19)
@@ -16,7 +18,6 @@ def cues(cue, rng):
     # bed-rest cutaway: quiet hospital-monitor beeps
     for i in range(3):
         cue(3.9 + i * 0.75, "beep", -33)
-    cue(4.4, "chirp", -30)
     # deadline: quote typed, calendar, DEADLINE stamp + cross
     for i in range(22):
         cue(12.0 + i * 0.045, "key", -33)
@@ -69,14 +70,17 @@ def cues(cue, rng):
     cue(60.7, "chirp", -30)
     # attention: flag, heartbeat on HEALTH, clock tick on TIME
     cue(62.16, "chirp", -30)
-    cue(62.6, "pop", -21)
+    for t0 in (62.92, 63.88, 65.04):  # her three things land on the scale
+        cue(t0, "thump", -17)
+        cue(t0, "pop_lo", -24)
     cue(63.56, "heartbeat", -18)
     cue(64.72, "ticktock", -22)
     for t0 in (62.7, 63.66, 64.82):
         cue(t0, "chirp", -30)
     cue(66.14, "chirp_big", -25)
+    cue(66.16, "thump", -14)  # "more attention" slams the scale down
+    cue(68.1, "pop_lo", -20)  # their deadline card lands
     cue(66.66, "ding", -25)
-    cue(67.8, "pop_lo", -23)
     cue(67.9, "chirp", -30)
     cue(69.12, "chirp", -29)
     cue(69.7, "buzz", -22)

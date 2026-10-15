@@ -28,7 +28,13 @@ export const PIXEL = 'Jersey20'; // no space: an unquoted CSS family name can't 
 loadFont({family: PIXEL, url: staticFile('fonts/Jersey20-Regular.ttf'), weight: '400'});
 export const PIXEL_WIDE = 1.3;
 
-export const useT = () => useCurrentFrame() / FPS;
+/** Maps output seconds to the source seconds graphics are written in (sped-up series reels). */
+export const TimeMapContext = React.createContext<((t: number) => number) | null>(null);
+export const useT = () => {
+  const t = useCurrentFrame() / FPS;
+  const map = React.useContext(TimeMapContext);
+  return map ? map(t) : t;
+};
 
 /** Spring pop: 0 -> slight overshoot -> 1. */
 export const pop = (t: number, at: number) => springAt(t, at, 11, 190);

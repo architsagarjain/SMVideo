@@ -1,11 +1,14 @@
-import {BOTTOM, FACE_ORIGIN, ReelConfig} from '../series/core';
+import {BOTTOM, FACE_ORIGIN, Move, ReelConfig, retime} from '../series/core';
+import {TimeMap} from '../series/timemap';
+import timemap from './timemap.json';
 import captions from './captions.json';
 
 /**
  * Navratri sabudana reel. Every cut sits in a pause between her sentences.
  * Source: 68.77 s (2063 frames).
  */
-export const SABUDANA_FRAMES = 2063;
+export const TM = timemap as TimeMap;
+export const SABUDANA_FRAMES = TM.frames; // after trims, pause cuts and speed-up
 
 export const S = {
   hook: {start: 0, end: 6.6},
@@ -19,19 +22,27 @@ export const S = {
   cta: {start: 64.6, end: 99},
 };
 
+retime(TM, S, []);
+const moves: Move[] = [
+  // first frame: opens punched in, snaps back out (pattern interrupt)
+  {origin: FACE_ORIGIN, inStart: TM.segs[0].s0, inDur: 0.01, scale: 1.22, outStart: TM.segs[0].s0, outDur: 0.42},
+  // "So if I'm looking at a plate of sabudana khichdi"
+  {origin: FACE_ORIGIN, inStart: 23.3, inDur: 2.6, scale: 1.05, outStart: 26.25, outDur: 0.05},
+  {origin: BOTTOM, inStart: S.panel.start, inDur: 0.7, scale: 0.72, outStart: S.panel.end - 0.05, outDur: 0.05, panel: true},
+  // "Identify what the meal provides, then fill the gap."
+  {origin: FACE_ORIGIN, inStart: 61.1, inDur: 0.6, scale: 1.08, outStart: 64.55, outDur: 0.05},
+  {origin: FACE_ORIGIN, inStart: S.cta.start, inDur: 4.0, scale: 1.05, outStart: 999, outDur: 1},
+];
+retime(TM, {}, moves);
+
 export const sabudanaConfig: ReelConfig = {
   dir: 'sabudana',
   gfx: [S.light, S.pearls, S.build],
   behind: [S.hook, S.name, S.question, S.cta],
   panel: S.panel,
-  moves: [
-    // "So if I'm looking at a plate of sabudana khichdi"
-    {origin: FACE_ORIGIN, inStart: 23.3, inDur: 2.6, scale: 1.05, outStart: 26.25, outDur: 0.05},
-    {origin: BOTTOM, inStart: S.panel.start, inDur: 0.7, scale: 0.72, outStart: S.panel.end - 0.05, outDur: 0.05, panel: true},
-    // "Identify what the meal provides, then fill the gap."
-    {origin: FACE_ORIGIN, inStart: 61.1, inDur: 0.6, scale: 1.08, outStart: 64.55, outDur: 0.05},
-    {origin: FACE_ORIGIN, inStart: S.cta.start, inDur: 4.0, scale: 1.05, outStart: 999, outDur: 1},
-  ],
+  moves,
   broll: [{start: S.eating.start, end: S.eating.end, src: 'broll_eating.mp4'}],
   captions: captions as ReelConfig['captions'],
+  tm: TM,
+  shakes: [5.62, 11.5, 28.66, 65.12],
 };

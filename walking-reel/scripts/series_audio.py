@@ -39,6 +39,41 @@ def midi(m):
 raw = subprocess.run(["ffmpeg", "-v", "error", "-i", src, "-vn", "-ac", "2", "-ar", str(SR), "-af", "highpass=f=70",
                       "-f", "f32le", "-"], capture_output=True, check=True).stdout
 voice = np.frombuffer(raw, dtype=np.float32).reshape(-1, 2).astype(np.float64)
+
+# Optional time map (scripts/make_timemap.py): keep the segments, join them with short
+# fades, then speed the whole voice up with pitch preserved. Cue times stay in source
+# seconds and are mapped with M().
+TMP = os.path.join(os.path.dirname(ROOT), "src", NAME, "timemap.json")
+TM = json.load(open(TMP)) if os.path.exists(TMP) else None
+
+
+def M(t):
+    if TM is None:
+        return t
+    for g in TM["segs"]:
+        if t < g["s0"]:
+            return g["o0"]
+        if t <= g["s1"]:
+            return g["o0"] + (t - g["s0"]) / TM["speed"]
+    return TM["dur"]
+
+
+if TM is not None:
+    fade = int(0.006 * SR)
+    ramp = np.linspace(0, 1, fade)[:, None]
+    parts = []
+    for g in TM["segs"]:
+        seg = voice[int(round(g["s0"] * SR)):int(round(g["s1"] * SR))].copy()
+        seg[:fade] *= ramp
+        seg[-fade:] *= ramp[::-1]
+        parts.append(seg)
+    joined = np.concatenate(parts).astype(np.float32)
+    sped = subprocess.run(["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
+                           "-af", f"rubberband=tempo={TM['speed']}:pitchq=quality:transients=mixed:window=standard",
+                           "-f", "f32le", "-ar", str(SR), "-ac", "2", "-"], input=joined.tobytes(), capture_output=True, check=True).stdout
+    voice = np.frombuffer(sped, dtype=np.float32).reshape(-1, 2).astype(np.float64)
+    n_out = int(round(TM["frames"] / TM["fps"] * SR))
+    voice = np.pad(voice, ((0, max(0, n_out - len(voice))), (0, 0)))[:n_out]
 voice *= db(-18 - 20 * np.log10(np.sqrt((voice ** 2).mean()) + 1e-12))
 N = len(voice)
 DUR = N / SR
@@ -216,9 +251,10 @@ SFX = {"pop": pop_(), "pop_lo": pop_(700, 330, 0.1), "click": click(), "click_hi
 sfx = np.zeros(N)
 
 
-def cue(t0, name, g):
+def cue(t0, name, g, off=0.0):
+    """t0 in source seconds; `off` is a fixed offset in output seconds (risers lead into a cut)."""
     y = chirp() if name == "chirp" else (chirp(0.45, 1900) if name == "chirp_big" else SFX[name])
-    put(sfx, t0, y, db(g))
+    put(sfx, M(t0) + off, y, db(g))
 
 
 # ---------------------------------------------------------------------------
@@ -230,19 +266,19 @@ spec.loader.exec_module(C)
 
 # shared transition language (same as Reel2)
 for a0, a1 in C.GFX:
-    cue(a0 - 0.5, "riser", -22)
+    cue(a0, "riser", -22, -0.5)
     cue(a0, "boom", -12)
-    cue(a1 - 0.35, "rwhoosh", -22)
+    cue(a1, "rwhoosh", -22, -0.35)
     cue(a1, "boom_big", -13)
 starts_handled = [a for a, _ in C.GFX]
 for a0, a1 in C.BEHIND + ([C.PANEL] if C.PANEL else []) + [(b[0], b[1]) for b in C.BROLL]:
     if a0 < 0.05:
-        cue(0.05, "boom", -15)
+        cue(0, "boom", -15, 0.03)
     elif not any(abs(a0 - g) < 0.1 for g in [g1 for _, g1 in C.GFX] + starts_handled):
-        cue(a0 - 0.3, "riser", -26)
+        cue(a0, "riser", -26, -0.3)
         cue(a0, "boom", -16)
 for b in C.BROLL:  # whoosh out of a cutaway
-    cue(b[1] - 0.3, "rwhoosh", -25)
+    cue(b[1], "rwhoosh", -25, -0.3)
 C.cues(cue, rng)
 
 # ---------------------------------------------------------------------------

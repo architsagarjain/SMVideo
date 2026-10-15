@@ -3,7 +3,8 @@ import {AbsoluteFill} from 'remotion';
 import {Canvas, Cross, Dotted, Icon, Marker, PIXEL, PIXEL_WIDE, QBox, Scramble, Tick, X, pop, useT} from '../explainer/kit';
 import {Stage} from '../series/core';
 import {Chip, Giant, Label} from '../series/parts';
-import {EASE_IN_OUT, lerp, tween} from '../theme';
+import {EASE_IN_OUT, lerp, springAt, tween} from '../theme';
+import {ICONS} from '../explainer/icons';
 import {K} from './config';
 
 // ===========================================================================
@@ -17,10 +18,10 @@ export const KneeBehind: React.FC = () => {
       {/* "I gained around 15 kilos when a knee injury left me on prolonged bed rest." */}
       {t < K.hook.end + 0.1 ? (
         <>
-          <Icon name="bandaids" at={0.2} size={200} x={190} y={760} rot={-18} />
-          <Scramble text="KNEE INJURY" at={3.16} x={190} y={900} size={42} color={X.pink} />
-          <Giant text="+15" at={1.62} y={250} size={400} stagger={0.12} />
-          <Scramble text="KILOS" at={2.26} x={880} y={760} size={64} color={X.blue} />
+          <Giant text="+15" at={1.62} y={400} size={380} stagger={0.1} />
+          <Scramble text="KILOS" at={2.26} x={885} y={800} size={64} color={X.pink} />
+          <Icon name="bandaids" at={3.16} size={190} x={190} y={790} rot={-18} />
+          <Scramble text="KNEE INJURY" at={3.2} x={190} y={925} size={42} color={X.pink} />
         </>
       ) : null}
 
@@ -55,9 +56,7 @@ export const KneeBehind: React.FC = () => {
 // On top of the B-roll cutaways
 // ===========================================================================
 export const KneeBrollOverlay = (t: number) => {
-  if (t < K.rehab.end) {
-    return <Scramble key="r" text="PROLONGED BED REST" at={4.4} x={540} y={300} size={60} color="#FFFFFF" per={0.02} />;
-  }
+  if (t < K.rehab.end) return null; // the hook title stays up over this cutaway
   // "I'd start with a manageable plan, collect consistent progress information and adjust based on the response."
   const steps = [
     {text: 'PLAN', at: 51.78},
@@ -178,31 +177,113 @@ const WeeksScene: React.FC = () => {
   );
 };
 
+// "...but your starting point, health and available time deserves more attention than
+//  somebody else's transformation deadline."  A balance: her three things outweigh their deadline.
+const TILES = [
+  {icon: 'flag-banner', at: 62.6, color: X.blue},
+  {icon: 'heart', at: 63.56, color: X.pink},
+  {icon: 'clock', at: 64.72, color: X.blue},
+];
+const PIVOT: [number, number] = [540, 900];
+const ARM = 330;
+const HANG = 190;
+
+const Glyph: React.FC<{name: string; size: number; color: string}> = ({name, size, color}) => (
+  <svg viewBox="0 0 256 256" width={size} height={size}>
+    {ICONS[name].map((d, k) => (
+      <path key={k} d={d} fill={color} />
+    ))}
+  </svg>
+);
+
+const Pan: React.FC<{x: number; y: number; at: number}> = ({x, y, at}) => (
+  <svg style={{position: 'absolute', left: 0, top: 0, overflow: 'visible', opacity: tween(useT(), at, 0.3)}} width={1} height={1}>
+    <line x1={x} y1={y - HANG} x2={x - 140} y2={y} stroke={X.ink} strokeWidth={4} />
+    <line x1={x} y1={y - HANG} x2={x + 140} y2={y} stroke={X.ink} strokeWidth={4} />
+    <path d={`M${x - 165} ${y} H${x + 165} Q ${x + 150} ${y + 50}, ${x} ${y + 54} Q ${x - 150} ${y + 50}, ${x - 165} ${y} Z`} fill={X.ink} />
+  </svg>
+);
+
 const AttentionScene: React.FC = () => {
-  const cols = [
-    {icon: 'flag-banner', at: 62.6, text: 'STARTING', text2: 'POINT', color: X.blue},
-    {icon: 'heart', at: 63.56, text: 'HEALTH', text2: '', color: X.pink},
-    {icon: 'clock', at: 64.72, text: 'YOUR', text2: 'TIME', color: X.blue},
-  ];
+  const t = useT();
+  const W = K.attention;
+  if (t < W.start || t >= W.end) return null;
+  // tilt (deg, + = her side down): each thing she names lands and tips it further;
+  // "more attention" slams it; their deadline lands and barely moves it back.
+  const sp = (at: number) => springAt(t, at, 9, 160);
+  const deg = 5 * sp(62.75) + 4.5 * sp(63.71) + 4 * sp(64.87) + 4.5 * sp(66.14) - 5 * sp(68.0) + 5 * sp(68.45);
+  const th = (deg * Math.PI) / 180;
+  const L: [number, number] = [PIVOT[0] - ARM * Math.cos(th), PIVOT[1] + ARM * Math.sin(th)];
+  const R: [number, number] = [PIVOT[0] + ARM * Math.cos(th), PIVOT[1] - ARM * Math.sin(th)];
+  const panL = L[1] + HANG;
+  const panR = R[1] + HANG;
+  const drop = (at: number, yRest: number) => {
+    const d = t - at;
+    if (d < 0) return null;
+    const fall = Math.min(1, d / 0.32);
+    return yRest - 700 * (1 - fall * fall);
+  };
+  const card = drop(67.8, panR - 150);
+  const crossed = t >= 69.7;
   return (
-    <Stage w={K.attention}>
-      <Canvas keys={[{t: K.attention.start, x: 540, y: 760, s: 1.12}, {t: 66.0, x: 540, y: 820, s: 1.05}, {t: 67.4, x: 540, y: 1000, s: 1.0}]}>
-        <Scramble text="YOUR" at={62.16} x={540} y={420} size={44} color={X.greyText} />
-        {cols.map((c, i) => (
-          <React.Fragment key={i}>
-            <Icon name={c.icon} at={c.at} size={180} x={200 + i * 340} y={640} rot={-8} />
-            <Scramble text={c.text} at={c.at + 0.1} x={200 + i * 340} y={790} size={46} color={c.color} />
-            {c.text2 ? <Scramble text={c.text2} at={c.at + 0.25} x={200 + i * 340} y={845} size={46} color={c.color} /> : null}
-          </React.Fragment>
-        ))}
-        <Marker at={66.14} x={540} y={940} dir="up" color={X.blue} />
-        <Scramble text="MORE ATTENTION" at={66.14} x={540} y={1010} size={66} color={X.ink} />
-        <Label text="THAN" x={540} y={1110} size={36} at={67.22} />
-        <Icon name="person" at={67.8} size={150} x={250} y={1280} color={X.grey} rot={0} />
-        <Scramble text="SOMEONE ELSE'S" at={67.9} x={660} y={1250} size={44} color={X.greyText} />
-        <Scramble text="DEADLINE" at={69.12} x={660} y={1310} size={56} color={X.greyText} />
-        <Cross at={69.7} x={900} y={1210} size={110} />
-        <Tick at={66.66} x={860} y={1000} size={60} />
+    <Stage w={W}>
+      <Canvas keys={[{t: W.start, x: 500, y: 860, s: 1.1}, {t: 65.9, x: 530, y: 880, s: 1.03}, {t: 67.6, x: 545, y: 900, s: 1.0}, {t: W.end, x: 560, y: 910, s: 1.05}]}>
+        {/* header */}
+        <Scramble text="YOUR" at={62.16} x={540} y={420} size={46} color={X.greyText} out={65.6} />
+        <Scramble text="STARTING POINT" at={62.6} x={540} y={510} size={76} color={X.blue} out={63.5} />
+        <Scramble text="HEALTH" at={63.56} x={540} y={510} size={76} color={X.pink} out={64.66} />
+        <Scramble text="AVAILABLE TIME" at={64.72} x={540} y={510} size={76} color={X.blue} out={66.08} />
+        <Scramble text="DESERVES" at={65.66} x={540} y={420} size={46} color={X.greyText} />
+        <Scramble text="MORE ATTENTION" at={66.14} x={540} y={510} size={84} color={X.ink} />
+        <Tick at={66.66} x={985} y={505} size={70} />
+        <Scramble text="THAN SOMEONE ELSE'S" at={67.22} x={540} y={600} size={40} color={X.greyText} per={0.015} />
+
+        {/* stand + beam */}
+        <svg style={{position: 'absolute', left: 0, top: 0, overflow: 'visible', opacity: tween(t, W.start + 0.05, 0.3)}} width={1} height={1}>
+          <path d={`M${PIVOT[0] - 16} ${PIVOT[1]} L${PIVOT[0] - 34} 1430 H${PIVOT[0] + 34} L${PIVOT[0] + 16} ${PIVOT[1]} Z`} fill={X.ink} />
+          <rect x={PIVOT[0] - 170} y={1420} width={340} height={34} rx={17} fill={X.ink} />
+          <line x1={L[0]} y1={L[1]} x2={R[0]} y2={R[1]} stroke={X.ink} strokeWidth={16} strokeLinecap="round" />
+          <circle cx={PIVOT[0]} cy={PIVOT[1]} r={24} fill={X.stage} stroke={X.ink} strokeWidth={9} />
+          <circle cx={L[0]} cy={L[1]} r={10} fill={X.ink} />
+          <circle cx={R[0]} cy={R[1]} r={10} fill={X.ink} />
+        </svg>
+        <Pan x={L[0]} y={panL} at={W.start + 0.05} />
+        <Pan x={R[0]} y={panR} at={W.start + 0.05} />
+
+        {/* her three things */}
+        {TILES.map((g, i) => {
+          const y = drop(g.at, panL - 58);
+          if (y === null) return null;
+          const x = L[0] + (i - 1) * 106;
+          return (
+            <div key={i} style={{position: 'absolute', left: x - 52, top: y - 52, width: 104, height: 104, borderRadius: 24, background: '#fff', boxShadow: '0 8px 20px rgba(0,0,0,0.16)', display: 'flex', alignItems: 'center', justifyContent: 'center', rotate: `${(i - 1) * 6}deg`}}>
+              <Glyph name={g.icon} size={70} color={g.color} />
+            </div>
+          );
+        })}
+        <Scramble text="YOU" at={62.6} x={L[0]} y={panL + 110} size={48} color={X.blue} />
+
+        {/* their deadline: a "30 day shred" post */}
+        {card !== null ? (
+          <div style={{position: 'absolute', left: R[0] - 120, top: card - 140, width: 240, height: 280, rotate: '5deg', borderRadius: 22, background: '#fff', boxShadow: '0 10px 26px rgba(0,0,0,0.18)', opacity: crossed ? 0.55 : 1, overflow: 'hidden'}}>
+            <div style={{height: 64, background: X.pink, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: PIXEL, fontSize: 44, color: '#fff'}}>
+              <span style={{scale: `${PIXEL_WIDE} 1`}}>30 DAYS</span>
+            </div>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 6, marginTop: 22}}>
+              <div style={{scale: '1.25 1', transformOrigin: 'bottom'}}>
+                <Glyph name="person" size={92} color={X.grey} />
+              </div>
+              <Glyph name="arrow-right" size={44} color={X.greyText} />
+              <Glyph name="person" size={92} color={X.ink} />
+            </div>
+            <div style={{textAlign: 'center', fontFamily: PIXEL, fontSize: 34, color: X.ink, marginTop: 14}}>
+              <span style={{display: 'inline-block', scale: `${PIXEL_WIDE} 1`}}>SHRED!</span>
+            </div>
+          </div>
+        ) : null}
+        <Scramble text="TRANSFORMATION" at={69.12} x={R[0]} y={panR + 100} size={34} color={X.greyText} />
+        <Scramble text="DEADLINE" at={69.7} x={R[0]} y={panR + 148} size={52} color={X.pink} />
+        <Cross at={69.7} x={R[0] + 10} y={(card ?? panR) - 10} size={190} />
       </Canvas>
     </Stage>
   );

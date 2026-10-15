@@ -1,8 +1,8 @@
 import React from 'react';
-import {AbsoluteFill, random} from 'remotion';
+import {AbsoluteFill, Img, random, staticFile} from 'remotion';
 import {PIXEL, PIXEL_WIDE, X, pop, useT} from '../explainer/kit';
 import {ICONS} from '../explainer/icons';
-import {EASE_IN, EASE_OUT, lerp, springAt, tween} from '../theme';
+import {EASE_IN, EASE_OUT, SANS, lerp, springAt, tween} from '../theme';
 
 /** Shared graphic parts for the series reels (from Reel2). */
 
@@ -109,6 +109,74 @@ export const Chip: React.FC<{at: number; x: number; y: number; text: string; bg?
   return (
     <div style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', padding: `${size * 0.28}px ${size * 0.68}px ${size * 0.2}px`, borderRadius: 999, background: bg, color: fg, fontFamily: PIXEL, fontSize: size, scale: Math.max(0, pop(t, at)), opacity: o, whiteSpace: 'pre'}}>
       <span style={{display: 'inline-block', scale: `${PIXEL_WIDE} 1`}}>{text}</span>
+    </div>
+  );
+};
+
+/**
+ * Scroll-stopping hook headline: white card at the top, bold sans, key words on a
+ * coloured marker. It is already on screen on the first frame (big, then springs to size)
+ * so the reel opens with a reason to stay. Lines are arrays of [text, highlight colour?].
+ */
+export const HookTitle: React.FC<{lines: [string, string?][][]; at: number; out: number; y?: number; size?: number}> = ({lines, at, out, y = 150, size = 66}) => {
+  const t = useT();
+  if (t > out + 0.3) return null;
+  const s = lerp(Math.min(springAt(t, at, 13, 210), 1.2), 1.12, 1);
+  const o = 1 - tween(t, out, 0.25, EASE_IN);
+  const wob = Math.sin((t - at) * 2.1) * 0.6; // slow living wobble
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: 540,
+        top: y,
+        translate: '-50% 0%',
+        rotate: `${-1.8 + wob}deg`,
+        scale: s * lerp(o, 0.9, 1),
+        opacity: o,
+        background: '#FFFFFF',
+        borderRadius: 30,
+        padding: '22px 34px 26px',
+        boxShadow: '0 18px 50px rgba(0,0,0,0.28), 0 3px 8px rgba(0,0,0,0.18)',
+        fontFamily: SANS,
+        fontWeight: 800,
+        fontSize: size,
+        lineHeight: 1.12,
+        letterSpacing: -1.5,
+        color: X.ink,
+        textAlign: 'center',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {lines.map((line, i) => (
+        <div key={i}>
+          {line.map(([txt, hl], k) =>
+            hl ? (
+              <span key={k} style={{background: hl, color: '#FFFFFF', borderRadius: 14, padding: '0 14px', margin: '0 4px'}}>
+                {txt}
+              </span>
+            ) : (
+              <span key={k}>{txt}</span>
+            ),
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/** Round food photo with a white ring and soft shadow; springs in with a little spin. */
+export const Photo: React.FC<{src: string; at: number; x: number; y: number; d: number; rot?: number; out?: number; ring?: number; children?: React.ReactNode}> = ({src, at, x, y, d, rot = 0, out, ring, children}) => {
+  const t = useT();
+  if (t < at - 0.02 || (out !== undefined && t > out + 0.3)) return null;
+  const p = springAt(t, at, 12, 200);
+  const o = out === undefined ? 1 : 1 - tween(t, out, 0.25, EASE_IN);
+  const r = ring ?? Math.max(6, d * 0.035);
+  return (
+    <div style={{position: 'absolute', left: x - d / 2, top: y - d / 2, width: d, height: d, scale: Math.max(0, p) * lerp(o, 0.85, 1), opacity: o, rotate: `${lerp(Math.min(p, 1.1), rot - 25, rot)}deg`}}>
+      <div style={{position: 'absolute', inset: 0, borderRadius: '50%', background: '#fff', boxShadow: `0 ${d * 0.06}px ${d * 0.16}px rgba(0,0,0,0.25)`}} />
+      <Img src={staticFile(src)} style={{position: 'absolute', left: r, top: r, width: d - 2 * r, height: d - 2 * r, borderRadius: '50%', objectFit: 'cover'}} />
+      {children}
     </div>
   );
 };

@@ -7,10 +7,13 @@ BROLL = [(53.6, 57.95)]
 
 def cues(cue, rng):
     # hook: journey, suspicious eye, "LIGHT" lands
-    cue(0.2, "pop", -21)
-    cue(2.32, "chirp", -29)
+    cue(0.65, "whoosh", -22)  # first-frame zoom snap
+    cue(0.65, "pop", -18)  # hook title
+    cue(0.7, "pop_lo", -20)  # khichdi photo
+    cue(1.3, "pop", -24)  # FASTING FOOD chip
+    cue(4.4, "whoosh", -24)  # magnifier sweeps over the plate
     cue(4.4, "pop", -21)
-    cue(4.4, "chirp", -30)
+    cue(4.45, "chirp", -30)
     for i in range(7):
         cue(5.62 + i * 0.05, "click", -26)
     cue(5.62, "thump", -19)
@@ -24,12 +27,12 @@ def cues(cue, rng):
     for i in range(8):
         cue(11.5 + i * 0.04, "click", -26)
     cue(11.5, "thump", -19)
+    cue(11.6, "pop_lo", -22)  # pearls photo
     cue(12.52, "pop", -21)
     # pearls pouring into the bowl, then the two meters
     cue(13.68, "chirp", -30)
     cue(14.54, "chirp_big", -26)
     cue(14.6, "pearls", -20)
-    cue(15.3, "pearls", -24)
     cue(16.6, "pop", -22)
     cue(16.75, "whoosh", -27)  # carbs bar fills
     cue(16.78, "chirp", -29)

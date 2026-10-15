@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
-import {X, useT} from '../explainer/kit';
+import {TimeMapContext, X, useT} from '../explainer/kit';
+import {TimeMap, outAt, snap, srcAt} from './timemap';
 import {EASE_IN_OUT, EASE_OUT, FPS, SANS, lerp, tween} from '../theme';
 
 /**
@@ -22,6 +23,50 @@ export type ReelConfig = {
   moves: Move[];
   broll: Broll[]; // full-screen cutaways (captions stay)
   captions: Word[][];
+  tm?: TimeMap; // speed-up / pause cuts (scripts/make_timemap.py)
+  shakes?: number[]; // camera-shake hits (source s): big word slams
+};
+
+/** Snap every window and move boundary that falls inside a pause cut onto the cut itself,
+ *  so scene changes land exactly on the jump (hidden) and keep their transition. */
+export const retime = <T extends Record<string, Win>>(tm: TimeMap, wins: T, moves: Move[]) => {
+  for (const w of Object.values(wins)) {
+    w.start = snap(tm, w.start);
+    w.end = snap(tm, w.end);
+  }
+  for (const m of moves) {
+    m.inStart = snap(tm, m.inStart);
+    const o = snap(tm, m.outStart);
+    if (o !== m.outStart) {
+      // the move out happens on the jump itself: done by the first frame after it
+      m.outStart = o - 0.0003;
+      m.outDur = 0.0001;
+    }
+  }
+};
+
+/** Footage-length video, played segment by segment through the time map. */
+const TimedVideo: React.FC<{cfg: ReelConfig; src: string; transparent?: boolean}> = ({cfg, src, transparent}) => {
+  const style = {width: '100%', height: '100%'};
+  const tm = cfg.tm;
+  if (!tm) return <OffthreadVideo src={staticFile(src)} muted transparent={transparent} style={style} />;
+  return (
+    <>
+      {tm.segs.map((g, i) => {
+        // first output frame at/after the segment start: matches srcAt() (frames before o0 belong to the previous segment)
+        const first = (o0: number) => Math.ceil(o0 * FPS - 1e-6);
+        const from = first(g.o0);
+        const to = i + 1 < tm.segs.length ? first(tm.segs[i + 1].o0) : tm.frames;
+        // source frame shown at this Sequence's first output frame (from this segment, not the previous one)
+        const startFrom = Math.max(0, Math.round((g.s0 + (from / FPS - g.o0) * tm.speed) * FPS));
+        return (
+          <Sequence key={i} from={from} durationInFrames={Math.max(1, to - from)}>
+            <OffthreadVideo src={staticFile(src)} muted transparent={transparent} startFrom={startFrom} playbackRate={tm.speed} style={style} />
+          </Sequence>
+        );
+      })}
+    </>
+  );
 };
 
 const FACE: [number, number] = [540, 820];
@@ -67,7 +112,7 @@ export const Footage: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
         <div style={{position: 'absolute', left: 0, right: 0, top: crop, bottom: 0, borderRadius: r, boxShadow: `0 ${40 / c.scale}px ${90 / c.scale}px -${20 / c.scale}px rgba(0,0,0,${0.35 * c.panel})`}} />
       ) : null}
       <AbsoluteFill style={{clipPath: c.panel > 0 ? `inset(${crop}px 0px 0px 0px round ${r}px)` : undefined}}>
-        <OffthreadVideo src={staticFile(`${cfg.dir}/footage_1080.mp4`)} muted style={{width: '100%', height: '100%'}} />
+        <TimedVideo cfg={cfg} src={`${cfg.dir}/footage_1080.mp4`} />
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -90,7 +135,7 @@ export const Subject: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
   if (washAt(cfg, t) <= 0) return null;
   return (
     <AbsoluteFill style={camStyle(cfg, t)}>
-      <OffthreadVideo src={staticFile(`${cfg.dir}/subject_1080.webm`)} transparent muted style={{width: '100%', height: '100%'}} />
+      <TimedVideo cfg={cfg} src={`${cfg.dir}/subject_1080.webm`} transparent />
     </AbsoluteFill>
   );
 };
@@ -101,8 +146,9 @@ export const BrollCuts: React.FC<{cfg: ReelConfig; overlay?: (t: number) => Reac
   return (
     <>
       {cfg.broll.map((b, i) => {
-        const from = Math.round(b.start * FPS);
-        const dur = Math.round(b.end * FPS) - from;
+        const o = (x: number) => (cfg.tm ? outAt(cfg.tm, x) : x);
+        const from = Math.round(o(b.start) * FPS);
+        const dur = Math.round(o(b.end) * FPS) - from;
         return (
           <Sequence key={i} from={from} durationInFrames={dur} premountFor={FPS}>
             <AbsoluteFill style={{backgroundColor: '#000'}}>
@@ -174,4 +220,32 @@ export const Stage: React.FC<{w: Win; children: React.ReactNode}> = ({w, childre
   );
 };
 
-export const Base: React.FC<{children: React.ReactNode}> = ({children}) => <AbsoluteFill style={{backgroundColor: X.stage}}>{children}</AbsoluteFill>;
+/** Short decaying camera shake on each hit; the frame scales up a touch so edges never show. */
+const Shaker: React.FC<{hits: number[]; children: React.ReactNode}> = ({hits, children}) => {
+  const t = useT();
+  let dx = 0;
+  let dy = 0;
+  let amp = 0;
+  for (const h of hits) {
+    const d = t - h;
+    if (d < 0 || d > 0.5) continue;
+    const a = 16 * Math.exp(-d * 8);
+    amp = Math.max(amp, a);
+    dx += a * Math.sin(d * 75);
+    dy += a * Math.cos(d * 58);
+  }
+  if (amp < 0.2) return <>{children}</>;
+  return <AbsoluteFill style={{translate: `${dx}px ${dy}px`, scale: 1 + amp / 400}}>{children}</AbsoluteFill>;
+};
+
+export const Base: React.FC<{cfg?: ReelConfig; children: React.ReactNode}> = ({cfg, children}) => {
+  const tm = cfg?.tm;
+  const map = React.useMemo(() => (tm ? (t: number) => srcAt(tm, t) : null), [tm]);
+  return (
+    <TimeMapContext.Provider value={map}>
+      <AbsoluteFill style={{backgroundColor: X.stage}}>
+        <Shaker hits={cfg?.shakes ?? []}>{children}</Shaker>
+      </AbsoluteFill>
+    </TimeMapContext.Provider>
+  );
+};
