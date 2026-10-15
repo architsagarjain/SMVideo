@@ -219,6 +219,9 @@ const AdaptScene: React.FC = () => {
   return (
     <Stage w={L.adapt}>
       <Canvas keys={[{t: L.adapt.start, x: 540, y: 620, s: 1.15}, {t: 85.0, x: 540, y: 760, s: 1.0}, {t: L.adapt.end, x: 540, y: 820, s: 1.06}]}>
+        {/* low battery while she sets it up, charges on "adapt" */}
+        <Icon name="battery-low" at={L.adapt.start + 0.05} size={280} x={540} y={760} color={X.pink} rot={0} out={84.0} />
+        <Icon name="battery-full" at={84.06} size={280} x={540} y={760} color={X.green} rot={0} out={84.95} />
         <Scramble text="YOUR BODY CAN" at={82.44} x={540} y={300} size={44} color={X.greyText} />
         <Scramble text="ADAPT" at={84.06} x={540} y={400} size={110} color={X.blue} />
         <Chip at={83.54} x={880} y={330} text="SOMEWHAT" bg={X.ink} size={34} />

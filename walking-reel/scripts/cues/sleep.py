@@ -84,6 +84,8 @@ def cues(cue, rng):
     cue(75.6, "pop", -20)
     cue(79.0, "ding", -26)
     # adapt
+    cue(81.95, "pop_lo", -20)  # low battery
+    cue(84.06, "ding", -24)  # battery charges
     cue(82.44, "chirp", -30)
     cue(83.54, "pop", -22)
     cue(84.06, "chirp_big", -25)
