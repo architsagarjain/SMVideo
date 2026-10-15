@@ -7,7 +7,8 @@ NAMES = ['pill', 'skull', 'brain', 'heart', 'footprints', 'person', 'person-simp
          'video-camera', 'person-arms-spread', 'clipboard-text', 'moon', 'note-pencil', 'list-checks',
          'magnifying-glass', 'feather', 'grains', 'cooking-pot', 'cheese', 'jar', 'bowl-steam', 'fork-knife',
          'puzzle-piece', 'heart', 'flag-banner', 'clock', 'bed', 'bandaids', 'chart-line-down', 'calendar-heart',
-         'sparkle', 'eye', 'leaf', 'user-focus', 'flame', 'drop-half']
+         'sparkle', 'eye', 'leaf', 'user-focus', 'flame', 'drop-half',
+         'baby', 'shield-check', 'alarm', 'moon-stars', 'check-circle', 'x-circle', 'battery-low', 'battery-full', 'egg', 'sneaker']
 out = {}
 for n in NAMES:
     s = open(f'node_modules/@phosphor-icons/core/assets/fill/{n}-fill.svg').read()

@@ -7,11 +7,14 @@ import {KneeReel} from './knee/Reel';
 import {KNEE_FRAMES} from './knee/config';
 import {SabudanaReel} from './sabudana/Reel';
 import {SABUDANA_FRAMES} from './sabudana/config';
+import {SleepReel} from './sleep/Reel';
+import {SLEEP_FRAMES} from './sleep/config';
 import {DURATION_FRAMES, FPS, HEIGHT, WIDTH} from './theme';
 
 export const Root: React.FC = () => {
   return (
     <>
+    <Composition id="Sleep" component={SleepReel} durationInFrames={SLEEP_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="Sabudana" component={SabudanaReel} durationInFrames={SABUDANA_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="Knee" component={KneeReel} durationInFrames={KNEE_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="Reel2" component={Reel2} durationInFrames={DURATION_FRAMES_2} fps={FPS} width={WIDTH} height={HEIGHT} />

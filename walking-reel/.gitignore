@@ -11,3 +11,6 @@ __pycache__/
 # raw sources are on Bhavika's Google Drive (too large for git)
 footage/knee/
 footage/sabudana/
+public/sleep/*
+!public/sleep/photos/
+footage/sleep/
