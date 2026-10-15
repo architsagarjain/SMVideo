@@ -108,7 +108,9 @@ export const Chip: React.FC<{at: number; x: number; y: number; text: string; bg?
   const o = out === undefined ? 1 : 1 - tween(t, out, 0.25);
   return (
     <div style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', padding: `${size * 0.28}px ${size * 0.68}px ${size * 0.2}px`, borderRadius: 999, background: bg, color: fg, fontFamily: PIXEL, fontSize: size, scale: Math.max(0, pop(t, at)), opacity: o, whiteSpace: 'pre'}}>
-      <span style={{display: 'inline-block', scale: `${PIXEL_WIDE} 1`}}>{text}</span>
+      {/* wide pixel look without overflowing the pill: set the font PIXEL_WIDE larger (so layout gets the
+          real stretched width) and squash it back vertically, trimming the extra line height */}
+      <span style={{display: 'inline-block', fontSize: size * PIXEL_WIDE, lineHeight: 1, scale: `1 ${1 / PIXEL_WIDE}`, margin: `${(-size * (PIXEL_WIDE - 1)) / 2}px 0`}}>{text}</span>
     </div>
   );
 };
