@@ -9,9 +9,11 @@ def cues(cue, rng):
     # hook: zoom snap, title, -1 HR slam, moon, fire
     cue(0.55, "whoosh", -22)
     cue(0.55, "pop", -18)
-    for i in range(5):
-        cue(2.24 + i * 0.08, "click", -25)
-    cue(2.24, "thump", -17)
+    cue(0.62, "pop_lo", -21)  # clock sticker
+    cue(2.24, "rwhoosh", -22)  # clock rewinds an hour
+    for i in range(8):
+        cue(2.24 + i * 0.1, "click_hi", -30)
+    cue(2.5, "pop", -19)  # -1 HOUR pill
     cue(2.9, "pop_lo", -21)
     cue(2.95, "chirp", -30)
     cue(5.46, "pop", -20)

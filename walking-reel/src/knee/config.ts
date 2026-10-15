@@ -39,7 +39,7 @@ retime(TM, {}, moves);
 export const kneeConfig: ReelConfig = {
   dir: 'knee',
   gfx: [K.questions, K.weeks, K.attention],
-  behind: [K.hook, K.deadline, K.year, K.cta],
+  behind: [K.deadline, K.year, K.cta], // hook plays on her real footage (src/knee/graphics KneeHook)
   panel: K.panel,
   moves,
   broll: [

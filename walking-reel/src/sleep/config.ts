@@ -40,7 +40,7 @@ retime(TM, {}, moves);
 export const sleepConfig: ReelConfig = {
   dir: 'sleep',
   gfx: [L.places, L.study, L.adapt, L.dialed],
-  behind: [L.hook, L.control, L.hour, L.scale, L.panic, L.cta],
+  behind: [L.control, L.hour, L.scale, L.panic, L.cta], // hook plays on her real footage
   panel: L.panel,
   moves,
   broll: [

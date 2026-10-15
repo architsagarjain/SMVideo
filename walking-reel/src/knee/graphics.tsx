@@ -3,6 +3,8 @@ import {AbsoluteFill} from 'remotion';
 import {Canvas, Cross, Dotted, Icon, Marker, PIXEL, PIXEL_WIDE, QBox, Scramble, Tick, X, pop, useT} from '../explainer/kit';
 import {Stage} from '../series/core';
 import {Chip, Giant, Label} from '../series/parts';
+import {ClockSticker, CountSticker, HookVignette, IconSticker, Pill, PhotoCard, Stamp, Sticker, Sweep} from '../series/hook';
+
 import {EASE_IN_OUT, lerp, springAt, tween} from '../theme';
 import {ICONS} from '../explainer/icons';
 import {K} from './config';
@@ -15,16 +17,6 @@ export const KneeBehind: React.FC = () => {
   const typed = 'GUIDE'.split('').filter((_, i) => t >= 71.2 + i * 0.09).length;
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
-      {/* "I gained around 15 kilos when a knee injury left me on prolonged bed rest." */}
-      {t < K.hook.end + 0.1 ? (
-        <>
-          <Giant text="+15" at={1.62} y={400} size={380} stagger={0.1} />
-          <Scramble text="KILOS" at={2.26} x={885} y={800} size={64} color={X.pink} />
-          <Icon name="bandaids" at={3.16} size={190} x={190} y={790} rot={-18} />
-          <Scramble text="KNEE INJURY" at={3.2} x={190} y={925} size={42} color={X.pink} />
-        </>
-      ) : null}
-
       {/* "I wouldn't hear 'I want to lose weight before December' and immediately hand you a deadline." */}
       <Scramble text={'"I WANT TO LOSE WEIGHT'} at={12.0} x={540} y={130} size={50} color={X.ink} per={0.02} out={15.5} />
       <Scramble text={'BEFORE DECEMBER"'} at={13.22} x={540} y={200} size={50} color={X.ink} per={0.025} out={15.5} />
@@ -295,4 +287,23 @@ export const KneeScenes: React.FC = () => (
     <WeeksScene />
     <AttentionScene />
   </>
+);
+
+// ===========================================================================
+// Hook (first screen): her real footage, stickers beside her head.
+// "I gained around 15 kilos when a knee injury left me on prolonged bed rest."
+// ===========================================================================
+export const KneeHook: React.FC = () => (
+  <AbsoluteFill style={{pointerEvents: 'none'}}>
+    <HookVignette end={K.hook.end} />
+    <Sticker at={0.95} out={3.0} x={200} y={790} rot={-8}>
+      <IconSticker icon="scales" color={X.ink} d={200} label="MY STORY" />
+    </Sticker>
+    <Sticker at={3.08} out={3.5} x={200} y={790} rot={-10}>
+      <IconSticker icon="bandaids" color={X.pink} d={200} label="KNEE INJURY" labelBg={X.pink} />
+    </Sticker>
+    <Sticker at={1.62} out={3.5} x={868} y={790} rot={6}>
+      <CountSticker at={1.62} to={15} unit="KG" bg={X.pink} />
+    </Sticker>
+  </AbsoluteFill>
 );

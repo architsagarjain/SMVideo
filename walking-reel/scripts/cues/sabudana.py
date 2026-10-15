@@ -10,13 +10,11 @@ def cues(cue, rng):
     cue(0.65, "whoosh", -22)  # first-frame zoom snap
     cue(0.65, "pop", -18)  # hook title
     cue(0.7, "pop_lo", -20)  # khichdi photo
-    cue(1.3, "pop", -24)  # FASTING FOOD chip
     cue(4.4, "whoosh", -24)  # magnifier sweeps over the plate
     cue(4.4, "pop", -21)
     cue(4.45, "chirp", -30)
-    for i in range(7):
-        cue(5.62 + i * 0.05, "click", -26)
-    cue(5.62, "thump", -19)
+    cue(5.62, "thump", -15)  # "LIGHT"? stamp slams on the plate
+    cue(5.64, "clank", -30)
     # light scene: bowl pops, feather floats up (airy whoosh), protein meter barely moves
     cue(6.65, "pop", -20)
     cue(8.4, "whoosh", -25)

@@ -38,7 +38,7 @@ retime(TM, {}, moves);
 export const sabudanaConfig: ReelConfig = {
   dir: 'sabudana',
   gfx: [S.light, S.pearls, S.build],
-  behind: [S.hook, S.name, S.question, S.cta],
+  behind: [S.name, S.question, S.cta], // hook plays on her real footage
   panel: S.panel,
   moves,
   broll: [{start: S.eating.start, end: S.eating.end, src: 'broll_eating.mp4'}],

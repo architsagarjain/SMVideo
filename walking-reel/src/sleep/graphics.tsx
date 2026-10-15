@@ -3,6 +3,8 @@ import {AbsoluteFill} from 'remotion';
 import {Canvas, Cross, Dotted, Icon, Marker, PIXEL, PIXEL_WIDE, Scramble, Tick, X, useT} from '../explainer/kit';
 import {Stage} from '../series/core';
 import {Chip, Giant, Label} from '../series/parts';
+import {ClockSticker, CountSticker, HookVignette, IconSticker, Pill, PhotoCard, Stamp, Sticker, Sweep} from '../series/hook';
+
 import {EASE_IN_OUT, EASE_OUT, tween} from '../theme';
 import {L} from './config';
 
@@ -16,13 +18,6 @@ export const SleepBehind: React.FC = () => {
   const typed = 'SLEEP'.split('').filter((_, i) => t >= 96.0 + i * 0.09).length;
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
-      {/* "How much could losing just one hour of sleep at night impact your body's ability to lose fat?" */}
-      <Giant text="-1 HR" at={2.24} y={460} size={330} stagger={0.08} out={L.hook.end - 0.15} />
-      <Icon name="moon-stars" at={2.9} size={190} x={185} y={790} color={X.navy} rot={-12} out={L.hook.end - 0.2} />
-      <Scramble text="SLEEP" at={2.95} x={185} y={925} size={44} color={X.blue} out={L.hook.end - 0.2} />
-      <Icon name="fire" at={5.46} size={190} x={895} y={790} color={X.pink} rot={10} out={L.hook.end - 0.2} />
-      <Scramble text="FAT LOSS" at={5.5} x={895} y={925} size={44} color={X.pink} out={L.hook.end - 0.2} />
-
       {/* "And sleep has more control over that than most people realize." */}
       <Giant text="SLEEP" at={14.66} y={440} size={300} stagger={0.06} out={L.control.end - 0.15} />
       <Chip at={15.74} x={540} y={300} text="IN CONTROL" bg={X.navy} size={46} out={L.control.end - 0.2} />
@@ -278,3 +273,28 @@ export const SleepScenes: React.FC = () => (
   </>
 );
 
+
+// ===========================================================================
+// Hook (first screen): her real footage; a clock beside her rewinds one hour.
+// "How much could losing just one hour of sleep at night impact your body's ability to lose fat?"
+// ===========================================================================
+export const SleepHook: React.FC = () => {
+  const end = L.hook.end - 0.2;
+  return (
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
+      <HookVignette end={L.hook.end} />
+      <Sticker at={0.62} out={end} x={872} y={830} rot={6}>
+        <ClockSticker d={230} rewindAt={2.24} accent={X.pink} />
+      </Sticker>
+      <Sticker at={2.5} out={end} x={872} y={1010} rot={-4}>
+        <Pill bg={X.pink} size={52}>-1 HOUR</Pill>
+      </Sticker>
+      <Sticker at={2.9} out={5.3} x={200} y={850} rot={-8}>
+        <IconSticker icon="moon-stars" color={X.navy} d={190} label="SLEEP" labelBg={X.navy} />
+      </Sticker>
+      <Sticker at={5.46} out={end} x={200} y={850} rot={-6}>
+        <IconSticker icon="fire" color={X.pink} d={190} label="FAT LOSS" labelBg={X.pink} />
+      </Sticker>
+    </AbsoluteFill>
+  );
+};

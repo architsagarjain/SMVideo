@@ -9,7 +9,8 @@ def cues(cue, rng):
     # hook
     cue(0.77, "whoosh", -22)  # first-frame zoom snap
     cue(0.77, "pop", -18)  # hook title
-    cue(3.16, "pop", -21)  # bandaid icon
+    cue(0.95, "pop_lo", -21)  # scales sticker
+    cue(3.08, "pop", -20)  # bandaid sticker
     for i in range(3):  # "+15" characters rising
         cue(1.62 + i * 0.12, "click", -24)
     cue(1.62, "thump", -19)

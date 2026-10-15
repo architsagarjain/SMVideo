@@ -3,6 +3,8 @@ import {AbsoluteFill, random} from 'remotion';
 import {Canvas, Cross, Dotted, Icon, Marker, PIXEL, PIXEL_WIDE, QBox, Scramble, Tick, X, pop, useT} from '../explainer/kit';
 import {Stage} from '../series/core';
 import {Chip, Giant, Label, Meter, Photo} from '../series/parts';
+import {ClockSticker, CountSticker, HookVignette, IconSticker, Pill, PhotoCard, Stamp, Sticker, Sweep} from '../series/hook';
+
 import {EASE_IN, EASE_OUT, lerp, springAt, tween} from '../theme';
 import {S} from './config';
 
@@ -15,17 +17,6 @@ export const SabudanaBehind: React.FC = () => {
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       {/* "After going through my own weight loss journey, I've become very suspicious of the word 'light' on food." */}
-      <Photo src="sabudana/photos/khichdi.jpg" at={0.66} x={865} y={770} d={330} rot={8} out={S.hook.end - 0.2} />
-      <Chip at={1.3} x={865} y={965} text="FASTING FOOD" bg={X.ink} size={38} out={S.hook.end - 0.2} />
-      {t >= 4.4 && t < S.hook.end ? (
-        <div style={{position: 'absolute', inset: 0, translate: `${lerp(tween(t, 4.4, 1.0, EASE_OUT), -170, 0)}px ${Math.sin((t - 4.4) * 5) * 14}px`}}>
-          <Icon name="magnifying-glass" at={4.4} size={200} x={905} y={735} rot={-12} color={X.ink} />
-        </div>
-      ) : null}
-      <Scramble text="SUSPICIOUS" at={4.45} x={190} y={900} size={42} color={X.pink} out={S.hook.end - 0.2} />
-      <Icon name="eye" at={4.4} size={150} x={190} y={780} rot={-8} out={S.hook.end - 0.2} />
-      <Giant text={'"LIGHT"'} at={5.62} y={385} size={270} color={X.pink} stagger={0.05} out={S.hook.end - 0.15} />
-
       {/* "Take sabudana during Navratri." */}
       <Giant text="SABUDANA" at={11.5} y={340} size={180} stagger={0.04} out={S.name.end - 0.15} />
       <Photo src="sabudana/photos/pearls_hand.jpg" at={11.6} x={185} y={790} d={250} rot={-8} out={S.name.end - 0.2} />
@@ -168,3 +159,25 @@ export const SabudanaScenes: React.FC = () => (
     <BuildScene />
   </>
 );
+
+// ===========================================================================
+// Hook (first screen): her real footage, the plate as a photo card beside her.
+// "After going through my own weight loss journey, I've become very suspicious of the word 'light' on food."
+// ===========================================================================
+export const SabudanaHook: React.FC = () => {
+  const end = S.hook.end - 0.2;
+  return (
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
+      <HookVignette end={S.hook.end} />
+      <Sticker at={0.7} out={end} x={862} y={860} rot={7}>
+        <PhotoCard src="sabudana/photos/khichdi.jpg" w={250} caption="FASTING FOOD">
+          <Stamp at={5.62} text={'"LIGHT"?'} color={X.pink} size={58} />
+        </PhotoCard>
+      </Sticker>
+      <Sweep at={4.4} from={[660, 700]} to={[885, 800]} size={170} out={5.55} />
+      <Sticker at={4.42} out={end} x={200} y={850} rot={-8}>
+        <IconSticker icon="eye" color={X.ink} d={190} label="SUSPICIOUS" labelBg={X.pink} />
+      </Sticker>
+    </AbsoluteFill>
+  );
+};
