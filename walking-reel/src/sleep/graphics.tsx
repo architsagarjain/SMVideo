@@ -17,15 +17,15 @@ export const SleepBehind: React.FC = () => {
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       {/* "How much could losing just one hour of sleep at night impact your body's ability to lose fat?" */}
-      <Giant text="-1 HR" at={2.24} y={400} size={330} stagger={0.08} out={L.hook.end - 0.15} />
+      <Giant text="-1 HR" at={2.24} y={460} size={330} stagger={0.08} out={L.hook.end - 0.15} />
       <Icon name="moon-stars" at={2.9} size={190} x={185} y={790} color={X.navy} rot={-12} out={L.hook.end - 0.2} />
       <Scramble text="SLEEP" at={2.95} x={185} y={925} size={44} color={X.blue} out={L.hook.end - 0.2} />
       <Icon name="fire" at={5.46} size={190} x={895} y={790} color={X.pink} rot={10} out={L.hook.end - 0.2} />
       <Scramble text="FAT LOSS" at={5.5} x={895} y={925} size={44} color={X.pink} out={L.hook.end - 0.2} />
 
       {/* "And sleep has more control over that than most people realize." */}
-      <Giant text="SLEEP" at={14.66} y={330} size={300} stagger={0.06} out={L.control.end - 0.15} />
-      <Chip at={15.74} x={540} y={180} text="IN CONTROL" bg={X.navy} size={46} out={L.control.end - 0.2} />
+      <Giant text="SLEEP" at={14.66} y={440} size={300} stagger={0.06} out={L.control.end - 0.15} />
+      <Chip at={15.74} x={540} y={300} text="IN CONTROL" bg={X.navy} size={46} out={L.control.end - 0.2} />
       <Icon name="moon-stars" at={14.8} size={180} x={895} y={790} color={X.navy} rot={12} out={L.control.end - 0.2} />
       <Icon name="eye" at={17.2} size={160} x={185} y={780} rot={-8} out={L.control.end - 0.2} />
       <Scramble text="MOST MISS IT" at={17.25} x={185} y={900} size={40} color={X.pink} out={L.control.end - 0.2} />
@@ -33,27 +33,27 @@ export const SleepBehind: React.FC = () => {
       {/* "But how much of a big difference could just one hour make?" */}
       <Icon name="hourglass-medium" at={18.84} size={180} x={185} y={790} rot={-10} out={L.hour.end - 0.2} />
       <Icon name="alarm" at={20.02} size={180} x={895} y={790} color={X.pink} rot={10} out={L.hour.end - 0.2} />
-      <Giant text="1 HOUR?" at={20.88} y={330} size={230} color={X.blue} stagger={0.05} out={L.hour.end - 0.15} />
+      <Giant text="1 HOUR?" at={20.88} y={470} size={230} color={X.blue} stagger={0.05} out={L.hour.end - 0.15} />
 
       {/* "And after eight weeks of dieting both groups ended up losing the same amount of weight on the scale" */}
-      <Chip at={37.04} x={540} y={170} text="AFTER 8 WEEKS" bg={X.ink} size={46} out={L.scale.end - 0.2} />
-      <Giant text="SAME" at={40.26} y={320} size={320} stagger={0.06} out={L.scale.end - 0.15} />
+      <Chip at={37.04} x={540} y={290} text="AFTER 8 WEEKS" bg={X.ink} size={46} out={L.scale.end - 0.2} />
+      <Giant text="SAME" at={40.26} y={420} size={320} stagger={0.06} out={L.scale.end - 0.15} />
       <Icon name="scales" at={41.24} size={190} x={185} y={790} rot={-8} out={L.scale.end - 0.2} />
       <Scramble text="ON THE SCALE" at={42.02} x={185} y={915} size={38} color={X.blue} out={L.scale.end - 0.2} />
       <Icon name="check-circle" at={43.5} size={170} x={895} y={790} color={X.green} rot={8} out={L.scale.end - 0.2} />
       <Scramble text="NO SURPRISE" at={43.6} x={895} y={910} size={38} color={X.green} out={L.scale.end - 0.2} />
 
       {/* "But before you panic, keep in mind that these people weren't lifting weights," */}
-      <Chip at={70.8} x={540} y={170} text="WAIT" bg={X.ink} size={50} out={L.panic.end - 0.2} />
+      <Chip at={70.8} x={540} y={300} text="WAIT" bg={X.ink} size={50} out={L.panic.end - 0.2} />
       <Icon name="clipboard-text" at={72.32} size={170} x={185} y={790} rot={-8} out={L.panic.end - 0.2} />
       <Scramble text="THE STUDY" at={72.4} x={185} y={910} size={40} color={X.greyText} out={L.panic.end - 0.2} />
       <Icon name="barbell" at={73.64} size={190} x={895} y={790} rot={10} out={L.panic.end - 0.2} />
       <Cross at={74.2} x={895} y={790} size={170} out={L.panic.end - 0.2} />
-      <Giant text="NO WEIGHTS" at={74.56} y={330} size={190} color={X.pink} stagger={0.035} out={L.panic.end - 0.15} />
+      <Giant text="NO WEIGHTS" at={74.56} y={480} size={165} color={X.pink} stagger={0.035} out={L.panic.end - 0.15} />
 
       {/* "Comment SLEEP if you want my free fat loss guide." */}
-      <Chip at={95.52} x={540} y={150} text="COMMENT" />
-      <Giant text="SLEEP" at={96.0} y={300} size={330} stagger={0.09} typed={typed}>
+      <Chip at={95.52} x={540} y={260} text="COMMENT" />
+      <Giant text="SLEEP" at={96.0} y={400} size={330} stagger={0.09} typed={typed}>
         <span style={{display: 'inline-block', width: 14, height: 250, marginLeft: 16, marginTop: 22, background: X.blue, opacity: t < 96.7 || Math.floor((t - 96.7) * 2.2) % 2 === 0 ? 1 : 0}} />
       </Giant>
       <Icon name="file-text" at={97.62} size={150} x={160} y={780} rot={-10} />
