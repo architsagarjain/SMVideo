@@ -18,13 +18,14 @@ export const S3Reveal: React.FC = () => {
   const f = useCurrentFrame();
   const seed = nodes[SEED];
   const pull = lerp(f, [26, 112], [0, 1], E.inOut);
+  // dive starts tilted on the seed node, then settles flat and north-up with all of India in frame
   const cam = {
-    cx: seed[0] + (480 - seed[0]) * pull,
-    cy: seed[1] + (590 - seed[1]) * pull,
-    zoom: 6.9 + (0.98 - 6.9) * pull,
-    tilt: 32 + pull * 8,
-    rot: -6 * pull,
-    oy: -40 * pull,
+    cx: seed[0] + (500 - seed[0]) * pull,
+    cy: seed[1] + (560 - seed[1]) * pull,
+    zoom: 6.9 + (0.9 - 6.9) * pull,
+    tilt: 32 * (1 - pull) * (1 - pull),
+    rot: 0,
+    oy: -80 * pull,
   };
   const delhi = cityIndex('Delhi'), bathinda = cityIndex('Bathinda');
   const edgeT = (a: number, b: number) => {
