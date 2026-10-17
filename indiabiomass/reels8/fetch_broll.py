@@ -33,7 +33,7 @@ for key, letter in sorted(pick.items()):
             name = c['source_page_url'].split('File:', 1)[1]
             w, h = c.get('width') or 3000, c.get('height') or 2000
             need = int(2100 * w / h) if w >= h else 1300          # landscape: ~2100 px tall; portrait: 1300 px wide
-            under = [x for x in (960, 1280, 1920, 2560, 3840) if x < w]  # thumbnails must be smaller than the original
+            under = [x for x in (960, 1280, 1920, 3840) if x < w]  # thumbnails must be smaller than the original
             width = next((x for x in under if x >= need), under[-1] if under else w)
             ok = get(f'https://commons.wikimedia.org/wiki/Special:FilePath/{name}?width={width}', out)
             time.sleep(3)

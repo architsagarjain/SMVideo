@@ -28,7 +28,7 @@ const Split: React.FC = () => {
   const label = (txt: string, x0: number, x1: number, on: number) => (
     <div style={{ position: 'absolute', left: x0, width: x1 - x0, top: 190, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 70 + 18 * on, letterSpacing: '-0.02em', color: on > 0.5 ? C.harvest : '#fff', textShadow: '0 4px 24px rgba(0,0,0,0.7)' }}>{txt}</div>
   );
-  const pOn = lerp(w, [0.5, 0.64], [0, 1]), bOn = lerp(w, [0.5, 0.36], [0, 1]);
+  const pOn = lerp(w, [0.5, 0.64], [0, 1]), bOn = lerp(w, [0.36, 0.5], [1, 0]);
   return (
     <AbsoluteFill>
       <div style={{ position: 'absolute', left: 0, top: 0, width: X, height: 1920, overflow: 'hidden' }}>
@@ -59,10 +59,10 @@ const Board: React.FC = () => {
       {ROWS.map((r) => {
         const t = lerp(f, [r.at - 4, r.at + 10], [0, 1], E.out);
         return (
-          <div key={r.k} style={{ display: 'grid', gridTemplateColumns: '1fr 190px 1fr', alignItems: 'center', gap: 10, background: 'rgba(5,26,17,0.88)', border: '1.5px solid rgba(232,176,75,0.35)', borderRadius: 18, padding: '14px 18px', opacity: t, transform: `translateY(${(1 - t) * 24}px)` }}>
-            <span style={{ fontFamily: F.text, fontWeight: 600, fontSize: 30, color: '#fff', textAlign: 'right' }}>{r.a}</span>
+          <div key={r.k} style={{ display: 'grid', gridTemplateColumns: '1fr 170px 1fr', alignItems: 'center', gap: 10, background: 'rgba(5,26,17,0.88)', border: '1.5px solid rgba(232,176,75,0.35)', borderRadius: 18, padding: '14px 18px', opacity: t, transform: `translateY(${(1 - t) * 24}px)` }}>
+            <span style={{ fontFamily: F.text, fontWeight: 600, fontSize: 35, color: '#fff', textAlign: 'right' }}>{r.a}</span>
             <span style={{ fontFamily: F.label, fontWeight: 600, fontSize: 19, letterSpacing: '0.14em', color: C.harvest, textAlign: 'center' }}>{r.k}</span>
-            <span style={{ fontFamily: F.text, fontWeight: 600, fontSize: 30, color: '#fff' }}>{r.b}</span>
+            <span style={{ fontFamily: F.text, fontWeight: 600, fontSize: 35, color: '#fff' }}>{r.b}</span>
           </div>
         );
       })}
@@ -101,7 +101,7 @@ export const V3: React.FC = () => {
       <Span from={T.q} to={T.brand}><Question /></Span>
       <Span from={T.brand} to={END}>
         <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 45%, #0A4A31 0%, ${C.forest} 40%, #03180F 100%)` }} />
-        <Chip text="PELLET MAKERS · BRIQUETTE MAKERS · BUYERS" at={T.brand + 4} top={560} size={22} />
+        <Headline text={'PELLET MAKERS.\nBRIQUETTE MAKERS.\nTHE BUYERS FOR BOTH.'} at={T.brand + 4} top={300} size={66} />
         <BrandLogo at={W('indiabiomass')} />
       </Span>
       <End8 at={END} />

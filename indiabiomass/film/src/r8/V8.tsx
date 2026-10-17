@@ -75,9 +75,9 @@ const Link: React.FC = () => {
 // real site captures, cropped: [file, sourceW, sourceH, crop x, y, w, h]
 const SHOTS: Record<string, [string, number, number, number, number, number, number]> = {
   verified: ['ui/card_paddypellets.png', 548, 664, 0, 250, 548, 414],
-  tenders: ['ui/tenders_view.png', 2880, 1800, 700, 1000, 2100, 800],
-  prices: ['ui/md_price.png', 2560, 1394, 0, 0, 2560, 1100],
-  supply: ['ui/md_supply.png', 2560, 844, 0, 0, 1700, 844],
+  tenders: ['ui/tenders_view.png', 2880, 1800, 760, 1180, 1500, 620],
+  prices: ['ui/md_price.png', 2560, 1394, 0, 120, 1750, 900],
+  supply: ['ui/md_supply.png', 2560, 844, 0, 0, 1450, 844],
 };
 const Shot: React.FC<{ k: string; w: number }> = ({ k, w }) => {
   const [src, sw, sh, cx, cy, cw, ch] = SHOTS[k];
@@ -98,7 +98,7 @@ const Feature: React.FC<{ i: number }> = ({ i }) => {
   const f = useCurrentFrame();
   const ft = FEATS[i];
   const t = lerp(f, [ft.at - 4, ft.at + 12], [0, 1], E.out);
-  const w = ft.k === 'verified' ? 640 : 900;
+  const w = ft.k === 'verified' ? 680 : 940;
   return (
     <AbsoluteFill style={{ background: FOREST }}>
       <div style={{ position: 'absolute', left: 0, right: 0, top: 230, display: 'flex', justifyContent: 'center', gap: 12 }}>

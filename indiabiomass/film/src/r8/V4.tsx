@@ -58,10 +58,12 @@ const RegionCard: React.FC<{ r: Reg; until: number }> = ({ r, until }) => {
   const t = lerp(f, [r.at + 2, r.at + 14], [0, 1], E.back) * lerp(f, [until - 6, until], [1, 0]);
   return (
     <div style={{ position: 'absolute', left: 150, width: 780, top: 930, opacity: Math.min(1, t), transform: `translateY(${(1 - Math.min(1, t)) * 50}px) scale(${0.9 + 0.1 * Math.min(1, t)})` }}>
-      <div style={{ borderRadius: 26, overflow: 'hidden', border: `3px solid ${r.color}`, boxShadow: '0 30px 80px rgba(0,0,0,0.55)', height: r.photo ? 330 : 0, position: 'relative' }}>
-        {r.photo && <Media src={r.photo} from={r.at} to={until} a={[1.2, 0, 0]} b={[1.05, 0, 0]} />}
-      </div>
-      <div style={{ marginTop: r.photo ? -40 : 0, display: 'flex', justifyContent: 'center' }}>
+      {r.photo && (
+        <div style={{ borderRadius: 26, overflow: 'hidden', border: `3px solid ${r.color}`, boxShadow: '0 30px 80px rgba(0,0,0,0.55)', height: 330, position: 'relative' }}>
+          <Media src={r.photo} from={r.at} to={until} a={[1.2, 0, 0]} b={[1.05, 0, 0]} />
+        </div>
+      )}
+      <div style={{ marginTop: r.photo ? -40 : 0, display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
         <div style={{ background: 'rgba(4,20,12,0.92)', border: `2px solid ${r.color}`, borderRadius: 999, padding: '12px 30px', textAlign: 'center' }}>
           <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 50, color: '#fff', letterSpacing: '-0.01em' }}>{r.name}</div>
           <div style={{ fontFamily: F.label, fontWeight: 600, fontSize: 20, letterSpacing: '0.16em', color: r.color.replace(',1)', ',0.95)') }}>{r.sub.toUpperCase()}</div>
