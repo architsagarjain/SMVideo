@@ -345,7 +345,7 @@
     "vo": "In north India, farmers have only a few weeks between the paddy harvest and sowing wheat. The field has to be cleared. And the straw left behind is bulky, loose, and slow to move.",
     "kind": "footage",
     "visual": "Ring shows A FEW WEEKS; loose straw over the field; colours drain to grey.",
-    "need": 4
+    "need": 2
    },
    {
     "t0": 17.5,
@@ -368,7 +368,7 @@
     "t1": 45.9,
     "vo": "The harvest ends. A baler arrives and packs the straw. Within days, an aggregator picks it up. The field is clear in time for wheat. The straw becomes pellets. The pellets go to a plant that needs them.",
     "kind": "footage",
-    "visual": "Tractor/baler at golden hour; bales; sowing / green shoots. Ring ticks with icons: BALER · AGGREGATOR · CLEAR FIELD.",
+    "visual": "Tractor at golden hour, then wheat sown straight into the cleared field. Ring ticks with icons: BALER · AGGREGATOR · CLEAR FIELD.",
     "need": 5
    },
    {

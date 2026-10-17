@@ -48,10 +48,10 @@ V = {
    (8, 8, 'brand', 'Logo on paper; end card.', None)]),
  6: dict(title='The harvest window', fmt='Countdown', look='Two endings: a countdown ring runs the whole reel; the first half is grey and hazy, then the film rewinds and replays in warm gold.', beats=[
    (0, 0, 'open', 'Combine harvester cutting paddy; countdown ring starts. Text: THE CLOCK STARTS.', 1),
-   (1, 2, 'footage', 'Ring shows A FEW WEEKS; loose straw over the field; colours drain to grey.', 4),
+   (1, 2, 'footage', 'Ring shows A FEW WEEKS; loose straw over the field; colours drain to grey.', 2),
    (3, 4, 'footage', 'Match strike close-up, then haze over farmland at dusk (grey grade).', 3),
    (5, 5, 'graphic', 'Rewind effect (scan lines run backwards); colour returns gold. Text: WITH A PLAN.', None),
-   (6, 7, 'footage', 'Tractor/baler at golden hour; bales; sowing / green shoots. Ring ticks with icons: BALER · AGGREGATOR · CLEAR FIELD.', 5),
+   (6, 7, 'footage', 'Tractor at golden hour, then wheat sown straight into the cleared field. Ring ticks with icons: BALER · AGGREGATOR · CLEAR FIELD.', 5),
    (8, 9, 'graphic', 'Split: grey ending vs gold ending side by side. Text: SAME FIELD. DIFFERENT ENDING.', 6),
    (10, 10, 'brand', 'Logo; end card.', None)]),
  7: dict(title='Guess the biomass', fmt='Quiz', look='Quiz show: a big number, a blurred extreme close-up with a 3-2-1 timer ring, then a pull-back reveal with the name and a score dot.', beats=[

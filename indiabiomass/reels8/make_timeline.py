@@ -55,7 +55,7 @@ for v in plan:
 </section>''')
 
 nav = ''.join(f'<a href="#video{v["n"]}"><b>{v["n"]}</b>{E(v["title"])}</a>' for v in plan)
-page = f'''<title>IndiaBiomass Reels 3–10</title>
+page = f'''<title>IndiaBiomass Videos 1–8</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;800&family=Geist:wght@400;500;600&family=Archivo:wght@500;600&display=swap">
@@ -115,7 +115,7 @@ tr.rec td {{ background:var(--gold-soft); }}
 @media (prefers-reduced-motion: reduce) {{ * {{ scroll-behavior:auto !important; }} }}
 </style>
 <div class="wrap">
-  <div><h1>IndiaBiomass Reels 3–10</h1>
+  <div><h1>IndiaBiomass Videos 1–8</h1>
   <p class="lede">Eight reels in Ruhaan's voice. Each video has its own number, look and B-roll. To ask for a change, quote the beat number, for example <b>“V3·4: use a different machine shot”</b>. Nothing has been generated yet: no ElevenLabs credits are spent until you approve this timeline.</p></div>
   <nav aria-label="Videos">{nav}</nav>
   {{CREDITS}}
