@@ -1,0 +1,514 @@
+[
+ {
+  "n": 1,
+  "title": "One bale’s journey",
+  "fmt": "Story",
+  "look": "Route map: warm documentary footage full-bleed, a gold route bar along the top fills station by station (5 stations).",
+  "total": 58.0,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 10.2,
+    "vo": "This is a bale of paddy straw. A month ago, it was standing in a field in Punjab. Here is where it goes next.",
+    "kind": "open",
+    "visual": "Push-in on a single paddy-straw bale. Hook text: WHERE DOES THIS BALE GO?",
+    "need": 1
+   },
+   {
+    "t0": 10.2,
+    "t1": 18.4,
+    "vo": "After the harvest, a baler presses the loose straw into tight bales, so it can be moved instead of burned.",
+    "kind": "footage",
+    "visual": "Baler packing straw in the field. Route bar appears; station 1 BALER lights.",
+    "need": 2
+   },
+   {
+    "t0": 18.4,
+    "t1": 25.4,
+    "vo": "An aggregator collects bales from dozens of farms and stacks them at a depot, dry and covered.",
+    "kind": "footage",
+    "visual": "Bales stacked under cover at a depot. Station 2 AGGREGATOR.",
+    "need": 3
+   },
+   {
+    "t0": 25.4,
+    "t1": 34.0,
+    "vo": "From there, a truck takes them to a pellet plant. The straw is shredded, dried, and pressed into small, dense pellets.",
+    "kind": "footage",
+    "visual": "Loaded truck on a rural highway, then pellets pouring from the mill. Station 3 PELLET PLANT.",
+    "need": 4
+   },
+   {
+    "t0": 34.0,
+    "t1": 43.3,
+    "vo": "The pellets are tested. Heat value. Moisture. Ash. Then they are loaded for a power plant that must burn biomass along with coal.",
+    "kind": "graphic",
+    "visual": "Pellets close-up; three spec chips tick in: HEAT VALUE · MOISTURE · ASH. Cut to plant at dusk. Station 4-5.",
+    "need": 6
+   },
+   {
+    "t0": 43.3,
+    "t1": 51.1,
+    "vo": "One bale. Five businesses. Farmer, baler, aggregator, pellet maker, buyer. Every link has to find the next one.",
+    "kind": "graphic",
+    "visual": "Five role cards (farmer, baler, aggregator, pellet maker, buyer) snap into a chain; links glow one by one.",
+    "need": null
+   },
+   {
+    "t0": 51.1,
+    "t1": 58.0,
+    "vo": "That is the chain IndiaBiomass is being built to connect.",
+    "kind": "brand",
+    "visual": "Chain resolves into the IndiaBiomass mark, end card.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 2,
+  "title": "Four myths",
+  "fmt": "Myth vs fact",
+  "look": "Flip cards: each myth is a card with a red MYTH stamp that flips to a green FACT side; darkened footage behind; counter 1/4 to 4/4.",
+  "total": 56.4,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 4.3,
+    "vo": "Four things people get wrong about the biomass business.",
+    "kind": "open",
+    "visual": "Hook text: 4 THINGS PEOPLE GET WRONG ABOUT BIOMASS over quick 3-shot montage.",
+    "need": 1
+   },
+   {
+    "t0": 4.3,
+    "t1": 16.4,
+    "vo": "Myth one. Biomass is just waste. Fact. Once it is collected, dried and processed, it is a fuel, with a spec sheet, a price, and buyers waiting for it.",
+    "kind": "footage",
+    "visual": "MYTH 1 card over a residue heap; flips to FACT over bagged fuel, with a mini spec-sheet + price-tag icon.",
+    "need": 2
+   },
+   {
+    "t0": 16.4,
+    "t1": 27.2,
+    "vo": "Myth two. Only big companies can sell to power plants. Fact. Many tenders are open to smaller suppliers, and registered M-S-Es can often skip the deposit.",
+    "kind": "footage",
+    "visual": "MYTH 2 card over a small workshop; FACT side shows a tender notice with an M-S-E badge.",
+    "need": 3
+   },
+   {
+    "t0": 27.2,
+    "t1": 37.0,
+    "vo": "Myth three. All straw is the same. Fact. Moisture, ash and heat value decide what your fuel is worth. Buyers test every load.",
+    "kind": "graphic",
+    "visual": "MYTH 3 over three different residue textures; FACT side: three gauges (moisture, ash, heat) at different levels.",
+    "need": 4
+   },
+   {
+    "t0": 37.0,
+    "t1": 48.3,
+    "vo": "Myth four. The price is whatever the buyer says. Fact. Prices change by region and by season. The real problem is that most sellers cannot see them.",
+    "kind": "map",
+    "visual": "MYTH 4 over a busy market; FACT side: India map with region dots pulsing at different sizes and a season dial (no numbers).",
+    "need": 5
+   },
+   {
+    "t0": 48.3,
+    "t1": 56.4,
+    "vo": "IndiaBiomass is building one place to see suppliers, tenders and prices across India.",
+    "kind": "brand",
+    "visual": "Cards stack into the IndiaBiomass card; end card.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 3,
+  "title": "Pellet or briquette?",
+  "fmt": "This or that",
+  "look": "Split screen: the frame is cut vertically, PELLET left and BRIQUETTE right with a VS chip; a scoreboard fills row by row.",
+  "total": 54.1,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 6.2,
+    "vo": "Pellet or briquette. Both are pressed biomass, but they are not the same product.",
+    "kind": "split",
+    "visual": "Hook: PELLET or BRIQUETTE? Both halves slide in, VS chip lands.",
+    "need": 1
+   },
+   {
+    "t0": 6.2,
+    "t1": 17.2,
+    "vo": "Pellets are small, about the size of a pencil stub. They flow easily and feed automatically, which is why power plants co-firing biomass mostly ask for pellets.",
+    "kind": "split",
+    "visual": "Left half grows to 70%: pellets pouring; pencil-stub size comparison; row SIZE / FEEDING ticks; power-plant icon.",
+    "need": 1
+   },
+   {
+    "t0": 17.2,
+    "t1": 23.8,
+    "vo": "Briquettes are bigger, like short logs. They are popular with industrial boilers, brick kilns and factories.",
+    "kind": "split",
+    "visual": "Right half grows: briquette logs; icons for boiler, brick kiln, factory.",
+    "need": 2
+   },
+   {
+    "t0": 23.8,
+    "t1": 36.3,
+    "vo": "Pellets need finer, drier raw material and more processing, so a pellet plant costs more to set up. Briquette machines are simpler, which makes them an easier place to start.",
+    "kind": "split",
+    "visual": "Scoreboard rows: RAW MATERIAL (fine & dry vs coarser), PLANT COST (higher vs simpler), with machinery footage in each half.",
+    "need": 5
+   },
+   {
+    "t0": 36.3,
+    "t1": 45.6,
+    "vo": "So which one should you make? It depends on two things. The raw material you have, and who is buying near you.",
+    "kind": "graphic",
+    "visual": "Question card: WHICH ONE SHOULD YOU MAKE? Two answer chips: YOUR RAW MATERIAL + BUYERS NEAR YOU.",
+    "need": null
+   },
+   {
+    "t0": 45.6,
+    "t1": 54.1,
+    "vo": "Pellet makers, briquette makers, and the buyers for both. IndiaBiomass is bringing them together.",
+    "kind": "brand",
+    "visual": "Both halves merge into the logo; end card.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 4,
+  "title": "Biomass map of India",
+  "fmt": "Map tour",
+  "look": "Map flight: the India map fills the screen; the camera flies to each region, a photo chip pops out of the state with the residue name.",
+  "total": 55.6,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 7.4,
+    "vo": "India does not have one kind of biomass. It has a different one in almost every region.",
+    "kind": "map",
+    "visual": "Full India map, all regions glow in different colours. Hook: WHAT DOES YOUR STATE GROW?",
+    "need": null
+   },
+   {
+    "t0": 7.4,
+    "t1": 13.3,
+    "vo": "In Punjab and Haryana, it is paddy straw, left behind after the rice harvest.",
+    "kind": "map",
+    "visual": "Fly to Punjab & Haryana; chip: PADDY STRAW.",
+    "need": null
+   },
+   {
+    "t0": 13.3,
+    "t1": 15.2,
+    "vo": "In Rajasthan, mustard husk.",
+    "kind": "map",
+    "visual": "Fly to Rajasthan; chip: MUSTARD HUSK (mustard field footage in chip).",
+    "need": 1
+   },
+   {
+    "t0": 15.2,
+    "t1": 19.1,
+    "vo": "Across Gujarat and Maharashtra, cotton stalks and groundnut shells.",
+    "kind": "map",
+    "visual": "Gujarat & Maharashtra; chips: COTTON STALKS, GROUNDNUT SHELLS.",
+    "need": 2
+   },
+   {
+    "t0": 19.1,
+    "t1": 23.3,
+    "vo": "In Uttar Pradesh and Maharashtra, bagasse from the sugar mills.",
+    "kind": "map",
+    "visual": "Uttar Pradesh & Maharashtra; chip: BAGASSE (sugarcane footage).",
+    "need": 3
+   },
+   {
+    "t0": 23.3,
+    "t1": 28.4,
+    "vo": "In the South, coconut shells. And rice husk, wherever rice is milled.",
+    "kind": "map",
+    "visual": "South; chips: COCONUT SHELLS, RICE HUSK.",
+    "need": 4
+   },
+   {
+    "t0": 28.4,
+    "t1": 43.6,
+    "vo": "Every one of these is a fuel, if it reaches the right buyer. The problem is distance. The straw is in one state, the factory that needs it is in another, and neither knows the other exists.",
+    "kind": "footage",
+    "visual": "Long highway footage; a dashed line stretches between two far-apart pins: SUPPLY ↔ DEMAND.",
+    "need": 7
+   },
+   {
+    "t0": 43.6,
+    "t1": 55.6,
+    "vo": "IndiaBiomass is mapping who has what, and where, so supply and demand can finally find each other. Which one grows near you?",
+    "kind": "brand",
+    "visual": "Pins connect across the map, logo; prompt WHICH ONE GROWS NEAR YOU? (comments).",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 5,
+  "title": "What buyers check",
+  "fmt": "Checklist",
+  "look": "Inspection sheet: light paper background with forest-green ink (the only light reel); footage sits in rounded frames; five checkboxes tick down a clipboard.",
+  "total": 52.5,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 7.0,
+    "vo": "Before a buyer pays for your biomass, they check five things. Know them before you quote.",
+    "kind": "open",
+    "visual": "Clipboard slides up: 5 CHECKS BEFORE A BUYER PAYS YOU.",
+    "need": 6
+   },
+   {
+    "t0": 7.0,
+    "t1": 14.0,
+    "vo": "One. Moisture. Wet fuel burns poorly, and you end up transporting water. Most buyers set a maximum.",
+    "kind": "footage",
+    "visual": "☐ MOISTURE ticks; frame: water on grain / wet material.",
+    "need": 1
+   },
+   {
+    "t0": 14.0,
+    "t1": 22.6,
+    "vo": "Two. G-C-V. The heat your fuel gives per kilo. Below the minimum, the load can be rejected, or the price cut.",
+    "kind": "footage",
+    "visual": "☐ G-C-V ticks; frame: clean flame; mini gauge with MIN mark.",
+    "need": 2
+   },
+   {
+    "t0": 22.6,
+    "t1": 28.1,
+    "vo": "Three. Ash. More ash means more cleaning, and more wear on the boiler.",
+    "kind": "footage",
+    "visual": "☐ ASH ticks; frame: ash falling.",
+    "need": 3
+   },
+   {
+    "t0": 28.1,
+    "t1": 33.9,
+    "vo": "Four. Size. Pellets and briquettes must match the size the buyer's feeding system takes.",
+    "kind": "footage",
+    "visual": "☐ SIZE ticks; frame: measuring / uniform pellets; caliper icon.",
+    "need": 4
+   },
+   {
+    "t0": 33.9,
+    "t1": 40.1,
+    "vo": "Five. Consistency. One good sample is not enough. Every truck has to match the spec.",
+    "kind": "footage",
+    "visual": "☐ CONSISTENCY ticks; frame: row of identical trucks / conveyor.",
+    "need": 5
+   },
+   {
+    "t0": 40.1,
+    "t1": 47.5,
+    "vo": "Get these five right, and price talks get a lot easier. Screenshot this before your next quote.",
+    "kind": "graphic",
+    "visual": "Full clipboard, all five ticked; SCREENSHOT THIS stamp.",
+    "need": null
+   },
+   {
+    "t0": 47.5,
+    "t1": 52.5,
+    "vo": "IndiaBiomass. Connecting India's biomass economy.",
+    "kind": "brand",
+    "visual": "Logo on paper; end card.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 6,
+  "title": "The harvest window",
+  "fmt": "Countdown",
+  "look": "Two endings: a countdown ring runs the whole reel; the first half is grey and hazy, then the film rewinds and replays in warm gold.",
+  "total": 61.0,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 3.5,
+    "vo": "The rice is cut. The clock starts.",
+    "kind": "open",
+    "visual": "Combine harvester cutting paddy; countdown ring starts. Text: THE CLOCK STARTS.",
+    "need": 1
+   },
+   {
+    "t0": 3.5,
+    "t1": 17.5,
+    "vo": "In north India, farmers have only a few weeks between the paddy harvest and sowing wheat. The field has to be cleared. And the straw left behind is bulky, loose, and slow to move.",
+    "kind": "footage",
+    "visual": "Ring shows A FEW WEEKS; loose straw over the field; colours drain to grey.",
+    "need": 4
+   },
+   {
+    "t0": 17.5,
+    "t1": 27.2,
+    "vo": "Without a baler, a buyer, or a truck, the fastest option is a matchstick. That is why the smoke comes back every autumn.",
+    "kind": "footage",
+    "visual": "Match strike close-up, then haze over farmland at dusk (grey grade).",
+    "need": 3
+   },
+   {
+    "t0": 27.2,
+    "t1": 30.3,
+    "vo": "Now, the same straw, with a plan.",
+    "kind": "graphic",
+    "visual": "Rewind effect (scan lines run backwards); colour returns gold. Text: WITH A PLAN.",
+    "need": null
+   },
+   {
+    "t0": 30.3,
+    "t1": 45.9,
+    "vo": "The harvest ends. A baler arrives and packs the straw. Within days, an aggregator picks it up. The field is clear in time for wheat. The straw becomes pellets. The pellets go to a plant that needs them.",
+    "kind": "footage",
+    "visual": "Tractor/baler at golden hour; bales; sowing / green shoots. Ring ticks with icons: BALER · AGGREGATOR · CLEAR FIELD.",
+    "need": 5
+   },
+   {
+    "t0": 45.9,
+    "t1": 56.1,
+    "vo": "Same field. Same few weeks. A different ending. What decides it is whether the farmer can find a baler and a buyer in time.",
+    "kind": "graphic",
+    "visual": "Split: grey ending vs gold ending side by side. Text: SAME FIELD. DIFFERENT ENDING.",
+    "need": 6
+   },
+   {
+    "t0": 56.1,
+    "t1": 61.0,
+    "vo": "IndiaBiomass is building that connection.",
+    "kind": "brand",
+    "visual": "Logo; end card.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 7,
+  "title": "Guess the biomass",
+  "fmt": "Quiz",
+  "look": "Quiz show: a big number, a blurred extreme close-up with a 3-2-1 timer ring, then a pull-back reveal with the name and a score dot.",
+  "total": 57.9,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 5.5,
+    "vo": "Four close-ups. Guess what each one is. The answer comes after each.",
+    "kind": "quiz",
+    "visual": "Hook: GUESS THE BIOMASS · 4 CLOSE-UPS; four blurred tiles.",
+    "need": null
+   },
+   {
+    "t0": 5.5,
+    "t1": 18.3,
+    "vo": "Number one. Fine, golden and light. It comes off the grain at a rice mill. Rice husk. A common boiler fuel, because it is dry and already collected in one place.",
+    "kind": "quiz",
+    "visual": "#1 blurred rice husk → reveal RICE HUSK; context shot of a rice mill.",
+    "need": 1
+   },
+   {
+    "t0": 18.3,
+    "t1": 29.6,
+    "vo": "Number two. Pale and fibrous. It is what is left after the juice is pressed out of sugarcane. Bagasse. Many sugar mills burn it to power themselves.",
+    "kind": "quiz",
+    "visual": "#2 blurred bagasse → reveal BAGASSE; sugarcane crushing context.",
+    "need": 2
+   },
+   {
+    "t0": 29.6,
+    "t1": 36.6,
+    "vo": "Number three. Light, papery pieces, left after threshing a winter oilseed. Mustard husk. Common across Rajasthan.",
+    "kind": "quiz",
+    "visual": "#3 blurred mustard husk → reveal MUSTARD HUSK.",
+    "need": 3
+   },
+   {
+    "t0": 36.6,
+    "t1": 44.3,
+    "vo": "Number four. Hard, curved and brown. Mostly from the South. Coconut shell. Dense, and also made into charcoal.",
+    "kind": "quiz",
+    "visual": "#4 blurred coconut shell → reveal COCONUT SHELL.",
+    "need": 4
+   },
+   {
+    "t0": 44.3,
+    "t1": 48.6,
+    "vo": "How many did you get? Tell us in the comments.",
+    "kind": "graphic",
+    "visual": "Four revealed tiles in a grid; HOW MANY DID YOU GET? comment prompt.",
+    "need": null
+   },
+   {
+    "t0": 48.6,
+    "t1": 57.9,
+    "vo": "Every one of these has a buyer somewhere. IndiaBiomass is building the way to find them.",
+    "kind": "brand",
+    "visual": "Logo; end card.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 8,
+  "title": "Why we’re building IndiaBiomass",
+  "fmt": "Manifesto",
+  "look": "Noise to signal: starts loud and cluttered (generic chat bubbles, missed calls, ringing phone), then everything clears into quiet type on forest green and real IndiaBiomass screens.",
+  "total": 54.3,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 11.7,
+    "vo": "Ask anyone in the biomass trade how they find a buyer. A phone call. A friend of a friend. A WhatsApp group with a thousand unread messages.",
+    "kind": "open",
+    "visual": "Person on phone; generic chat bubbles and missed-call chips pile up (no WhatsApp branding).",
+    "need": 1
+   },
+   {
+    "t0": 11.7,
+    "t1": 20.2,
+    "vo": "Ask them how they know the right price. Most will tell you they don't. They find out after the deal.",
+    "kind": "graphic",
+    "visual": "Price tag with a question mark; text: THEY FIND OUT AFTER THE DEAL.",
+    "need": 2
+   },
+   {
+    "t0": 20.2,
+    "t1": 28.0,
+    "vo": "Meanwhile, power plants need fuel every day. Factories are switching their boilers. Farmers have straw with nowhere to go.",
+    "kind": "footage",
+    "visual": "Three quick shots: power plant, factory boiler, farmer with straw.",
+    "need": 3
+   },
+   {
+    "t0": 28.0,
+    "t1": 37.0,
+    "vo": "The demand is real. The supply is real. What is missing is the link between them. So we are building it.",
+    "kind": "graphic",
+    "visual": "Noise clears; two dots (SUPPLY, DEMAND) and a missing link that draws itself. SO WE ARE BUILDING IT.",
+    "need": null
+   },
+   {
+    "t0": 37.0,
+    "t1": 47.4,
+    "vo": "Verified suppliers and buyers, in one place. Tenders, as they are published. Prices, region by region. Supply and policy updates, tracked for you.",
+    "kind": "graphic",
+    "visual": "Four feature cards from the real site captures: verified listings, tenders, prices, supply & policy.",
+    "need": null
+   },
+   {
+    "t0": 47.4,
+    "t1": 54.3,
+    "vo": "IndiaBiomass. The information and trust layer for India's biomass industry.",
+    "kind": "brand",
+    "visual": "Logo with descriptor; end card.",
+    "need": null
+   }
+  ]
+ }
+]
