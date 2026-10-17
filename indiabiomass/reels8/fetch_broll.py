@@ -4,12 +4,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = f'{HERE}/footage/raw'; os.makedirs(RAW, exist_ok=True)
 cands = json.load(open(f'{HERE}/candidates_V1-4.json')) + json.load(open(f'{HERE}/candidates_V5-8.json'))
 pick = json.load(open(f'{HERE}/broll_pick.json'))
-UA = 'IndiaBiomassReels/1.0 (social video production; contact via commons talk)'
+UA = 'IndiaBiomassReels/1.0 (https://indiabiomassfinal.netlify.app; video production)'
 
 def get(url, out):
     for k in range(6):
         r = subprocess.run(['curl', '-sSL', '-A', UA, '-o', out, '-w', '%{http_code}', url], capture_output=True, text=True)
-        if r.stdout.strip() == '200' and os.path.getsize(out) > 10000: return True
+        if r.stdout.strip() == '200' and os.path.getsize(out) > 10000 and open(out,'rb').read(15)[:15].find(b'<!DOCTYPE') < 0: return True
         time.sleep(5 * (k + 1))
     return False
 
@@ -25,12 +25,20 @@ for key, letter in sorted(pick.items()):
     c = next((c for c in cands if str(c['video']) in (v, v[1:]) and int(c['need_index']) == int(n) and c['candidate'] == letter), None)
     if not c: print('MISSING', key); continue
     url = c['download_url']; ext = os.path.splitext(urllib.parse.urlparse(url).path)[1].lower() or '.mp4'
+    ext = '.jpg' if ext in ('.jpeg', '.jpg') else ext
     out = f'{RAW}/{key}{ext}'
     if not os.path.exists(out) or os.path.getsize(out) < 10000:
         ok = False
-        if 'upload.wikimedia.org' in url and c.get('width', 0) and max(c.get('width', 0), c.get('height', 0)) > 2160:
-            ok = get(wm_thumb(url, 2160 if c['width'] >= c['height'] else int(2160 * c['width'] / c['height'])), out)
-        if not ok: ok = get(url, out)
+        if 'wikimedia.org' in url:
+            name = c['source_page_url'].split('File:', 1)[1]
+            w, h = c.get('width') or 3000, c.get('height') or 2000
+            need = int(2100 * w / h) if w >= h else 1300          # landscape: ~2100 px tall; portrait: 1300 px wide
+            under = [x for x in (960, 1280, 1920, 2560, 3840) if x < w]  # thumbnails must be smaller than the original
+            width = next((x for x in under if x >= need), under[-1] if under else w)
+            ok = get(f'https://commons.wikimedia.org/wiki/Special:FilePath/{name}?width={width}', out)
+            time.sleep(3)
+        else:
+            ok = get(url, out)
         print(('OK  ' if ok else 'FAIL'), key, url[:90]); time.sleep(1.5)
     manifest.append({**c, 'role': key, 'file': os.path.relpath(out, HERE)})
 json.dump(manifest, open(f'{HERE}/footage/broll_manifest.json', 'w'), indent=1, ensure_ascii=False)
