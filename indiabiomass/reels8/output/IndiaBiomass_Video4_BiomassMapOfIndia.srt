@@ -1,0 +1,119 @@
+1
+00:00:00,233 --> 00:00:01,200
+India does not have
+
+2
+00:00:01,200 --> 00:00:02,900
+one kind of biomass.
+
+3
+00:00:03,267 --> 00:00:03,967
+It has a different
+
+4
+00:00:03,967 --> 00:00:06,233
+one in almost every region.
+
+5
+00:00:06,367 --> 00:00:08,033
+In Punjab and Haryana,
+
+6
+00:00:08,167 --> 00:00:09,433
+it is paddy straw,
+
+7
+00:00:09,567 --> 00:00:12,033
+left behind after the rice harvest.
+
+8
+00:00:12,300 --> 00:00:13,500
+In Rajasthan,
+
+9
+00:00:13,633 --> 00:00:14,767
+mustard husk.
+
+10
+00:00:14,967 --> 00:00:16,933
+Across Gujarat and Maharashtra,
+
+11
+00:00:17,267 --> 00:00:19,233
+cotton stalks and groundnut shells.
+
+12
+00:00:19,467 --> 00:00:21,433
+In Uttar Pradesh and Maharashtra,
+
+13
+00:00:21,833 --> 00:00:23,400
+bagasse from the sugar mills.
+
+14
+00:00:23,567 --> 00:00:24,400
+In the South,
+
+15
+00:00:24,700 --> 00:00:25,367
+coconut shells.
+
+16
+00:00:25,367 --> 00:00:27,200
+And rice husk,
+
+17
+00:00:27,300 --> 00:00:28,667
+wherever rice is milled.
+
+18
+00:00:28,667 --> 00:00:29,900
+Every one of these
+
+19
+00:00:29,900 --> 00:00:30,967
+is a fuel,
+
+20
+00:00:31,067 --> 00:00:32,900
+if it reaches the right buyer.
+
+21
+00:00:33,067 --> 00:00:34,500
+The problem is distance.
+
+22
+00:00:34,800 --> 00:00:36,600
+The straw is in one state,
+
+23
+00:00:36,633 --> 00:00:37,567
+the factory that needs
+
+24
+00:00:37,567 --> 00:00:39,133
+it is in another,
+
+25
+00:00:39,400 --> 00:00:41,900
+and neither knows the other exists.
+
+26
+00:00:42,300 --> 00:00:44,867
+IndiaBiomass is mapping who has what,
+
+27
+00:00:44,867 --> 00:00:46,100
+and where,
+
+28
+00:00:46,133 --> 00:00:47,200
+so supply and demand
+
+29
+00:00:47,200 --> 00:00:49,333
+can finally find each other.
+
+30
+00:00:49,467 --> 00:00:50,967
+Which one grows near you?
