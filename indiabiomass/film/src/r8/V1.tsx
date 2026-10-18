@@ -93,7 +93,7 @@ export const V1: React.FC = () => {
   return (
     <Shell8 d={D}>
       <Span from={0} to={T.baler}><Media src="V1_1.jpg" from={0} to={T.baler} a={[1.25, 0, 30]} b={[1.05, 0, 0]} grade="golden" /><Shade /></Span>
-      <Span from={T.baler} to={T.depot}><Media src="V1_2.jpg" from={T.baler} to={T.depot} a={[1.3, 80, 0]} b={[1.15, -40, 0]} grade="golden" /><Shade /></Span>
+      <Span from={T.baler} to={T.depot}><Media src="V1_2r.mp4" from={T.baler} to={T.depot} a={[1.05, 0, 0]} b={[1.12, 0, 0]} grade="golden" /><Shade /></Span>
       <Span from={T.depot} to={T.truck}><Media src="V1_3.jpg" from={T.depot} to={T.truck} a={[1.12, 0, 0]} b={[1.3, 0, -40]} /><Shade /></Span>
       <Span from={T.truck} to={T.plant}><Media src="V1_4.jpg" from={T.truck} to={T.plant} a={[1.35, 0, 0]} b={[1.15, 0, 20]} /><Shade /></Span>
       <Span from={T.plant} to={T.power}><Media src="V1_5.jpg" from={T.plant} to={T.power} a={[1.1, 0, 0]} b={[1.3, 0, 0]} grade="industrial" /><Shade mid={0.35} /></Span>

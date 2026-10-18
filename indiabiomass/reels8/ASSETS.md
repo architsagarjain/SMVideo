@@ -52,3 +52,14 @@ Every B-roll clip or photo used in `film/src/r8` (public/r8/<role>). CC BY / CC 
 | V8_6 | video | Aerial view of city traffic at night . | [link](https://mixkit.co/free-stock-video/aerial-view-of-city-traffic-at-night-11/) | Mixkit Stock Video Free License | franklandgrave (Mixkit) |
 
 Voice: ElevenLabs "Ruhaan – Social Media Explainer Style", Turbo v2.5 (commercial use needs a paid ElevenLabs plan). Music: original synthesised score. SFX: Mixkit free licence (see ../ASSET_MANIFEST.md). Interface shots: IndiaBiomass site captures.
+
+## Mixkit Restricted (personal-use) clips — used at the owner's request
+
+These four clips are under the **Mixkit Restricted License (personal, non-commercial use only; 720p)**. They were added on the client's instruction for posting from a personal account. Promotional use for a business may fall outside this licence; replace them (or license via Envato) before any commercial or company-account use.
+
+| Role | Used in | Clip | Source |
+|---|---|---|---|
+| V1_2r | Video 1 · baler beat (replaces V1_2 photo) | Tractor pulling hay bales | https://mixkit.co/free-stock-video/tractor-pulling-hay-bales-7696/ |
+| V5_3r | Video 5 · ash check (replaces V5_3) | Coal in ashes by fire | https://mixkit.co/free-stock-video/coal-in-ashes-by-fire-12542/ |
+| V6_4r | Video 6 · "a baler arrives" (replaces V6_4 photo) | Sunset while a tractor works | https://mixkit.co/free-stock-video/sunset-while-a-tractor-works-7734/ |
+| V6_smoke | Video 6 · smoke layer over the stubble shot | Grey smoke on a black background | https://mixkit.co/free-stock-video/grey-smoke-on-a-black-background-45298/ |

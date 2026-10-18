@@ -119,11 +119,11 @@ export const V6: React.FC = () => {
       <Span from={0} to={L(1)}><Media src="V6_1.jpg" from={0} to={L(1)} a={[1.2, 0, 0]} b={[1.08, 0, 0]} style={{ filter: `grayscale(${lerp(f, [20, L(1)], [0, 0.6])})` }} /><Shade /></Span>
       <Span from={L(1)} to={L(3)}><Media src="V6_2.jpg" from={L(1)} to={L(3)} a={[1.1, 0, 0]} b={[1.3, 0, 0]} style={{ filter: GREY }} /><Shade /></Span>
       <Span from={L(3)} to={L(4)}><Media src="V6_3.mp4" from={L(3)} to={L(4)} a={[1.1, 0, 0]} b={[1.2, 0, 0]} style={{ filter: 'grayscale(0.5)' }} /><Shade mid={0.2} /></Span>
-      <Span from={L(4)} to={RW - 8}><Media src="V6_2.jpg" from={L(4)} to={RW} a={[1.4, 60, 0]} b={[1.6, 0, -40]} style={{ filter: GREY }} /><Smoke from={L(4)} /><Shade /></Span>
+      <Span from={L(4)} to={RW - 8}><Media src="V6_2.jpg" from={L(4)} to={RW} a={[1.4, 60, 0]} b={[1.6, 0, -40]} style={{ filter: GREY }} /><Smoke from={L(4)} /><AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.75 }}><Media src="V6_smoke.mp4" from={L(4)} to={RW} a={[1.3, 0, 120]} b={[1.5, 0, 40]} grade="none" /></AbsoluteFill><Shade /></Span>
       <Span from={RW - 8} to={RW + 20} fade={2}><Rewind /></Span>
       {/* gold half */}
       <Span from={RW + 20} to={W('baler', 0, 6)}><Media src="V6_1.jpg" from={RW + 20} to={L(6) + 30} a={[1.1, 0, 0]} b={[1.2, 0, 0]} grade="golden" /><Shade /></Span>
-      <Span from={W('baler', 0, 6)} to={W('field', 0, 6)}><Media src="V6_4.jpg" from={W('baler', 0, 6)} to={W('field', 0, 6)} a={[1.25, 0, 0]} b={[1.1, 0, 0]} grade="golden" /><Shade /></Span>
+      <Span from={W('baler', 0, 6)} to={W('field', 0, 6)}><Media src="V6_4r.mp4" from={W('baler', 0, 6)} to={W('field', 0, 6)} a={[1.05, 0, 0]} b={[1.12, 0, 0]} grade="golden" /><Shade /></Span>
       <Span from={W('field', 0, 6)} to={L(7)}><Media src="V6_5.jpg" from={W('field', 0, 6)} to={L(7)} a={[1.1, 0, 0]} b={[1.25, 0, 0]} grade="golden" /><Shade /></Span>
       <Span from={L(7)} to={L(8)}><Pellets /></Span>
       <Span from={L(8)} to={L(9)}><TwoEndings /></Span>

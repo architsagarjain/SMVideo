@@ -13,7 +13,7 @@ const { L, END } = timing(D);
 const ITEMS = [
   { k: 'Moisture', note: 'Wet fuel = transporting water', at: L(1), src: 'V5_1.jpg' },
   { k: 'GCV (heat value)', note: 'Below the minimum: rejected or price cut', at: L(2), src: 'V5_2.mp4' },
-  { k: 'Ash', note: 'More cleaning, more boiler wear', at: L(3), src: 'V5_3.mp4' },
+  { k: 'Ash', note: 'More cleaning, more boiler wear', at: L(3), src: 'V5_3r.mp4' },
   { k: 'Size', note: 'Must fit the feeding system', at: L(4), src: 'V5_4.jpg' },
   { k: 'Consistency', note: 'Every truck matches the spec', at: L(5), src: 'V5_5.mp4' },
 ];
