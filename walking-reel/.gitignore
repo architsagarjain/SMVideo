@@ -14,3 +14,6 @@ footage/sabudana/
 public/sleep/*
 !public/sleep/photos/
 footage/sleep/
+public/v4/*
+!public/v4/photos/
+footage/v4/

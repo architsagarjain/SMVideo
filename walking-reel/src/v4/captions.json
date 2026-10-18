@@ -1,0 +1,842 @@
+[
+ [
+  {
+   "text": "If",
+   "start": 0.84,
+   "end": 1.44
+  },
+  {
+   "text": "you",
+   "start": 1.44,
+   "end": 1.6
+  },
+  {
+   "text": "are",
+   "start": 1.6,
+   "end": 1.64
+  }
+ ],
+ [
+  {
+   "text": "a",
+   "start": 1.64,
+   "end": 1.78
+  },
+  {
+   "text": "busy",
+   "start": 1.78,
+   "end": 2.0
+  },
+  {
+   "text": "woman,",
+   "start": 2.0,
+   "end": 2.3
+  }
+ ],
+ [
+  {
+   "text": "stop",
+   "start": 2.64,
+   "end": 2.82
+  },
+  {
+   "text": "following",
+   "start": 2.82,
+   "end": 3.32
+  },
+  {
+   "text": "fat",
+   "start": 3.32,
+   "end": 3.62
+  }
+ ],
+ [
+  {
+   "text": "loss",
+   "start": 3.62,
+   "end": 3.86
+  },
+  {
+   "text": "diets",
+   "start": 3.86,
+   "end": 4.22
+  },
+  {
+   "text": "that",
+   "start": 4.22,
+   "end": 4.56
+  }
+ ],
+ [
+  {
+   "text": "require",
+   "start": 4.56,
+   "end": 5.0
+  },
+  {
+   "text": "you",
+   "start": 5.0,
+   "end": 5.2
+  },
+  {
+   "text": "to",
+   "start": 5.2,
+   "end": 5.48
+  }
+ ],
+ [
+  {
+   "text": "cook",
+   "start": 5.48,
+   "end": 5.66
+  },
+  {
+   "text": "5",
+   "start": 5.66,
+   "end": 6.06
+  },
+  {
+   "text": "different",
+   "start": 6.06,
+   "end": 6.5
+  }
+ ],
+ [
+  {
+   "text": "meals",
+   "start": 6.5,
+   "end": 6.82
+  },
+  {
+   "text": "every",
+   "start": 6.82,
+   "end": 7.34
+  },
+  {
+   "text": "single",
+   "start": 7.34,
+   "end": 7.76
+  }
+ ],
+ [
+  {
+   "text": "day.",
+   "start": 7.76,
+   "end": 8.08
+  }
+ ],
+ [
+  {
+   "text": "You",
+   "start": 8.84,
+   "end": 8.88
+  },
+  {
+   "text": "have",
+   "start": 8.88,
+   "end": 9.12
+  },
+  {
+   "text": "work,",
+   "start": 9.12,
+   "end": 9.52
+  }
+ ],
+ [
+  {
+   "text": "meetings,",
+   "start": 9.82,
+   "end": 10.26
+  }
+ ],
+ [
+  {
+   "text": "commute,",
+   "start": 10.56,
+   "end": 10.9
+  }
+ ],
+ [
+  {
+   "text": "a",
+   "start": 11.52,
+   "end": 11.66
+  },
+  {
+   "text": "social",
+   "start": 11.66,
+   "end": 11.96
+  },
+  {
+   "text": "life",
+   "start": 11.96,
+   "end": 12.38
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 12.38,
+   "end": 12.94
+  },
+  {
+   "text": "then",
+   "start": 12.94,
+   "end": 13.16
+  },
+  {
+   "text": "your",
+   "start": 13.16,
+   "end": 13.5
+  }
+ ],
+ [
+  {
+   "text": "diet",
+   "start": 13.5,
+   "end": 13.78
+  },
+  {
+   "text": "says",
+   "start": 13.78,
+   "end": 14.22
+  },
+  {
+   "text": "you",
+   "start": 14.22,
+   "end": 14.44
+  }
+ ],
+ [
+  {
+   "text": "need",
+   "start": 14.44,
+   "end": 14.72
+  },
+  {
+   "text": "chicken,",
+   "start": 14.72,
+   "end": 15.14
+  }
+ ],
+ [
+  {
+   "text": "broccoli,",
+   "start": 15.48,
+   "end": 15.9
+  }
+ ],
+ [
+  {
+   "text": "some",
+   "start": 16.52,
+   "end": 16.64
+  },
+  {
+   "text": "fancy",
+   "start": 16.64,
+   "end": 17.3
+  },
+  {
+   "text": "salad",
+   "start": 17.3,
+   "end": 17.76
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 17.76,
+   "end": 18.3
+  },
+  {
+   "text": "a",
+   "start": 18.3,
+   "end": 18.58
+  },
+  {
+   "text": "different",
+   "start": 18.58,
+   "end": 18.82
+  }
+ ],
+ [
+  {
+   "text": "smoothie",
+   "start": 18.82,
+   "end": 19.38
+  },
+  {
+   "text": "every",
+   "start": 19.38,
+   "end": 19.66
+  },
+  {
+   "text": "single",
+   "start": 19.66,
+   "end": 20.0
+  }
+ ],
+ [
+  {
+   "text": "day.",
+   "start": 20.0,
+   "end": 20.26
+  }
+ ],
+ [
+  {
+   "text": "Of",
+   "start": 20.92,
+   "end": 21.12
+  },
+  {
+   "text": "course",
+   "start": 21.12,
+   "end": 21.36
+  },
+  {
+   "text": "you",
+   "start": 21.36,
+   "end": 21.56
+  }
+ ],
+ [
+  {
+   "text": "can't",
+   "start": 21.56,
+   "end": 21.78
+  },
+  {
+   "text": "stick",
+   "start": 21.78,
+   "end": 21.96
+  },
+  {
+   "text": "to",
+   "start": 21.96,
+   "end": 22.16
+  }
+ ],
+ [
+  {
+   "text": "it.",
+   "start": 22.16,
+   "end": 22.46
+  }
+ ],
+ [
+  {
+   "text": "You",
+   "start": 22.66,
+   "end": 22.88
+  },
+  {
+   "text": "don't",
+   "start": 22.88,
+   "end": 23.28
+  },
+  {
+   "text": "need",
+   "start": 23.28,
+   "end": 23.5
+  }
+ ],
+ [
+  {
+   "text": "a",
+   "start": 23.5,
+   "end": 23.78
+  },
+  {
+   "text": "perfect",
+   "start": 23.78,
+   "end": 24.02
+  },
+  {
+   "text": "diet.",
+   "start": 24.02,
+   "end": 24.38
+  }
+ ],
+ [
+  {
+   "text": "You",
+   "start": 24.38,
+   "end": 24.86
+  },
+  {
+   "text": "need",
+   "start": 24.86,
+   "end": 25.12
+  },
+  {
+   "text": "5",
+   "start": 25.12,
+   "end": 25.62
+  }
+ ],
+ [
+  {
+   "text": "to",
+   "start": 25.62,
+   "end": 25.84
+  },
+  {
+   "text": "6",
+   "start": 25.84,
+   "end": 26.18
+  },
+  {
+   "text": "meals",
+   "start": 26.18,
+   "end": 26.5
+  }
+ ],
+ [
+  {
+   "text": "you",
+   "start": 26.5,
+   "end": 26.74
+  },
+  {
+   "text": "actually",
+   "start": 26.74,
+   "end": 27.14
+  },
+  {
+   "text": "like",
+   "start": 27.14,
+   "end": 27.54
+  }
+ ],
+ [
+  {
+   "text": "that",
+   "start": 27.54,
+   "end": 28.0
+  },
+  {
+   "text": "are",
+   "start": 28.0,
+   "end": 28.14
+  },
+  {
+   "text": "easy",
+   "start": 28.14,
+   "end": 28.42
+  }
+ ],
+ [
+  {
+   "text": "to",
+   "start": 28.42,
+   "end": 28.64
+  },
+  {
+   "text": "make",
+   "start": 28.64,
+   "end": 28.88
+  },
+  {
+   "text": "and",
+   "start": 28.88,
+   "end": 29.14
+  }
+ ],
+ [
+  {
+   "text": "fit",
+   "start": 29.14,
+   "end": 29.46
+  },
+  {
+   "text": "your",
+   "start": 29.46,
+   "end": 29.82
+  },
+  {
+   "text": "calorie",
+   "start": 29.82,
+   "end": 30.2
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 30.2,
+   "end": 30.48
+  },
+  {
+   "text": "protein",
+   "start": 30.48,
+   "end": 30.82
+  },
+  {
+   "text": "targets",
+   "start": 30.82,
+   "end": 31.32
+  }
+ ],
+ [
+  {
+   "text": "because",
+   "start": 31.32,
+   "end": 32.14
+  },
+  {
+   "text": "the",
+   "start": 32.14,
+   "end": 32.42
+  },
+  {
+   "text": "diet",
+   "start": 32.42,
+   "end": 32.76
+  }
+ ],
+ [
+  {
+   "text": "that",
+   "start": 32.76,
+   "end": 33.02
+  },
+  {
+   "text": "works",
+   "start": 33.02,
+   "end": 33.44
+  },
+  {
+   "text": "isn't",
+   "start": 33.44,
+   "end": 33.88
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 33.88,
+   "end": 34.08
+  },
+  {
+   "text": "one",
+   "start": 34.08,
+   "end": 34.28
+  },
+  {
+   "text": "that",
+   "start": 34.28,
+   "end": 34.48
+  }
+ ],
+ [
+  {
+   "text": "looks",
+   "start": 34.48,
+   "end": 34.78
+  },
+  {
+   "text": "the",
+   "start": 34.78,
+   "end": 35.06
+  },
+  {
+   "text": "best",
+   "start": 35.06,
+   "end": 35.28
+  }
+ ],
+ [
+  {
+   "text": "on",
+   "start": 35.28,
+   "end": 35.52
+  },
+  {
+   "text": "Instagram",
+   "start": 35.52,
+   "end": 36.02
+  }
+ ],
+ [
+  {
+   "text": "is",
+   "start": 36.46,
+   "end": 36.74
+  },
+  {
+   "text": "the",
+   "start": 36.74,
+   "end": 36.94
+  },
+  {
+   "text": "one",
+   "start": 36.94,
+   "end": 37.22
+  }
+ ],
+ [
+  {
+   "text": "you",
+   "start": 37.22,
+   "end": 37.7
+  },
+  {
+   "text": "can",
+   "start": 37.7,
+   "end": 37.96
+  },
+  {
+   "text": "still",
+   "start": 37.96,
+   "end": 38.54
+  }
+ ],
+ [
+  {
+   "text": "follow",
+   "start": 38.54,
+   "end": 38.92
+  },
+  {
+   "text": "when",
+   "start": 38.92,
+   "end": 39.14
+  },
+  {
+   "text": "you're",
+   "start": 39.14,
+   "end": 39.34
+  }
+ ],
+ [
+  {
+   "text": "busy.",
+   "start": 39.34,
+   "end": 39.58
+  }
+ ],
+ [
+  {
+   "text": "That's",
+   "start": 40.34,
+   "end": 40.58
+  },
+  {
+   "text": "the",
+   "start": 40.58,
+   "end": 40.7
+  },
+  {
+   "text": "difference",
+   "start": 40.7,
+   "end": 41.04
+  }
+ ],
+ [
+  {
+   "text": "between",
+   "start": 41.04,
+   "end": 41.42
+  },
+  {
+   "text": "losing",
+   "start": 41.42,
+   "end": 41.78
+  },
+  {
+   "text": "fat",
+   "start": 41.78,
+   "end": 42.12
+  }
+ ],
+ [
+  {
+   "text": "for",
+   "start": 42.12,
+   "end": 42.44
+  },
+  {
+   "text": "30",
+   "start": 42.44,
+   "end": 42.82
+  },
+  {
+   "text": "days",
+   "start": 42.82,
+   "end": 43.1
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 43.1,
+   "end": 43.52
+  },
+  {
+   "text": "actually",
+   "start": 43.52,
+   "end": 43.9
+  },
+  {
+   "text": "keeping",
+   "start": 43.9,
+   "end": 44.2
+  }
+ ],
+ [
+  {
+   "text": "it",
+   "start": 44.2,
+   "end": 44.38
+  },
+  {
+   "text": "off",
+   "start": 44.38,
+   "end": 44.6
+  },
+  {
+   "text": "in",
+   "start": 44.6,
+   "end": 44.84
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 44.84,
+   "end": 44.94
+  },
+  {
+   "text": "long",
+   "start": 44.94,
+   "end": 45.14
+  },
+  {
+   "text": "run",
+   "start": 45.14,
+   "end": 45.28
+  }
+ ],
+ [
+  {
+   "text": "as",
+   "start": 45.28,
+   "end": 45.48
+  },
+  {
+   "text": "well.",
+   "start": 45.48,
+   "end": 45.82
+  }
+ ],
+ [
+  {
+   "text": "Comment",
+   "start": 46.42,
+   "end": 46.56
+  },
+  {
+   "text": "busy",
+   "start": 46.56,
+   "end": 46.88
+  },
+  {
+   "text": "and",
+   "start": 46.88,
+   "end": 47.5
+  }
+ ],
+ [
+  {
+   "text": "I'll",
+   "start": 47.5,
+   "end": 47.76
+  },
+  {
+   "text": "send",
+   "start": 47.76,
+   "end": 47.86
+  },
+  {
+   "text": "you",
+   "start": 47.86,
+   "end": 48.02
+  }
+ ],
+ [
+  {
+   "text": "my",
+   "start": 48.02,
+   "end": 48.16
+  },
+  {
+   "text": "free",
+   "start": 48.16,
+   "end": 48.42
+  },
+  {
+   "text": "guide",
+   "start": 48.42,
+   "end": 48.7
+  }
+ ],
+ [
+  {
+   "text": "for",
+   "start": 48.7,
+   "end": 49.1
+  },
+  {
+   "text": "building",
+   "start": 49.1,
+   "end": 49.36
+  },
+  {
+   "text": "a",
+   "start": 49.36,
+   "end": 49.58
+  }
+ ],
+ [
+  {
+   "text": "fat",
+   "start": 49.58,
+   "end": 49.76
+  },
+  {
+   "text": "loss",
+   "start": 49.76,
+   "end": 49.96
+  },
+  {
+   "text": "diet",
+   "start": 49.96,
+   "end": 50.32
+  }
+ ],
+ [
+  {
+   "text": "around",
+   "start": 50.32,
+   "end": 50.7
+  },
+  {
+   "text": "a",
+   "start": 50.7,
+   "end": 50.88
+  },
+  {
+   "text": "busy",
+   "start": 50.88,
+   "end": 51.06
+  }
+ ],
+ [
+  {
+   "text": "schedule.",
+   "start": 51.06,
+   "end": 51.44
+  }
+ ]
+]
