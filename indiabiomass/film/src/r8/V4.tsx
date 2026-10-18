@@ -1,9 +1,8 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip, End8 } from './common8';
+import { totalFrames, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip } from './common8';
 import { MapCanvas, Cam } from '../components/MapCanvas';
 import { nodes, edges, cities } from '../components/graph';
-import { Logo } from '../components/Logo';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
 import data from '../data/r8/v4.json';
@@ -14,7 +13,7 @@ const D = data as unknown as R8Data;
 const { L, W, END } = timing(D);
 type Reg = { name: string; sub: string; at: number; cities: string[]; color: string; photo?: string; zoom: number };
 const REG: Reg[] = [
-  { name: 'PADDY STRAW', sub: 'Punjab · Haryana', at: L(1), cities: ['Ludhiana', 'Amritsar', 'Bathinda', 'Karnal', 'Panipat'], color: 'rgba(232,176,75,1)', zoom: 2.4 },
+  { name: 'PADDY STRAW', sub: 'Punjab · Haryana', at: L(1), cities: ['Ludhiana', 'Amritsar', 'Bathinda', 'Karnal', 'Panipat'], color: 'rgba(232,176,75,1)', photo: 'V4_paddy.jpg', zoom: 2.4 },
   { name: 'MUSTARD HUSK', sub: 'Rajasthan', at: L(2), cities: ['Jodhpur', 'Jaipur', 'Kota'], color: 'rgba(242,210,60,1)', photo: 'V4_1.jpg', zoom: 2.0 },
   { name: 'COTTON STALKS', sub: 'Gujarat · Maharashtra', at: L(3), cities: ['Ahmedabad', 'Rajkot', 'Aurangabad', 'Nagpur'], color: 'rgba(245,242,234,1)', photo: 'V4_2.jpg', zoom: 1.8 },
   { name: 'GROUNDNUT SHELLS', sub: 'Gujarat · Maharashtra', at: W('groundnut'), cities: ['Rajkot', 'Ahmedabad', 'Surat'], color: 'rgba(214,150,90,1)', photo: 'V4_6.jpg', zoom: 1.8 },
@@ -107,11 +106,10 @@ export const V4: React.FC = () => {
       <Span from={L(7)} to={L(8)}><Media src="V4_7.jpg" from={L(7)} to={L(8)} a={[1.4, 0, 0]} b={[1.15, 0, 0]} /><Shade top={0.6} mid={0.35} bottom={0.75} /><Distance /></Span>
       <Span from={L(8)} to={END} fade={10}>
         <IndiaMap net={lerp(f, [L(8), L(8) + 60], [0, 1])} />
-        <div style={{ position: 'absolute', left: 190, top: 200, width: 700, opacity: lerp(f, [L(8), L(8) + 12], [0, 1]) }}><Logo id="v4brand" at={L(8)} width={700} mode="settle" /></div>
+        <Headline text={'WHO HAS WHAT,\nAND WHERE'} at={L(8)} top={190} size={80} color={C.harvest} />
         <Chip text="WHICH ONE GROWS NEAR YOU?" at={L(9)} top={1250} size={30} />
       </Span>
-      <End8 at={END} reveal />
     </Shell8>
   );
 };
-export const V4_FRAMES = D.frames;
+export const V4_FRAMES = totalFrames(D);

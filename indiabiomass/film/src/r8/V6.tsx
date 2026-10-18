@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { BrandLogo, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip, End8 } from './common8';
+import { totalFrames, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip } from './common8';
 import { Logo } from '../components/Logo';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
@@ -132,14 +132,15 @@ export const V6: React.FC = () => {
       <Ring />
       <Headline text={'THE RICE IS CUT.\nTHE CLOCK STARTS.'} at={4} out={L(1) - 6} top={470} size={80} />
       <Span from={L(3)} to={L(4)} fade={4}><Chip text="THE FASTEST OPTION" at={L(3) + 10} top={470} /></Span>
-      <Span from={RW} to={L(6)} fade={6}><Headline text={'WITH A PLAN'} at={W('plan')} top={900} size={110} color={C.harvest} /></Span>
+      <Span from={RW} to={L(6)} fade={6}>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 820, height: 300, background: 'linear-gradient(90deg, rgba(4,20,12,0.35) 0%, rgba(4,20,12,0.88) 20%, rgba(4,20,12,0.88) 80%, rgba(4,20,12,0.35) 100%)', borderTop: `3px solid ${C.harvest}`, borderBottom: `3px solid ${C.harvest}`, opacity: lerp(f, [RW + 20, RW + 30], [0, 1]) }} />
+        <Headline text={'WITH A PLAN'} at={W('plan')} top={900} size={120} color={C.harvest} />
+      </Span>
       <Span from={L(6)} to={L(7)} fade={6}><Steps /></Span>
       <Span from={L(9)} to={END} fade={6}>
         <Headline text={'A BALER AND\nA BUYER, IN TIME'} at={L(9) + 4} top={470} size={78} />
-        <BrandLogo at={L(10)} />
       </Span>
-      <End8 at={END} />
     </Shell8>
   );
 };
-export const V6_FRAMES = D.frames;
+export const V6_FRAMES = totalFrames(D);

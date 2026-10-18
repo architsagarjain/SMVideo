@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { BrandLogo, Shell8, timing, R8Data, Span, Media, Headline, Chip, End8 } from './common8';
+import { totalFrames, Shell8, timing, R8Data, Span, Media, Headline, Chip } from './common8';
 import { Logo } from '../components/Logo';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
@@ -12,9 +12,9 @@ const D = data as unknown as R8Data;
 const { L, W, END } = timing(D);
 const Q = [
   { n: 1, clue: L(1), ans: L(2), next: L(3), name: 'RICE HUSK', src: 'V7_1.jpg', ctx: 'V7_5.jpg' },
-  { n: 2, clue: L(3), ans: L(4), next: L(5), name: 'BAGASSE', src: 'V7_2.jpg' },
-  { n: 3, clue: L(5), ans: L(6), next: L(7), name: 'MUSTARD HUSK', src: 'V7_3.jpg' },
-  { n: 4, clue: L(7), ans: L(8), next: L(9), name: 'COCONUT SHELL', src: 'V7_4.jpg' },
+  { n: 2, clue: L(3), ans: L(4), next: L(5), name: 'BAGASSE', src: 'V7_2.jpg', ctx: 'V7_ctx2.jpg' },
+  { n: 3, clue: L(5), ans: L(6), next: L(7), name: 'MUSTARD HUSK', src: 'V7_3.jpg', ctx: 'V7_ctx3.jpg' },
+  { n: 4, clue: L(7), ans: L(8), next: L(9), name: 'COCONUT SHELL', src: 'V7_4.jpg', ctx: 'V7_ctx4.jpg' },
 ];
 const BG = `radial-gradient(ellipse 110% 70% at 50% 35%, #0D5A3B 0%, ${C.forest} 45%, #021A10 100%)`;
 
@@ -101,10 +101,8 @@ export const V7: React.FC = () => {
       </Span>
       <Span from={L(10)} to={END} fade={8}>
         <Headline text={'EVERY ONE HAS\nA BUYER SOMEWHERE'} at={L(10)} top={420} size={78} />
-        <BrandLogo at={W('indiabiomass')} />
       </Span>
-      <End8 at={END} />
     </Shell8>
   );
 };
-export const V7_FRAMES = D.frames;
+export const V7_FRAMES = totalFrames(D);

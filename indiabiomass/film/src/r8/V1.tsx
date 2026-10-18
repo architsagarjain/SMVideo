@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { BrandLogo, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip, End8 } from './common8';
+import { totalFrames, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip } from './common8';
 import { Logo } from '../components/Logo';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
@@ -107,10 +107,8 @@ export const V1: React.FC = () => {
       <Span from={T.chain} to={T.brand} fade={6}><Chain /></Span>
       <Span from={T.brand} to={END} fade={6}>
         <Headline text={'THE CHAIN WE\'RE\nCONNECTING'} at={T.brand} top={420} size={84} color={C.harvest} />
-        <BrandLogo at={T.name} />
       </Span>
-      <End8 at={END} />
     </Shell8>
   );
 };
-export const V1_FRAMES = D.frames;
+export const V1_FRAMES = totalFrames(D);

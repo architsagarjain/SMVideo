@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, Img, staticFile, useCurrentFrame } from 'remotion';
-import { BrandLogo, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip, End8 } from './common8';
+import { totalFrames, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip } from './common8';
 import { Logo } from '../components/Logo';
 import { lerp, E, rng } from '../lib';
 import { C, F } from '../theme';
@@ -130,11 +130,10 @@ export const V8: React.FC = () => {
       {FEATS.map((ft, i) => <Span key={ft.k} from={ft.at} to={ft.to} fade={6}><Feature i={i} /></Span>)}
       <Span from={L(11)} to={END}>
         <AbsoluteFill style={{ background: FOREST }} />
-        <BrandLogo at={L(11)} />
-        <Headline text={'The information and trust layer\nfor India’s biomass industry'} at={W('information')} top={1000} size={44} weight={600} font={F.text} lh={1.25} />
+        <Headline text={'IndiaBiomass'} at={L(11)} top={560} size={110} color={C.harvest} />
+        <Headline text={'The information and trust layer\nfor India’s biomass industry'} at={W('information')} top={760} size={52} weight={600} font={F.text} lh={1.25} />
       </Span>
-      <End8 at={END} />
     </Shell8>
   );
 };
-export const V8_FRAMES = D.frames;
+export const V8_FRAMES = totalFrames(D);

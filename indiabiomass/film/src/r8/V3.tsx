@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { BrandLogo, Shell8, timing, R8Data, Span, Media, Headline, Chip, Frame, End8 } from './common8';
+import { totalFrames, Shell8, timing, R8Data, Span, Media, Headline, Chip, Frame } from './common8';
 import { Logo } from '../components/Logo';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
@@ -102,10 +102,8 @@ export const V3: React.FC = () => {
       <Span from={T.brand} to={END}>
         <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 45%, #0A4A31 0%, ${C.forest} 40%, #03180F 100%)` }} />
         <Headline text={'PELLET MAKERS.\nBRIQUETTE MAKERS.\nTHE BUYERS FOR BOTH.'} at={T.brand + 4} top={300} size={66} />
-        <BrandLogo at={W('indiabiomass')} />
       </Span>
-      <End8 at={END} />
     </Shell8>
   );
 };
-export const V3_FRAMES = D.frames;
+export const V3_FRAMES = totalFrames(D);

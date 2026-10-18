@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { BrandLogo, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip, End8 } from './common8';
+import { totalFrames, Shell8, timing, R8Data, Span, Media, Shade, Headline, Chip } from './common8';
 import { Logo } from '../components/Logo';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
@@ -67,11 +67,11 @@ const Card: React.FC<{ i: number }> = ({ i }) => {
     <div style={{ position: 'absolute', left: 110, top: 470, width: 860, height: 820, perspective: 2000, opacity: inn, transform: `translateY(${(1 - inn) * 80}px)` }}>
       <div style={{ position: 'absolute', inset: 0, transformStyle: 'preserve-3d', transform: `rotateY(${flip}deg)` }}>
         <div style={{ ...face, background: 'rgba(28,10,8,0.92)', border: `3px solid ${RED}` }}>
-          <div style={{ alignSelf: 'center', transform: `rotate(-8deg) scale(${0.6 + 0.4 * stamp})`, opacity: Math.min(1, stamp), border: `6px solid ${RED}`, color: RED, borderRadius: 14, padding: '6px 26px', fontFamily: F.display, fontWeight: 800, fontSize: 64, letterSpacing: '0.1em' }}>MYTH</div>
+          <div style={{ alignSelf: 'center', transform: `scale(${0.6 + 0.4 * stamp})`, opacity: Math.min(1, stamp), border: `6px solid ${RED}`, color: RED, borderRadius: 14, padding: '6px 26px', fontFamily: F.display, fontWeight: 800, fontSize: 64, letterSpacing: '0.1em' }}>MYTH</div>
           <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 66, lineHeight: 1.08, color: '#fff', textAlign: 'center', letterSpacing: '-0.02em' }}>“{m.front}”</div>
         </div>
         <div style={{ ...face, background: 'rgba(6,30,19,0.94)', border: `3px solid ${GREEN}`, transform: 'rotateY(180deg)' }}>
-          <div style={{ alignSelf: 'center', border: `6px solid ${GREEN}`, color: GREEN, borderRadius: 14, padding: '6px 26px', fontFamily: F.display, fontWeight: 800, fontSize: 64, letterSpacing: '0.1em', transform: 'rotate(-4deg)' }}>FACT</div>
+          <div style={{ alignSelf: 'center', border: `6px solid ${GREEN}`, color: GREEN, borderRadius: 14, padding: '6px 26px', fontFamily: F.display, fontWeight: 800, fontSize: 64, letterSpacing: '0.1em' }}>FACT</div>
           <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 58, lineHeight: 1.1, color: '#fff', textAlign: 'center', letterSpacing: '-0.02em' }}>{m.back}</div>
           {flip > 90 && <Extra kind={m.extra} at={m.fact} />}
         </div>
@@ -120,11 +120,9 @@ export const V2: React.FC = () => {
       <Counter />
       <Span from={L(9)} to={END}>
         <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 45%, #0A4A31 0%, ${C.forest} 40%, #03180F 100%)` }} />
-        <BrandLogo at={L(9)} />
-        <Chip text="SUPPLIERS · TENDERS · PRICES" at={L(9) + 30} top={1180} />
+        <Headline text={'ONE PLACE FOR\nSUPPLIERS, TENDERS\nAND PRICES'} at={L(9) + 4} top={560} size={82} />
       </Span>
-      <End8 at={END} />
     </Shell8>
   );
 };
-export const V2_FRAMES = D.frames;
+export const V2_FRAMES = totalFrames(D);

@@ -5,6 +5,8 @@ import { Grain, Vignette } from '../components/Overlays';
 import { Footage, Grade } from '../components/Footage';
 import { Cue } from '../components/Subtitles';
 import { Logo } from '../components/Logo';
+import { S7Finale } from '../scenes/S7Finale';
+import { LightLeak } from '../components/LightLeak';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
 
@@ -25,17 +27,33 @@ export const timing = (d: R8Data) => ({
     return hits[nth].s;
   },
   END: d.words[d.words.length - 1].e + 10,
+  FIN: finaleAt(d),
 });
+
+/** The shared end cut (the brand film's finale) starts as the last word ends and runs FINALE_LEN frames. */
+export const FINALE_LEN = 165;
+export const finaleAt = (d: R8Data) => d.words[d.words.length - 1].e;
+export const totalFrames = (d: R8Data) => finaleAt(d) + FINALE_LEN;
+export const Finale8: React.FC<{ d: R8Data }> = ({ d }) => {
+  const at = finaleAt(d);
+  return (
+    <>
+      <Sequence from={at} durationInFrames={FINALE_LEN}><S7Finale /></Sequence>
+      <LightLeak at={at} dur={20} from="left" strength={0.75} />
+    </>
+  );
+};
 
 /** Audio, subtitles, grain/vignette. `plate` gives the captions a dark backing (for light reels). */
 export const Shell8: React.FC<{ d: R8Data; children: React.ReactNode; bg?: string; plate?: boolean; vignette?: number }> = ({ d, children, bg = C.night, plate, vignette = 0.42 }) => {
   useBrandFonts();
-  const end = d.words[d.words.length - 1].e + 10;
+  const end = finaleAt(d) + 4;
   const cues = d.cues.filter((c) => c.s < end).map((c) => ({ ...c, e: Math.min(c.e, end) }));
   return (
     <AbsoluteFill style={{ background: bg }}>
       <Audio src={staticFile(`audio/${d.reel}_mix.wav`)} />
       {children}
+      <Finale8 d={d} />
       {vignette > 0 && <Vignette strength={vignette} />}
       <Grain opacity={0.05} />
       <Captions cues={cues} plate={plate} />

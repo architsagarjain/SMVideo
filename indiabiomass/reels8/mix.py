@@ -24,8 +24,10 @@ def rec(name, gain=1.0, dur=None):
 
 def run(n):
     d = json.load(open(os.path.join(FILM, 'src', 'data', 'r8', f'v{n}.json')))
-    DUR = d['frames'] / FPS; Ls = [(l['s'] / FPS, l['e'] / FPS) for l in d['lines']]
-    END = (d['words'][-1]['e'] + 10) / FPS
+    FIN = d['words'][-1]['e']                     # the shared finale starts as the last word ends (film/src/r8/common8.tsx)
+    DUR = (FIN + 165) / FPS; Ls = [(l['s'] / FPS, l['e'] / FPS) for l in d['lines']]
+    END = (FIN + 10) / FPS
+    HIT = (FIN + 46) / FPS                        # the finale's logo hit (S7Finale END = 46)
     music, sfx = Track(DUR), Track(DUR)
 
     def bars(t0, t1, seq, drums=True, gain=1.0, four=False, arp=False, pad=0.16, bass=True, swing=0.0):
@@ -71,32 +73,32 @@ def run(n):
         bars(L(1) - 0.05, brand, ['D', 'A', 'Bm', 'G'], drums=True, arp=True, gain=0.85)
         for i in range(1, 5): wh(L(i)); sfx.add(L(i) + 0.15, bell(m('A5'), 0.8) * 0.18)
         for k in range(5): sfx.add(L(5) + 0.9 + k * 0.55, tick(2200, 0.05) * 0.7)
-        ending(END)
+        ending(HIT)
     elif n == 2:  # myth / fact: punchy A minor, card flips
         music.add(0, impact(1.6, 0.5) * 0.4)
         bars(L(1) - 0.05, brand, ['Am', 'F', 'C', 'G'], drums=True, four=True, gain=0.85)
         for i in (1, 3, 5, 7): wh(L(i), 0.6); sfx.add(L(i) + 0.05, rec('glitch_short.wav', 0.25, 0.3))
         for i in (2, 4, 6, 8): sfx.add(L(i) - 0.15, whoosh(0.35, 800, 6000, 0.45, -0.6, 0.6) * 0.5); sfx.add(L(i) + 0.1, bell(m('E6'), 0.7) * 0.25)
-        ending(END, ('A2', 'E3', 'A3', 'C4', 'E4', 'B4'))
+        ending(HIT, ('A2', 'E3', 'A3', 'C4', 'E4', 'B4'))
     elif n == 3:  # versus: E minor, split hits
         music.add(0, impact(1.4, 0.5) * 0.45); sfx.add(0.6, rec('hit_drum_deep.wav', 0.5))
         bars(L(1) - 0.05, brand, ['Em', 'C', 'G', 'D'], drums=True, gain=0.8, arp=True)
         for i in (1, 2, 3, 4): wh(L(i), 0.5)
         sfx.add(L(5), impact(0.9, 0.35) * 0.3)
-        ending(END, ('E3', 'B3', 'E4', 'G4', 'B4', 'F#5'))
+        ending(HIT, ('E3', 'B3', 'E4', 'G4', 'B4', 'F#5'))
     elif n == 4:  # map tour: airy F, arp only until the problem line
         music.add(0, shimmer(3.0, density=30, lo=2500, hi=9000, seed=4) * 0.5)
         bars(0.3, L(7), ['F', 'C', 'Dm', 'Bb'], drums=False, arp=True, gain=0.9, pad=0.13)
         bars(L(7), brand, ['Dm', 'Bb', 'F', 'C'], drums=True, gain=0.85)
         for i in range(1, 6): sfx.add(L(i) - 0.2, whoosh(0.5, 250, 3500, 0.45, 0, 0) * 0.45); sfx.add(L(i) + 0.3, blip(84, 0.12) * 0.35)
-        ending(END, ('F2', 'C3', 'F3', 'A3', 'C4', 'G4'))
+        ending(HIT, ('F2', 'C3', 'F3', 'A3', 'C4', 'G4'))
     elif n == 5:  # checklist: bright G, a tick per box
         bars(0.3, brand, ['G', 'D', 'Em', 'C'], drums=True, gain=0.75, swing=0.04)
         for i in range(1, 6):
             sfx.add(L(i) + 0.35, rec('ui_click_device.wav', 0.5) if os.path.exists(os.path.join(SFX, 'ui_click_device.wav')) else tick(2000, 0.05))
             sfx.add(L(i) + 0.4, bell(m('B5'), 0.6) * 0.22)
         sfx.add(L(7), rec('hit_soft_drum_subtle.wav', 0.5))
-        ending(END, ('G2', 'D3', 'G3', 'B3', 'D4', 'A4'))
+        ending(HIT, ('G2', 'D3', 'G3', 'B3', 'D4', 'A4'))
     elif n == 6:  # countdown: grey drone + clock, rewind, then warm D with drums
         t_rw = L(5)
         music.add(0, supersaw([m(x) for x in ['D3', 'A3', 'C4']], t_rw, a=1.0, r=0.6, detune=0.25) * 0.15)
@@ -106,13 +108,13 @@ def run(n):
         sfx.add(L(4), rec('amb_wind_blowing.wav', 0.35, 3.0))
         music.add(t_rw - 1.2, reverse_swell(1.2) * 0.8); sfx.add(t_rw - 0.6, rec('glitch_whoosh_stutter.wav', 0.4))
         bars(t_rw + 0.1, brand, ['D', 'A', 'G', 'D'], drums=True, arp=True, gain=0.85)
-        ending(END)
+        ending(HIT)
     elif n == 7:  # quiz: playful C, countdown blips in the pauses, reveal chime
         bars(0.3, brand, ['C', 'Am', 'F', 'G'], drums=True, gain=0.7, arp=True, pad=0.12)
         for i in (2, 4, 6, 8):
             for k in range(3): sfx.add(L(i) - 1.5 + k * 0.45, blip(79 + k * 2, 0.1) * 0.45)
             sfx.add(L(i) - 0.05, bell(m('C6'), 1.0) * 0.32); sfx.add(L(i) - 0.05, bell(m('G6'), 0.9) * 0.2)
-        ending(END, ('C3', 'G3', 'C4', 'E4', 'G4', 'D5'))
+        ending(HIT, ('C3', 'G3', 'C4', 'E4', 'G4', 'D5'))
     elif n == 8:  # manifesto: noisy start, then quiet pads; groove enters with the features
         for k, t in enumerate(np.arange(L(1), L(2), 0.35)): sfx.add(t, blip(88 + (k % 3) * 3, 0.08) * 0.3)
         sfx.add(L(1), rec('glitch_static.wav', 0.25, 2.0))
@@ -121,7 +123,7 @@ def run(n):
         sfx.add(L(6) - 0.1, impact(1.2, 0.5) * 0.4)
         bars(L(7) - 0.05, brand, ['Bb', 'F', 'Gm', 'D'], drums=True, gain=0.8, arp=True)
         for i in (7, 8, 9, 10): wh(L(i), 0.45)
-        ending(END)
+        ending(HIT)
 
     # ---------------------------------------------------------------- mix (as in the approved reels)
     N = int(DUR * SR)
