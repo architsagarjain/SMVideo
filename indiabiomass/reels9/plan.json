@@ -1,0 +1,570 @@
+[
+ {
+  "n": 9,
+  "title": "Straw to pellet in six steps",
+  "fmt": "How it’s made",
+  "look": "Factory line: full-bleed machine footage; a steel conveyor strip along the bottom carries the material from station 1 to 6; a giant step number slams in for each stage.",
+  "total": 45.2,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 6.1,
+    "vo": "Loose straw goes in. Hard pellets come out. Here is what happens in between.",
+    "kind": "open",
+    "visual": "Loose straw pile, then hard pellets: before/after wipe. Hook: FROM LOOSE STRAW TO A PELLET.",
+    "need": 1
+   },
+   {
+    "t0": 6.1,
+    "t1": 9.6,
+    "vo": "Step one. Cleaning. Stones and metal are removed.",
+    "kind": "footage",
+    "visual": "STEP 1 CLEANING: sorting conveyor; stones and metal icons drop out.",
+    "need": 2
+   },
+   {
+    "t0": 9.6,
+    "t1": 13.8,
+    "vo": "Step two. Drying. Pellets need low moisture to hold together.",
+    "kind": "footage",
+    "visual": "STEP 2 DRYING: dryer / sun-drying; a moisture bar falls.",
+    "need": 3
+   },
+   {
+    "t0": 13.8,
+    "t1": 18.3,
+    "vo": "Step three. Grinding. A hammer mill turns the straw into powder.",
+    "kind": "footage",
+    "visual": "STEP 3 GRINDING: hammer mill, powder pouring.",
+    "need": 4
+   },
+   {
+    "t0": 18.3,
+    "t1": 24.8,
+    "vo": "Step four. Pressing. Rollers force it through a steel die. Heat and pressure make it bind.",
+    "kind": "footage",
+    "visual": "STEP 4 PRESSING: pellets extruding from the die (hero shot).",
+    "need": 5
+   },
+   {
+    "t0": 24.8,
+    "t1": 28.3,
+    "vo": "Step five. Cooling. Hot, soft pellets turn hard.",
+    "kind": "footage",
+    "visual": "STEP 5 COOLING: steam rising off fresh pellets.",
+    "need": 6
+   },
+   {
+    "t0": 28.3,
+    "t1": 32.1,
+    "vo": "Step six. Screening and bagging, ready for the buyer.",
+    "kind": "footage",
+    "visual": "STEP 6 BAGGING: sacks filled and stacked.",
+    "need": 7
+   },
+   {
+    "t0": 32.1,
+    "t1": 35.5,
+    "vo": "Six steps, and a waste becomes a fuel.",
+    "kind": "graphic",
+    "visual": "All six stations light up in a row: WASTE → FUEL.",
+    "need": 8
+   },
+   {
+    "t0": 35.5,
+    "t1": 45.2,
+    "vo": "Pellet makers, machinery suppliers and buyers. IndiaBiomass is bringing them together.",
+    "kind": "brand",
+    "visual": "Brand line, then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 10,
+  "title": "A day in the life of an aggregator",
+  "fmt": "Day in the life",
+  "look": "Clock day: a huge timestamp (5:00 AM → 9:00 PM) leads each scene; the sky colour behind the type shifts from dawn blue to night; a thin progress arc fills like a clock.",
+  "total": 46.4,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 6.9,
+    "vo": "Five a.m. An aggregator's day starts with calls. Which farms have harvested. Which balers are free.",
+    "kind": "open",
+    "visual": "5:00 AM over village sunrise; person on phone at dawn.",
+    "need": 1
+   },
+   {
+    "t0": 6.9,
+    "t1": 12.3,
+    "vo": "Eight a.m. Out on the fields, checking the straw. Wet bales lose value.",
+    "kind": "footage",
+    "visual": "8:00 AM: hands checking straw in the field; chip WET BALES LOSE VALUE.",
+    "need": 3
+   },
+   {
+    "t0": 12.3,
+    "t1": 16.8,
+    "vo": "Eleven a.m. Agreeing terms with farmers, one field at a time.",
+    "kind": "footage",
+    "visual": "11:00 AM: two people agreeing terms in a field.",
+    "need": 4
+   },
+   {
+    "t0": 16.8,
+    "t1": 24.1,
+    "vo": "Two p.m. Arranging trucks. Too few, and bales sit in the rain. Too many, and trucks wait empty.",
+    "kind": "footage",
+    "visual": "2:00 PM: truck / trolley being loaded; split icons TOO FEW / TOO MANY.",
+    "need": 5
+   },
+   {
+    "t0": 24.1,
+    "t1": 29.5,
+    "vo": "Five p.m. Calling buyers. Who needs how much, and who pays on time.",
+    "kind": "footage",
+    "visual": "5:00 PM: evening phone call.",
+    "need": 6
+   },
+   {
+    "t0": 29.5,
+    "t1": 31.3,
+    "vo": "Nine p.m. Planning tomorrow.",
+    "kind": "footage",
+    "visual": "9:00 PM: notebook under a lamp.",
+    "need": 7
+   },
+   {
+    "t0": 31.3,
+    "t1": 35.9,
+    "vo": "Aggregators hold the supply chain together, one call at a time.",
+    "kind": "graphic",
+    "visual": "Clock completes a full circle; ONE CALL AT A TIME.",
+    "need": null
+   },
+   {
+    "t0": 35.9,
+    "t1": 46.4,
+    "vo": "IndiaBiomass is building one place for the people who keep India's biomass moving.",
+    "kind": "brand",
+    "visual": "Brand line, then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 11,
+  "title": "Four red flags in a biomass deal",
+  "fmt": "Warning list",
+  "look": "Red alert: near-black and signal red; a red flag plants into the frame for each warning, a 1/4–4/4 counter; ends on a big green VERIFY stamp.",
+  "total": 46.0,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 3.4,
+    "vo": "Four red flags in any biomass deal.",
+    "kind": "open",
+    "visual": "Dark smoke texture; four red flags drop in a row. Hook: 4 RED FLAGS.",
+    "need": 6
+   },
+   {
+    "t0": 3.4,
+    "t1": 12.3,
+    "vo": "One. No specs in writing. If moisture, ash and heat value are not written down, every dispute is your word against theirs.",
+    "kind": "footage",
+    "visual": "FLAG 1 NO SPECS IN WRITING: contract close-up with blank spec lines.",
+    "need": 1
+   },
+   {
+    "t0": 12.3,
+    "t1": 19.9,
+    "vo": "Two. A price far below everyone else. Very cheap fuel often means wet, mixed, or not there at all.",
+    "kind": "footage",
+    "visual": "FLAG 2 TOO-CHEAP PRICE: market haggling; price tag slashes down.",
+    "need": 2
+   },
+   {
+    "t0": 19.9,
+    "t1": 24.5,
+    "vo": "Three. Full payment in advance, to someone you have never verified.",
+    "kind": "footage",
+    "visual": "FLAG 3 FULL PAYMENT UPFRONT: cash counting; ? over the receiver.",
+    "need": 3
+   },
+   {
+    "t0": 24.5,
+    "t1": 30.2,
+    "vo": "Four. No delivery schedule. Without dates and quantities, a deal is just a conversation.",
+    "kind": "footage",
+    "visual": "FLAG 4 NO DELIVERY SCHEDULE: empty warehouse / blank calendar.",
+    "need": 4
+   },
+   {
+    "t0": 30.2,
+    "t1": 34.8,
+    "vo": "One red flag means ask more questions. Two means walk away.",
+    "kind": "graphic",
+    "visual": "1 flag = ASK MORE · 2 flags = WALK AWAY (meter).",
+    "need": null
+   },
+   {
+    "t0": 34.8,
+    "t1": 37.5,
+    "vo": "Trade with people you can verify.",
+    "kind": "footage",
+    "visual": "Handshake; green VERIFY stamp.",
+    "need": 5
+   },
+   {
+    "t0": 37.5,
+    "t1": 46.0,
+    "vo": "That is what IndiaBiomass is being built for.",
+    "kind": "brand",
+    "visual": "Brand line, then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 12,
+  "title": "The biomass calendar",
+  "fmt": "Seasonal wheel",
+  "look": "Year wheel: a 12-month ring sits centre screen and rotates to each season; the active slice glows and its residue photo fills the wheel’s centre.",
+  "total": 44.5,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 3.1,
+    "vo": "Biomass has seasons, just like crops.",
+    "kind": "open",
+    "visual": "Seasons timelapse; the wheel draws on. Hook: WHAT’S IN SEASON?",
+    "need": 6
+   },
+   {
+    "t0": 3.1,
+    "t1": 9.2,
+    "vo": "October and November. The paddy harvest in the north. Paddy straw everywhere, and little time.",
+    "kind": "footage",
+    "visual": "OCT–NOV slice: paddy harvest (north).",
+    "need": 1
+   },
+   {
+    "t0": 9.2,
+    "t1": 13.8,
+    "vo": "From November, sugar mills start crushing. Bagasse piles up until spring.",
+    "kind": "footage",
+    "visual": "NOV–APR slice: sugar mill crushing, bagasse.",
+    "need": 2
+   },
+   {
+    "t0": 13.8,
+    "t1": 17.6,
+    "vo": "Through winter, cotton stalks are cleared from the fields.",
+    "kind": "footage",
+    "visual": "WINTER slice: cotton picking / stalks.",
+    "need": 3
+   },
+   {
+    "t0": 17.6,
+    "t1": 21.0,
+    "vo": "February to April. Mustard husk, then wheat straw.",
+    "kind": "footage",
+    "visual": "FEB–APR slice: mustard threshing, wheat harvest.",
+    "need": 4
+   },
+   {
+    "t0": 21.0,
+    "t1": 25.2,
+    "vo": "And rice husk comes all year, wherever rice mills run.",
+    "kind": "footage",
+    "visual": "ALL YEAR ring: rice mill, rice husk.",
+    "need": 5
+   },
+   {
+    "t0": 25.2,
+    "t1": 35.1,
+    "vo": "Buy in season, and supply is easy. Buy out of season, and you compete for what is left. Plan your year around the calendar.",
+    "kind": "graphic",
+    "visual": "IN SEASON = EASY · OUT OF SEASON = COMPETE; wheel spins once.",
+    "need": null
+   },
+   {
+    "t0": 35.1,
+    "t1": 44.5,
+    "vo": "IndiaBiomass will help you see what is available, and where.",
+    "kind": "brand",
+    "visual": "Brand line, then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 13,
+  "title": "One new word: torrefaction",
+  "fmt": "Science explainer",
+  "look": "Word of the day: a dictionary entry (TOR·RE·FAC·TION, pronunciation, noun) on deep forest, then a before/after roast comparison and three benefit icons that light up.",
+  "total": 41.0,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 4.6,
+    "vo": "One word you will hear more often in biomass. Torrefaction.",
+    "kind": "open",
+    "visual": "Dictionary card types out the word over a furnace glow.",
+    "need": 1
+   },
+   {
+    "t0": 4.6,
+    "t1": 11.5,
+    "vo": "It means roasting biomass at a high temperature, with very little oxygen. Not burning it. Roasting it.",
+    "kind": "footage",
+    "visual": "Kiln / furnace glow; labels HIGH HEAT · LITTLE OXYGEN · NOT BURNING.",
+    "need": 1
+   },
+   {
+    "t0": 11.5,
+    "t1": 16.1,
+    "vo": "What comes out is dark, dry and brittle. Almost like coal.",
+    "kind": "split",
+    "visual": "Before / after: raw pellet vs dark roasted pellet; ALMOST LIKE COAL.",
+    "need": 2
+   },
+   {
+    "t0": 16.1,
+    "t1": 18.0,
+    "vo": "Why does that matter?",
+    "kind": "graphic",
+    "visual": "WHY IT MATTERS → three icon slots appear.",
+    "need": null
+   },
+   {
+    "t0": 18.0,
+    "t1": 21.0,
+    "vo": "It packs more heat into every kilo.",
+    "kind": "graphic",
+    "visual": "Icon 1 lights: MORE HEAT PER KILO (flame).",
+    "need": null
+   },
+   {
+    "t0": 21.0,
+    "t1": 25.2,
+    "vo": "It does not soak up water, so it stores better.",
+    "kind": "footage",
+    "visual": "Icon 2: water beads off; rain / droplets on material.",
+    "need": 3
+   },
+   {
+    "t0": 25.2,
+    "t1": 31.3,
+    "vo": "And it grinds easily, which power plants like, because their mills are built for coal.",
+    "kind": "footage",
+    "visual": "Icon 3: grinds easily; coal mill / conveyor at a plant.",
+    "need": 4
+   },
+   {
+    "t0": 31.3,
+    "t1": 41.0,
+    "vo": "Torrefaction plants, pellet makers and buyers. IndiaBiomass is bringing them together.",
+    "kind": "brand",
+    "visual": "Brand line, then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 14,
+  "title": "Same morning, two phones",
+  "fmt": "Parallel stories",
+  "look": "Two-screen: the frame is split top/bottom (not left/right), each half with its own clock and person; a gold line joins the halves at the end.",
+  "total": 44.5,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 3.4,
+    "vo": "Seven a.m. Two people, two districts apart.",
+    "kind": "split",
+    "visual": "7:00 AM in both halves; PUNJAB (top) / HARYANA (bottom).",
+    "need": null
+   },
+   {
+    "t0": 3.4,
+    "t1": 10.3,
+    "vo": "In Punjab, a pellet maker has a warehouse full of stock, and no one to sell to.",
+    "kind": "split",
+    "visual": "Top: warehouse full of stock; chip NO BUYER.",
+    "need": 1
+   },
+   {
+    "t0": 10.3,
+    "t1": 16.4,
+    "vo": "In Haryana, a factory manager needs fuel by Friday, and no one to buy from.",
+    "kind": "split",
+    "visual": "Bottom: factory boiler room; chip NO SUPPLIER.",
+    "need": 2
+   },
+   {
+    "t0": 16.4,
+    "t1": 24.1,
+    "vo": "She calls three traders. He checks old WhatsApp groups. She hears three different prices. He gets no reply.",
+    "kind": "split",
+    "visual": "Top: woman on phone; bottom: man on phone; price chips scatter / NO REPLY.",
+    "need": 3
+   },
+   {
+    "t0": 24.1,
+    "t1": 28.7,
+    "vo": "By evening, his boiler runs short. Her stock is still waiting.",
+    "kind": "split",
+    "visual": "Evening: boiler running short / stock waiting in the rain.",
+    "need": 5
+   },
+   {
+    "t0": 28.7,
+    "t1": 37.4,
+    "vo": "They just never found each other. That is the real gap in India's biomass trade. Not supply. Not demand. The connection.",
+    "kind": "graphic",
+    "visual": "Halves slide apart: NOT SUPPLY. NOT DEMAND. THE CONNECTION.",
+    "need": null
+   },
+   {
+    "t0": 37.4,
+    "t1": 44.5,
+    "vo": "IndiaBiomass is building it.",
+    "kind": "brand",
+    "visual": "Gold line joins both halves; then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 15,
+  "title": "You asked",
+  "fmt": "FAQ",
+  "look": "Inbox: question cards arrive like messages from the audience; the answer types out under each; Q1/Q2/Q3 tabs at the top.",
+  "total": 46.0,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 3.4,
+    "vo": "Three questions people ask us about biomass.",
+    "kind": "open",
+    "visual": "Three question cards stack in. Hook: 3 QUESTIONS WE GET ASKED.",
+    "need": 6
+   },
+   {
+    "t0": 3.4,
+    "t1": 16.1,
+    "vo": "One. Can I sell biomass without a factory? Yes. Many people collect, bale and store crop residue, and supply pellet makers and plants. That is aggregation, a business on its own.",
+    "kind": "footage",
+    "visual": "Q1 card; answer YES over bales being collected and stored.",
+    "need": 1
+   },
+   {
+    "t0": 16.1,
+    "t1": 25.2,
+    "vo": "Two. Why does the price change so much? Season, region, quality and distance. Straw is cheap at harvest and costly months later.",
+    "kind": "footage",
+    "visual": "Q2 card; four factor chips (SEASON · REGION · QUALITY · DISTANCE) over a mandi.",
+    "need": 3
+   },
+   {
+    "t0": 25.2,
+    "t1": 35.2,
+    "vo": "Three. How do I find buyers outside my district? Today, mostly through contacts and calls. That is exactly the gap we are working on.",
+    "kind": "footage",
+    "visual": "Q3 card; answer over a highway; chip THE GAP WE ARE WORKING ON.",
+    "need": 4
+   },
+   {
+    "t0": 35.2,
+    "t1": 38.6,
+    "vo": "Have a question? Drop it in the comments.",
+    "kind": "graphic",
+    "visual": "Comment box: DROP YOUR QUESTION BELOW.",
+    "need": null
+   },
+   {
+    "t0": 38.6,
+    "t1": 46.0,
+    "vo": "IndiaBiomass. Connecting India's biomass economy.",
+    "kind": "brand",
+    "visual": "Brand line, then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ },
+ {
+  "n": 16,
+  "title": "Five things you didn’t know",
+  "fmt": "Rapid-fire facts",
+  "look": "Countdown: a huge number (5→1) slams in with a fast punch-zoom on a new shot for every fact; quick cuts and the fastest pacing of the series.",
+  "total": 44.9,
+  "beats": [
+   {
+    "t0": 0,
+    "t1": 4.2,
+    "vo": "Five things you probably did not know about biomass.",
+    "kind": "open",
+    "visual": "Number wall flickers 1–5. Hook: 5 THINGS YOU DIDN’T KNOW.",
+    "need": null
+   },
+   {
+    "t0": 4.2,
+    "t1": 10.3,
+    "vo": "One. Many sugar mills run on their own waste, burning bagasse for steam and power.",
+    "kind": "footage",
+    "visual": "#5 Sugar mills burn their own bagasse.",
+    "need": 1
+   },
+   {
+    "t0": 10.3,
+    "t1": 14.5,
+    "vo": "Two. Rice husk ash goes into cement and steel making.",
+    "kind": "footage",
+    "visual": "#4 Rice husk ash in cement and steel.",
+    "need": 2
+   },
+   {
+    "t0": 14.5,
+    "t1": 18.7,
+    "vo": "Three. Coconut shells become activated carbon, used in water filters.",
+    "kind": "footage",
+    "visual": "#3 Coconut shells become activated carbon.",
+    "need": 3
+   },
+   {
+    "t0": 18.7,
+    "t1": 24.8,
+    "vo": "Four. Paddy straw can be turned into compressed biogas. C-B-G plants already run on it.",
+    "kind": "footage",
+    "visual": "#2 Paddy straw becomes compressed biogas (CBG).",
+    "need": 4
+   },
+   {
+    "t0": 24.8,
+    "t1": 29.4,
+    "vo": "Five. In the hills, fallen pine needles are pressed into briquettes.",
+    "kind": "footage",
+    "visual": "#1 Pine needles pressed into briquettes.",
+    "need": 5
+   },
+   {
+    "t0": 29.4,
+    "t1": 36.3,
+    "vo": "The same residue can go a dozen ways. The question is who needs it, and where.",
+    "kind": "graphic",
+    "visual": "Five tiles shrink into a grid: A DOZEN WAYS. WHO NEEDS IT, AND WHERE?",
+    "need": null
+   },
+   {
+    "t0": 36.3,
+    "t1": 44.9,
+    "vo": "IndiaBiomass is building the way to find out.",
+    "kind": "brand",
+    "visual": "Brand line, then the shared finale end cut.",
+    "need": null
+   }
+  ]
+ }
+]
