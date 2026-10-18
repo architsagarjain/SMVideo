@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
 import {TimeMapContext, X, useT} from '../explainer/kit';
 import {TimeMap, outAt, snap, srcAt} from './timemap';
-import {EASE_IN_OUT, EASE_OUT, FPS, SANS, lerp, tween} from '../theme';
+import {EASE_IN_OUT, EASE_OUT, FPS, SANS, lerp, springAt, tween} from '../theme';
 
 /**
  * Shared engine for the Bhavika series reels (same look as Reel2):
@@ -25,6 +25,9 @@ export type ReelConfig = {
   captions: Word[][];
   tm?: TimeMap; // speed-up / pause cuts (scripts/make_timemap.py)
   shakes?: number[]; // camera-shake hits (source s): big word slams
+  blur?: number; // portrait mode: footage blurred by this many px under her sharp cut-out (no wall wash)
+  pop?: boolean; // word-by-word captions with the spoken word highlighted
+  noCaptions?: Win[]; // windows where the on-screen labels already say the words
 };
 
 /** Snap every window and move boundary that falls inside a pause cut onto the cut itself,
@@ -112,7 +115,13 @@ export const Footage: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
         <div style={{position: 'absolute', left: 0, right: 0, top: crop, bottom: 0, borderRadius: r, boxShadow: `0 ${40 / c.scale}px ${90 / c.scale}px -${20 / c.scale}px rgba(0,0,0,${0.35 * c.panel})`}} />
       ) : null}
       <AbsoluteFill style={{clipPath: c.panel > 0 ? `inset(${crop}px 0px 0px 0px round ${r}px)` : undefined}}>
-        <TimedVideo cfg={cfg} src={`${cfg.dir}/footage_1080.mp4`} />
+        {cfg.blur ? (
+          <AbsoluteFill style={{filter: `blur(${cfg.blur}px) saturate(1.06)`, scale: 1.05}}>
+            <TimedVideo cfg={cfg} src={`${cfg.dir}/footage_1080.mp4`} />
+          </AbsoluteFill>
+        ) : (
+          <TimedVideo cfg={cfg} src={`${cfg.dir}/footage_1080.mp4`} />
+        )}
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -121,7 +130,7 @@ export const Footage: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
 export const Wash: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
   const t = useT();
   const w = washAt(cfg, t);
-  if (w <= 0) return null;
+  if (w <= 0 || cfg.blur) return null;
   if (cfg.panel && t >= cfg.panel.start && t < cfg.panel.end) return null;
   return (
     <AbsoluteFill style={{backgroundColor: X.stage, opacity: 0.93 * w}}>
@@ -132,7 +141,7 @@ export const Wash: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
 
 export const Subject: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
   const t = useT();
-  if (washAt(cfg, t) <= 0) return null;
+  if (!cfg.blur && washAt(cfg, t) <= 0) return null;
   return (
     <AbsoluteFill style={camStyle(cfg, t)}>
       <TimedVideo cfg={cfg} src={`${cfg.dir}/subject_1080.webm`} transparent />
@@ -168,7 +177,7 @@ export const BrollCuts: React.FC<{cfg: ReelConfig; overlay?: (t: number) => Reac
 /** Plain white bold captions, 1-3 words, hidden on full-screen explainer scenes. */
 export const Captions: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
   const t = useT();
-  if (inWin(t, cfg.gfx)) return null;
+  if (inWin(t, cfg.gfx) || inWin(t, cfg.noCaptions ?? [])) return null;
   const CH = cfg.captions;
   let ci = -1;
   for (let i = 0; i < CH.length; i++) if (CH[i][0].start - 0.04 <= t) ci = i;
@@ -191,7 +200,7 @@ export const Captions: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
           textAlign: 'center',
           fontFamily: SANS,
           fontWeight: 800,
-          fontSize: 76,
+          fontSize: cfg.pop ? 84 : 76,
           letterSpacing: -1.5,
           lineHeight: 1.05,
           color: '#FFFFFF',
@@ -200,7 +209,18 @@ export const Captions: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
           textShadow: '0 4px 18px rgba(0,0,0,0.55), 0 2px 4px rgba(0,0,0,0.45), 0 0 2px rgba(0,0,0,0.5)',
         }}
       >
-        {chunk.map((w) => w.text).join(' ')}
+        {cfg.pop
+          ? chunk.map((w, i) => {
+              const nextStart = chunk[i + 1]?.start ?? w.end + 0.3;
+              const on = t >= w.start - 0.03 && t < nextStart;
+              const k = springAt(t, w.start - 0.03, 14, 320);
+              return (
+                <span key={i} style={{display: 'inline-block', margin: '0 0.12em', color: on ? '#FFE14D' : '#FFFFFF', scale: on ? lerp(Math.min(k, 1.1), 1.18, 1.06) : 1}}>
+                  {w.text}
+                </span>
+              );
+            })
+          : chunk.map((w) => w.text).join(' ')}
       </div>
     </AbsoluteFill>
   );
