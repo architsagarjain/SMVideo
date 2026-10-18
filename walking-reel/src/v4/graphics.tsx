@@ -73,7 +73,7 @@ export const V4Open: React.FC = () => {
         const prevSlot = order > 0 ? slot(order - 1) : slot(0);
         const y = order === 0 ? lerp(Math.min(p, 1.1), 300, slot(0)) : lerp(springAt(t, shown[shown.length - 1].at, 13, 220), prevSlot, slot(order));
         return (
-          <div key={n.app} style={{position: 'absolute', left: 540, top: y - leave * 900, translate: '-50% -50%', scale: lerp(Math.min(p, 1), 0.85, 1) * (1 - order * 0.03), opacity: Math.min(1, p * 2) * (1 - order * 0.12)}}>
+          <div key={n.app} style={{position: 'absolute', left: 540, top: y - leave * 900, translate: '-50% -50%', scale: lerp(Math.min(p, 1), 0.85, 1) * (1 - order * 0.03), opacity: Math.min(1, p * 2) * (1 - order * 0.12) * (1 - Math.min(1, leave * 2.5))}}>
             <Notification {...n} />
           </div>
         );
@@ -266,8 +266,8 @@ export const V4PerfectBehind: React.FC = () => {
   const strike = tween(t, 23.95, 0.22, EASE_OUT);
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
-      <Giant text="PERFECT" at={22.8} y={420} size={250} color={X.ink} stagger={0.035} out={B.perfect.end - 0.12} />
-      <div style={{position: 'absolute', left: 60, top: 520, width: 960 * strike, height: 30, borderRadius: 15, background: '#E5383B', rotate: '-4deg', transformOrigin: 'left', opacity: 1 - tween(t, B.perfect.end - 0.12, 0.12)}} />
+      <Giant text="PERFECT" at={22.8} y={500} size={250} color={X.ink} stagger={0.035} out={B.perfect.end - 0.12} />
+      <div style={{position: 'absolute', left: 60, top: 595, width: 960 * strike, height: 30, borderRadius: 15, background: '#E5383B', rotate: '-4deg', transformOrigin: 'left', opacity: 1 - tween(t, B.perfect.end - 0.12, 0.12)}} />
     </AbsoluteFill>
   );
 };
@@ -386,7 +386,6 @@ const InstaScene: React.FC = () => {
           </div>
         ) : null}
         <Tick at={38.54} x={790} y={1430} size={110} />
-        <Scramble text="VS" at={36.6} x={540} y={960} size={70} color={X.pink} />
       </Canvas>
     </Stage>
   );
@@ -426,12 +425,12 @@ const ChartScene: React.FC = () => {
           <Px size={30} color={X.greyText}>MONTHS</Px>
         </div>
         {t >= 44.0 ? (
-          <div style={{position: 'absolute', left: 560, top: 1080, display: 'flex', flexDirection: 'column', gap: 18, opacity: tween(t, 44.0, 0.3)}}>
+          <div style={{position: 'absolute', left: 140, top: 1060, opacity: tween(t, 44.0, 0.3)}}>
             <Pill bg={X.pink} size={38}>30-DAY DIET: COMES BACK</Pill>
           </div>
         ) : null}
         {t >= 44.9 ? (
-          <div style={{position: 'absolute', left: 160, top: 1180, opacity: tween(t, 44.9, 0.3)}}>
+          <div style={{position: 'absolute', left: 140, top: 1160, opacity: tween(t, 44.9, 0.3)}}>
             <Pill bg={X.blue} size={38}>A DIET YOU CAN KEEP: STAYS OFF</Pill>
           </div>
         ) : null}
