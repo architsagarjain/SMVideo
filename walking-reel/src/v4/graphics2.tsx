@@ -4,6 +4,7 @@ import {ICONS} from '../explainer/icons';
 import {useT} from '../explainer/kit';
 import {EASE_IN, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {C, FOOD} from './config2';
+import {V4cStrike} from './graphics3';
 
 /**
  * Simplified busy-women reel, in the style of the reference reels: one straight word or image at a
@@ -61,14 +62,19 @@ const inside = (t: number, w: {start: number; end: number}) => t >= w.start && t
 export const V4bBehind: React.FC = () => {
   const t = useT();
   if (!inside(t, C.perfect)) return null;
-  return <Word text="perfect" at={23.6} out={C.perfect.end - 0.2} y={520} size={330} serif />;
+  return (
+    <>
+      <Word text="perfect" at={23.6} out={C.perfect.end - 0.2} y={520} size={330} serif />
+      <V4cStrike />
+    </>
+  );
 };
 
 // ===========================================================================
 // On her (talking-head sections)
 // ===========================================================================
 const TALK_TEXT: [number, number][] = [
-  [2.6, 8.6], [10.5, 11.45], [25.0, 28.0], [37.9, 40.2], [43.8, 46.3], [46.35, 999],
+  [2.6, 8.6], [10.5, 11.45], [25.0, 28.0], [37.9, 40.2], [46.35, 999],
 ];
 
 export const V4bTalk: React.FC = () => {
@@ -103,13 +109,6 @@ export const V4bTalk: React.FC = () => {
           <Word text="WHEN YOU'RE BUSY" at={38.92} out={C.follow.end - 0.2} y={580} size={74} />
         </>
       ) : null}
-      {/* "...and actually keeping it off in the long run" */}
-      {inside(t, C.longrun) ? (
-        <>
-          <Word text="KEEPING IT OFF" at={43.9} out={C.longrun.end - 0.2} y={440} size={120} />
-          <Word text="in the long run" at={44.6} out={C.longrun.end - 0.2} y={565} size={100} serif />
-        </>
-      ) : null}
       {/* "Comment busy and I'll send you my free guide..." */}
       {t >= C.cta.start ? (
         <>
@@ -128,7 +127,7 @@ export const V4bTalk: React.FC = () => {
 export const V4bBroll: React.FC = () => {
   const t = useT();
   const shade = (w: {start: number; end: number}) => (inside(t, w) ? 1 : 0);
-  const anyText = shade(C.open) || shade(C.work) || shade(C.meet) || shade(C.social) || shade(C.eat) || shade(C.push);
+  const anyText = shade(C.open) || shade(C.work) || shade(C.meet) || shade(C.social) || shade(C.eat);
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       {anyText ? <AbsoluteFill style={{background: 'radial-gradient(90% 55% at 50% 45%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.12) 70%, rgba(0,0,0,0) 100%)'}} /> : null}
@@ -150,8 +149,6 @@ export const V4bBroll: React.FC = () => {
           <Word text="fits your calories & protein" at={29.14} out={C.eat.end - 0.2} y={880} size={80} serif />
         </>
       ) : null}
-      {/* "losing fat for 30 days" */}
-      {inside(t, C.push) ? <Word text="30 DAYS" at={42.44} out={C.push.end - 0.05} y={900} size={190} /> : null}
     </AbsoluteFill>
   );
 };

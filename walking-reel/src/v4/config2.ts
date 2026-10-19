@@ -54,7 +54,7 @@ retime(TM2, {}, moves);
 
 export const v4bConfig: ReelConfig = {
   dir: 'v4',
-  gfx: [C.chicken, C.broccoli, C.salad, C.smoothie, C.insta],
+  gfx: [C.chicken, C.broccoli, C.salad, C.smoothie, C.insta, C.longrun],
   behind: [],
   moves,
   broll: [
