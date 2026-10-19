@@ -105,7 +105,7 @@ export const Media: React.FC<{ src: string; from: number; to: number; a?: [numbe
   return (
     <AbsoluteFill style={style}>
       <Offset by={from}>
-        <Footage src={`r8/${src}`} dur={to - from} still={still} rate={rate} from={a} to={b} grade={grade} />
+        <Footage src={src.includes('/') ? src : `r8/${src}`} dur={to - from} still={still} rate={rate} from={a} to={b} grade={grade} />
       </Offset>
     </AbsoluteFill>
   );
