@@ -17,12 +17,16 @@ def thumb(path, w=320):
         subprocess.run(['convert', path, '-resize', f'{w}x{w*2}>', '-quality', '72', small], check=True)
     return 'data:image/jpeg;base64,' + base64.b64encode(open(small, 'rb').read()).decode()
 
-def broll_for(n, need):
-    if need is None: return None
-    key = f'V{n}_{need}'
-    pool = [c for c in cands if c.get('video') in (f'V{n}', n, str(n)) and int(c.get('need_index', -1)) == need]
-    if key in pick: pool = [c for c in pool if c.get('candidate') == pick[key]] or pool
+def one(n, need):
+    """need: int (use broll_pick), or '1b' for a fixed candidate."""
+    idx, cand = (int(need[:-1]), need[-1]) if isinstance(need, str) else (need, pick.get(f'V{n}_{need}'))
+    pool = [c for c in cands if c.get('video') in (f'V{n}', n, str(n)) and int(c.get('need_index', -1)) == idx]
+    if cand: pool = [c for c in pool if c.get('candidate') == cand] or pool
     return pool[0] if pool else None
+
+def broll_for(n, need):
+    if need is None: return []
+    return [c for c in (one(n, x) for x in (need if isinstance(need, list) else [need])) if c]
 
 E = html.escape
 KIND = {'open': 'Hook', 'footage': 'B-roll', 'graphic': 'Graphic', 'split': 'Split screen', 'map': 'Map', 'quiz': 'Quiz', 'brand': 'Brand'}
@@ -33,13 +37,14 @@ for v in plan:
     ticks = ''.join(f'<span style="left:{t / total * 100:.2f}%">{t}s</span>' for t in range(0, int(total) + 1, 10))
     rows = []
     for i, b in enumerate(v['beats']):
-        c = broll_for(n, b['need'])
+        cs = broll_for(n, b['need'])
         media = ''
-        if c:
+        for c in cs:
             src = thumb(c.get('thumb'))
-            lic = f'{E(c.get("license_name", ""))} · {E(str(c.get("author", "")))}'
-            media = (f'<figure><img src="{src}" alt="{E(c.get("title", ""))}" loading="lazy">'
-                     f'<figcaption>{"Video" if c.get("kind") == "video" else "Photo"} · {lic}</figcaption></figure>') if src else ''
+            lic = f'{E(c.get("license_name", ""))} · {E(str(c.get("author", "")).split(".")[0][:40])}'
+            media += (f'<figure><img src="{src}" alt="{E(c.get("title", ""))}" loading="lazy">'
+                      f'<figcaption>{"Video" if c.get("kind") == "video" else "Photo"} · {lic}</figcaption></figure>') if src else ''
+        if cs: pass
         elif b['kind'] in ('graphic', 'brand', 'map', 'quiz', 'split'):
             media = f'<div class="gfx k-{b["kind"]}">{E(KIND[b["kind"]])}<small>animated in Remotion</small></div>'
         rows.append(f'''<li class="beat">
@@ -106,7 +111,7 @@ tr.rec td {{ background:var(--gold-soft); }}
 .what {{ min-width:0; display:grid; gap:6px; }} .what p {{ margin:0; }}
 .vo {{ color:var(--muted); font-size:14px; }}
 .vis {{ font-weight:500; }}
-.media figure {{ margin:0; display:grid; gap:4px; }}
+.media {{ display:grid; gap:8px; }} .media figure {{ margin:0; display:grid; gap:4px; }}
 .media img {{ width:100%; aspect-ratio:16/10; object-fit:cover; border-radius:10px; background:var(--line); }}
 .media figcaption {{ font-size:11px; color:var(--muted); line-height:1.3; }}
 .gfx {{ aspect-ratio:16/10; border-radius:10px; display:grid; place-content:center; text-align:center; font-family:var(--label); font-weight:600; color:#fff; background:var(--k); font-size:14px; }}
