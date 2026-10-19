@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
+import {AbsoluteFill, OffthreadVideo, Sequence, getInputProps, staticFile} from 'remotion';
 import {TimeMapContext, X, useT} from '../explainer/kit';
 import {TimeMap, outAt, snap, srcAt} from './timemap';
 import {EASE_IN_OUT, EASE_OUT, FPS, SANS, lerp, springAt, tween} from '../theme';
@@ -28,6 +28,7 @@ export type ReelConfig = {
   blur?: number; // portrait mode: footage blurred by this many px under her sharp cut-out (no wall wash)
   pop?: boolean; // word-by-word captions with the spoken word highlighted
   noCaptions?: Win[]; // windows where the on-screen labels already say the words
+  grade?: Grade; // colour grade on her talking-head footage only (not B-roll or cutaways)
   cut?: Win[]; // her cut-out drawn over the sharp footage (no wash), so text can sit behind her
   clean?: boolean; // small one-line captions in the lower third (reference-reel style)
 };
@@ -50,9 +51,24 @@ export const retime = <T extends Record<string, Win>>(tm: TimeMap, wins: T, move
   }
 };
 
+export type Grade = {filter?: string; vignette?: number; warm?: number};
+/** The reel's grade; a still can try another with --props='{"grade": {...}}'. */
+export const gradeOf = (cfg: ReelConfig): Grade => ((getInputProps() as {grade?: Grade}).grade ?? cfg.grade ?? {});
+
+/** Vignette and warm tint over the graded footage. */
+export const GradeOverlay: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
+  const g = gradeOf(cfg);
+  return (
+    <>
+      {g.warm ? <AbsoluteFill style={{background: `rgba(255, 168, 92, ${g.warm})`, mixBlendMode: 'soft-light'}} /> : null}
+      {g.vignette ? <AbsoluteFill style={{background: `radial-gradient(75% 60% at 50% 42%, rgba(0,0,0,0) 55%, rgba(0,0,0,${g.vignette}) 100%)`}} /> : null}
+    </>
+  );
+};
+
 /** Footage-length video, played segment by segment through the time map. */
 const TimedVideo: React.FC<{cfg: ReelConfig; src: string; transparent?: boolean}> = ({cfg, src, transparent}) => {
-  const style = {width: '100%', height: '100%'};
+  const style = {width: '100%', height: '100%', filter: gradeOf(cfg).filter};
   const tm = cfg.tm;
   if (!tm) return <OffthreadVideo src={staticFile(src)} muted transparent={transparent} style={style} />;
   return (
