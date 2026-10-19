@@ -122,7 +122,7 @@ const Middle: React.FC<{ gap: number }> = ({ gap }) => {
   return (
     <div style={{ position: 'absolute', left: 0, right: 0, top: HALF - gap, height: gap * 2, display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
       <div style={{ textAlign: 'center' }}>
-        {f < b + 4 && <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 64, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.02em', opacity: Math.min(lerp(f, [a + 4, a + 12], [0, 1]), lerp(f, [b, b + 4], [1, 0])) }}>THEY NEVER FOUND<br />EACH OTHER</div>}
+        {f < b && <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 64, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.02em', opacity: Math.min(lerp(f, [a - 2, a + 6], [0, 1]), lerp(f, [b - 5, b], [1, 0])) }}>THEY NEVER FOUND<br />EACH OTHER</div>}
         {f >= b && lines.map(([t, at, col]) => (
           <div key={t} style={{ fontFamily: F.display, fontWeight: 800, fontSize: 76, lineHeight: 1.08, color: col, letterSpacing: '-0.02em', opacity: lerp(f, [at - 3, at + 5], [0.15, 1]) }}>{t}</div>
         ))}
