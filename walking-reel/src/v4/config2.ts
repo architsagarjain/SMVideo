@@ -73,5 +73,6 @@ export const v4bConfig: ReelConfig = {
   // her cut-out on top where words sit behind her (STOP, perfect, the Instagram grid, BUSY)
   cut: [C.stop, C.perfect, C.insta, C.cta],
   clean: true,
+  grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
   noCaptions: [C.open, {start: C.work.start, end: C.social.end}, C.cta],
 };
