@@ -46,6 +46,10 @@ const QCard: React.FC<{ i: number }> = ({ i }) => {
         <div style={{ fontFamily: F.label, fontWeight: 700, fontSize: 26, letterSpacing: '0.2em', color: C.slate }}>QUESTION {i + 1}</div>
       </div>
       <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 62, lineHeight: 1.08, color: C.ink, letterSpacing: '-0.02em', marginTop: 18 }}>{q.q}</div>
+      {/* answer on its way: typing dots under the card until the answer starts */}
+      <div style={{ position: 'absolute', right: 40, bottom: -130, display: 'flex', gap: 14, background: C.forest, borderRadius: '30px 30px 6px 30px', padding: '26px 34px', opacity: lerp(f, [q.at + 14, q.at + 22], [0, 1]) * lerp(f, [q.ans - 10, q.ans - 4], [1, 0]) }}>
+        {[0, 1, 2].map((k) => <span key={k} style={{ width: 22, height: 22, borderRadius: 11, background: '#fff', opacity: 0.35 + 0.65 * Math.max(0, Math.sin((f - k * 4) * 0.35)) }} />)}
+      </div>
     </div>
   );
 };
