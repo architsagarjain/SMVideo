@@ -11,11 +11,14 @@ BROLL = []
 
 def cues(cue, rng):
     # hook on the desk clip: a notification, then the words
-    cue(0.84, "pack:notif", -17)
+    for t0, g in ((0.86, -19), (1.26, -23), (1.66, -23)):
+        cue(t0, "pack:notif", g)
     cue(1.64, "pack:whoosh_soft", -25)
     # STOP / 5 different meals
     cue(2.64, "pack:whoosh_deep", -20)
     cue(5.66, "pack:hit", -21)
+    for i in range(5):
+        cue(5.7 + i * 0.1, "pack:tick", -26)
     # montage: one quick whoosh per cut
     for t0 in (8.6, 9.75, 10.5, 11.45):
         cue(t0, "pack:whoosh_fast", -20)
@@ -27,6 +30,7 @@ def cues(cue, rng):
     # "can't stick to it": silence on purpose
     # perfect (behind her)
     cue(23.6, "pack:whoosh_cine", -24)
+    cue(23.98, "pack:whoosh_fast", -24)
     # 5-6 meals you like / easy / fits your targets
     cue(25.12, "pack:chime2", -23)
     cue(28.0, "pack:whoosh_soft", -27)
@@ -41,12 +45,17 @@ def cues(cue, rng):
     # training clips, 30 days
     cue(40.2, "pack:whoosh_soft", -24)
     cue(41.9, "pack:whoosh_fast", -23)
-    cue(42.44, "pack:hit", -22)
+    for j in range(6):
+        cue(42.0 + j * 0.1, "pack:tick", -28)
+    cue(42.62, "pack:hit", -22)
     # keeping it off
-    cue(43.05, "pack:whoosh_fast2", -24)
+    cue(43.05, "pack:whoosh_cine", -24)
     cue(43.9, "pack:hit", -25)
+    cue(45.3, "pack:chime2", -25)
     # CTA: typing BUSY, then the guide
     cue(46.42, "pack:chime2", -24)
     for i in range(4):
         cue(46.56 + i * 0.09, "pack:key", -18)
+    cue(47.0, "pack:tick", -20)
+    cue(47.02, "pack:whoosh_soft", -27)
     cue(48.16, "pack:notif", -20)
