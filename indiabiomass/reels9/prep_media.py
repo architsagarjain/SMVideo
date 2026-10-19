@@ -2,7 +2,8 @@
 import os, subprocess, json, glob
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = f'{HERE}/footage/raw'; OUT = os.path.join(HERE, '..', 'film', 'public', 'r9'); os.makedirs(OUT, exist_ok=True)
-SKIP = {}  # seconds to skip at the start (black first frames etc.)
+SKIP = {}
+# V10_7 was re-cropped by hand to the right edge (the notebook): crop=ih*9/16:ih:iw-ow-40:0  # seconds to skip at the start (black first frames etc.)
 def probe(p):
     r = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height:format=duration', '-of', 'json', p], capture_output=True, text=True)
     j = json.loads(r.stdout); s = j['streams'][0]; return s['width'], s['height'], float(j['format'].get('duration', 0))
