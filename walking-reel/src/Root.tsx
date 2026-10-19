@@ -10,12 +10,15 @@ import {SABUDANA_FRAMES} from './sabudana/config';
 import {SleepReel} from './sleep/Reel';
 import {V4Reel} from './v4/Reel';
 import {V4_FRAMES} from './v4/config';
+import {V4bReel} from './v4/Reel2';
+import {V4B_FRAMES} from './v4/config2';
 import {SLEEP_FRAMES} from './sleep/config';
 import {DURATION_FRAMES, FPS, HEIGHT, WIDTH} from './theme';
 
 export const Root: React.FC = () => {
   return (
     <>
+    <Composition id="BusyWomen2" component={V4bReel} durationInFrames={V4B_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BusyWomen" component={V4Reel} durationInFrames={V4_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="Sleep" component={SleepReel} durationInFrames={SLEEP_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="Sabudana" component={SabudanaReel} durationInFrames={SABUDANA_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />

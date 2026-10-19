@@ -28,6 +28,7 @@ export type ReelConfig = {
   blur?: number; // portrait mode: footage blurred by this many px under her sharp cut-out (no wall wash)
   pop?: boolean; // word-by-word captions with the spoken word highlighted
   noCaptions?: Win[]; // windows where the on-screen labels already say the words
+  clean?: boolean; // small one-line captions in the lower third (reference-reel style)
 };
 
 /** Snap every window and move boundary that falls inside a pause cut onto the cut itself,
@@ -187,7 +188,7 @@ export const Captions: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
   if (t > chunk[chunk.length - 1].end + 0.6 && (!next || t < next[0].start - 0.04)) return null;
   const p = tween(t, chunk[0].start - 0.04, 0.12);
   const c = cameraAt(cfg, t);
-  const y = lerp(c.panel, 1330, 1600);
+  const y = cfg.clean ? 1530 : lerp(c.panel, 1330, 1600);
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       <div
@@ -199,8 +200,8 @@ export const Captions: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
           translate: `0px ${-50 + lerp(p, 6, 0)}%`,
           textAlign: 'center',
           fontFamily: SANS,
-          fontWeight: 800,
-          fontSize: cfg.pop ? 84 : 76,
+          fontWeight: cfg.clean ? 700 : 800,
+          fontSize: cfg.clean ? 50 : cfg.pop ? 84 : 76,
           letterSpacing: -1.5,
           lineHeight: 1.05,
           color: '#FFFFFF',
