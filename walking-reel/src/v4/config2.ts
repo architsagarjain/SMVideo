@@ -74,5 +74,5 @@ export const v4bConfig: ReelConfig = {
   cut: [C.stop, C.perfect, C.insta, C.cta],
   clean: true,
   grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
-  noCaptions: [C.open, {start: C.work.start, end: C.social.end}, C.cta],
+  noCaptions: [C.open, {start: C.work.start, end: C.social.end}, {start: C.longrun.start - 0.1, end: C.longrun.start}, C.cta],
 };

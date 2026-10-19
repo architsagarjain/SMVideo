@@ -164,8 +164,9 @@ const STEADY = 'M 130 760 C 330 830, 560 1000, 950 1110';
 
 export const V4cChart: React.FC = () => {
   const t = useT();
-  if (!inside(t, C.longrun)) return null;
-  const enter = tween(t, C.longrun.start, 0.3, EASE_OUT);
+  // hard cut straight from the push-up clip (starts a touch early so no frame of her shows between)
+  if (t < C.longrun.start - 0.1 || t >= C.longrun.end) return null;
+  const enter = 1;
   const a = tween(t, 43.3, 1.1, EASE_IN_OUT);
   const b = tween(t, 44.3, 1.1, EASE_IN_OUT);
   const la = tween(t, 44.3, 0.3);
