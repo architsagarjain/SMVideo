@@ -117,7 +117,7 @@ const Stack: React.FC = () => {
         })}
       </svg>
       <div style={{ position: 'absolute', left: 50, right: 50, top: 1330, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 22px', opacity: lerp(f, [t0 + 30, t0 + 40], [0, 1]) }}>
-        {SEASONS.map((s) => <span key={s.crop} style={{ fontFamily: F.label, fontWeight: 600, fontSize: 22, letterSpacing: '0.1em', color: '#fff' }}><span style={{ display: 'inline-block', width: 16, height: 16, borderRadius: 4, background: s.col, marginRight: 8 }} />{s.crop.split(' · ')[0]}</span>)}
+        {SEASONS.map((s) => <span key={s.crop} style={{ fontFamily: F.label, fontWeight: 600, fontSize: 28, letterSpacing: '0.08em', color: '#fff' }}><span style={{ display: 'inline-block', width: 20, height: 20, borderRadius: 4, background: s.col, marginRight: 8 }} />{s.crop.split(' · ')[0]}</span>)}
       </div>
       <Headline text={'BUY IN SEASON'} at={t0} out={L(7) - 4} top={170} size={86} color={C.harvest} />
       <Headline text={'PLAN YOUR YEAR\nAROUND THE CALENDAR'} at={L(7)} top={130} size={74} />

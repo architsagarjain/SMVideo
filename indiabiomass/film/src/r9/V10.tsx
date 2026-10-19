@@ -137,7 +137,7 @@ export const V10: React.FC = () => {
       )}
       {f < L(7) + 6 && <Ring full={L(6)} />}
       {f >= L(6) && f < L(7) + 6 && <AbsoluteFill style={{ opacity: lerp(f, [L(7), L(7) + 6], [1, 0]) }}><OneCall /></AbsoluteFill>}
-      {f >= L(7) - 6 && f < FIN + 2 && <AbsoluteFill style={{ opacity: lerp(f, [L(7) - 6, L(7) + 2], [0, 1]) }}><BrandBeat at={L(7)} text={"ONE PLACE FOR THE PEOPLE\nWHO KEEP INDIA'S\nBIOMASS MOVING"} /></AbsoluteFill>}
+      {f >= L(7) - 6 && f < FIN + 2 && <AbsoluteFill style={{ opacity: lerp(f, [L(7) - 6, L(7) + 2], [0, 1]) }}><BrandBeat at={L(7)} text={"ONE PLACE FOR\nTHE PEOPLE WHO KEEP\nINDIA'S BIOMASS\nMOVING"} /></AbsoluteFill>}
     </Shell8>
   );
 };

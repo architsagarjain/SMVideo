@@ -16,7 +16,7 @@ const typed = (f: number, at: number, s: string, cps = 1.4) => s.slice(0, Math.m
 
 const Card: React.FC = () => {
   const f = useCurrentFrame();
-  const t = lerp(f, [2, 14], [0, 1], E.out);
+  const t = lerp(f, [W('Torrefaction') - 16, W('Torrefaction') - 4], [0, 1], E.out);
   const up = lerp(f, [L(1) - 4, L(1) + 12], [0, 1], E.inOut);
   const word = typed(f, W('Torrefaction') - 4, 'tor·re·fac·tion', 0.9);
   const def = typed(f, L(1) + 4, 'roasting biomass at high temperature, with very little oxygen.', 2.2);
@@ -60,7 +60,7 @@ const BeforeAfter: React.FC = () => {
         <div style={{ position: 'absolute', left: 60, top: 190, fontFamily: F.label, fontWeight: 700, fontSize: 32, letterSpacing: '0.24em', color: '#5B4423' }}>BEFORE · RAW BIOMASS</div>
       </div>
       <div style={{ position: 'absolute', left: 0, right: 0, top: 960, height: 960, overflow: 'hidden', clipPath: `inset(0 ${(1 - split) * 100}% 0 0)` }}>
-        <Media src={r9('V13_2.mp4')} from={t0} to={L(3)} a={[1.5, 0, 0]} b={[1.3, 0, 0]} grade="industrial" style={{ top: -480 }} />
+        <Media src={r9('V13_2.mp4')} from={t0} to={L(3)} a={[1.5, 0, 0]} b={[1.3, 0, 0]} grade="industrial" />
         <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.7) 100%)' }} />
         <div style={{ position: 'absolute', left: 60, top: 40, fontFamily: F.label, fontWeight: 700, fontSize: 32, letterSpacing: '0.24em', color: C.harvest }}>AFTER · TORREFIED</div>
       </div>

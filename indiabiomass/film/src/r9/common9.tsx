@@ -32,7 +32,7 @@ export const BrandBeat: React.FC<{ at: number; chips?: string[]; text: string; b
         {lines.map((ln, i) => {
           const t = lerp(f, [textAt + i * 5, textAt + i * 5 + 14], [0, 1], E.out);
           return (
-            <div key={i} style={{ fontFamily: F.display, fontWeight: 800, fontSize: 76, lineHeight: 1.08, letterSpacing: '-0.025em', color: i === lines.length - 1 ? accent : ink, opacity: t, transform: `translateY(${(1 - t) * 30}px)` }}>{ln}</div>
+            <div key={i} style={{ fontFamily: F.display, fontWeight: 800, fontSize: Math.max(...lines.map((x) => x.length)) > 17 ? 62 : 76, lineHeight: 1.08, letterSpacing: '-0.025em', color: i === lines.length - 1 ? accent : ink, opacity: t, transform: `translateY(${(1 - t) * 30}px)` }}>{ln}</div>
           );
         })}
       </div>
