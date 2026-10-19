@@ -167,7 +167,7 @@ export const V4cChart: React.FC = () => {
   // hard cut straight from the push-up clip (starts a touch early so no frame of her shows between)
   if (t < C.longrun.start - 0.1 || t >= C.longrun.end) return null;
   const enter = 1;
-  const a = tween(t, 43.3, 1.1, EASE_IN_OUT);
+  const a = tween(t, C.longrun.start - 0.1, 1.3, EASE_OUT); // starts drawing on the cut
   const b = tween(t, 44.3, 1.1, EASE_IN_OUT);
   const la = tween(t, 44.3, 0.3);
   const lb = tween(t, 45.3, 0.3);
