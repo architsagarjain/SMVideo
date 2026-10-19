@@ -63,15 +63,15 @@ export const V4bBehind: React.FC = () => {
   const t = useT();
   return (
     <>
-      {inside(t, C.stop) ? <Word text="STOP" at={2.64} out={4.4} y={520} size={300} /> : null}
+      {inside(t, C.stop) ? <Word text="STOP" at={2.64} out={4.4} y={585} size={300} /> : null}
       {inside(t, C.perfect) ? (
         <>
-          <Word text="perfect" at={23.6} out={C.perfect.end - 0.2} y={520} size={330} serif />
+          <Word text="perfect" at={23.6} out={C.perfect.end - 0.2} y={560} size={330} serif />
           <V4cStrike />
         </>
       ) : null}
       <V4bInstaGrid />
-      {t >= C.cta.start ? <Word text="BUSY" at={46.56} out={999} y={520} size={330} /> : null}
+      {t >= C.cta.start ? <Word text="BUSY" at={46.56} out={999} y={595} size={340} /> : null}
     </>
   );
 };
@@ -117,7 +117,7 @@ export const V4bTalk: React.FC = () => {
       {/* "Comment busy and I'll send you my free guide..." */}
       {t >= C.cta.start ? (
         <>
-          <Word text="Comment" at={46.42} out={999} y={300} size={96} serif />
+          <Word text="Comment" at={46.42} out={999} y={385} size={96} serif />
           <Word text="for my free fat loss guide" at={48.16} out={999} y={1480} size={50} color="#FFFFFF" />
         </>
       ) : null}
@@ -131,15 +131,17 @@ export const V4bTalk: React.FC = () => {
 export const V4bBroll: React.FC = () => {
   const t = useT();
   const shade = (w: {start: number; end: number}) => (inside(t, w) ? 1 : 0);
-  const anyText = shade(C.open) || shade(C.work) || shade(C.meet) || shade(C.social) || shade(C.eat);
+  const anyText = shade(C.work) || shade(C.meet) || shade(C.social);
+  const top = shade(C.open) || shade(C.eat);
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
+      {top ? <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 22%, rgba(0,0,0,0) 34%)'}} /> : null}
       {anyText ? <AbsoluteFill style={{background: 'radial-gradient(90% 55% at 50% 45%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.12) 70%, rgba(0,0,0,0) 100%)'}} /> : null}
       {/* hook: "If you are a busy woman," */}
       {inside(t, C.open) ? (
         <>
-          <Word text="If you're a" at={1.3} out={C.open.end - 0.15} y={790} size={90} serif />
-          <Word text="BUSY WOMAN" at={1.78} out={C.open.end - 0.15} y={910} size={150} />
+          <Word text="If you're a" at={1.3} out={C.open.end - 0.15} y={120} size={84} serif />
+          <Word text="BUSY WOMAN" at={1.78} out={C.open.end - 0.15} y={232} size={150} />
         </>
       ) : null}
       {/* "You have work, meetings, ... a social life" */}
@@ -149,8 +151,8 @@ export const V4bBroll: React.FC = () => {
       {/* "...that are easy to make and fit your calorie and protein targets" */}
       {inside(t, C.eat) ? (
         <>
-          <Word text="EASY TO MAKE" at={28.14} out={C.eat.end - 0.2} y={760} size={120} />
-          <Word text="fits your calories & protein" at={29.14} out={C.eat.end - 0.2} y={880} size={80} serif />
+          <Word text="EASY TO MAKE" at={28.14} out={C.eat.end - 0.2} y={250} size={120} />
+          <Word text="fits your calories & protein" at={29.14} out={C.eat.end - 0.2} y={370} size={80} serif />
         </>
       ) : null}
     </AbsoluteFill>

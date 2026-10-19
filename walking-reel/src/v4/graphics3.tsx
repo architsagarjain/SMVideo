@@ -46,7 +46,7 @@ export const V4cNotes: React.FC = () => {
             style={{
               position: 'absolute',
               left: 70,
-              top: 110 + i * 168,
+              top: 1160 + i * 168,
               width: 940,
               height: 146,
               borderRadius: 38,
@@ -58,7 +58,7 @@ export const V4cNotes: React.FC = () => {
               padding: '0 30px',
               boxSizing: 'border-box',
               opacity: Math.min(1, p * 1.6),
-              translate: `0 ${lerp(p, -60, 0)}px`,
+              translate: `0 ${lerp(p, 60, 0)}px`,
               fontFamily: SANS,
             }}
           >
@@ -126,7 +126,7 @@ export const V4cStrike: React.FC = () => {
   if (!inside(t, C.perfect) || t < 23.98) return null;
   const p = tween(t, 23.98, 0.3, EASE_IN_OUT);
   const o = 1 - tween(t, C.perfect.end - 0.2, 0.22, EASE_IN);
-  return <div style={{position: 'absolute', left: 175, top: 548, width: 730 * p, height: 16, borderRadius: 8, background: '#FF5A4E', opacity: o, boxShadow: '0 3px 12px rgba(0,0,0,0.3)'}} />;
+  return <div style={{position: 'absolute', left: 175, top: 588, width: 730 * p, height: 16, borderRadius: 8, background: '#FF5A4E', opacity: o, boxShadow: '0 3px 12px rgba(0,0,0,0.3)'}} />;
 };
 
 // ---------------------------------------------------------------------------
