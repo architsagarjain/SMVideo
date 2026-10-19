@@ -11,9 +11,9 @@ BROLL = []
 
 def cues(cue, rng):
     # hook on the desk clip: a notification, then the words
-    for t0, g in ((0.86, -19), (1.26, -23), (1.66, -23)):
+    for t0, g in ((1.29, -19), (1.5, -23), (1.78, -23)):
         cue(t0, "pack:notif", g)
-    cue(1.64, "pack:whoosh_soft", -25)
+    cue(1.8, "pack:whoosh_soft", -25)
     # STOP / 5 different meals
     cue(2.64, "pack:whoosh_deep", -20)
     cue(5.66, "pack:hit", -21)
@@ -38,8 +38,10 @@ def cues(cue, rng):
     cue(29.14, "pack:chime2", -25)
     # Instagram post
     cue(31.2, "pack:whoosh_cine", -24)
-    for j in range(10):
-        cue(35.06 + j * 0.08, "pack:tick", -30)
+    # double-tap hearts on the grid
+    for t0 in (35.06, 35.22, 35.38, 35.54):
+        cue(t0, "pack:tick", -21)
+    cue(35.06, "pack:chime2", -28)
     cue(36.4, "pack:whoosh_fast2", -24)
     cue(37.96, "pack:chime2", -25)
     # training clips, 30 days

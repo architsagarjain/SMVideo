@@ -28,6 +28,7 @@ export type ReelConfig = {
   blur?: number; // portrait mode: footage blurred by this many px under her sharp cut-out (no wall wash)
   pop?: boolean; // word-by-word captions with the spoken word highlighted
   noCaptions?: Win[]; // windows where the on-screen labels already say the words
+  cut?: Win[]; // her cut-out drawn over the sharp footage (no wash), so text can sit behind her
   clean?: boolean; // small one-line captions in the lower third (reference-reel style)
 };
 
@@ -142,7 +143,7 @@ export const Wash: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
 
 export const Subject: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
   const t = useT();
-  if (!cfg.blur && washAt(cfg, t) <= 0) return null;
+  if (!cfg.blur && washAt(cfg, t) <= 0 && !inWin(t, cfg.cut ?? [])) return null;
   return (
     <AbsoluteFill style={camStyle(cfg, t)}>
       <TimedVideo cfg={cfg} src={`${cfg.dir}/subject_1080.webm`} transparent />

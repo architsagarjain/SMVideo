@@ -46,6 +46,8 @@ retime(TM2, C, []);
 const hold = (a: number, b: number, scale: number, inDur = 0.001): Move => ({origin: FACE_ORIGIN, inStart: a, inDur, scale, outStart: b - 0.0003, outDur: 0.0001});
 const moves: Move[] = [
   hold(C.stop.start, C.stop.end, 1.06, 6), // slow push while she sets it up
+  hold(C.says.start, C.says.end, 1.1), // jump-zoom: "then your diet says"
+  hold(C.everyday.start, C.everyday.end, 1.12),
   hold(C.cant.start, C.cant.end, 1.18), // the one close-up
   hold(C.follow.start, C.follow.end, 1.06, 3.5),
   {origin: FACE_ORIGIN, inStart: C.cta.start, inDur: 4.5, scale: 1.08, outStart: 9999, outDur: 1},
@@ -54,7 +56,7 @@ retime(TM2, {}, moves);
 
 export const v4bConfig: ReelConfig = {
   dir: 'v4',
-  gfx: [C.chicken, C.broccoli, C.salad, C.smoothie, C.insta, C.longrun],
+  gfx: [C.chicken, C.broccoli, C.salad, C.smoothie, C.longrun],
   behind: [],
   moves,
   broll: [
@@ -68,7 +70,8 @@ export const v4bConfig: ReelConfig = {
   ],
   captions: captions as ReelConfig['captions'],
   tm: TM2,
-  blur: 9,
+  // her cut-out on top where words sit behind her (STOP, perfect, the Instagram grid, BUSY)
+  cut: [C.stop, C.perfect, C.insta, C.cta],
   clean: true,
-  noCaptions: [{start: C.work.start, end: C.social.end}],
+  noCaptions: [{start: C.work.start, end: C.social.end}, C.cta],
 };

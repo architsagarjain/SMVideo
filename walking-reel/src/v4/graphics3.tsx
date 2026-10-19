@@ -26,9 +26,9 @@ const Glyph: React.FC<{name: string; size: number; color: string}> = ({name, siz
 // Hook: three notifications drop in while she says "If you're a busy woman"
 // ---------------------------------------------------------------------------
 const NOTES = [
-  {at: 0.86, icon: 'calendar-blank', bg: '#FF3B30', app: 'Calendar', text: 'Client meeting in 10 min'},
-  {at: 1.26, icon: 'briefcase', bg: '#0A84FF', app: 'Work', text: '14 unread messages'},
-  {at: 1.66, icon: 'chat-circle-dots', bg: '#30D158', app: 'Messages', text: 'Mom: Dinner at 8 tonight?'},
+  {at: 1.22, icon: 'calendar-blank', bg: '#FF3B30', app: 'Calendar', text: 'Client meeting in 10 min'},
+  {at: 1.5, icon: 'briefcase', bg: '#0A84FF', app: 'Work', text: '14 unread messages'},
+  {at: 1.78, icon: 'chat-circle-dots', bg: '#30D158', app: 'Messages', text: 'Mom: Dinner at 8 tonight?'},
 ];
 
 export const V4cNotes: React.FC = () => {
@@ -218,7 +218,7 @@ export const V4cComment: React.FC = () => {
       style={{
         position: 'absolute',
         left: 90,
-        top: 1250,
+        top: 1300,
         width: 900,
         height: 128,
         borderRadius: 64,

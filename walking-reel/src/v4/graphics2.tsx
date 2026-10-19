@@ -61,11 +61,17 @@ const inside = (t: number, w: {start: number; end: number}) => t >= w.start && t
 // ===========================================================================
 export const V4bBehind: React.FC = () => {
   const t = useT();
-  if (!inside(t, C.perfect)) return null;
   return (
     <>
-      <Word text="perfect" at={23.6} out={C.perfect.end - 0.2} y={520} size={330} serif />
-      <V4cStrike />
+      {inside(t, C.stop) ? <Word text="STOP" at={2.64} out={4.4} y={520} size={300} /> : null}
+      {inside(t, C.perfect) ? (
+        <>
+          <Word text="perfect" at={23.6} out={C.perfect.end - 0.2} y={520} size={330} serif />
+          <V4cStrike />
+        </>
+      ) : null}
+      <V4bInstaGrid />
+      {t >= C.cta.start ? <Word text="BUSY" at={46.56} out={999} y={520} size={330} /> : null}
     </>
   );
 };
@@ -87,7 +93,6 @@ export const V4bTalk: React.FC = () => {
       {/* "stop following fat loss diets that require you to cook 5 different meals every single day." */}
       {inside(t, C.stop) ? (
         <>
-          <Word text="STOP" at={2.64} out={4.4} y={470} size={210} />
           <Word text="5" at={5.66} out={C.stop.end - 0.2} y={470} x={300} size={330} />
           <Word text="different" at={6.06} out={C.stop.end - 0.2} y={430} x={430} size={96} serif align="left" />
           <Word text="meals" at={6.5} out={C.stop.end - 0.2} y={530} x={430} size={96} serif align="left" />
@@ -112,9 +117,8 @@ export const V4bTalk: React.FC = () => {
       {/* "Comment busy and I'll send you my free guide..." */}
       {t >= C.cta.start ? (
         <>
-          <Word text="Comment" at={46.42} out={999} y={350} size={96} serif />
-          <Word text="BUSY" at={46.56} out={999} y={510} size={230} />
-          <Word text="for my free fat loss guide" at={48.16} out={999} y={670} size={52} color="#FFFFFF" />
+          <Word text="Comment" at={46.42} out={999} y={300} size={96} serif />
+          <Word text="for my free fat loss guide" at={48.16} out={999} y={1480} size={50} color="#FFFFFF" />
         </>
       ) : null}
     </AbsoluteFill>
@@ -134,8 +138,8 @@ export const V4bBroll: React.FC = () => {
       {/* hook: "If you are a busy woman," */}
       {inside(t, C.open) ? (
         <>
-          <Word text="If you're a" at={0.84} out={C.open.end - 0.15} y={790} size={90} serif />
-          <Word text="BUSY WOMAN" at={1.64} out={C.open.end - 0.15} y={910} size={150} />
+          <Word text="If you're a" at={1.3} out={C.open.end - 0.15} y={790} size={90} serif />
+          <Word text="BUSY WOMAN" at={1.78} out={C.open.end - 0.15} y={910} size={150} />
         </>
       ) : null}
       {/* "You have work, meetings, ... a social life" */}
@@ -156,10 +160,10 @@ export const V4bBroll: React.FC = () => {
 // ===========================================================================
 // Full-screen cutaways: the food the diet asks for, then an Instagram post
 // ===========================================================================
-const Backdrop: React.FC<{src: string}> = ({src}) => (
-  <AbsoluteFill style={{background: '#111'}}>
-    <Img src={staticFile(src)} style={{width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(42px) brightness(0.55) saturate(1.2)', scale: 1.3}} />
-  </AbsoluteFill>
+const PAPER = '#F7F5F1';
+const INK = '#1B1714';
+const Backdrop: React.FC = () => (
+  <AbsoluteFill style={{background: `radial-gradient(90% 60% at 50% 42%, #FFFFFF 0%, ${PAPER} 70%, #EDE8E0 100%)`}} />
 );
 
 export const V4bFood: React.FC = () => {
@@ -170,11 +174,11 @@ export const V4bFood: React.FC = () => {
   const p = tween(t, f.w.start, 0.3, EASE_OUT);
   return (
     <AbsoluteFill>
-      <Backdrop src={`${P}${f.img}.jpg`} />
-      <div style={{position: 'absolute', left: 540, top: 860, translate: '-50% -50%', width: 820, height: 820, borderRadius: 34, overflow: 'hidden', boxShadow: '0 30px 80px rgba(0,0,0,0.5)', scale: lerp(p, 0.96, 1)}}>
+      <Backdrop />
+      <div style={{position: 'absolute', left: 540, top: 860, translate: '-50% -50%', width: 820, height: 820, borderRadius: 34, overflow: 'hidden', boxShadow: '0 30px 70px rgba(40,30,20,0.22)', scale: lerp(p, 0.96, 1)}}>
         <Img src={staticFile(`${P}${f.img}.jpg`)} style={{width: '100%', height: '100%', objectFit: 'cover', scale: z}} />
       </div>
-      <Word text={f.label} at={f.w.start + 0.05} out={f.w.end + 1} y={1420} size={120} serif />
+      <Word text={f.label} at={f.w.start + 0.05} out={f.w.end + 1} y={1420} size={120} serif color={INK} />
     </AbsoluteFill>
   );
 };
@@ -187,35 +191,55 @@ const Glyph: React.FC<{name: string; size: number; color: string}> = ({name, siz
   </svg>
 );
 
-export const V4bInsta: React.FC = () => {
+const GRID = ['insta_bowl', 'big_broccoli', 'big_smoothie', 'big_salad', 'meal_smoothie', 'meal_oats2', 'meal_chicken2', 'meal_salad', 'meal_curd'];
+const HEARTS: [number, number, string][] = [[0, 35.06, '48.2K'], [5, 35.22, '31.9K'], [2, 35.38, '27.5K'], [3, 35.54, '52.1K']];
+const TILE = 352, GAP = 6, GX = (1080 - 3 * TILE - 2 * GAP) / 2, GY = 330;
+
+/** "...isn't the one that looks the best on Instagram": a white profile grid behind her. */
+export const V4bInstaGrid: React.FC = () => {
   const t = useT();
   if (!inside(t, C.insta)) return null;
-  const likes = Math.round(12400 * tween(t, 35.06, 0.9, EASE_OUT));
-  const p = tween(t, C.insta.start, 0.4, EASE_OUT);
+  const e = tween(t, C.insta.start, 0.22);
+  const h = tween(t, C.insta.start + 0.1, 0.4, EASE_OUT);
   return (
-    <AbsoluteFill>
-      <Backdrop src={`${P}insta_bowl.jpg`} />
-      <Word text="looks best on Instagram" at={34.3} out={C.insta.end + 1} y={190} size={88} serif />
-      <div style={{position: 'absolute', left: 540, top: 1010, translate: `-50% ${lerp(p, -46, -50)}%`, opacity: p, width: 600, height: 1180, borderRadius: 80, background: '#0d0d0f', padding: 20, boxShadow: '0 40px 100px rgba(0,0,0,0.55)'}}>
-        <div style={{width: '100%', height: '100%', borderRadius: 62, background: '#fff', overflow: 'hidden', fontFamily: SANS}}>
-          <div style={{display: 'flex', alignItems: 'center', gap: 16, padding: '44px 28px 18px'}}>
-            <div style={{width: 66, height: 66, borderRadius: '50%', background: 'linear-gradient(45deg,#F9CE34,#EE2A7B,#6228D7)', padding: 4}}>
-              <div style={{width: '100%', height: '100%', borderRadius: '50%', background: '#fff'}} />
-            </div>
-            <div style={{fontWeight: 800, fontSize: 32, color: '#111'}}>cleaneats.daily</div>
+    <AbsoluteFill style={{background: PAPER, opacity: e}}>
+      {/* profile header */}
+      <div style={{position: 'absolute', left: 40, top: 120, display: 'flex', alignItems: 'center', gap: 26, opacity: h, translate: `0 ${lerp(h, -20, 0)}px`, fontFamily: SANS}}>
+        <div style={{width: 128, height: 128, borderRadius: '50%', background: 'linear-gradient(45deg,#F9CE34,#EE2A7B,#6228D7)', padding: 6, boxSizing: 'border-box'}}>
+          <Img src={staticFile(`${P}insta_bowl.jpg`)} style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '5px solid #fff', boxSizing: 'border-box'}} />
+        </div>
+        <div>
+          <div style={{display: 'flex', alignItems: 'center', gap: 12, fontWeight: 800, fontSize: 46, color: INK}}>
+            perfect.diet.daily
+            <div style={{width: 40, height: 40, borderRadius: '50%', background: '#0A84FF', color: '#fff', fontSize: 28, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>✓</div>
           </div>
-          <Img src={staticFile(`${P}insta_bowl.jpg`)} style={{width: '100%', height: 560, objectFit: 'cover', display: 'block'}} />
-          <div style={{display: 'flex', gap: 24, padding: '24px 28px 8px', alignItems: 'center'}}>
-            <Glyph name="heart-straight" size={56} color="#ED4956" />
-            <Glyph name="chat-teardrop-text" size={54} color="#111" />
-            <Glyph name="paper-plane-right" size={52} color="#111" />
-          </div>
-          <div style={{padding: '6px 28px', fontWeight: 800, fontSize: 36, color: '#111'}}>{likes.toLocaleString('en-US')} likes</div>
-          <div style={{padding: '6px 28px', fontSize: 30, color: '#333', lineHeight: 1.3}}>
-            <b>cleaneats.daily</b> my perfect 5-meal clean eating day
-          </div>
+          <div style={{fontSize: 32, fontWeight: 600, color: '#8a8580', marginTop: 6}}>2.4M followers · 5 meals a day</div>
         </div>
       </div>
+      {GRID.map((g, i) => {
+        const p = tween(t, C.insta.start + 0.15 + i * 0.05, 0.45, EASE_OUT);
+        const x = GX + (i % 3) * (TILE + GAP);
+        const y = GY + Math.floor(i / 3) * (TILE + GAP);
+        const heart = HEARTS.find((k) => k[0] === i);
+        const hp = heart ? tween(t, heart[1], 0.35, EASE_OUT) : 0;
+        const hOut = heart ? 1 - tween(t, heart[1] + 0.55, 0.3, EASE_IN) : 0;
+        return (
+          <div key={g} style={{position: 'absolute', left: x, top: y, width: TILE, height: TILE, overflow: 'hidden', opacity: p, translate: `0 ${lerp(p, 40, 0)}px`, background: '#ddd'}}>
+            <Img src={staticFile(`${P}${g}.jpg`)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            {hp > 0 ? (
+              <>
+                <div style={{position: 'absolute', left: '50%', top: '50%', translate: '-50% -50%', scale: lerp(hp, 0.3, 1) * (1 + 0.15 * Math.sin(Math.PI * hp)), opacity: hOut, filter: 'drop-shadow(0 6px 16px rgba(0,0,0,0.35))'}}>
+                  <Glyph name="heart-straight" size={150} color="#fff" />
+                </div>
+                <div style={{position: 'absolute', left: 16, bottom: 14, display: 'flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 30, background: 'rgba(0,0,0,0.5)', color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: 30, opacity: hp}}>
+                  <Glyph name="heart-straight" size={30} color="#FF3B5C" />
+                  {heart![2]}
+                </div>
+              </>
+            ) : null}
+          </div>
+        );
+      })}
     </AbsoluteFill>
   );
 };
