@@ -43,7 +43,7 @@ voice = np.frombuffer(raw, dtype=np.float32).reshape(-1, 2).astype(np.float64)
 # Optional time map (scripts/make_timemap.py): keep the segments, join them with short
 # fades, then speed the whole voice up with pitch preserved. Cue times stay in source
 # seconds and are mapped with M().
-TMP = os.path.join(os.path.dirname(ROOT), "src", NAME, "timemap.json")
+TMP = os.path.join(os.path.dirname(ROOT), "src", os.environ.get("TM_DIR", NAME), "timemap.json")
 TM = json.load(open(TMP)) if os.path.exists(TMP) else None
 
 
@@ -251,8 +251,36 @@ SFX = {"pop": pop_(), "pop_lo": pop_(700, 330, 0.1), "click": click(), "click_hi
 sfx = np.zeros(N)
 
 
+PACK = os.path.join(os.path.dirname(ROOT), "sfx", "pack")
+_pack = {}
+
+
+def pack(name, max_len=2.2):
+    """A sound from the user's SFX pack (sfx/pack/<name>.*): mono, leading silence trimmed,
+    peak-normalised, long tails faded. Returns (samples, offset of its loudest moment)."""
+    if name not in _pack:
+        f = next(x for x in os.listdir(PACK) if os.path.splitext(x)[0] == name)
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(PACK, f), "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
+                             capture_output=True, check=True).stdout
+        y = np.frombuffer(raw, dtype=np.float32).astype(np.float64)
+        env = np.abs(y)
+        start = int(np.argmax(env > env.max() * db(-40)))
+        y = y[start:]
+        n = int(max_len * SR)
+        if len(y) > n:
+            y = y[:n] * np.concatenate([np.ones(n - int(0.3 * SR)), np.linspace(1, 0, int(0.3 * SR))])
+        sm = np.convolve(np.abs(y), np.ones(480) / 480, mode="same")
+        _pack[name] = (norm(y), int(np.argmax(sm)) / SR)
+    return _pack[name]
+
+
 def cue(t0, name, g, off=0.0):
-    """t0 in source seconds; `off` is a fixed offset in output seconds (risers lead into a cut)."""
+    """t0 in source seconds; `off` is a fixed offset in output seconds (risers lead into a cut).
+    "pack:<name>" plays a sound from the user's pack; whooshes are lined up on their loudest moment."""
+    if name.startswith("pack:"):
+        y, peak = pack(name[5:])
+        put(sfx, M(t0) + off - (peak if name[5:].startswith("whoosh") else 0.0), y, db(g))
+        return
     y = chirp() if name == "chirp" else (chirp(0.45, 1900) if name == "chirp_big" else SFX[name])
     put(sfx, M(t0) + off, y, db(g))
 
