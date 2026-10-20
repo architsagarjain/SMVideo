@@ -12,6 +12,7 @@ FIXES = {
     # name: [(start_s, from_text, to_text)]  to_text None = drop the word
     'knee': [(0.00, 'I', 'I'), (42.14, 'over', 'over-'), (42.54, 'predict', 'predict')],
     # large-v3 hears "I've" / "I'm" here
+    'v5': [(17.72, 'HIT', 'HIIT')],
     'sabudana': [(5.70, 'light', '"light"'), (3.64, 'I', "I've"), (3.66, 'have', None), (23.84, 'I', "I'm"), (24.04, 'am', None)],
 }
 words = [w for s in json.load(open(f"{ROOT}/analysis/{NAME}/whisper_transcript.json")) for w in s["words"]]
