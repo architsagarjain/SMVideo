@@ -9,16 +9,14 @@ TIPS = [(7.36, 8.24, 3), (22.34, 23.12, 3), (30.46, 31.32, 3)]  # (number in, ti
 
 
 def cues(cue, rng):
-    # hook on the desk clip
-    cue(0.86, "pack:hit", -22)
-    cue(1.72, "pack:whoosh_soft", -26)
-    # "here are my 3 tips"
-    cue(2.62, "pack:whoosh_fast", -23)
-    cue(3.36, "pack:whoosh_deep", -21)
-    cue(3.42, "pack:hit", -22)
-    # 1 2 3, the third lights up
+    # hook: BUSY? behind her on frame one, then the exhausted-at-her-desk clip
+    cue(0.86, "pack:hit", -21)
+    cue(1.72, "pack:whoosh_fast", -22)
+    cue(2.1, "pack:hit", -24)
+    cue(2.62, "pack:whoosh_fast2", -24)
+    # "here are my 3 tips": 1 2 3 pop in, the third lights up
     for i in range(3):
-        cue(4.3 + i * 0.08, "pack:tick", -25)
+        cue(3.36 + i * 0.1, "pack:tick", -22)
     cue(4.42, "pack:chime2", -24)
     # tip headings: deep whoosh into the number, a hit as it lands, a tick per title word
     for num, title, n in TIPS:
@@ -30,15 +28,21 @@ def cues(cue, rng):
     for t0 in (9.96, 10.2, 10.54):
         cue(t0, "pack:tick", -21)
     cue(10.86, "pack:chime", -24)
-    # gym / home / back to her
+    # no gym? work out at home / back to her
     cue(12.13, "pack:whoosh_fast", -22)
-    cue(13.6, "pack:whoosh_fast2", -23)
+    cue(13.6, "pack:whoosh_fast2", -24)
     cue(14.6, "pack:whoosh_soft", -28)
     # 10 minute HIIT: the timer ticks
     cue(16.2, "pack:whoosh_fast", -22)
     for j in range(8):
         cue(16.5 + j * 0.25, "pack:tick", -29)
+    # the internet is full of them: the search bar types
+    cue(18.66, "pack:whoosh_fast", -23)
+    for i in range(7):
+        cue(19.0 + i * 0.12, "pack:key", -22)
+    cue(19.9, "pack:chime2", -27)
     # just do something
+    cue(20.6, "pack:whoosh_soft", -28)
     cue(20.68, "pack:hit", -22)
     # stop skipping meals
     cue(24.1, "pack:whoosh_fast", -22)
@@ -51,10 +55,12 @@ def cues(cue, rng):
     # don't want to / know you should
     cue(35.24, "pack:whoosh_fast", -26)
     cue(36.02, "pack:chime", -24)
-    # early morning workouts
+    # workouts, then the alarm: early morning, before work
     cue(36.9, "pack:whoosh_fast2", -23)
+    cue(38.5, "pack:hit", -24)
+    cue(39.15, "pack:whoosh_fast", -23)
     cue(39.3, "pack:notif", -21)
-    cue(40.02, "pack:hit", -24)
+    cue(40.02, "pack:tick", -23)
     # "I hated it at first": silence on purpose
     # focus
     cue(43.04, "pack:whoosh_soft", -24)

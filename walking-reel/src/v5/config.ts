@@ -12,24 +12,26 @@ export const TM5 = timemap as TimeMap;
 export const V5_FRAMES = TM5.frames;
 
 export const C = {
-  open: {start: 0.85, end: 2.62}, // B-roll desk: BUSY? no time for health?
-  three: {start: 2.62, end: 4.25}, // "here are my 3 tips": a giant 3 behind her
-  third: {start: 4.25, end: 7.2}, // "the third one changed things for me the most"
+  open: {start: 0.85, end: 1.72}, // her: a giant BUSY? behind her head
+  tired: {start: 1.72, end: 2.62}, // B-roll: exhausted at her desk, no time for health?
+  intro: {start: 2.62, end: 7.2}, // "here are my 3 tips... the third one changed things the most"
   tip1: {start: 7.2, end: 9.7}, // heading: 01 PICK EASY TASKS
   wins: {start: 9.7, end: 12.13}, // small wins build momentum
-  gym: {start: 12.13, end: 13.6}, // B-roll gym: can't get to the gym?
+  gym: {start: 12.13, end: 13.6}, // B-roll gym: no gym?
   home: {start: 13.6, end: 14.6}, // B-roll home: work out at home
   cantEven: {start: 14.82, end: 16.2}, // her, punch-in
-  hiit: {start: 16.2, end: 18.4}, // B-roll push-ups + 10 min timer
-  something: {start: 18.66, end: 21.82}, // just do something
+  hiit: {start: 16.2, end: 18.4}, // B-roll high knees + 10 min timer
+  online: {start: 18.66, end: 20.6}, // B-roll following a workout video: search bar types
+  something: {start: 20.6, end: 21.82}, // just do something
   tip2: {start: 22.19, end: 24.1}, // heading: 02 EAT ON TIME
-  skip: {start: 24.1, end: 26.0}, // B-roll work: stop skipping meals
+  skip: {start: 24.1, end: 26.0}, // B-roll on the phone: stop skipping meals
   loop: {start: 26.0, end: 30.07}, // white cutaway: skip lunch -> overeat at night -> repeat
   tip3: {start: 30.28, end: 33.43}, // heading: 03 START YOUR DAY with something you dislike
   should: {start: 33.52, end: 36.54}, // don't want to / know you should
-  morning: {start: 36.9, end: 41.13}, // B-roll gym + 5:30 AM
+  workout: {start: 36.9, end: 39.15}, // B-roll dumbbells: moving my workouts
+  alarm: {start: 39.15, end: 41.13}, // B-roll gym + ringing alarm: early morning, before work
   hated: {start: 41.19, end: 42.9}, // her, close-up
-  focus: {start: 43.04, end: 45.95}, // B-roll desk: focus on work
+  focus: {start: 43.04, end: 45.95}, // B-roll typing: focus
   done: {start: 45.95, end: 48.11}, // the hard thing: done
   cta: {start: 48.45, end: 999},
 };
@@ -42,6 +44,7 @@ export const TIPS = [
 retime(TM5, C, []);
 const hold = (a: number, b: number, scale: number, inDur = 0.001): Move => ({origin: FACE_ORIGIN, inStart: a, inDur, scale, outStart: b - 0.0003, outDur: 0.0001});
 const moves: Move[] = [
+  hold(C.open.start, C.open.end, 1.06, 0.9), // fast push on BUSY?
   hold(C.tip1.start, C.tip1.end, 1.05, 2.4), // slow push under each heading
   hold(C.cantEven.start, C.cantEven.end, 1.12), // jump-zoom: "can't even do that?"
   hold(20.68, C.something.end, 1.1), // "just do something"
@@ -58,19 +61,22 @@ export const v5Config: ReelConfig = {
   behind: [],
   moves,
   broll: [
-    {start: C.open.start, end: C.open.end, src: 'broll_desk.mp4'},
-    {start: C.gym.start, end: C.gym.end, src: 'broll_gym.mp4'},
-    {start: C.home.start, end: C.home.end, src: 'broll_home.mp4'},
-    {start: C.hiit.start, end: C.hiit.end, src: 'broll_pushups.mp4'},
-    {start: C.skip.start, end: C.skip.end, src: 'broll_work.mp4'},
-    {start: C.morning.start, end: C.morning.end, src: 'broll_morning.mp4'},
-    {start: C.focus.start, end: C.focus.end, src: 'broll_focus.mp4'},
+    // her own B-roll only (parts of each clip the earlier reels did not use)
+    {start: C.tired.start, end: C.tired.end, src: 'b_tired.mp4'},
+    {start: C.gym.start, end: C.gym.end, src: 'b_gym.mp4'},
+    {start: C.home.start, end: C.home.end, src: 'b_home.mp4'},
+    {start: C.hiit.start, end: C.hiit.end, src: 'b_pushups.mp4'},
+    {start: C.online.start, end: C.online.end, src: 'b_tablet.mp4'},
+    {start: C.skip.start, end: C.skip.end, src: 'b_work.mp4'},
+    {start: C.workout.start, end: C.workout.end, src: 'b_dumbbell.mp4'},
+    {start: C.alarm.start, end: C.alarm.end, src: 'b_morning.mp4'},
+    {start: C.focus.start, end: C.focus.end, src: 'b_focus.mp4'},
   ],
   captions: captions as ReelConfig['captions'],
   tm: TM5,
   // her cut-out on top where a number or word sits behind her head
-  cut: [C.three, C.third, C.tip1, C.wins, C.something, C.tip2, C.tip3, C.should, C.done, C.cta],
+  cut: [C.open, C.tip1, C.tip2, C.tip3, C.cta],
   clean: true,
   grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
-  noCaptions: [C.open, C.tip1, C.tip2, C.tip3, C.skip, C.cta],
+  noCaptions: [C.open, C.tired, C.tip1, C.tip2, C.tip3, C.skip, C.cta],
 };

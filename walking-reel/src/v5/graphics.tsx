@@ -12,7 +12,7 @@ import {C, TIPS} from './config';
 const CREAM = '#F6E7C1';
 const INK = '#1B1714';
 const PAPER = '#F7F5F1';
-const SHADOW = '0 4px 28px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.35)';
+const SHADOW = '0 0 34px rgba(0,0,0,0.55), 0 0 70px rgba(0,0,0,0.35), 0 3px 8px rgba(0,0,0,0.45)';
 type Win = {start: number; end: number};
 const inside = (t: number, w: Win) => t >= w.start && t < w.end;
 
@@ -83,31 +83,12 @@ export const V5Behind: React.FC = () => {
   const tip = TIPS.find((k) => inside(t, k.w));
   return (
     <>
-      {/* talking-head words: dim the poster wall behind her so they read */}
-      {[C.third, C.wins, C.something, C.should, C.done].map((w, i) =>
-        inside(t, w) ? <AbsoluteFill key={i} style={{background: 'linear-gradient(to bottom, rgba(10,8,6,0.62) 0%, rgba(10,8,6,0.45) 45%, rgba(10,8,6,0.3) 100%)', opacity: fadeIn(t, w)}} /> : null,
-      )}
-      {/* "here are my 3 tips" */}
-      {inside(t, C.three) ? (
-        <>
-          <AbsoluteFill style={{background: 'rgba(10,8,6,0.35)', opacity: fadeIn(t, C.three)}} />
-          <Rise text="3" at={3.36} out={C.three.end - 0.2} y={560} size={640} />
-        </>
-      ) : null}
-      {/* tip heading: dim the wall, giant number rises behind her */}
-      {tip ? (
-        <>
-          <AbsoluteFill style={{background: 'radial-gradient(90% 70% at 50% 40%, rgba(10,8,6,0.45) 0%, rgba(10,8,6,0.6) 100%)', opacity: fadeIn(t, tip.w, 0.25)}} />
-          <Rise text={tip.n} at={tip.at} out={tip.w.end - 0.2} y={560} size={560} />
-        </>
-      ) : null}
+      {/* hook: a giant BUSY? behind her head on the very first frame */}
+      {inside(t, C.open) ? <Rise text="BUSY?" at={C.open.start - 0.3} out={C.open.end - 0.12} y={590} size={300} /> : null}
+      {/* tip heading: giant number rises behind her head */}
+      {tip ? <Rise text={tip.n} at={tip.at} out={tip.w.end - 0.2} y={615} size={520} /> : null}
       {/* CTA */}
-      {t >= C.cta.start ? (
-        <>
-          <AbsoluteFill style={{background: 'rgba(10,8,6,0.3)', opacity: tween(t, C.cta.start, 0.3)}} />
-          <Rise text="FAT LOSS" at={48.88} out={999} y={610} size={172} />
-        </>
-      ) : null}
+      {t >= C.cta.start ? <Rise text="FAT LOSS" at={48.88} out={999} y={610} size={172} /> : null}
     </>
   );
 };
@@ -130,7 +111,8 @@ const Rise: React.FC<{text: string; at: number; out: number; y: number; size: nu
           letterSpacing: -size * 0.05,
           lineHeight: 0.92,
           color: CREAM,
-          textShadow: '0 10px 60px rgba(0,0,0,0.35)',
+          textShadow: '0 0 50px rgba(0,0,0,0.55), 0 12px 40px rgba(0,0,0,0.35)',
+          WebkitTextStroke: `${Math.max(2, size / 140)}px rgba(40,28,18,0.55)`,
           whiteSpace: 'nowrap',
         }}
       >
@@ -152,27 +134,24 @@ const TipFront: React.FC<{tip: (typeof TIPS)[number]}> = ({tip}) => {
   const words = tip.title.split(' ');
   return (
     <AbsoluteFill style={{pointerEvents: 'none', opacity: o}}>
-      {/* dark band over her top so the title reads */}
-      <AbsoluteFill style={{opacity: tween(t, tip.titleAt - 0.2, 0.3)}}><AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(10,8,6,0.55) 64%, rgba(10,8,6,0.55) 76%, rgba(10,8,6,0) 90%)'}} />
-      </AbsoluteFill>
       {/* TIP label with rules either side */}
-      <div style={{position: 'absolute', left: 540, top: 205, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
+      <div style={{position: 'absolute', left: 540, top: 90, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
         <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
         <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 42, letterSpacing: 14, color: CREAM, textShadow: SHADOW}}>TIP</div>
         <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
       </div>
       {/* title */}
-      <div style={{position: 'absolute', left: 540, top: 1185, translate: '-50% 0', display: 'flex', gap: 26, whiteSpace: 'nowrap'}}>
+      <div style={{position: 'absolute', left: 540, top: 150, translate: '-50% 0', display: 'flex', gap: 24, whiteSpace: 'nowrap'}}>
         {words.map((w, i) => {
           const p = tween(t, tip.titleAt + i * 0.12, 0.42, EASE_OUT);
           return (
             <div key={i} style={{overflow: 'hidden', padding: '6px 4px'}}>
-              <div style={{translate: `0 ${lerp(p, 105, 0)}%`, fontFamily: SANS, fontWeight: 800, fontSize: 112, letterSpacing: -3, lineHeight: 1, color: CREAM, textShadow: SHADOW}}>{w}</div>
+              <div style={{translate: `0 ${lerp(p, 105, 0)}%`, fontFamily: SANS, fontWeight: 800, fontSize: 104, letterSpacing: -3, lineHeight: 1, color: CREAM, textShadow: SHADOW}}>{w}</div>
             </div>
           );
         })}
       </div>
-      {tip.sub ? <Word text={tip.sub} at={tip.subAt} out={out} y={1360} size={78} serif /> : null}
+      {tip.sub ? <Word text={tip.sub} at={tip.subAt} out={out} y={1270} size={84} serif /> : null}
     </AbsoluteFill>
   );
 };
@@ -182,16 +161,8 @@ export const V5Talk: React.FC = () => {
   const tip = TIPS.find((k) => inside(t, k.w));
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
-      {/* "here are my 3 tips" */}
-      {inside(t, C.three) ? (
-        <>
-          <AbsoluteFill style={{opacity: fadeIn(t, C.three)}}><AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(10,8,6,0.55) 64%, rgba(10,8,6,0.55) 76%, rgba(10,8,6,0) 90%)'}} />
-          </AbsoluteFill>
-          <Word text="tips" at={3.54} out={C.three.end - 0.2} y={1200} size={170} serif />
-        </>
-      ) : null}
-      {/* "the third one changed things for me the most": three markers, #3 lights up */}
-      {inside(t, C.third) ? <ThreeDots /> : null}
+      {/* "here are my 3 tips... the third one changed things for me the most" */}
+      {inside(t, C.intro) ? <ThreeDots /> : null}
       {tip ? <TipFront tip={tip} /> : null}
       {/* "small wins build momentum" */}
       {inside(t, C.wins) ? <Wins /> : null}
@@ -219,30 +190,30 @@ export const V5Talk: React.FC = () => {
 
 const ThreeDots: React.FC = () => {
   const t = useT();
-  const o = 1 - tween(t, C.third.end - 0.25, 0.22, EASE_IN);
+  const o = 1 - tween(t, C.intro.end - 0.25, 0.22, EASE_IN);
   const lit = tween(t, 4.42, 0.4, EASE_OUT);
   return (
     <>
-      <div style={{position: 'absolute', left: 540, top: 230, translate: '-50% 0', display: 'flex', gap: 46, opacity: o}}>
+      <div style={{position: 'absolute', left: 540, top: 150, translate: '-50% 0', display: 'flex', gap: 46, opacity: o}}>
         {[1, 2, 3].map((n, i) => {
-          const p = tween(t, 4.3 + i * 0.08, 0.35, EASE_OUT);
+          const p = tween(t, 3.36 + i * 0.1, 0.35, EASE_OUT);
           const on = n === 3 ? lit : 0;
           return (
             <div
               key={n}
               style={{
-                width: 150,
-                height: 150,
+                width: 160,
+                height: 160,
                 borderRadius: '50%',
-                border: `5px solid ${CREAM}`,
-                background: on > 0 ? `rgba(246,231,193,${on})` : 'rgba(0,0,0,0.25)',
-                boxShadow: on > 0 ? `0 0 ${60 * on}px rgba(246,231,193,${0.7 * on})` : undefined,
+                border: `6px solid ${CREAM}`,
+                background: on > 0 ? `rgba(246,231,193,${on})` : 'rgba(20,17,14,0.55)',
+                boxShadow: on > 0 ? `0 0 ${70 * on}px rgba(246,231,193,${0.8 * on})` : '0 8px 30px rgba(0,0,0,0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontFamily: SANS,
                 fontWeight: 800,
-                fontSize: 78,
+                fontSize: 84,
                 color: on > 0.5 ? INK : CREAM,
                 opacity: p,
                 scale: lerp(p, 0.6, 1) * (1 + 0.14 * on),
@@ -253,7 +224,8 @@ const ThreeDots: React.FC = () => {
           );
         })}
       </div>
-      <Word text="changed everything for me" at={5.0} out={C.third.end - 0.25} y={445} size={72} serif />
+      <Word text="tips" at={3.54} out={4.9} y={385} size={110} serif />
+      <Word text="changed everything" at={5.0} out={C.intro.end - 0.25} y={385} size={84} serif />
     </>
   );
 };
@@ -342,33 +314,35 @@ export const V5Chip: React.FC = () => {
 // ===========================================================================
 export const V5Broll: React.FC = () => {
   const t = useT();
-  const top = [C.open, C.gym, C.home, C.hiit, C.focus].find((w) => inside(t, w));
+  const top = [C.tired, C.gym, C.home, C.hiit, C.online, C.focus, C.workout].find((w) => inside(t, w));
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       {top ? <TopShade o={1} /> : null}
-      {inside(t, C.skip) || inside(t, C.morning) ? <AbsoluteFill style={{background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 28%, rgba(0,0,0,0) 42%)'}} /> : null}
-      {/* hook */}
-      {inside(t, C.open) ? (
+      {inside(t, C.skip) ? <AbsoluteFill style={{background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 28%, rgba(0,0,0,0) 42%)'}} /> : null}
+      {/* hook, second beat: no time for health? */}
+      {inside(t, C.tired) ? (
         <>
-          <Word text="BUSY?" at={0.86} out={C.open.end - 0.1} y={190} size={200} />
-          <Word text="no time for health?" at={1.72} out={C.open.end - 0.1} y={345} size={92} serif />
+          <Word text="no time for" at={1.72} out={C.tired.end - 0.08} y={190} size={96} serif />
+          <Word text="HEALTH?" at={2.1} out={C.tired.end - 0.08} y={320} size={190} />
         </>
       ) : null}
       {inside(t, C.gym) ? <Word text="NO GYM?" at={12.32} out={C.gym.end - 0.05} y={230} size={170} /> : null}
       {inside(t, C.home) ? (
         <>
-          <Word text="work out" at={C.home.start} out={C.home.end - 0.05} y={185} size={96} serif />
-          <Word text="AT HOME" at={C.home.start + 0.1} out={C.home.end - 0.05} y={310} size={150} />
+          <Word text="work out" at={13.72} out={C.home.end - 0.05} y={185} size={96} serif />
+          <Word text="AT HOME" at={13.82} out={C.home.end - 0.05} y={310} size={150} />
         </>
       ) : null}
       {inside(t, C.hiit) ? <Timer /> : null}
+      {inside(t, C.online) ? <Search /> : null}
       {inside(t, C.skip) ? (
         <>
           <Word text="stop skipping" at={24.34} out={C.skip.end - 0.1} y={1270} size={96} serif />
           <Word text="MEALS" at={24.94} out={C.skip.end - 0.1} y={1400} size={170} />
         </>
       ) : null}
-      {inside(t, C.morning) ? <Alarm /> : null}
+      {inside(t, C.workout) ? <Word text="WORKOUTS" at={38.5} out={C.workout.end - 0.05} y={230} size={160} /> : null}
+      {inside(t, C.alarm) ? <Alarm /> : null}
       {inside(t, C.focus) ? (
         <>
           <Word text="FOCUS" at={45.0} out={C.focus.end - 0.1} y={200} size={190} />
@@ -376,6 +350,47 @@ export const V5Broll: React.FC = () => {
         </>
       ) : null}
     </AbsoluteFill>
+  );
+};
+
+/** "early morning before work": a ringing alarm chip over the gym clip. */
+const Alarm: React.FC = () => {
+  const t = useT();
+  const p = tween(t, C.alarm.start + 0.05, 0.4, EASE_OUT);
+  const out = 1 - tween(t, C.alarm.end - 0.12, 0.12, EASE_IN);
+  const ring = Math.sin(t * 42) * 9 * (1 - tween(t, 39.4, 1.0));
+  return (
+    <>
+      <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.22) 26%, rgba(0,0,0,0) 40%)'}} />
+      <div style={{position: 'absolute', left: 540, top: 150, translate: `-50% ${lerp(p, -24, 0)}px`, opacity: p * out, display: 'flex', alignItems: 'center', gap: 22, padding: '18px 40px 18px 20px', borderRadius: 70, background: 'rgba(255,255,255,0.96)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', fontFamily: SANS}}>
+        <div style={{width: 92, height: 92, borderRadius: '50%', background: '#FF9F0A', display: 'flex', alignItems: 'center', justifyContent: 'center', rotate: `${ring}deg`}}>
+          <Glyph name="alarm" size={58} color="#fff" />
+        </div>
+        <div style={{fontWeight: 800, fontSize: 70, color: INK, letterSpacing: -2, whiteSpace: 'nowrap'}}>EARLY MORNING</div>
+      </div>
+      <Word text="before work" at={40.02} out={C.alarm.end - 0.12} y={355} size={100} serif />
+    </>
+  );
+};
+
+/** "the internet is full of them": a search bar types and the results count up. */
+const Search: React.FC = () => {
+  const t = useT();
+  const q = '10 min HIIT workout';
+  const p = tween(t, C.online.start + 0.05, 0.35, EASE_OUT);
+  const typed = q.slice(0, Math.max(0, Math.min(q.length, Math.floor((t - 19.0) / 0.045) + 1)));
+  const n = Math.round(lerp(tween(t, 19.9, 0.6, EASE_OUT), 0, 2400000));
+  return (
+    <div style={{position: 'absolute', left: 540, top: 170, translate: `-50% ${lerp(p, -20, 0)}px`, opacity: p * (1 - tween(t, C.online.end - 0.1, 0.1)), display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18}}>
+      <div style={{width: 900, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.97)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', gap: 22, padding: '0 34px', boxSizing: 'border-box', fontFamily: SANS}}>
+        <Glyph name="magnifying-glass" size={54} color="#555" />
+        <div style={{fontSize: 48, fontWeight: 700, color: INK, whiteSpace: 'nowrap'}}>
+          {typed}
+          {typed.length < q.length && Math.floor(t * 3) % 2 === 0 ? <span style={{color: '#0A84FF', fontWeight: 400}}>|</span> : null}
+        </div>
+      </div>
+      {n > 0 ? <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 44, color: '#fff', textShadow: SHADOW}}>{n.toLocaleString('en-US')} videos</div> : null}
+    </div>
   );
 };
 
@@ -405,25 +420,6 @@ const Timer: React.FC = () => {
   );
 };
 
-/** "moving my workouts to early morning before work": an alarm chip, then BEFORE WORK. */
-const Alarm: React.FC = () => {
-  const t = useT();
-  const p = tween(t, 39.3, 0.4, EASE_OUT);
-  const out = 1 - tween(t, C.morning.end - 0.15, 0.15, EASE_IN);
-  const ring = Math.sin(t * 40) * 6 * (1 - tween(t, 39.5, 0.8));
-  return (
-    <>
-      <div style={{position: 'absolute', left: 540, top: 1180, translate: `-50% ${lerp(p, 30, 0)}px`, opacity: p * out, display: 'flex', alignItems: 'center', gap: 22, padding: '20px 40px 20px 24px', borderRadius: 70, background: 'rgba(255,255,255,0.96)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', fontFamily: SANS}}>
-        <div style={{width: 84, height: 84, borderRadius: '50%', background: '#FF9F0A', display: 'flex', alignItems: 'center', justifyContent: 'center', rotate: `${ring}deg`}}>
-          <Glyph name="alarm" size={54} color="#fff" />
-        </div>
-        <div style={{fontWeight: 800, fontSize: 84, color: INK, letterSpacing: -2, fontVariantNumeric: 'tabular-nums'}}>5:30 AM</div>
-      </div>
-      <Word text="BEFORE WORK" at={40.02} out={C.morning.end - 0.15} y={1390} size={120} />
-    </>
-  );
-};
-
 // ===========================================================================
 // Full-screen cutaway: the skip-lunch loop
 // ===========================================================================
@@ -443,7 +439,7 @@ export const V5Loop: React.FC = () => {
   const back = tween(t, 29.1, 0.6, EASE_IN_OUT);
   const pulse = t > 29.7 ? 0.5 + 0.5 * Math.sin((t - 29.7) * 9) : 0;
   return (
-    <AbsoluteFill style={{background: `radial-gradient(90% 60% at 50% 45%, #FFFFFF 0%, ${PAPER} 70%, #EDE8E0 100%)`, opacity: e}}>
+    <AbsoluteFill style={{background: `radial-gradient(90% 60% at 50% 45%, #FFFFFF 0%, ${PAPER} 70%, #EDE8E0 100%)`, opacity: e, scale: lerp(tween(t, C.loop.start, C.loop.end - C.loop.start, EASE_IN_OUT), 1, 1.05)}}>
       <Word text="the skip-lunch loop" at={C.loop.start + 0.05} out={999} y={330} size={100} serif color={INK} shadow={false} />
       <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
         <defs>
