@@ -43,13 +43,15 @@ export const TIPS = [
 
 retime(TM5, C, []);
 const hold = (a: number, b: number, scale: number, inDur = 0.001): Move => ({origin: FACE_ORIGIN, inStart: a, inDur, scale, outStart: b - 0.0003, outDur: 0.0001});
+// slow push that eases back out (no snap when the heading ends)
+const push = (a: number, b: number, scale: number, inDur: number): Move => ({origin: FACE_ORIGIN, inStart: a, inDur, scale, outStart: b - 0.5, outDur: 0.5});
 const moves: Move[] = [
   hold(C.open.start, C.open.end, 1.06, 0.9), // fast push on BUSY?
-  hold(C.tip1.start, C.tip1.end, 1.05, 2.4), // slow push under each heading
+  push(C.tip1.start, C.tip1.end, 1.05, 1.9), // slow push under each heading
   hold(C.cantEven.start, C.cantEven.end, 1.12), // jump-zoom: "can't even do that?"
   hold(20.68, C.something.end, 1.1), // "just do something"
-  hold(C.tip2.start, C.tip2.end, 1.05, 1.9),
-  hold(C.tip3.start, C.tip3.end, 1.05, 3.1),
+  push(C.tip2.start, C.tip2.end, 1.05, 1.3),
+  push(C.tip3.start, C.tip3.end, 1.05, 2.5),
   hold(C.hated.start, C.hated.end, 1.18), // the one close-up
   {origin: FACE_ORIGIN, inStart: C.cta.start, inDur: 3.5, scale: 1.08, outStart: 9999, outDur: 1},
 ];
