@@ -105,7 +105,7 @@ export const V5Behind: React.FC = () => {
       {t >= C.cta.start ? (
         <>
           <AbsoluteFill style={{background: 'rgba(10,8,6,0.3)', opacity: tween(t, C.cta.start, 0.3)}} />
-          <Rise text="FAT LOSS" at={48.88} out={999} y={600} size={210} />
+          <Rise text="FAT LOSS" at={48.88} out={999} y={610} size={172} />
         </>
       ) : null}
     </>
@@ -152,6 +152,9 @@ const TipFront: React.FC<{tip: (typeof TIPS)[number]}> = ({tip}) => {
   const words = tip.title.split(' ');
   return (
     <AbsoluteFill style={{pointerEvents: 'none', opacity: o}}>
+      {/* dark band over her top so the title reads */}
+      <AbsoluteFill style={{opacity: tween(t, tip.titleAt - 0.2, 0.3)}}><AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(10,8,6,0.55) 64%, rgba(10,8,6,0.55) 76%, rgba(10,8,6,0) 90%)'}} />
+      </AbsoluteFill>
       {/* TIP label with rules either side */}
       <div style={{position: 'absolute', left: 540, top: 205, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
         <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
@@ -180,7 +183,13 @@ export const V5Talk: React.FC = () => {
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       {/* "here are my 3 tips" */}
-      {inside(t, C.three) ? <Word text="tips" at={3.54} out={C.three.end - 0.2} y={1080} size={150} serif /> : null}
+      {inside(t, C.three) ? (
+        <>
+          <AbsoluteFill style={{opacity: fadeIn(t, C.three)}}><AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(10,8,6,0.55) 64%, rgba(10,8,6,0.55) 76%, rgba(10,8,6,0) 90%)'}} />
+          </AbsoluteFill>
+          <Word text="tips" at={3.54} out={C.three.end - 0.2} y={1200} size={170} serif />
+        </>
+      ) : null}
       {/* "the third one changed things for me the most": three markers, #3 lights up */}
       {inside(t, C.third) ? <ThreeDots /> : null}
       {tip ? <TipFront tip={tip} /> : null}
@@ -418,61 +427,50 @@ const Alarm: React.FC = () => {
 // ===========================================================================
 // Full-screen cutaway: the skip-lunch loop
 // ===========================================================================
-const LOOP_R = 330, LCX = 540, LCY = 1000;
-const at = (d: number) => ({x: LCX + LOOP_R * Math.cos((d * Math.PI) / 180), y: LCY + LOOP_R * Math.sin((d * Math.PI) / 180)});
-const NODES = [
-  {at: 26.04, icon: 'fork-knife', label: 'Skip lunch', ...at(-90), below: false},
-  {at: 27.46, icon: 'moon', label: 'Overeat at night', ...at(30), below: true},
-  {at: 28.86, icon: 'arrow-right', label: 'Repeat', ...at(150), below: true},
+const ROWS = [
+  {at: 26.04, icon: 'fork-knife', label: 'Skip lunch', y: 640, color: INK},
+  {at: 27.46, icon: 'moon', label: 'Overeat at night', y: 980, color: INK},
+  {at: 28.86, icon: 'arrow-right', label: 'Repeat', y: 1320, color: '#FF5A4E'},
 ];
-const arcPath = (a0: number, a1: number) => {
-  const p = (a: number) => [LCX + LOOP_R * Math.cos(a), LCY + LOOP_R * Math.sin(a)];
-  const [x0, y0] = p(a0);
-  const [x1, y1] = p(a1);
-  return `M ${x0} ${y0} A ${LOOP_R} ${LOOP_R} 0 0 1 ${x1} ${y1}`;
-};
-const deg = (d: number) => (d * Math.PI) / 180;
-// node angles: top -90, bottom-right 30, bottom-left 150 (clockwise); arcs leave a gap around each node
-const ARCS = [
-  {d: arcPath(deg(-90 + 22), deg(30 - 22)), at: 26.7},
-  {d: arcPath(deg(30 + 22), deg(150 - 22)), at: 28.1},
-  {d: arcPath(deg(150 + 22), deg(270 - 22)), at: 29.1},
-];
+const RX = 250; // icon centre x
+const DOWN = [{y0: 640, y1: 980, at: 26.7}, {y0: 980, y1: 1320, at: 28.1}];
+const BACK = 'M 820 1320 C 1010 1320, 1010 640, 820 640';
 
 export const V5Loop: React.FC = () => {
   const t = useT();
   if (!inside(t, C.loop)) return null;
   const e = tween(t, C.loop.start, 0.22);
-  const spin = t > 29.6 ? (t - 29.6) * 140 : 0;
+  const back = tween(t, 29.1, 0.6, EASE_IN_OUT);
+  const pulse = t > 29.7 ? 0.5 + 0.5 * Math.sin((t - 29.7) * 9) : 0;
   return (
     <AbsoluteFill style={{background: `radial-gradient(90% 60% at 50% 45%, #FFFFFF 0%, ${PAPER} 70%, #EDE8E0 100%)`, opacity: e}}>
       <Word text="the skip-lunch loop" at={C.loop.start + 0.05} out={999} y={330} size={100} serif color={INK} shadow={false} />
       <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
         <defs>
-          <marker id="ah" viewBox="0 0 10 10" refX={6} refY={5} markerWidth={5} markerHeight={5} orient="auto-start-reverse">
+          <marker id="ah" viewBox="0 0 10 10" refX={6} refY={5} markerWidth={4.5} markerHeight={4.5} orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z" fill={INK} />
           </marker>
         </defs>
-        {ARCS.map((a, i) => {
-          const p = tween(t, a.at, 0.6, EASE_IN_OUT);
-          return p > 0 ? <path key={i} d={a.d} fill="none" stroke={INK} strokeWidth={12} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - p} markerEnd={p > 0.95 ? 'url(#ah)' : undefined} opacity={0.85} /> : null;
+        {DOWN.map((d, i) => {
+          const p = tween(t, d.at, 0.45, EASE_IN_OUT);
+          return p > 0 ? <path key={i} d={`M ${RX} ${d.y0 + 96} L ${RX} ${d.y1 - 104}`} stroke={INK} strokeWidth={12} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - p} markerEnd={p > 0.95 ? 'url(#ah)' : undefined} opacity={0.85} /> : null;
         })}
+        {back > 0 ? <path d={BACK} fill="none" stroke="#FF5A4E" strokeWidth={12} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - back} markerEnd={back > 0.95 ? 'url(#ahr)' : undefined} /> : null}
+        <defs>
+          <marker id="ahr" viewBox="0 0 10 10" refX={6} refY={5} markerWidth={4.5} markerHeight={4.5} orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF5A4E" />
+          </marker>
+        </defs>
       </svg>
-      {/* a dot runs round the loop once it closes */}
-      {spin > 0 ? (
-        <div style={{position: 'absolute', left: LCX, top: LCY, width: 0, height: 0, rotate: `${-90 + spin}deg`}}>
-          <div style={{position: 'absolute', left: LOOP_R - 18, top: -18, width: 36, height: 36, borderRadius: '50%', background: '#FF5A4E', boxShadow: '0 0 20px rgba(255,90,78,0.6)'}} />
-        </div>
-      ) : null}
-      {NODES.map((n, i) => {
-        const p = tween(t, n.at, 0.4, EASE_OUT);
+      {ROWS.map((r, i) => {
+        const p = tween(t, r.at, 0.4, EASE_OUT);
         if (p <= 0) return null;
         return (
-          <div key={i} style={{position: 'absolute', left: n.x, top: n.y, translate: '-50% -50%', width: 170, height: 170, opacity: Math.min(1, p * 2), scale: lerp(p, 0.6, 1)}}>
-            <div style={{width: 170, height: 170, borderRadius: '50%', background: i === 2 ? '#FF5A4E' : INK, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 16px 40px rgba(40,30,20,0.25)'}}>
-              <Glyph name={n.icon} size={88} color="#fff" />
+          <div key={i} style={{position: 'absolute', left: RX - 85, top: r.y - 85, display: 'flex', alignItems: 'center', gap: 36, opacity: Math.min(1, p * 2), translate: `${lerp(p, -30, 0)}px 0`}}>
+            <div style={{width: 170, height: 170, borderRadius: '50%', background: r.color, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 16px 40px rgba(40,30,20,0.25)', scale: i === 2 ? 1 + 0.08 * pulse : 1}}>
+              <Glyph name={r.icon} size={88} color="#fff" />
             </div>
-            <div style={{position: 'absolute', left: '50%', top: n.below ? 196 : -80, translate: '-50% 0', fontFamily: SANS, fontWeight: 800, fontSize: 56, color: INK, letterSpacing: -1, whiteSpace: 'nowrap'}}>{n.label}</div>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 64, color: i === 2 ? '#FF5A4E' : INK, letterSpacing: -2, whiteSpace: 'nowrap'}}>{r.label}</div>
           </div>
         );
       })}
