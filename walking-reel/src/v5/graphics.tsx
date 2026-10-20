@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill, Img, staticFile} from 'remotion';
 import {ICONS} from '../explainer/icons';
 import {useT} from '../explainer/kit';
 import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
@@ -15,6 +15,19 @@ const PAPER = '#F7F5F1';
 const SHADOW = '0 0 34px rgba(0,0,0,0.55), 0 0 70px rgba(0,0,0,0.35), 0 3px 8px rgba(0,0,0,0.45)';
 type Win = {start: number; end: number};
 const inside = (t: number, w: Win) => t >= w.start && t < w.end;
+
+/** Cream text with one white light sweep passing across it, starting at `at`. */
+const shine = (t: number, at: number, dur = 0.7): React.CSSProperties => {
+  const p = tween(t, at, dur, EASE_IN_OUT);
+  return {
+    color: 'transparent',
+    backgroundImage: `linear-gradient(105deg, ${CREAM} 0%, ${CREAM} 40%, #FFFFFF 50%, ${CREAM} 60%, ${CREAM} 100%)`,
+    backgroundSize: '300% 100%',
+    backgroundPosition: `${lerp(p, 100, 0)}% 0`,
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+  };
+};
 
 const Word: React.FC<{text: string; at: number; out: number; y: number; x?: number; size: number; serif?: boolean; color?: string; align?: 'center' | 'left'; shadow?: boolean}> = ({
   text,
@@ -100,7 +113,7 @@ const Rise: React.FC<{text: string; at: number; out: number; y: number; size: nu
   const p = tween(t, at, 0.55, EASE_OUT);
   const o = 1 - tween(t, out, 0.25, EASE_IN);
   return (
-    <div style={{position: 'absolute', left: 540, top: y, translate: '-50% -50%', overflow: 'hidden', padding: '0 20px', opacity: o}}>
+    <div style={{position: 'absolute', left: 540, top: y, translate: '-50% -50%', overflow: 'hidden', padding: '0 20px', opacity: o, filter: 'drop-shadow(0 0 28px rgba(0,0,0,0.5)) drop-shadow(0 10px 22px rgba(0,0,0,0.3))'}}>
       <div
         style={{
           translate: `0 ${lerp(p, 70, 0)}%`,
@@ -110,10 +123,8 @@ const Rise: React.FC<{text: string; at: number; out: number; y: number; size: nu
           fontSize: size,
           letterSpacing: -size * 0.05,
           lineHeight: 0.92,
-          color: CREAM,
-          textShadow: '0 0 50px rgba(0,0,0,0.55), 0 12px 40px rgba(0,0,0,0.35)',
-          WebkitTextStroke: `${Math.max(2, size / 140)}px rgba(40,28,18,0.55)`,
           whiteSpace: 'nowrap',
+          ...shine(t, at + 0.45, 0.8),
         }}
       >
         {text}
@@ -145,8 +156,8 @@ const TipFront: React.FC<{tip: (typeof TIPS)[number]}> = ({tip}) => {
         {words.map((w, i) => {
           const p = tween(t, tip.titleAt + i * 0.12, 0.42, EASE_OUT);
           return (
-            <div key={i} style={{overflow: 'hidden', padding: '6px 4px'}}>
-              <div style={{translate: `0 ${lerp(p, 105, 0)}%`, fontFamily: SANS, fontWeight: 800, fontSize: 104, letterSpacing: -3, lineHeight: 1, color: CREAM, textShadow: SHADOW}}>{w}</div>
+            <div key={i} style={{overflow: 'hidden', padding: '6px 4px', filter: 'drop-shadow(0 0 18px rgba(0,0,0,0.55)) drop-shadow(0 3px 6px rgba(0,0,0,0.4))'}}>
+              <div style={{translate: `0 ${lerp(p, 105, 0)}%`, fontFamily: SANS, fontWeight: 800, fontSize: 104, letterSpacing: -3, lineHeight: 1, ...shine(t, tip.titleAt + 0.5 + i * 0.12, 0.6)}}>{w}</div>
             </div>
           );
         })}
@@ -298,7 +309,9 @@ const Done: React.FC = () => {
 export const V5Chip: React.FC = () => {
   const t = useT();
   const k = TIPS.findIndex((x) => t >= x.w.end && t < x.chipEnd);
-  if (k < 0) return null;
+  // only over her talking head: B-roll and cutaways keep the top clear for their own words
+  const cover = [C.tired, C.gym, C.home, C.hiit, C.online, C.skip, C.loop, C.workout, C.alarm, C.focus].some((w) => inside(t, w));
+  if (k < 0 || cover) return null;
   const tip = TIPS[k];
   const p = tween(t, tip.w.end, 0.35, EASE_OUT) * (1 - tween(t, tip.chipEnd - 0.2, 0.2, EASE_IN));
   return (
@@ -507,7 +520,7 @@ export const V5Comment: React.FC = () => {
       }}
     >
       <div style={{width: 84, height: 84, borderRadius: '50%', background: 'linear-gradient(45deg,#F9CE34,#EE2A7B,#6228D7)', padding: 4, boxSizing: 'border-box'}}>
-        <div style={{width: '100%', height: '100%', borderRadius: '50%', background: '#e9e2d6'}} />
+        <Img src={staticFile('v5/pfp.jpg')} style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '3px solid #fff', boxSizing: 'border-box'}} />
       </div>
       <div style={{flex: 1, fontSize: 46, fontWeight: typed ? 800 : 500, color: typed ? '#111' : '#999', letterSpacing: typed ? 1 : 0}}>
         {typed || 'Add a comment…'}
