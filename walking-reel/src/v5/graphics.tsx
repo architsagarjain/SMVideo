@@ -147,13 +147,13 @@ const TipFront: React.FC<{tip: (typeof TIPS)[number]}> = ({tip}) => {
   return (
     <AbsoluteFill style={{pointerEvents: 'none', opacity: o}}>
       {/* TIP label with rules either side */}
-      <div style={{position: 'absolute', left: tip.hx, top: 90, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
+      <div style={{position: 'absolute', left: 540, top: 90, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
         <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
         <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 42, letterSpacing: 14, color: CREAM, textShadow: SHADOW}}>TIP</div>
         <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
       </div>
       {/* title */}
-      <div style={{position: 'absolute', left: tip.hx, top: 150, translate: '-50% 0', display: 'flex', gap: 24, whiteSpace: 'nowrap'}}>
+      <div style={{position: 'absolute', left: 540, top: 150, translate: '-50% 0', display: 'flex', gap: 24, whiteSpace: 'nowrap'}}>
         {words.map((w, i) => {
           const p = tween(t, tip.titleAt + i * 0.12, 0.42, EASE_OUT);
           return (
