@@ -214,10 +214,11 @@ const o = (s: number) => outAt(TM6, s);
 
 export const V6Card: React.FC = () => {
   const t = useT();
-  const run = CARD_RUNS.find((r) => t >= r.start - 0.01 && t < r.end + 0.35);
+  const run = CARD_RUNS.find((r) => t >= r.start - 0.01 && t < r.end);
   if (!run) return null;
-  const pin = tween(t, run.start, 0.4, EASE_OUT);
-  const pout = tween(t, run.end, 0.3, EASE_IN);
+  // in once she has shrunk into the lower half, out before she grows back
+  const pin = tween(t, run.start + 0.2, 0.4, EASE_OUT);
+  const pout = tween(t, run.end - 0.6, 0.25, EASE_IN_OUT);
   const y = lerp(pin, -260, 0) + lerp(pout, 0, -1000);
   return (
     <div style={{position: 'absolute', left: CX, top: CY, width: CW, height: CH, borderRadius: 46, overflow: 'hidden', translate: `0 ${y}px`, opacity: Math.min(1, pin * 1.5), boxShadow: '0 30px 70px rgba(40,30,20,0.28)', border: '6px solid #FFFFFF', boxSizing: 'border-box', background: '#111'}}>
@@ -315,12 +316,14 @@ const CardOverlay: React.FC = () => {
   );
 };
 
-/** White stage behind her shrunk cut-out while a card is up (fades with her move). */
+/** White stage behind her shrunk cut-out while a card is up. */
 export const V6Stage: React.FC = () => {
   const t = useT();
   const run = CARD_RUNS.find((r) => t >= r.start - 0.01 && t < r.end);
   if (!run) return null;
-  const o = tween(t, run.start, 0.25) * (1 - tween(t, run.end - 0.35, 0.3));
+  // solid for the whole run: the wall drops out behind her, and she is back at full size (matching the
+  // footage exactly) by the time it goes, so the exit is seamless
+  const o = tween(t, run.start, 0.08);
   return <AbsoluteFill style={{opacity: o, background: 'radial-gradient(100% 70% at 50% 35%, #FFFFFF 0%, #F7F5F1 65%, #ECE7DF 100%)'}} />;
 };
 
