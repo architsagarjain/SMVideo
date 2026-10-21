@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Img, staticFile} from 'remotion';
+import {AbsoluteFill} from 'remotion';
 import {ICONS} from '../explainer/icons';
 import {useT} from '../explainer/kit';
 import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
@@ -97,23 +97,24 @@ export const V5Behind: React.FC = () => {
   return (
     <>
       {/* hook: a giant BUSY? behind her head on the very first frame */}
-      {inside(t, C.open) ? <Rise text="BUSY?" at={C.open.start - 0.3} out={C.open.end - 0.12} y={590} size={300} /> : null}
+      {inside(t, C.open) ? <Rise text="BUSY?" at={C.open.start - 0.3} out={C.open.end - 0.12} x={473} y={590} size={300} ink={8} /> : null}
       {/* tip heading: giant number rises behind her head */}
-      {tip ? <Rise text={tip.n} at={tip.at} out={tip.w.end - 0.2} y={615} size={520} /> : null}
+      {tip ? <Rise text={tip.n} at={tip.at} out={tip.w.end - 0.2} x={tip.hx} y={615} size={520} ink={tip.n === '01' ? -1 : 13} /> : null}
       {/* CTA */}
-      {t >= C.cta.start ? <Rise text="FAT LOSS" at={48.88} out={999} y={610} size={172} /> : null}
+      {t >= C.cta.start ? <Rise text="FAT LOSS" at={48.88} out={999} x={482} y={610} size={172} ink={4} /> : null}
     </>
   );
 };
 
 /** A huge cream word that wipes up out of a mask and settles. */
-const Rise: React.FC<{text: string; at: number; out: number; y: number; size: number}> = ({text, at, out, y, size}) => {
+/** x is where the visible letters centre; ink is how far the glyphs sit right of their layout box. */
+const Rise: React.FC<{text: string; at: number; out: number; x: number; y: number; size: number; ink: number}> = ({text, at, out, x, y, size, ink}) => {
   const t = useT();
   if (t < at - 0.02 || t > out + 0.3) return null;
   const p = tween(t, at, 0.55, EASE_OUT);
   const o = 1 - tween(t, out, 0.25, EASE_IN);
   return (
-    <div style={{position: 'absolute', left: 540, top: y, translate: '-50% -50%', overflow: 'hidden', padding: '0 20px', opacity: o, filter: 'drop-shadow(0 0 28px rgba(0,0,0,0.5)) drop-shadow(0 10px 22px rgba(0,0,0,0.3))'}}>
+    <div style={{position: 'absolute', left: x - ink, top: y, translate: '-50% -50%', overflow: 'hidden', padding: '0 20px', opacity: o, filter: 'drop-shadow(0 0 28px rgba(0,0,0,0.5)) drop-shadow(0 10px 22px rgba(0,0,0,0.3))'}}>
       <div
         style={{
           translate: `0 ${lerp(p, 70, 0)}%`,
@@ -146,13 +147,13 @@ const TipFront: React.FC<{tip: (typeof TIPS)[number]}> = ({tip}) => {
   return (
     <AbsoluteFill style={{pointerEvents: 'none', opacity: o}}>
       {/* TIP label with rules either side */}
-      <div style={{position: 'absolute', left: 540, top: 90, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
+      <div style={{position: 'absolute', left: tip.hx, top: 90, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
         <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
         <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 42, letterSpacing: 14, color: CREAM, textShadow: SHADOW}}>TIP</div>
         <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
       </div>
       {/* title */}
-      <div style={{position: 'absolute', left: 540, top: 150, translate: '-50% 0', display: 'flex', gap: 24, whiteSpace: 'nowrap'}}>
+      <div style={{position: 'absolute', left: tip.hx, top: 150, translate: '-50% 0', display: 'flex', gap: 24, whiteSpace: 'nowrap'}}>
         {words.map((w, i) => {
           const p = tween(t, tip.titleAt + i * 0.12, 0.42, EASE_OUT);
           return (
@@ -191,7 +192,7 @@ export const V5Talk: React.FC = () => {
       {/* CTA (front): Comment above the giant word, guide line under the comment box */}
       {t >= C.cta.start ? (
         <>
-          <Word text="Comment" at={48.66} out={999} y={390} size={96} serif />
+          <Word text="Comment" at={48.66} out={999} x={482} y={390} size={96} serif />
           <Word text="for my free fat loss guide" at={50.64} out={999} y={1480} size={50} color="#FFFFFF" />
         </>
       ) : null}
@@ -490,6 +491,26 @@ export const V5Loop: React.FC = () => {
 // ===========================================================================
 // CTA: comment box types FAT LOSS and sends
 // ===========================================================================
+/** A generic commenter: flat illustrated avatar (no real person). */
+const Avatar: React.FC = () => (
+  <svg viewBox="0 0 100 100" width="100%" height="100%" style={{display: 'block', borderRadius: '50%', border: '3px solid #fff', boxSizing: 'border-box', background: '#FCE3D3'}}>
+    <defs>
+      <clipPath id="av"><circle cx={50} cy={50} r={50} /></clipPath>
+    </defs>
+    <g clipPath="url(#av)">
+      <rect width={100} height={100} fill="#FCE3D3" />
+      <path d="M 22 58 C 18 30, 34 16, 52 17 C 72 18, 84 34, 79 60 L 79 78 L 22 78 Z" fill="#3B2418" />
+      <path d="M 14 104 C 16 80, 32 72, 50 72 C 68 72, 84 80, 86 104 Z" fill="#E8657A" />
+      <rect x={43} y={58} width={14} height={16} rx={6} fill="#E7A983" />
+      <ellipse cx={50} cy={46} rx={17} ry={20} fill="#F1B993" />
+      <path d="M 32 42 C 34 26, 48 22, 60 27 C 66 30, 69 36, 69 43 C 60 38, 46 37, 32 42 Z" fill="#3B2418" />
+      <circle cx={43.5} cy={48} r={1.9} fill="#3B2418" />
+      <circle cx={56.5} cy={48} r={1.9} fill="#3B2418" />
+      <path d="M 45 56 Q 50 59.5, 55 56" stroke="#B5534F" strokeWidth={1.8} fill="none" strokeLinecap="round" />
+    </g>
+  </svg>
+);
+
 export const V5Comment: React.FC = () => {
   const t = useT();
   if (t < C.cta.start + 0.08) return null;
@@ -520,7 +541,7 @@ export const V5Comment: React.FC = () => {
       }}
     >
       <div style={{width: 84, height: 84, borderRadius: '50%', background: 'linear-gradient(45deg,#F9CE34,#EE2A7B,#6228D7)', padding: 4, boxSizing: 'border-box'}}>
-        <Img src={staticFile('v5/pfp.jpg')} style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '3px solid #fff', boxSizing: 'border-box'}} />
+        <Avatar />
       </div>
       <div style={{flex: 1, fontSize: 46, fontWeight: typed ? 800 : 500, color: typed ? '#111' : '#999', letterSpacing: typed ? 1 : 0}}>
         {typed || 'Add a comment…'}

@@ -36,9 +36,9 @@ export const C = {
   cta: {start: 48.45, end: 999},
 };
 export const TIPS = [
-  {w: C.tip1, n: '01', at: 7.36, title: 'PICK EASY TASKS', titleAt: 8.24, sub: undefined as string | undefined, subAt: 0, chip: 'Pick easy tasks', chipEnd: C.something.end},
-  {w: C.tip2, n: '02', at: 22.34, title: 'EAT ON TIME', titleAt: 23.12, sub: undefined as string | undefined, subAt: 0, chip: 'Eat on time', chipEnd: C.loop.start},
-  {w: C.tip3, n: '03', at: 30.46, title: 'START YOUR DAY', titleAt: 31.32, sub: 'with something you dislike' as string | undefined, subAt: 31.96, chip: 'Hard thing first', chipEnd: C.done.end},
+  {w: C.tip1, n: '01', hx: 482, at: 7.36, title: 'PICK EASY TASKS', titleAt: 8.24, sub: undefined as string | undefined, subAt: 0, chip: 'Pick easy tasks', chipEnd: C.something.end},
+  {w: C.tip2, n: '02', hx: 503, at: 22.34, title: 'EAT ON TIME', titleAt: 23.12, sub: undefined as string | undefined, subAt: 0, chip: 'Eat on time', chipEnd: C.loop.start},
+  {w: C.tip3, n: '03', hx: 495, at: 30.46, title: 'START YOUR DAY', titleAt: 31.32, sub: 'with something you dislike' as string | undefined, subAt: 31.96, chip: 'Hard thing first', chipEnd: C.done.end},
 ];
 
 retime(TM5, C, []);
