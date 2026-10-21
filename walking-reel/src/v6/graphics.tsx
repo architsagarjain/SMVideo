@@ -121,7 +121,7 @@ export const V6Talk: React.FC = () => {
           <Word text="isn't bad" at={25.3} out={C.notBad.end - 0.1} y={350} size={110} serif />
         </>
       ) : null}
-      {inside(t, C.punish) ? <Word text="don't" at={29.06} out={C.punish.end - 0.2} y={330} size={110} serif /> : null}
+      {inside(t, C.punish) ? <Word text="don't" at={29.06} out={C.punish.end - 0.2} y={452} size={110} serif /> : null}
       {inside(t, C.more) ? (
         <>
           <Word text="MORE" at={38.28} out={C.more.end - 0.12} y={190} size={170} shine />
@@ -246,15 +246,15 @@ const Scale: React.FC = () => {
   const flick = t > 8.4 && t < 9.2 ? ['72.4', '72.6', '72.4', '72.5', '72.4'][k % 5] : '72.4';
   const lock = tween(t, 9.06, 0.3, EASE_OUT);
   return (
-    <AbsoluteFill style={{background: 'radial-gradient(90% 80% at 50% 40%, #FFFFFF 0%, #F1ECE4 100%)', alignItems: 'center', justifyContent: 'flex-start'}}>
+    <AbsoluteFill style={{background: 'radial-gradient(90% 80% at 50% 35%, #3A3129 0%, #1B1714 70%, #120F0C 100%)', alignItems: 'center', justifyContent: 'flex-start'}}>
       {/* kept in the upper part of the card so the caption below stays clear */}
-      <div style={{width: 440, height: 320, borderRadius: 60, marginTop: 50, background: 'linear-gradient(160deg, #FAFAFA, #DCDCDC)', boxShadow: '0 30px 60px rgba(40,30,20,0.25), inset 0 2px 0 #fff', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <div style={{width: 440, height: 320, borderRadius: 60, marginTop: 50, background: 'linear-gradient(160deg, #FAFAFA, #DCDCDC)', boxShadow: '0 30px 60px rgba(0,0,0,0.5), inset 0 2px 0 #fff', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
         <div style={{width: 340, height: 150, borderRadius: 24, background: '#1E2A23', boxShadow: 'inset 0 4px 12px rgba(0,0,0,0.6)', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 12, paddingTop: 18, boxSizing: 'border-box', fontFamily: SANS}}>
           <div style={{fontWeight: 800, fontSize: 104, color: '#A7F3B5', letterSpacing: -2, fontVariantNumeric: 'tabular-nums', textShadow: '0 0 18px rgba(167,243,181,0.5)'}}>{flick}</div>
           <div style={{fontWeight: 700, fontSize: 40, color: '#A7F3B5', opacity: 0.8}}>kg</div>
         </div>
       </div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 420, textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 64, color: INK, opacity: tween(t, 8.1, 0.3)}}>the scale doesn't move</div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 420, textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 68, color: '#FFFFFF', opacity: tween(t, 8.1, 0.3)}}>the scale doesn't move</div>
       <div style={{position: 'absolute', top: 40, left: 40, padding: '10px 22px', borderRadius: 30, background: RED, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: 34, opacity: lock, scale: lerp(lock, 1.3, 1)}}>NO CHANGE</div>
     </AbsoluteFill>
   );
