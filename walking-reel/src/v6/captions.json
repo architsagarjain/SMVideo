@@ -1,0 +1,687 @@
+[
+ [
+  {
+   "text": "If",
+   "start": 1.14,
+   "end": 1.28
+  },
+  {
+   "text": "you",
+   "start": 1.28,
+   "end": 1.44
+  },
+  {
+   "text": "stop",
+   "start": 1.44,
+   "end": 1.78
+  }
+ ],
+ [
+  {
+   "text": "losing",
+   "start": 1.78,
+   "end": 2.18
+  },
+  {
+   "text": "fat,",
+   "start": 2.18,
+   "end": 2.54
+  }
+ ],
+ [
+  {
+   "text": "doing",
+   "start": 2.84,
+   "end": 2.94
+  },
+  {
+   "text": "more",
+   "start": 2.94,
+   "end": 3.32
+  },
+  {
+   "text": "cardio",
+   "start": 3.32,
+   "end": 3.66
+  }
+ ],
+ [
+  {
+   "text": "might",
+   "start": 3.66,
+   "end": 3.96
+  },
+  {
+   "text": "not",
+   "start": 3.96,
+   "end": 4.26
+  },
+  {
+   "text": "be",
+   "start": 4.26,
+   "end": 4.46
+  }
+ ],
+ [
+  {
+   "text": "what",
+   "start": 4.46,
+   "end": 4.68
+  },
+  {
+   "text": "you",
+   "start": 4.68,
+   "end": 4.8
+  },
+  {
+   "text": "need",
+   "start": 4.8,
+   "end": 5.12
+  }
+ ],
+ [
+  {
+   "text": "because",
+   "start": 5.12,
+   "end": 5.86
+  },
+  {
+   "text": "this",
+   "start": 5.86,
+   "end": 6.34
+  },
+  {
+   "text": "is",
+   "start": 6.34,
+   "end": 6.48
+  }
+ ],
+ [
+  {
+   "text": "what",
+   "start": 6.48,
+   "end": 6.7
+  },
+  {
+   "text": "usually",
+   "start": 6.7,
+   "end": 7.04
+  },
+  {
+   "text": "happens.",
+   "start": 7.04,
+   "end": 7.58
+  }
+ ],
+ [
+  {
+   "text": "The",
+   "start": 8.1,
+   "end": 8.2
+  },
+  {
+   "text": "scale",
+   "start": 8.2,
+   "end": 8.54
+  },
+  {
+   "text": "doesn't",
+   "start": 8.54,
+   "end": 9.06
+  }
+ ],
+ [
+  {
+   "text": "move.",
+   "start": 9.06,
+   "end": 9.4
+  }
+ ],
+ [
+  {
+   "text": "So",
+   "start": 9.8,
+   "end": 9.88
+  },
+  {
+   "text": "you",
+   "start": 9.88,
+   "end": 10.12
+  },
+  {
+   "text": "add",
+   "start": 10.12,
+   "end": 10.7
+  }
+ ],
+ [
+  {
+   "text": "20",
+   "start": 10.7,
+   "end": 11.22
+  },
+  {
+   "text": "minutes",
+   "start": 11.22,
+   "end": 11.46
+  },
+  {
+   "text": "of",
+   "start": 11.46,
+   "end": 11.68
+  }
+ ],
+ [
+  {
+   "text": "cardio,",
+   "start": 11.68,
+   "end": 12.08
+  }
+ ],
+ [
+  {
+   "text": "then",
+   "start": 12.36,
+   "end": 12.46
+  },
+  {
+   "text": "another",
+   "start": 12.46,
+   "end": 12.94
+  },
+  {
+   "text": "workout,",
+   "start": 12.94,
+   "end": 13.44
+  }
+ ],
+ [
+  {
+   "text": "then",
+   "start": 13.7,
+   "end": 13.78
+  },
+  {
+   "text": "you",
+   "start": 13.78,
+   "end": 13.92
+  },
+  {
+   "text": "start",
+   "start": 13.92,
+   "end": 14.14
+  }
+ ],
+ [
+  {
+   "text": "doing",
+   "start": 14.14,
+   "end": 14.38
+  },
+  {
+   "text": "more",
+   "start": 14.38,
+   "end": 14.7
+  },
+  {
+   "text": "cardio",
+   "start": 14.7,
+   "end": 15.14
+  }
+ ],
+ [
+  {
+   "text": "every",
+   "start": 15.14,
+   "end": 15.64
+  },
+  {
+   "text": "single",
+   "start": 15.64,
+   "end": 16.04
+  },
+  {
+   "text": "day",
+   "start": 16.04,
+   "end": 16.46
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 16.46,
+   "end": 17.18
+  },
+  {
+   "text": "suddenly",
+   "start": 17.18,
+   "end": 17.66
+  },
+  {
+   "text": "you're",
+   "start": 17.66,
+   "end": 18.2
+  }
+ ],
+ [
+  {
+   "text": "exhausted,",
+   "start": 18.2,
+   "end": 18.84
+  }
+ ],
+ [
+  {
+   "text": "you're",
+   "start": 19.16,
+   "end": 19.36
+  },
+  {
+   "text": "hungrier",
+   "start": 19.36,
+   "end": 19.8
+  },
+  {
+   "text": "and",
+   "start": 19.8,
+   "end": 20.74
+  }
+ ],
+ [
+  {
+   "text": "you're",
+   "start": 20.74,
+   "end": 21.06
+  },
+  {
+   "text": "moving",
+   "start": 21.06,
+   "end": 21.34
+  },
+  {
+   "text": "less",
+   "start": 21.34,
+   "end": 21.66
+  }
+ ],
+ [
+  {
+   "text": "for",
+   "start": 21.66,
+   "end": 21.86
+  },
+  {
+   "text": "the",
+   "start": 21.86,
+   "end": 21.96
+  },
+  {
+   "text": "rest",
+   "start": 21.96,
+   "end": 22.14
+  }
+ ],
+ [
+  {
+   "text": "of",
+   "start": 22.14,
+   "end": 22.3
+  },
+  {
+   "text": "the",
+   "start": 22.3,
+   "end": 22.4
+  },
+  {
+   "text": "day",
+   "start": 22.4,
+   "end": 22.58
+  }
+ ],
+ [
+  {
+   "text": "because",
+   "start": 22.58,
+   "end": 22.9
+  },
+  {
+   "text": "you're",
+   "start": 22.9,
+   "end": 23.36
+  },
+  {
+   "text": "tired.",
+   "start": 23.36,
+   "end": 23.6
+  }
+ ],
+ [
+  {
+   "text": "I'm",
+   "start": 24.32,
+   "end": 24.42
+  },
+  {
+   "text": "not",
+   "start": 24.42,
+   "end": 24.58
+  },
+  {
+   "text": "saying",
+   "start": 24.58,
+   "end": 24.9
+  }
+ ],
+ [
+  {
+   "text": "cardio",
+   "start": 24.9,
+   "end": 25.3
+  },
+  {
+   "text": "is",
+   "start": 25.3,
+   "end": 25.54
+  },
+  {
+   "text": "bad.",
+   "start": 25.54,
+   "end": 25.8
+  }
+ ],
+ [
+  {
+   "text": "It",
+   "start": 25.8,
+   "end": 26.16
+  },
+  {
+   "text": "absolutely",
+   "start": 26.16,
+   "end": 26.92
+  },
+  {
+   "text": "has",
+   "start": 26.92,
+   "end": 27.24
+  }
+ ],
+ [
+  {
+   "text": "its",
+   "start": 27.24,
+   "end": 27.46
+  },
+  {
+   "text": "benefits,",
+   "start": 27.46,
+   "end": 27.96
+  }
+ ],
+ [
+  {
+   "text": "but",
+   "start": 28.66,
+   "end": 28.78
+  },
+  {
+   "text": "you",
+   "start": 28.78,
+   "end": 29.06
+  },
+  {
+   "text": "don't",
+   "start": 29.06,
+   "end": 29.28
+  }
+ ],
+ [
+  {
+   "text": "need",
+   "start": 29.28,
+   "end": 29.42
+  },
+  {
+   "text": "to",
+   "start": 29.42,
+   "end": 29.62
+  },
+  {
+   "text": "punish",
+   "start": 29.62,
+   "end": 29.86
+  }
+ ],
+ [
+  {
+   "text": "yourself",
+   "start": 29.86,
+   "end": 30.4
+  },
+  {
+   "text": "into",
+   "start": 30.4,
+   "end": 30.76
+  },
+  {
+   "text": "losing",
+   "start": 30.76,
+   "end": 31.06
+  }
+ ],
+ [
+  {
+   "text": "fat.",
+   "start": 31.06,
+   "end": 31.46
+  }
+ ],
+ [
+  {
+   "text": "You",
+   "start": 31.7,
+   "end": 32.08
+  },
+  {
+   "text": "need",
+   "start": 32.08,
+   "end": 32.44
+  },
+  {
+   "text": "the",
+   "start": 32.44,
+   "end": 32.8
+  }
+ ],
+ [
+  {
+   "text": "right",
+   "start": 32.8,
+   "end": 33.08
+  },
+  {
+   "text": "calorie",
+   "start": 33.08,
+   "end": 33.48
+  },
+  {
+   "text": "deficit,",
+   "start": 33.48,
+   "end": 33.94
+  }
+ ],
+ [
+  {
+   "text": "enough",
+   "start": 34.24,
+   "end": 34.38
+  },
+  {
+   "text": "protein,",
+   "start": 34.38,
+   "end": 34.92
+  }
+ ],
+ [
+  {
+   "text": "strength",
+   "start": 35.36,
+   "end": 35.56
+  },
+  {
+   "text": "training",
+   "start": 35.56,
+   "end": 35.94
+  },
+  {
+   "text": "and",
+   "start": 35.94,
+   "end": 36.74
+  }
+ ],
+ [
+  {
+   "text": "daily",
+   "start": 36.74,
+   "end": 37.12
+  },
+  {
+   "text": "movement.",
+   "start": 37.12,
+   "end": 37.58
+  }
+ ],
+ [
+  {
+   "text": "More",
+   "start": 38.28,
+   "end": 38.58
+  },
+  {
+   "text": "isn't",
+   "start": 38.58,
+   "end": 38.98
+  },
+  {
+   "text": "always",
+   "start": 38.98,
+   "end": 39.32
+  }
+ ],
+ [
+  {
+   "text": "better.",
+   "start": 39.32,
+   "end": 39.68
+  }
+ ],
+ [
+  {
+   "text": "Sometimes",
+   "start": 40.14,
+   "end": 40.46
+  },
+  {
+   "text": "you",
+   "start": 40.46,
+   "end": 40.66
+  },
+  {
+   "text": "just",
+   "start": 40.66,
+   "end": 41.02
+  }
+ ],
+ [
+  {
+   "text": "need",
+   "start": 41.02,
+   "end": 41.22
+  },
+  {
+   "text": "the",
+   "start": 41.22,
+   "end": 41.4
+  },
+  {
+   "text": "right",
+   "start": 41.4,
+   "end": 41.6
+  }
+ ],
+ [
+  {
+   "text": "strategy.",
+   "start": 41.6,
+   "end": 42.22
+  }
+ ],
+ [
+  {
+   "text": "Comment",
+   "start": 42.92,
+   "end": 43.1
+  },
+  {
+   "text": "cardio",
+   "start": 43.1,
+   "end": 43.62
+  },
+  {
+   "text": "and",
+   "start": 43.62,
+   "end": 44.02
+  }
+ ],
+ [
+  {
+   "text": "I'll",
+   "start": 44.02,
+   "end": 44.24
+  },
+  {
+   "text": "send",
+   "start": 44.24,
+   "end": 44.34
+  },
+  {
+   "text": "you",
+   "start": 44.34,
+   "end": 44.54
+  }
+ ],
+ [
+  {
+   "text": "my",
+   "start": 44.54,
+   "end": 44.78
+  },
+  {
+   "text": "free",
+   "start": 44.78,
+   "end": 45.08
+  },
+  {
+   "text": "fat",
+   "start": 45.08,
+   "end": 45.44
+  }
+ ],
+ [
+  {
+   "text": "loss",
+   "start": 45.44,
+   "end": 45.7
+  },
+  {
+   "text": "workout",
+   "start": 45.7,
+   "end": 46.06
+  },
+  {
+   "text": "guide.",
+   "start": 46.06,
+   "end": 46.44
+  }
+ ]
+]

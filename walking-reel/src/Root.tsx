@@ -14,12 +14,15 @@ import {V4bReel} from './v4/Reel2';
 import {V4B_FRAMES} from './v4/config2';
 import {V5Reel} from './v5/Reel';
 import {V5_FRAMES} from './v5/config';
+import {V6Reel} from './v6/Reel';
+import {V6_FRAMES} from './v6/config';
 import {SLEEP_FRAMES} from './sleep/config';
 import {DURATION_FRAMES, FPS, HEIGHT, WIDTH} from './theme';
 
 export const Root: React.FC = () => {
   return (
     <>
+    <Composition id="CardioReel" component={V6Reel} durationInFrames={V6_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BusyTips" component={V5Reel} durationInFrames={V5_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BusyWomen2" component={V4bReel} durationInFrames={V4B_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BusyWomen" component={V4Reel} durationInFrames={V4_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
