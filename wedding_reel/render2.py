@@ -10,16 +10,24 @@ from render_reel import (Clip, zoom_img, zoom_blur, screen, hblur, mix, flash_ov
                          clamp, kf, whip, tr_zoomin, tr_spin, tr_flash, tr_iris, tr_diag, tr_lightleak, tr_softzoom, xx, yy, WARM_WHITE)
 
 HERE = os.path.dirname(os.path.abspath(__file__)); FD = os.path.join(HERE, "..", "fonts")
-F_REG, F_ITAL = os.path.join(FD, "DMSerifDisplay-Regular.ttf"), os.path.join(FD, "DMSerifDisplay-Italic.ttf")
-F_SANS, F_SANSM = os.path.join(FD, "Poppins-SemiBold.ttf"), os.path.join(FD, "Poppins-Medium.ttf")
+F_REG, F_ITAL = os.path.join(FD, "CormorantGaramond-Var.ttf"), os.path.join(FD, "CormorantGaramond-Italic-Var.ttf")   # Cormorant Garamond, Bold (700)
 GOLD = (236, 200, 128); MAROON = (104, 22, 46); CREAM = (247, 236, 221)
 _fc = {}
-def font(p, s):
-    if (p, s) not in _fc: _fc[(p, s)] = ImageFont.truetype(p, s)
-    return _fc[(p, s)]
+def font(p, s, wght=700):
+    if (p, s, wght) not in _fc:
+        f = ImageFont.truetype(p, s); f.set_variation_by_axes([wght]); _fc[(p, s, wght)] = f
+    return _fc[(p, s, wght)]
 def back_out(x, c1=1.9):
     x = clamp(x, 0, 1); c3 = c1 + 1; return 1 + c3 * (x - 1) ** 3 + c1 * (x - 1) ** 2
 
+
+def heart_pts(cx, cy, s):
+    th = np.linspace(0, 2 * np.pi, 80)
+    return [(cx + s * 16 * math.sin(a) ** 3, cy - s * (13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a) - math.cos(4 * a))) for a in th]
+def tracked(draw, text, fnt, cx, y, tr, fill):
+    ws = [draw.textlength(c, font=fnt) for c in text]; total = sum(ws) + tr * (len(text) - 1); x = cx - total / 2
+    for c, w in zip(text, ws): draw.text((x, y), c, font=fnt, fill=fill); x += w + tr
+    return total
 
 # ------------------------------------------------------------------ shots
 class Shot:
@@ -96,74 +104,58 @@ class Split:
     def free(self): self.release()
 
 
-# ------------------------------------------------------------------ end card
-def lens(draw, cx, cy, L, w, ang, fill=None, outline=None, width=4):
-    pts = []
-    for s in np.linspace(0, 1, 24): pts.append((w * math.sin(math.pi * s) * (1 - .15 * s), -L * s))
-    for s in np.linspace(1, 0, 24): pts.append((-w * math.sin(math.pi * s) * (1 - .15 * s), -L * s))
-    c, sn = math.cos(math.radians(ang)), math.sin(math.radians(ang))
-    P = [(cx + x * c - y * sn, cy + x * sn + y * c) for x, y in pts]
-    draw.polygon(P, fill=fill, outline=outline, width=width) if fill else draw.line(P + [P[0]], fill=outline, width=width, joint="curve")
-def heart_pts(cx, cy, s):
-    th = np.linspace(0, 2 * np.pi, 80)
-    return [(cx + s * 16 * math.sin(a) ** 3, cy - s * (13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a) - math.cos(4 * a))) for a in th]
-def tracked(draw, text, fnt, cx, y, tr, fill):
-    ws = [draw.textlength(c, font=fnt) for c in text]; total = sum(ws) + tr * (len(text) - 1); x = cx - total / 2
-    for c, w in zip(text, ws): draw.text((x, y), c, font=fnt, fill=fill); x += w + tr
-    return total
+# ------------------------------------------------------------------ end screen (the supplied artwork, animated)
+class EndScreen:
+    """Animates the supplied end-screen artwork: clean background + staggered reveal of logo, tagline and button,
+    a slow push-in, a gold glint over the logo/tagline and a shine sweep across the button."""
+    BOXES = {"logo": (195, 285, 385, 495), "tag": (125, 500, 455, 585), "btn": (160, 585, 420, 660)}   # source-pixel boxes
+    def __init__(self, path):
+        src = np.asarray(Image.open(path).convert("RGB")); h, w = src.shape[:2]
+        lum = src.mean(2); dark = (lum < 150).astype(np.uint8)
+        fg = np.zeros((h, w), np.uint8); self.fg = {}
+        for k, (x0, y0, x1, y1) in self.BOXES.items():
+            m = np.zeros((h, w), np.uint8); m[y0:y1, x0:x1] = dark[y0:y1, x0:x1]
+            if k == "btn": m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((41, 41), np.uint8))
+            m = cv2.dilate(m, np.ones((5, 5), np.uint8)); self.fg[k] = m; fg |= m
+        clean = cv2.inpaint(src, cv2.dilate(fg, np.ones((7, 7), np.uint8)), 7, cv2.INPAINT_TELEA)
+        sc = H / h; nw = int(round(w * sc)); self.x0 = int(round(((w * .5017) * sc) - W / 2))      # centre the content, crop the sides
+        def up(im, interp=cv2.INTER_LANCZOS4):
+            big = cv2.resize(im, (nw, H), interpolation=interp)[:, self.x0:self.x0 + W]
+            return big
+        def sharpen(im): bl = cv2.GaussianBlur(im, (0, 0), 1.6); return np.clip(im * 1.55 - bl * .55, 0, 255)
+        self.orig = sharpen(up(src).astype(np.float32)); self.clean = sharpen(up(clean).astype(np.float32))
+        self.box = {}; self.alpha = {}; self.fgm = {}
+        for k, (x0, y0, x1, y1) in self.BOXES.items():
+            X0, Y0, X1, Y1 = int(x0 * sc - self.x0), int(y0 * sc), int(x1 * sc - self.x0), int(y1 * sc); self.box[k] = (X0, Y0, X1, Y1)
+            fe = 28; yy_, xx_ = np.mgrid[0:Y1 - Y0, 0:X1 - X0].astype(np.float32)
+            al = np.clip(np.minimum.reduce([xx_ / fe, (X1 - X0 - 1 - xx_) / fe, yy_ / fe, (Y1 - Y0 - 1 - yy_) / fe]), 0, 1); self.alpha[k] = al[..., None]
+            self.fgm[k] = cv2.GaussianBlur(cv2.resize(self.fg[k], (nw, H), interpolation=cv2.INTER_LINEAR)[:, self.x0:self.x0 + W].astype(np.float32), (0, 0), 1.2)[Y0:Y1, X0:X1, None]
+    def frame(self, u):
+        img = self.clean.copy()
+        sched = {"logo": (.10, .45), "tag": (.45, .45), "btn": (.80, .40)}
+        for k, (st, dur) in sched.items():
+            x = clamp((u - st) / dur, 0, 1)
+            if x <= 0: continue
+            X0, Y0, X1, Y1 = self.box[k]; crop = self.orig[Y0:Y1, X0:X1]; al = self.alpha[k]
+            e = ease_out(x); rise = 34 * (1 - e)
+            sc = (.86 + .14 * back_out(x)) if k == "btn" else (.95 + .05 * e)
+            cx, cy = (X1 - X0) / 2, (Y1 - Y0) / 2
+            M = np.float32([[sc, 0, cx - cx * sc], [0, sc, cy - cy * sc + rise]])
+            wc = cv2.warpAffine(crop, M, (X1 - X0, Y1 - Y0), borderMode=cv2.BORDER_REFLECT); wa = cv2.warpAffine(al, M, (X1 - X0, Y1 - Y0))[..., None] if al.ndim == 3 else cv2.warpAffine(al, M, (X1 - X0, Y1 - Y0))
+            a = (wa if wa.ndim == 3 else wa[..., None]) * clamp(x * 2.2, 0, 1)
+            img[Y0:Y1, X0:X1] = img[Y0:Y1, X0:X1] * (1 - a) + wc * a
+        # gold glint across logo+tagline, shine sweep across the button
+        for k, st, dur, col in (("logo", 1.05, .55, (255, 222, 150)), ("tag", 1.2, .55, (255, 222, 150)), ("btn", 1.45, .55, (255, 245, 225))):
+            x = (u - st) / dur
+            if not 0 <= x <= 1: continue
+            X0, Y0, X1, Y1 = self.box[k]; g = np.exp(-(((np.arange(X1 - X0)[None, :] + (np.arange(Y1 - Y0)[:, None]) * .35) - (x * 1.5 - .25) * (X1 - X0)) / ((X1 - X0) * .09)) ** 2)[..., None]
+            m = self.fgm[k] if k != "btn" else np.clip(self.fgm[k] * 1.0, 0, 1)
+            img[Y0:Y1, X0:X1] = screen(img[Y0:Y1, X0:X1], np.array(col, np.float32) * g * m * (.55 if k != "btn" else .45))
+        # slow push-in about the logo
+        z = 1.0 + .055 * smooth(u / 2.6); cx, cy = W / 2, 930
+        return cv2.warpAffine(img, np.float32([[z, 0, cx - cx * z], [0, z, cy - cy * z]]), (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
 
-def make_endcard_layers():
-    yy1 = np.linspace(0, 1, H)[:, None, None]; xx1 = np.linspace(-1, 1, W)[None, :, None]
-    bg = np.array([250, 241, 228], np.float32) * (1 - yy1) + np.array([235, 212, 188], np.float32) * yy1
-    bg = bg * (1 - .10 * np.clip(np.hypot(xx1, (yy1 - .45) * 1.6) - .35, 0, 1) ** 1.5) + 0 * xx1
-    bgi = Image.fromarray(np.clip(bg, 0, 255).astype(np.uint8)); d = ImageDraw.Draw(bgi)
-    for inset, wdt in ((54, 3), (74, 1)): d.rectangle([inset, inset, W - inset, H - inset], outline=GOLD, width=wdt)
-    layers = {"bg": np.asarray(bgi, np.float32)}
-    def rgba(fn):
-        im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); fn(ImageDraw.Draw(im)); return np.asarray(im, np.float32)
-    def lotus(d):
-        cx, cy = W / 2, 690
-        for ang, L, w in ((-62, 92, 28), (62, 92, 28), (-31, 128, 34), (31, 128, 34), (0, 160, 40)): lens(d, cx, cy, L, w, ang, outline=MAROON + (255,), width=5)
-        d.polygon(heart_pts(cx, cy - 215, 1.25), fill=MAROON + (255,))
-    def word(d):
-        tracked(d, "SHAADI", font(F_REG, 150), W / 2, 745, 18, MAROON + (255,))
-        tracked(d, "MANGALAM", font(F_SANS, 40), W / 2, 922, 30, (150, 98, 52, 255))
-    def rule(d):
-        d.line([(W / 2 - 150, 1010), (W / 2 - 14, 1010)], fill=GOLD + (255,), width=3); d.line([(W / 2 + 14, 1010), (W / 2 + 150, 1010)], fill=GOLD + (255,), width=3)
-        d.polygon([(W / 2, 1002), (W / 2 + 8, 1010), (W / 2, 1018), (W / 2 - 8, 1010)], fill=GOLD + (255,))
-    def tag(d):
-        tracked(d, "Where Beautiful", font(F_ITAL, 78), W / 2, 1060, 2, MAROON + (255,)); tracked(d, "Stories Begin.", font(F_ITAL, 78), W / 2, 1150, 2, MAROON + (255,))
-    for k, fn in (("lotus", lotus), ("word", word), ("rule", rule), ("tag", tag)): layers[k] = rgba(fn)
-    return layers
 
-
-# ------------------------------------------------------------------ particles & overlays
-class Petals:
-    PAL = [(235, 70, 110), (255, 150, 170), (214, 40, 78), (255, 205, 218), (245, 180, 80), (255, 120, 140)]
-    def __init__(self, n=52, seed=5):
-        r = np.random.default_rng(seed); self.n = n
-        self.x0, self.y0 = r.uniform(0, W, n), r.uniform(0, H + 300, n); self.vy, self.vx = r.uniform(150, 420, n), r.uniform(-90, 90, n)
-        self.size, self.rot0, self.rv = r.uniform(14, 34, n), r.uniform(0, 360, n), r.uniform(-260, 260, n)
-        self.sway, self.ph = r.uniform(20, 70, n), r.uniform(0, 6.28, n); self.col = [self.PAL[i] for i in r.integers(0, len(self.PAL), n)]
-    def layer(self, t, strength, hh=H // 2, ww=W // 2):
-        cv = np.zeros((hh, ww, 3), np.uint8); al = np.zeros((hh, ww), np.uint8)
-        for i in range(int(self.n * strength)):
-            y = (self.y0[i] + self.vy[i] * t) % (H + 300) - 150; x = (self.x0[i] + self.vx[i] * t + self.sway[i] * math.sin(1.7 * t + self.ph[i])) % W
-            minor = self.size[i] * (.25 + .5 * abs(math.cos(2.2 * t + self.ph[i]))); c = (int(x / 2), int(y / 2)); ax = (max(1, int(self.size[i] / 2)), max(1, int(minor / 2)))
-            ang = self.rot0[i] + self.rv[i] * t
-            cv2.ellipse(cv, c, ax, ang, 0, 360, self.col[i][::-1] if False else self.col[i], -1, cv2.LINE_AA); cv2.ellipse(al, c, ax, ang, 0, 360, 255, -1, cv2.LINE_AA)
-        al = cv2.GaussianBlur(al, (3, 3), 0); cv = cv2.GaussianBlur(cv, (3, 3), 0)
-        return cv2.resize(cv, (W, H)).astype(np.float32), cv2.resize(al, (W, H)).astype(np.float32)[..., None] / 255 * .9
-class Sparkles:
-    def __init__(self, n=44, seed=9):
-        r = np.random.default_rng(seed); self.n = n; self.x, self.y0 = r.uniform(0, W, n), r.uniform(0, H, n); self.vy = r.uniform(-40, -12, n)
-        self.rad, self.ph, self.fr = r.uniform(3, 11, n), r.uniform(0, 6.28, n), r.uniform(2, 5, n)
-    def layer(self, t):
-        cv = np.zeros((H // 2, W // 2), np.uint8)
-        for i in range(self.n):
-            y = (self.y0[i] + self.vy[i] * t) % H; a = .5 + .5 * math.sin(self.fr[i] * t + self.ph[i])
-            cv2.circle(cv, (int(self.x[i] / 2), int(y / 2)), int(self.rad[i] / 2) + 1, int(255 * a ** 2), -1, cv2.LINE_AA)
-        cv = cv2.GaussianBlur(cv, (0, 0), 2.2); return cv2.resize(cv, (W, H)).astype(np.float32)[..., None] / 255
 def light_leak(img, t, t0, dur, seed=0):
     p = (t - t0) / dur
     if not 0 <= p <= 1: return img
@@ -263,6 +255,7 @@ class Text:
         self.bm = {}
         for (txt, fk, size, cy, ab, vb) in WORDS:
             f = font(F_REG if fk == "reg" else F_ITAL, size); l, t, r, b = f.getbbox(txt); pad = 12
+            while r - l > 980: size -= 6; f = font(F_REG if fk == "reg" else F_ITAL, size); l, t, r, b = f.getbbox(txt)
             im = Image.new("L", (r - l + 2 * pad, b - t + 2 * pad), 0); ImageDraw.Draw(im).text((pad - l, pad - t), txt, font=f, fill=255)
             self.bm[txt] = np.asarray(im, np.float32) / 255
         ys = np.linspace(0, 1, H)[:, None, None]
@@ -270,7 +263,7 @@ class Text:
         self.hdr = self.make_header()
     def make_header(self):
         im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im); cx, y = W / 2, 238
-        tw = tracked(d, "SHAADI MANGALAM", font(F_SANS, 31), cx, y, 11, GOLD + (255,))
+        tw = tracked(d, "SHAADI MANGALAM", font(F_REG, 42), cx, y - 8, 12, GOLD + (255,))
         for sgn in (-1, 1):
             x0 = cx + sgn * (tw / 2 + 30); x1 = cx + sgn * (tw / 2 + 150); d.line([(x0, y + 22), (x1, y + 22)], fill=GOLD + (200,), width=2)
         d.polygon(heart_pts(cx, y - 34, .95), fill=GOLD + (255,))
@@ -307,18 +300,10 @@ class Reel2:
             elif s["kind"] == "split3v": o = Split(s, raw, s["t0"], s["t1"])
             else: o = None
             self.items.append(o)
-        self.petals, self.spark, self.text = Petals(), Sparkles(), Text(); self.end = None; self.endp = Petals(60, 12)
+        self.text = Text(); self.end = None
     def card(self, t):
-        if self.end is None: self.end = make_endcard_layers()
-        L = self.end; t0 = SHOTS[-1]["t0"]; u = t - t0; img = L["bg"].copy()
-        for k, st, dur, rise in (("lotus", .00, .35, 40), ("word", .10, .38, 34), ("rule", .22, .3, 0), ("tag", .30, .4, 26)):
-            p = ease_out((u - st) / dur)
-            if p <= 0: continue
-            a = L[k]
-            if rise and p < 1: a = cv2.warpAffine(a, np.float32([[1, 0, 0], [0, 1, rise * (1 - p)]]), (W, H))
-            al = a[..., 3:4] / 255 * p; img = img * (1 - al) + a[..., :3] * al
-        pc, pa = self.endp.layer(t, .9); img = img * (1 - pa * .8) + pc * pa * .8
-        return img
+        if self.end is None: self.end = EndScreen(os.path.join(HERE, "assets", "end_screen.png"))
+        return self.end.frame(max(t - SHOTS[-1]["t0"], 0.0))
     def shot_frame(self, i, t, zmul):
         s = SHOTS[i]
         if s["kind"] == "endcard": return self.card(t)
@@ -355,16 +340,11 @@ class Reel2:
         img = chroma(img, ca)
         # overlays (only over footage)
         if SHOTS[idx]["kind"] != "endcard":
-            ps = smooth((t - tb(DROP_BEAT)) / .6) * (1 - smooth((t - tb(55.5)) / .6))
-            if ps > 0.02:
-                pc, pa = self.petals.layer(t, .65 * ps); img = img * (1 - pa * ps) + pc * pa * ps
-            sp = smooth((t - tb(8)) / 1.0)
-            if sp > 0: img = screen(img, np.array([255, 214, 140], np.float32) * self.spark.layer(t) * .55 * sp)
             for i, (b, d) in enumerate(LEAKS): img = light_leak(img, t, tb(b), d, i)
             for k in range(DROP_BEAT, 56, 4):          # bar-line flash pulses
                 dt = t - tb(k)
                 if 0 <= dt < .2: img = flash_overlay(img, (.32 if k == DROP_BEAT else .08) * math.exp(-dt / .06))
-        img = rr.grade(img)
+        if SHOTS[idx]["kind"] != "endcard": img = rr.grade(img)
         if t < .12: img = img * (t / .12)
         img = self.text.apply(img, t)
         if t > DUR - .3: img = img * (1 - smooth((t - (DUR - .3)) / .3))

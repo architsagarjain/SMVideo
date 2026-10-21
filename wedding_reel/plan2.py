@@ -5,7 +5,7 @@ W, H = 1080, 1920
 BPM = 137.42
 BEAT = 60.0 / BPM            # 0.43663 s
 DROP_SONG_T = 21.435         # first kick of the drop in the source song
-N_BEATS = 68
+N_BEATS = 70
 ENDCARD_BEAT = 64
 DROP_BEAT = 16
 SONG_START = DROP_SONG_T - DROP_BEAT * BEAT
@@ -25,8 +25,8 @@ SHOTS = [
         dict(clip=2, src=3.95, speed=[(0, .8), (1, .8)], zoom=[(0, 1.15), (1, 1.3)], focus=(.5, .3)),
         dict(clip=4, src=0.30, speed=[(0, .8), (1, .8)], zoom=[(0, 1.1), (1, 1.25)], focus=(.55, .3)),
         dict(clip=6, src=5.20, speed=[(0, .7), (1, .7)], zoom=[(0, 1.05), (1, 1.2)], focus=(.55, .5))]),
-    S(4, 4, 2, 5.4, .6, (1.0, 1.2), (.5, .4), ("zoomin", .34)),
-    S(8, 2, 4, .2, .8, (1.05, 1.17), (.55, .4), ("whip_l", .26)),
+    S(4, 5, 2, 5.4, .6, (1.0, 1.2), (.5, .4), ("zoomin", .34)),
+    S(9, 1, 4, .2, .8, (1.05, 1.17), (.55, .4), ("whip_l", .26)),
     S(10, 2, 4, 3.6, .9, (1.1, 1.28), (.42, .55), ("spin+", .30)),
     S(12, 2, 6, 5.15, .65, (1.0, 1.14), (.5, .55), ("zoomin", .30)),
     S(14, 1, 6, 8.3, 1.0, (1.08, 1.2), (.5, .35), ("whip_r", .20)),
@@ -65,7 +65,7 @@ SHOTS = [
     S(56, 2, 6, 30.3, .6, (1.0, 1.12), (.5, .5), ("flash", .30)),
     S(58, 2, 2, 20.6, .6, (1.05, 1.17), (.62, .45), ("lightleak", .50)),
     S(60, 4, 2, 32.5, .55, (1.0, 1.16), (.55, .42), ("softzoom", .50)),
-    dict(kind="endcard", b=ENDCARD_BEAT, n=4, trans=("glowdip", .46)),
+    dict(kind="endcard", b=ENDCARD_BEAT, n=6, trans=("glowdip", .46)),
 ]
 for i, s in enumerate(SHOTS):
     s["t0"] = tb(s["b"]); s["t1"] = tb(SHOTS[i + 1]["b"]) if i + 1 < len(SHOTS) else DUR
@@ -74,10 +74,10 @@ TRANS = [(s["t0"], s["trans"][0], s["trans"][1]) for s in SHOTS if s["trans"]]
 
 # kinetic words: (text, font key, size, centre y, appear beat, vanish beat)
 WORDS = [
-    ("Where", "reg", 140, 900, 4, 8), ("Beautiful", "ital", 236, 1085, 5, 8),
-    ("Stories", "reg", 236, 1290, 6, 8), ("Begin.", "ital", 236, 1495, 7, 8),
-    ("Meet.", "ital", 300, 1240, 20, 22), ("Celebrate.", "ital", 205, 1000, 32, 36),
-    ("Forever.", "ital", 270, 1300, 52, 56),
+    ("Where", "reg", 150, 860, 4, 9), ("Beautiful", "ital", 262, 1035, 4.5, 9),
+    ("Stories", "ital", 262, 1250, 5, 9), ("Begin.", "ital", 262, 1480, 5.5, 9),
+    ("Meet.", "ital", 340, 1240, 20, 22), ("Celebrate.", "ital", 240, 1000, 32, 36),
+    ("Forever.", "ital", 300, 1300, 52, 56),
 ]
 LEAKS = [(16, 1.0), (24, .8), (32, .8), (48, .8)]       # (beat, seconds) light-leak sweeps
 HEADER = (8, ENDCARD_BEAT - .2)                                       # brand header visible from..to (beats)

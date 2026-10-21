@@ -11,5 +11,5 @@ for i in 0 1 2 3; do a=$((i*Q)); b=$(( (i+1)*Q )); [ $b -gt $N ] && b=$N; python
 for i in 0 1 2 3; do echo "file '$W/c$((i*Q)).mp4'"; done > "$W/list.txt"
 ffmpeg -v error -y -f concat -safe 0 -i "$W/list.txt" -c copy "$W/v.mp4"
 mkdir -p output
-ffmpeg -y -i "$W/v.mp4" -i "$W/mix.wav" -filter_complex "[1:a]loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=out:st=29.35:d=0.35[a]" \
-  -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -ar 48000 -movflags +faststart output/shaadi_mangalam_reel_v2.mp4
+ffmpeg -y -i "$W/v.mp4" -i "$W/mix.wav" -filter_complex "[1:a]loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=out:st=30.2:d=0.35[a]" \
+  -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -ar 48000 -movflags +faststart output/shaadi_mangalam_reel_v3.mp4
