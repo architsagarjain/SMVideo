@@ -1,18 +1,20 @@
-import {FACE_ORIGIN, Move, ReelConfig, retime} from '../series/core';
+import {BOTTOM, FACE_ORIGIN, Move, ReelConfig, retime} from '../series/core';
 import {TimeMap} from '../series/timemap';
 import timemap from './timemap.json';
 import captions from './captions.json';
 
 /**
- * "More cardio isn't the answer" reel. New layout for this one (from the reference reels): a rounded
- * B-roll card in the lower half while she keeps talking above it, kinetic keyword text, one word
- * behind her head per section. Blurred background, Bright & Clean grade. Times are source seconds.
+ * "More cardio isn't the answer" reel. Talking head with the Bright & Clean grade; for the B-roll
+ * moments the frame turns into a white stage: her cut-out shrinks into the lower half (body visible)
+ * and a rounded B-roll / graphic card sits on top. Kinetic keyword text, one word behind her head
+ * per section. Times are source seconds.
  */
 export const TM6 = timemap as TimeMap;
 export const V6_FRAMES = TM6.frames;
 
 export const C = {
-  hook: {start: 1.13, end: 4.85}, // card: treadmill. STOPPED LOSING FAT? / MORE CARDIO? x
+  hookA: {start: 1.13, end: 2.75}, // her: stopped losing FAT?
+  hookB: {start: 2.75, end: 4.85}, // white stage + treadmill card: MORE CARDIO? x
   happens: {start: 4.85, end: 7.83}, // here's what usually happens
   scale: {start: 7.83, end: 9.75}, // card: the scale doesn't move
   esc1: {start: 9.75, end: 12.36}, // card: treadmill, +20 MIN CARDIO
@@ -39,9 +41,9 @@ export const PILLARS = [
 
 retime(TM6, C, []);
 // built after retime so the spans use the snapped windows
-/** The card spans: one rounded B-roll card in the lower half; `from` = seconds into the clip. */
+/** The card spans: one rounded B-roll card on top of the white stage; `from` = seconds into the clip. */
 export const CARD = [
-  {w: C.hook, src: 'c_tread1.mp4', from: 0},
+  {w: C.hookB, src: 'c_tread1.mp4', from: 0},
   {w: C.esc1, src: 'c_tread2.mp4', from: 0},
   {w: C.esc2, src: 'c_lift.mp4', from: 0},
   {w: C.esc3, src: 'c_tread2.mp4', from: 2.6},
@@ -51,12 +53,15 @@ export const CARD = [
 ];
 /** Continuous card runs (the card slides in at the first and out at the last). */
 export const CARD_RUNS = [
-  {start: C.hook.start, end: C.hook.end},
+  {start: C.hookB.start, end: C.hookB.end},
   {start: C.scale.start, end: C.esc3.end},
   {start: C.p1.start, end: C.p4.end},
 ];
 const hold = (a: number, b: number, scale: number, inDur = 0.001): Move => ({origin: FACE_ORIGIN, inStart: a, inDur, scale, outStart: b - 0.0003, outDur: 0.0001});
+// white stage: she shrinks into the lower half from the bottom edge, then grows back
+const stage = (w: {start: number; end: number}): Move => ({origin: BOTTOM, inStart: w.start, inDur: 0.45, scale: 0.76, outStart: w.end - 0.4, outDur: 0.4});
 const moves: Move[] = [
+  ...CARD_RUNS.map(stage),
   hold(C.notBad.start, C.notBad.end, 1.1), // jump-zoom: "I'm not saying cardio is bad"
   {origin: FACE_ORIGIN, inStart: 29.62, inDur: 0.28, scale: 1.1, outStart: C.punish.end - 0.4, outDur: 0.4}, // punch on "punish"
   hold(C.more.start, C.more.end, 1.08),
@@ -72,7 +77,8 @@ export const v6Config: ReelConfig = {
   broll: [{start: C.benefits.start, end: C.benefits.end, src: 'c_cricket.mp4'}],
   captions: captions as ReelConfig['captions'],
   tm: TM6,
-  blur: 8, // portrait-mode background; her feathered cut-out stays sharp on top
+  // her cut-out on top for the white stage and where a word sits behind her head
+  cut: [...CARD_RUNS, C.punish, C.cta],
   clean: true,
   grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
   noCaptions: [C.scale, C.cta], // the scale card carries its own line

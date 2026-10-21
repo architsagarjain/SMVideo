@@ -102,10 +102,10 @@ export const V6Talk: React.FC = () => {
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       {/* hook */}
-      {inside(t, C.hook) ? (
+      {inside(t, C.hookA) ? (
         <>
-          <Word text="stopped losing" at={1.44} out={C.hook.end - 0.15} y={190} size={96} serif />
-          <Word text="FAT?" at={2.0} out={C.hook.end - 0.15} y={330} size={210} shine />
+          <Word text="stopped losing" at={1.2} out={C.hookA.end - 0.1} y={190} size={96} serif />
+          <Word text="FAT?" at={1.78} out={C.hookA.end - 0.1} y={330} size={210} shine />
         </>
       ) : null}
       {inside(t, C.happens) ? (
@@ -122,7 +122,6 @@ export const V6Talk: React.FC = () => {
         </>
       ) : null}
       {inside(t, C.punish) ? <Word text="don't" at={29.06} out={C.punish.end - 0.2} y={330} size={110} serif /> : null}
-      {any(t, [C.p1, C.p2, C.p3, C.p4]) ? <PillarList /> : null}
       {inside(t, C.more) ? (
         <>
           <Word text="MORE" at={38.28} out={C.more.end - 0.12} y={190} size={170} shine />
@@ -208,9 +207,9 @@ const Strategy: React.FC = () => {
 };
 
 // ===========================================================================
-// The lower-half card: B-roll (or the scale) while she keeps talking above
+// The card on top of the white stage: B-roll (or the scale) while she keeps talking below
 // ===========================================================================
-const CX = 70, CY = 1150, CW = 940, CH = 620;
+const CX = 70, CY = 110, CW = 940, CH = 760;
 const o = (s: number) => outAt(TM6, s);
 
 export const V6Card: React.FC = () => {
@@ -219,9 +218,9 @@ export const V6Card: React.FC = () => {
   if (!run) return null;
   const pin = tween(t, run.start, 0.4, EASE_OUT);
   const pout = tween(t, run.end, 0.3, EASE_IN);
-  const y = lerp(pin, 260, 0) + lerp(pout, 0, 900);
+  const y = lerp(pin, -260, 0) + lerp(pout, 0, -1000);
   return (
-    <div style={{position: 'absolute', left: CX, top: CY, width: CW, height: CH, borderRadius: 46, overflow: 'hidden', translate: `0 ${y}px`, opacity: Math.min(1, pin * 1.5), boxShadow: '0 30px 80px rgba(0,0,0,0.45)', border: '6px solid rgba(255,255,255,0.92)', boxSizing: 'border-box', background: '#111'}}>
+    <div style={{position: 'absolute', left: CX, top: CY, width: CW, height: CH, borderRadius: 46, overflow: 'hidden', translate: `0 ${y}px`, opacity: Math.min(1, pin * 1.5), boxShadow: '0 30px 70px rgba(40,30,20,0.28)', border: '6px solid #FFFFFF', boxSizing: 'border-box', background: '#111'}}>
       {CARD.map((c, i) => {
         const from = Math.round(o(c.w.start) * FPS);
         const dur = Math.max(1, Math.round(o(c.w.end) * FPS) - from);
@@ -271,7 +270,7 @@ const CardOverlay: React.FC = () => {
   const pil = PILLARS.find((k) => inside(t, k.w));
   return (
     <AbsoluteFill>
-      {inside(t, C.hook) ? (
+      {inside(t, C.hookB) ? (
         <>
           <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 40%)'}} />
           <div style={{position: 'absolute', left: 36, top: 34, opacity: tween(t, 2.84, 0.3), fontFamily: SANS, fontWeight: 800, fontSize: 64, color: '#fff', textShadow: SHADOW, letterSpacing: -2}}>MORE CARDIO?</div>
@@ -303,11 +302,26 @@ const CardOverlay: React.FC = () => {
       {pil ? (
         <>
           <AbsoluteFill style={{background: 'linear-gradient(to bottom right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 45%)'}} />
-          <div style={{position: 'absolute', left: 34, top: 6, fontFamily: SANS, fontWeight: 800, fontSize: 200, lineHeight: 1, letterSpacing: -8, color: 'rgba(255,255,255,0.9)', textShadow: '0 6px 30px rgba(0,0,0,0.4)', opacity: tween(t, pil.at - 0.1, 0.3), translate: `0 ${lerp(tween(t, pil.at - 0.1, 0.35, EASE_OUT), 30, 0)}px`}}>{pil.n}</div>
+          <div style={{position: 'absolute', left: 34, top: 14, display: 'flex', alignItems: 'center', gap: 22, opacity: tween(t, pil.at - 0.1, 0.3), translate: `0 ${lerp(tween(t, pil.at - 0.1, 0.35, EASE_OUT), 30, 0)}px`}}>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 190, lineHeight: 1, letterSpacing: -8, color: 'rgba(255,255,255,0.92)', textShadow: '0 6px 30px rgba(0,0,0,0.4)'}}>{pil.n}</div>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 64, lineHeight: 1.02, letterSpacing: -2, color: '#fff', textShadow: SHADOW, whiteSpace: 'pre'}}>{pil.label.replace(' ', '\n')}</div>
+          </div>
+          <div style={{position: 'absolute', right: 34, bottom: 30, display: 'flex', gap: 12}}>
+            {PILLARS.map((k, i) => <div key={i} style={{width: 22, height: 22, borderRadius: 11, background: t >= k.at ? CREAM : 'rgba(255,255,255,0.35)', boxShadow: '0 2px 8px rgba(0,0,0,0.35)'}} />)}
+          </div>
         </>
       ) : null}
     </AbsoluteFill>
   );
+};
+
+/** White stage behind her shrunk cut-out while a card is up (fades with her move). */
+export const V6Stage: React.FC = () => {
+  const t = useT();
+  const run = CARD_RUNS.find((r) => t >= r.start - 0.01 && t < r.end);
+  if (!run) return null;
+  const o = tween(t, run.start, 0.25) * (1 - tween(t, run.end - 0.35, 0.3));
+  return <AbsoluteFill style={{opacity: o, background: 'radial-gradient(100% 70% at 50% 35%, #FFFFFF 0%, #F7F5F1 65%, #ECE7DF 100%)'}} />;
 };
 
 // ===========================================================================

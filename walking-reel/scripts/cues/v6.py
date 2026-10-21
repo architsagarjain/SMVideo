@@ -7,9 +7,10 @@ BROLL = []
 
 
 def cues(cue, rng):
-    # hook: the card slides up on frame one, FAT? lands, a red cross on MORE CARDIO?
-    cue(1.13, "pack:whoosh_soft", -24)
-    cue(2.0, "pack:hit", -21)
+    # hook: FAT? lands, then the white stage + treadmill card, a red cross on MORE CARDIO?
+    cue(1.13, "pack:hit", -24)
+    cue(1.78, "pack:hit", -21)
+    cue(2.75, "pack:whoosh_soft", -23)
     cue(2.84, "pack:tick", -23)
     cue(3.96, "pack:hit", -19)
     cue(4.85, "pack:whoosh_fast2", -26)
