@@ -22,12 +22,12 @@ def cues(cue, rng):
     for t0 in (7.72, 9.3, 12.0, 14.18, 17.18):
         cue(t0, "pack:key", -20)
         cue(t0 + 0.08, "pack:key", -24)
-    cue(18.68, "pack:chime2", -25)
-    cue(19.13, "pack:hit", -19)
+    cue(19.84, "pack:chime2", -25)
+    cue(20.29, "pack:hit", -19)
     # +500 behind her head: ticks while it counts
-    cue(20.1, "pack:whoosh_deep", -22)
-    for j in range(8):
-        cue(21.3 + j * 0.13, "pack:tick", -29)
+    cue(21.4, "pack:whoosh_deep", -22)
+    for j in range(7):
+        cue(21.45 + j * 0.13, "pack:tick", -29)
     cue(22.4, "pack:hit", -22)
     # guilty too
     cue(27.92, "pack:chime", -25)

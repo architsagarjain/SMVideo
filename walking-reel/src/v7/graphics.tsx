@@ -149,11 +149,11 @@ const Sticker: React.FC<{kind: Kind; size: number; x: number; y: number; at: num
 // ===========================================================================
 export const V7Behind: React.FC = () => {
   const t = useT();
-  const n = Math.round(lerp(tween(t, 21.3, 1.1, EASE_IN_OUT), 0, 500));
+  const n = Math.round(lerp(tween(t, 21.45, 0.9, EASE_IN_OUT), 0, 500));
   return (
     <>
       {inside(t, C.hook) ? <Rise text="STOP" at={0.92} out={C.hook.end - 0.2} y={600} size={330} /> : null}
-      {inside(t, C.extra) && t >= 20.1 ? <Rise text={`+${n}`} at={20.1} out={C.extra.end - 0.2} y={600} size={330} /> : null}
+      {inside(t, C.extra) ? <Rise text={`+${n}`} at={C.extra.start} out={C.extra.end - 0.2} y={600} size={330} /> : null}
       {t >= C.cta.start ? <Rise text="SNACK" at={45.44} out={999} y={600} size={270} /> : null}
     </>
   );
@@ -267,6 +267,7 @@ const ItemIcon: React.FC<{icon: string}> = ({icon}) =>
     </svg>
   );
 
+const ROW = 100;
 /** The snack receipt prints downward from a slot as she lists each snack. */
 export const V7Receipt: React.FC = () => {
   const t = useT();
@@ -274,21 +275,21 @@ export const V7Receipt: React.FC = () => {
   const {y, o} = cardIn(t, C.receipt);
   const shown = ITEMS.filter((k) => t >= k.at).length;
   const total = tween(t, TOTAL_AT, 0.4, EASE_OUT);
-  const target = 150 + shown * 92 + (total > 0 ? 150 : 0);
+  const target = 160 + shown * ROW + (total > 0 ? 150 : 0);
   // paper height eases toward the current number of lines
-  const prev = 150 + Math.max(0, shown - 1) * 92 + 0;
+  const prev = 160 + Math.max(0, shown - 1) * ROW + 0;
   const last = shown > 0 ? ITEMS[shown - 1].at : C.receipt.start;
-  const grow = total > 0 ? lerp(tween(t, TOTAL_AT, 0.35, EASE_OUT), 150 + shown * 92, target) : lerp(tween(t, last, 0.3, EASE_OUT), prev, target);
+  const grow = total > 0 ? lerp(tween(t, TOTAL_AT, 0.35, EASE_OUT), 160 + shown * ROW, target) : lerp(tween(t, last, 0.3, EASE_OUT), prev, target);
   const stamp = tween(t, TOTAL_AT + 0.45, 0.3, EASE_OUT);
   return (
     <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 960, translate: `0 ${y}px`, opacity: o, fontFamily: SANS}}>
       {/* printer slot */}
-      <div style={{position: 'absolute', left: 120, top: 92, width: 840, height: 40, borderRadius: 20, background: '#2B2520', boxShadow: '0 10px 30px rgba(40,30,20,0.3)'}} />
+      <div style={{position: 'absolute', left: 80, top: 92, width: 920, height: 40, borderRadius: 20, background: '#2B2520', boxShadow: '0 10px 30px rgba(40,30,20,0.3)'}} />
       {/* paper */}
-      <div style={{position: 'absolute', left: 170, top: 112, width: 740, height: grow, overflow: 'hidden', filter: 'drop-shadow(0 18px 30px rgba(40,30,20,0.22))'}}>
+      <div style={{position: 'absolute', left: 120, top: 112, width: 840, height: grow, overflow: 'hidden', filter: 'drop-shadow(0 18px 30px rgba(40,30,20,0.22))'}}>
         <div style={{position: 'absolute', inset: 0, background: '#FFFDF8', clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 14px), 95% 100%, 90% calc(100% - 14px), 85% 100%, 80% calc(100% - 14px), 75% 100%, 70% calc(100% - 14px), 65% 100%, 60% calc(100% - 14px), 55% 100%, 50% calc(100% - 14px), 45% 100%, 40% calc(100% - 14px), 35% 100%, 30% calc(100% - 14px), 25% 100%, 20% calc(100% - 14px), 15% 100%, 10% calc(100% - 14px), 5% 100%, 0 calc(100% - 14px))'}} />
         <div style={{position: 'absolute', left: 44, right: 44, top: 46, textAlign: 'center'}}>
-          <div style={{fontWeight: 800, fontSize: 44, letterSpacing: 6, color: INK}}>SNACK RECEIPT</div>
+          <div style={{fontWeight: 800, fontSize: 50, letterSpacing: 7, color: INK}}>SNACK RECEIPT</div>
           <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 34, color: '#8a8178', marginTop: 4}}>one &quot;healthy&quot; day</div>
           <div style={{borderTop: '3px dashed #CFC6BA', marginTop: 16}} />
         </div>
@@ -296,17 +297,17 @@ export const V7Receipt: React.FC = () => {
           const p = tween(t, k.at, 0.3, EASE_OUT);
           if (p <= 0) return null;
           return (
-            <div key={i} style={{position: 'absolute', left: 44, right: 44, top: 160 + i * 92, height: 80, display: 'flex', alignItems: 'center', gap: 20, opacity: p, translate: `${lerp(p, -16, 0)}px 0`}}>
+            <div key={i} style={{position: 'absolute', left: 48, right: 48, top: 168 + i * ROW, height: 88, display: 'flex', alignItems: 'center', gap: 20, opacity: p, translate: `${lerp(p, -16, 0)}px 0`}}>
               <div style={{width: 64, display: 'flex', justifyContent: 'center'}}>
                 <ItemIcon icon={k.icon} />
               </div>
-              <div style={{flex: 1, fontWeight: 700, fontSize: 42, color: INK, whiteSpace: 'nowrap'}}>{k.label}</div>
-              <div style={{fontWeight: 800, fontSize: 44, color: k.kcal === 'meal' ? '#8a8178' : INK, fontVariantNumeric: 'tabular-nums'}}>{k.kcal === 'meal' ? 'meal' : `${k.kcal}`}</div>
+              <div style={{flex: 1, fontWeight: 700, fontSize: 48, color: INK, whiteSpace: 'nowrap'}}>{k.label}</div>
+              <div style={{fontWeight: 800, fontSize: 50, color: k.kcal === 'meal' ? '#8a8178' : INK, fontVariantNumeric: 'tabular-nums'}}>{k.kcal === 'meal' ? 'meal' : `${k.kcal}`}</div>
             </div>
           );
         })}
         {total > 0 ? (
-          <div style={{position: 'absolute', left: 44, right: 44, top: 160 + ITEMS.length * 92 + 10, opacity: total}}>
+          <div style={{position: 'absolute', left: 48, right: 48, top: 168 + ITEMS.length * ROW + 10, opacity: total}}>
             <div style={{borderTop: '3px dashed #CFC6BA'}} />
             <div style={{display: 'flex', alignItems: 'center', marginTop: 22}}>
               <div style={{flex: 1, fontWeight: 800, fontSize: 48, color: INK, letterSpacing: 2}}>EXTRA</div>
@@ -315,9 +316,9 @@ export const V7Receipt: React.FC = () => {
           </div>
         ) : null}
       </div>
-      {/* stamp */}
+      {/* stamp, under the paper so it never covers a line */}
       {stamp > 0 ? (
-        <div style={{position: 'absolute', left: 600, top: 300, rotate: '0deg', padding: '12px 28px', border: `7px solid ${RED}`, borderRadius: 18, color: RED, fontWeight: 800, fontSize: 54, letterSpacing: 4, opacity: stamp * 0.92, scale: lerp(stamp, 1.6, 1), background: 'rgba(255,253,248,0.6)'}}>
+        <div style={{position: 'absolute', left: 540, translate: '-50% 0', top: 112 + 160 + ITEMS.length * ROW + 190, padding: '12px 28px', border: `7px solid ${RED}`, borderRadius: 18, color: RED, fontWeight: 800, fontSize: 54, letterSpacing: 4, opacity: stamp * 0.92, scale: lerp(stamp, 1.6, 1), background: 'rgba(255,253,248,0.6)'}}>
           NOT A MEAL
         </div>
       ) : null}

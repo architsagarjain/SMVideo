@@ -15,8 +15,8 @@ export const V7_FRAMES = TM7.frames;
 export const C = {
   hook: {start: 0.9, end: 4.3}, // STOP behind her, snack stickers around her get crossed out
   hear: {start: 4.3, end: 7.2}, // sounds wrong? hear me out
-  receipt: {start: 7.2, end: 19.6}, // white stage: the snack receipt prints as she lists them
-  extra: {start: 19.6, end: 27.2}, // +500 behind her head, felt like nothing
+  receipt: {start: 7.2, end: 21.4}, // white stage: the snack receipt prints as she lists them, then totals
+  extra: {start: 21.4, end: 27.2}, // +500 behind her head, felt like nothing
   meToo: {start: 27.2, end: 28.6}, // "I have done this too"
   great: {start: 28.6, end: 33.3}, // the four snacks, each ticked: great foods
   unlimited: {start: 33.3, end: 38.5}, // healthy is not unlimited
@@ -32,7 +32,7 @@ export const ITEMS = [
   {at: 14.18, label: 'Protein bar', kcal: '+170', icon: 'bar'},
   {at: 17.18, label: 'Dark chocolate', kcal: '+110', icon: 'choc'},
 ];
-export const TOTAL_AT = 18.68;
+export const TOTAL_AT = 19.84; // "and suddenly"
 
 retime(TM7, C, []);
 // white stage runs (her cut-out shrinks into the lower half while a card sits on top)
