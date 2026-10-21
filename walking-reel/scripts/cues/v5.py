@@ -30,8 +30,8 @@ def cues(cue, rng):
     cue(10.86, "pack:chime", -24)
     # no gym? work out at home / back to her
     cue(12.13, "pack:whoosh_fast", -22)
-    cue(13.6, "pack:whoosh_fast2", -24)
-    cue(14.6, "pack:whoosh_soft", -28)
+    cue(13.6, "pack:whoosh_fast2", -24)  # cut from the gym clip back to her
+    cue(13.72, "pack:tick", -23)
     # 10 minute HIIT: the timer ticks
     cue(16.2, "pack:whoosh_fast", -22)
     for j in range(8):

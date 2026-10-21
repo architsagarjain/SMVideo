@@ -328,7 +328,7 @@ export const V5Chip: React.FC = () => {
 // ===========================================================================
 export const V5Broll: React.FC = () => {
   const t = useT();
-  const top = [C.tired, C.gym, C.home, C.hiit, C.online, C.focus, C.workout].find((w) => inside(t, w));
+  const top = [C.tired, C.gym, C.hiit, C.online, C.focus, C.workout].find((w) => inside(t, w));
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       {top ? <TopShade o={1} /> : null}

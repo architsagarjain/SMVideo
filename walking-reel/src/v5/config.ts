@@ -18,7 +18,7 @@ export const C = {
   tip1: {start: 7.2, end: 9.7}, // heading: 01 PICK EASY TASKS
   wins: {start: 9.7, end: 12.13}, // small wins build momentum
   gym: {start: 12.13, end: 13.6}, // B-roll gym: no gym?
-  home: {start: 13.6, end: 14.6}, // B-roll home: work out at home
+  home: {start: 13.6, end: 14.6}, // her talking: work out at home (none of her clips show a home workout)
   cantEven: {start: 14.82, end: 16.2}, // her, punch-in
   hiit: {start: 16.2, end: 18.4}, // B-roll high knees + 10 min timer
   online: {start: 18.66, end: 20.6}, // B-roll following a workout video: search bar types
@@ -67,7 +67,6 @@ export const v5Config: ReelConfig = {
     // her own B-roll only (parts of each clip the earlier reels did not use)
     {start: C.tired.start, end: C.tired.end, src: 'b_tired.mp4'},
     {start: C.gym.start, end: C.gym.end, src: 'b_gym.mp4'},
-    {start: C.home.start, end: C.home.end, src: 'b_home.mp4'},
     {start: C.hiit.start, end: C.hiit.end, src: 'b_pushups.mp4'},
     {start: C.online.start, end: C.online.end, src: 'b_tablet.mp4'},
     {start: C.skip.start, end: C.skip.end, src: 'b_work.mp4'},
