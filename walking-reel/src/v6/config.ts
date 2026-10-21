@@ -75,5 +75,5 @@ export const v6Config: ReelConfig = {
   blur: 8, // portrait-mode background; her feathered cut-out stays sharp on top
   clean: true,
   grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
-  noCaptions: [C.cta],
+  noCaptions: [C.scale, C.cta], // the scale card carries its own line
 };
