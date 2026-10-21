@@ -97,11 +97,11 @@ export const V5Behind: React.FC = () => {
   return (
     <>
       {/* hook: a giant BUSY? behind her head on the very first frame */}
-      {inside(t, C.open) ? <Rise text="BUSY?" at={C.open.start - 0.3} out={C.open.end - 0.12} x={473} y={590} size={300} ink={8} /> : null}
+      {inside(t, C.open) ? <Rise text="BUSY?" at={C.open.start - 0.3} out={C.open.end - 0.12} x={540} y={590} size={300} ink={0} /> : null}
       {/* tip heading: giant number rises behind her head */}
       {tip ? <Rise text={tip.n} at={tip.at} out={tip.w.end - 0.2} x={tip.hx} y={615} size={520} ink={tip.n === '01' ? -1 : 13} /> : null}
       {/* CTA */}
-      {t >= C.cta.start ? <Rise text="FAT LOSS" at={48.88} out={999} x={482} y={610} size={172} ink={4} /> : null}
+      {t >= C.cta.start ? <Rise text="FAT LOSS" at={48.88} out={999} x={540} y={610} size={172} ink={0} /> : null}
     </>
   );
 };
@@ -192,7 +192,7 @@ export const V5Talk: React.FC = () => {
       {/* CTA (front): Comment above the giant word, guide line under the comment box */}
       {t >= C.cta.start ? (
         <>
-          <Word text="Comment" at={48.66} out={999} x={482} y={390} size={96} serif />
+          <Word text="Comment" at={48.66} out={999} y={478} size={96} serif />
           <Word text="for my free fat loss guide" at={50.64} out={999} y={1480} size={50} color="#FFFFFF" />
         </>
       ) : null}
