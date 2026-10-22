@@ -76,10 +76,11 @@ export const v5Config: ReelConfig = {
   ],
   captions: captions as ReelConfig['captions'],
   tm: TM5,
-  // her cut-out on top where a number or word sits behind her head
-  // portrait-mode background: the wall blurs, her feathered cut-out stays sharp on top
-  blur: 8,
+  // no blur: a white wash over the top of the frame carries the words (V5Wash); her cut-out stays
+  // on top all the way through so numbers and words can sit behind her head
+  cut: [{start: 0, end: 999}],
   clean: true,
+  pill: true, // captions on a dark pill: readable on her grey top without the blur
   grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
   noCaptions: [C.open, C.tired, C.tip1, C.tip2, C.tip3, C.skip, C.cta],
 };

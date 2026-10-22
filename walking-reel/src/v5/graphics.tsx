@@ -29,6 +29,20 @@ const shine = (t: number, at: number, dur = 0.7): React.CSSProperties => {
   };
 };
 
+const INK_T = INK;
+/** Ink text with one soft light sweep passing across it. */
+const shineInk = (t: number, at: number, dur = 0.7): React.CSSProperties => {
+  const p = tween(t, at, dur, EASE_IN_OUT);
+  return {
+    color: 'transparent',
+    backgroundImage: `linear-gradient(105deg, ${INK} 0%, ${INK} 40%, #8A847C 50%, ${INK} 60%, ${INK} 100%)`,
+    backgroundSize: '300% 100%',
+    backgroundPosition: `${lerp(p, 100, 0)}% 0`,
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+  };
+};
+
 const Word: React.FC<{text: string; at: number; out: number; y: number; x?: number; size: number; serif?: boolean; color?: string; align?: 'center' | 'left'; shadow?: boolean}> = ({
   text,
   at,
@@ -89,6 +103,18 @@ const TopShade: React.FC<{o: number}> = ({o}) =>
 const fadeIn = (t: number, w: Win, d = 0.3) => tween(t, w.start, d) * (1 - tween(t, w.end - 0.25, 0.25));
 
 // ===========================================================================
+// White wash over the top of the frame wherever words sit on the wall (replaces the blur)
+// ===========================================================================
+const WASH: Win[] = [C.open, C.intro, ...TIPS.map((k) => k.w), C.wins, C.something, C.should, C.done, C.cta];
+export const V5Wash: React.FC = () => {
+  const t = useT();
+  let o = 0;
+  for (const w of WASH) if (t >= w.start - 0.01 && t < w.end + 0.3) o = Math.max(o, (w.start < 1 ? 1 : tween(t, w.start, 0.25)) * (1 - tween(t, w.end - 0.05, 0.3)));
+  if (o <= 0) return null;
+  return <AbsoluteFill style={{opacity: o, background: 'linear-gradient(to bottom, rgba(244,241,235,0.97) 0%, rgba(244,241,235,0.92) 26%, rgba(244,241,235,0) 42%)'}} />;
+};
+
+// ===========================================================================
 // Behind her head (between the footage and her cut-out)
 // ===========================================================================
 export const V5Behind: React.FC = () => {
@@ -114,7 +140,7 @@ const Rise: React.FC<{text: string; at: number; out: number; x: number; y: numbe
   const p = tween(t, at, 0.55, EASE_OUT);
   const o = 1 - tween(t, out, 0.25, EASE_IN);
   return (
-    <div style={{position: 'absolute', left: x - ink, top: y, translate: '-50% -50%', overflow: 'hidden', padding: '0 20px', opacity: o, filter: 'drop-shadow(0 0 28px rgba(0,0,0,0.5)) drop-shadow(0 10px 22px rgba(0,0,0,0.3))'}}>
+    <div style={{position: 'absolute', left: x - ink, top: y, translate: '-50% -50%', overflow: 'hidden', padding: '0 20px', opacity: o, filter: 'drop-shadow(0 0 22px rgba(255,255,255,0.9))'}}>
       <div
         style={{
           translate: `0 ${lerp(p, 70, 0)}%`,
@@ -125,7 +151,7 @@ const Rise: React.FC<{text: string; at: number; out: number; x: number; y: numbe
           letterSpacing: -size * 0.05,
           lineHeight: 0.92,
           whiteSpace: 'nowrap',
-          ...shine(t, at + 0.45, 0.8),
+          ...shineInk(t, at + 0.45, 0.8),
         }}
       >
         {text}
@@ -148,17 +174,17 @@ const TipFront: React.FC<{tip: (typeof TIPS)[number]}> = ({tip}) => {
     <AbsoluteFill style={{pointerEvents: 'none', opacity: o}}>
       {/* TIP label with rules either side */}
       <div style={{position: 'absolute', left: 540, top: 90, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: lab}}>
-        <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 42, letterSpacing: 14, color: CREAM, textShadow: SHADOW}}>TIP</div>
-        <div style={{width: 110 * lab, height: 3, background: CREAM, borderRadius: 2}} />
+        <div style={{width: 110 * lab, height: 3, background: INK_T, borderRadius: 2}} />
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 42, letterSpacing: 14, color: INK_T}}>TIP</div>
+        <div style={{width: 110 * lab, height: 3, background: INK_T, borderRadius: 2}} />
       </div>
       {/* title */}
       <div style={{position: 'absolute', left: 540, top: 150, translate: '-50% 0', display: 'flex', gap: 24, whiteSpace: 'nowrap'}}>
         {words.map((w, i) => {
           const p = tween(t, tip.titleAt + i * 0.12, 0.42, EASE_OUT);
           return (
-            <div key={i} style={{overflow: 'hidden', padding: '6px 4px', filter: 'drop-shadow(0 0 18px rgba(0,0,0,0.55)) drop-shadow(0 3px 6px rgba(0,0,0,0.4))'}}>
-              <div style={{translate: `0 ${lerp(p, 105, 0)}%`, fontFamily: SANS, fontWeight: 800, fontSize: 104, letterSpacing: -3, lineHeight: 1, ...shine(t, tip.titleAt + 0.5 + i * 0.12, 0.6)}}>{w}</div>
+            <div key={i} style={{overflow: 'hidden', padding: '6px 4px'}}>
+              <div style={{translate: `0 ${lerp(p, 105, 0)}%`, fontFamily: SANS, fontWeight: 800, fontSize: 104, letterSpacing: -3, lineHeight: 1, ...shineInk(t, tip.titleAt + 0.5 + i * 0.12, 0.6)}}>{w}</div>
             </div>
           );
         })}
@@ -181,8 +207,8 @@ export const V5Talk: React.FC = () => {
       {/* "just do something" */}
       {inside(t, C.something) ? (
         <>
-          <Word text="JUST DO" at={20.68} out={C.something.end - 0.2} y={250} size={140} />
-          <Word text="something" at={21.06} out={C.something.end - 0.2} y={385} size={120} serif />
+          <Word text="JUST DO" at={20.68} out={C.something.end - 0.2} y={250} size={140} color={INK} shadow={false} />
+          <Word text="something" at={21.06} out={C.something.end - 0.2} y={385} size={120} serif color={INK} shadow={false} />
         </>
       ) : null}
       {/* "something you don't want to do but you know you should" */}
@@ -192,7 +218,7 @@ export const V5Talk: React.FC = () => {
       {/* CTA (front): Comment above the giant word, guide line under the comment box */}
       {t >= C.cta.start ? (
         <>
-          <Word text="Comment" at={48.66} out={999} y={478} size={96} serif />
+          <Word text="Comment" at={48.66} out={999} y={478} size={96} serif color={INK} shadow={false} />
           <Word text="for my free fat loss guide" at={50.64} out={999} y={1480} size={50} color="#FFFFFF" />
         </>
       ) : null}
@@ -217,16 +243,16 @@ const ThreeDots: React.FC = () => {
                 width: 160,
                 height: 160,
                 borderRadius: '50%',
-                border: `6px solid ${CREAM}`,
-                background: on > 0 ? `rgba(246,231,193,${on})` : 'rgba(20,17,14,0.55)',
-                boxShadow: on > 0 ? `0 0 ${70 * on}px rgba(246,231,193,${0.8 * on})` : '0 8px 30px rgba(0,0,0,0.35)',
+                border: `6px solid ${INK_T}`,
+                background: on > 0.5 ? INK : 'rgba(255,255,255,0.92)',
+                boxShadow: '0 10px 26px -10px rgba(0,0,0,0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontFamily: SANS,
                 fontWeight: 800,
                 fontSize: 84,
-                color: on > 0.5 ? INK : CREAM,
+                color: on > 0.5 ? '#FFFFFF' : INK,
                 opacity: p,
                 scale: lerp(p, 0.6, 1) * (1 + 0.14 * on),
               }}
@@ -236,8 +262,8 @@ const ThreeDots: React.FC = () => {
           );
         })}
       </div>
-      <Word text="tips" at={3.54} out={4.9} y={385} size={110} serif />
-      <Word text="changed everything" at={5.0} out={C.intro.end - 0.25} y={385} size={84} serif />
+      <Word text="tips" at={3.54} out={4.9} y={385} size={110} serif color={INK} shadow={false} />
+      <Word text="changed everything" at={5.0} out={C.intro.end - 0.25} y={385} size={84} serif color={INK} shadow={false} />
     </>
   );
 };
@@ -252,16 +278,16 @@ const Wins: React.FC = () => {
         {[9.86, 10.1, 10.44].map((at, i) => {
           const p = tween(t, at, 0.35, EASE_OUT);
           return (
-            <div key={i} style={{opacity: Math.min(1, p * 2), scale: lerp(p, 0.5, 1), filter: 'drop-shadow(0 6px 14px rgba(0,0,0,0.3))'}}>
-              <Check size={110} p={tween(t, at + 0.1, 0.3, EASE_OUT)} />
+            <div key={i} style={{opacity: Math.min(1, p * 2), scale: lerp(p, 0.5, 1)}}>
+              <Check fill={INK} stroke="#FFFFFF" size={110} p={tween(t, at + 0.1, 0.3, EASE_OUT)} />
             </div>
           );
         })}
       </div>
       <div style={{position: 'absolute', left: 540, top: 330, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 18, opacity: m}}>
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 118, letterSpacing: -3, color: CREAM, textShadow: SHADOW, lineHeight: 1}}>MOMENTUM</div>
-        <svg width={100} height={100} viewBox="0 0 100 100" style={{filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.35))'}}>
-          <path d="M 14 86 L 84 16 M 40 16 L 84 16 L 84 60" fill="none" stroke={CREAM} strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - m} />
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 118, letterSpacing: -3, color: INK_T, lineHeight: 1}}>MOMENTUM</div>
+        <svg width={100} height={100} viewBox="0 0 100 100">
+          <path d="M 14 86 L 84 16 M 40 16 L 84 16 L 84 60" fill="none" stroke={INK_T} strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - m} />
         </svg>
       </div>
     </div>
@@ -275,11 +301,11 @@ const Should: React.FC = () => {
   const ok = tween(t, 35.88, 0.35, EASE_OUT);
   return (
     <>
-      <Word text="don't want to" at={34.2} out={out} y={235} size={100} serif />
+      <Word text="don't want to" at={34.2} out={out} y={235} size={100} serif color={INK} shadow={false} />
       {strike > 0 ? <div style={{position: 'absolute', left: 540 - 290, top: 240, width: 580 * strike, height: 10, borderRadius: 5, background: '#FF5A4E', opacity: 1 - tween(t, out, 0.22, EASE_IN)}} /> : null}
       <div style={{position: 'absolute', left: 540, top: 330, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 22, opacity: ok * (1 - tween(t, out, 0.22, EASE_IN)), whiteSpace: 'nowrap'}}>
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 84, letterSpacing: -2, color: CREAM, textShadow: SHADOW, lineHeight: 1}}>KNOW YOU SHOULD</div>
-        <Check size={84} p={tween(t, 36.02, 0.3, EASE_OUT)} />
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 84, letterSpacing: -2, color: INK_T, lineHeight: 1}}>KNOW YOU SHOULD</div>
+        <Check fill={INK} stroke="#FFFFFF" size={84} p={tween(t, 36.02, 0.3, EASE_OUT)} />
       </div>
     </>
   );
@@ -293,14 +319,14 @@ const Done: React.FC = () => {
   const tick = tween(t, 47.64, 0.3, EASE_OUT);
   return (
     <div style={{position: 'absolute', left: 540, top: 215, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 30, opacity: o * box, whiteSpace: 'nowrap'}}>
-      <div style={{width: 120, height: 120, borderRadius: 26, border: `7px solid ${CREAM}`, background: tick > 0 ? CREAM : 'rgba(0,0,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', scale: 1 + 0.12 * Math.sin(Math.PI * tick)}}>
+      <div style={{width: 120, height: 120, borderRadius: 26, border: `7px solid ${INK_T}`, background: tick > 0 ? INK : 'rgba(255,255,255,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', scale: 1 + 0.12 * Math.sin(Math.PI * tick)}}>
         <svg width={84} height={84} viewBox="0 0 100 100">
-          <path d="M 18 52 L 40 73 L 82 28" fill="none" stroke={INK} strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - tick} />
+          <path d="M 18 52 L 40 73 L 82 28" fill="none" stroke="#FFFFFF" strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - tick} />
         </svg>
       </div>
       <div style={{lineHeight: 1}}>
-        <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 64, color: '#fff', textShadow: SHADOW}}>the hard thing</div>
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 112, letterSpacing: -3, color: CREAM, textShadow: SHADOW, marginTop: 6, opacity: tween(t, 47.6, 0.3)}}>DONE</div>
+        <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 64, color: INK}}>the hard thing</div>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 112, letterSpacing: -3, color: INK_T, marginTop: 6, opacity: tween(t, 47.6, 0.3)}}>DONE</div>
       </div>
     </div>
   );
