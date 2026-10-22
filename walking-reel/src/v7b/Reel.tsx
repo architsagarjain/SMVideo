@@ -39,6 +39,10 @@ const sceneIndex = (t: number) => {
   return i;
 };
 const TRANS = 0.45;
+// CTA: when the comment sheet opens, her video shrinks into the space above it (like Instagram)
+const SHEET_AT = 45.14;
+const SHEET_TOP = 1040;
+const CTA_SMALL: Rect = {x: (SW - 530) / 2, y: 100, w: 530, h: 942, r: 30};
 const lerpRect = (a: Rect, b: Rect, p: number): Rect => ({x: lerp(p, a.x, b.x), y: lerp(p, a.y, b.y), w: lerp(p, a.w, b.w), h: lerp(p, a.h, b.h), r: lerp(p, a.r, b.r)});
 
 // ===========================================================================
@@ -183,6 +187,13 @@ const Calendar: React.FC<{t: number}> = ({t}) => {
   );
 };
 
+/** Her profile picture: a small cream badge with a dumbbell. */
+const ProfileIcon: React.FC<{border: string}> = ({border}) => (
+  <div style={{width: '100%', height: '100%', borderRadius: '50%', background: '#F6E7C1', border: `3px solid ${border}`, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    <Glyph name="barbell" size={34} color="#1B1714" />
+  </div>
+);
+
 const Story: React.FC<{t: number}> = ({t}) => {
   const from = Math.round(outAt(TMP, C.story.start) * FPS);
   const prog = tween(t, C.story.start, C.story.end - C.story.start, (x) => x);
@@ -205,7 +216,7 @@ const Story: React.FC<{t: number}> = ({t}) => {
       </div>
       <div style={{position: 'absolute', left: 24, top: 112, display: 'flex', alignItems: 'center', gap: 16}}>
         <div style={{width: 72, height: 72, borderRadius: 36, background: 'linear-gradient(45deg,#F9CE34,#EE2A7B,#6228D7)', padding: 4, boxSizing: 'border-box'}}>
-          <div style={{width: '100%', height: '100%', borderRadius: '50%', background: '#2B2B2B', border: '3px solid #000', boxSizing: 'border-box'}} />
+          <ProfileIcon border="#000" />
         </div>
         <div style={{color: '#fff', fontSize: 34, fontWeight: 800}}>Bhavika</div>
         <div style={{color: 'rgba(255,255,255,0.75)', fontSize: 30, fontWeight: 600}}>2h</div>
@@ -285,7 +296,8 @@ const Her: React.FC = () => {
     o = tween(t, cur.w.start, 0.3);
     sc = lerp(tween(t, cur.w.start, 0.4, EASE_OUT), 0.7, 1);
   }
-  const pip = r.w < SW - 1;
+  if (cur.app === 'reel') r = lerpRect(r, CTA_SMALL, tween(t, SHEET_AT, 0.45, EASE_OUT)); // makes room for the comment sheet
+  const pip = r.w < SW - 1 && cur.app !== 'reel';
   return (
     <div style={{position: 'absolute', left: r.x, top: r.y, width: r.w, height: r.h, borderRadius: r.r, overflow: 'hidden', opacity: o, scale: sc, boxShadow: pip ? '0 18px 40px rgba(0,0,0,0.35)' : undefined, outline: pip ? '5px solid #fff' : undefined, background: '#000'}}>
       <Footage cfg={cfg} />
@@ -405,15 +417,15 @@ const ReelUI: React.FC = () => {
   const t = useT();
   if (t < C.cta.start) return null;
   const o = tween(t, C.cta.start + 0.2, 0.3);
-  const sheet = tween(t, 45.14, 0.45, EASE_OUT);
+  const sheet = tween(t, SHEET_AT, 0.45, EASE_OUT);
   const word = 'SNACK';
   const typedN = Math.max(0, Math.min(word.length, Math.floor((t - 45.5) / 0.08) + 1));
   const sent = tween(t, 46.1, 0.3, EASE_OUT);
   const shown = sent > 0 ? '' : word.slice(0, typedN);
   const caret = sent === 0 && Math.floor(t * 3) % 2 === 0;
-  const SHEET_TOP = 900;
   return (
     <AbsoluteFill style={{opacity: o, fontFamily: SANS}}>
+      <AbsoluteFill style={{opacity: 1 - sheet}}>
       <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.5) 100%)'}} />
       <div style={{position: 'absolute', left: 36, top: 96, fontSize: 46, fontWeight: 800, color: '#fff'}}>Reels</div>
       <div style={{position: 'absolute', right: 36, top: 96}}>
@@ -432,18 +444,21 @@ const ReelUI: React.FC = () => {
         ))}
       </div>
       <div style={{position: 'absolute', left: 30, bottom: 120, display: 'flex', alignItems: 'center', gap: 16}}>
-        <div style={{width: 64, height: 64, borderRadius: 32, background: '#2B2B2B', border: '3px solid #fff', boxSizing: 'border-box'}} />
+        <div style={{width: 64, height: 64}}>
+          <ProfileIcon border="#fff" />
+        </div>
         <div style={{fontSize: 34, fontWeight: 800, color: '#fff'}}>Bhavika</div>
         <div style={{padding: '6px 20px', borderRadius: 14, border: '2px solid #fff', fontSize: 28, fontWeight: 700, color: '#fff'}}>Follow</div>
       </div>
       <div style={{position: 'absolute', left: 30, bottom: 64, fontSize: 30, fontWeight: 600, color: '#fff'}}>Stop eating “healthy” snacks if…</div>
+      </AbsoluteFill>
       {/* comment sheet */}
       <div style={{position: 'absolute', left: 0, right: 0, top: lerp(sheet, SH, SHEET_TOP), height: SH - SHEET_TOP + 40, borderRadius: '44px 44px 0 0', background: '#FFFFFF', boxShadow: '0 -20px 50px rgba(0,0,0,0.3)'}}>
         <div style={{position: 'absolute', left: 410, top: 16, width: 80, height: 10, borderRadius: 5, background: '#D1D1D6'}} />
-        <div style={{position: 'absolute', left: 0, right: 0, top: 44, textAlign: 'center', fontSize: 36, fontWeight: 800, color: INK}}>Comments</div>
-        <div style={{position: 'absolute', left: 0, right: 0, top: 96, height: 2, background: '#EFEFF4'}} />
-        {[...(sent > 0 ? [{name: 'you', text: 'SNACK', av: ME, fresh: true}] : []), ...COMMENTS].map((c, i) => (
-          <div key={c.name} style={{position: 'absolute', left: 32, right: 32, top: 126 + i * 128, display: 'flex', gap: 22, alignItems: 'center', opacity: 'fresh' in c ? sent : 1, translate: 'fresh' in c ? `0 ${lerp(sent, -20, 0)}px` : undefined}}>
+        <div style={{position: 'absolute', left: 0, right: 0, top: 36, textAlign: 'center', fontSize: 36, fontWeight: 800, color: INK}}>Comments</div>
+        <div style={{position: 'absolute', left: 0, right: 0, top: 88, height: 2, background: '#EFEFF4'}} />
+        {[...(sent > 0 ? [{name: 'you', text: 'SNACK', av: ME, fresh: true}] : []), ...COMMENTS].slice(0, 2).map((c, i) => (
+          <div key={c.name} style={{position: 'absolute', left: 32, right: 32, top: 110 + i * 112, display: 'flex', gap: 22, alignItems: 'center', opacity: 'fresh' in c ? sent : 1, translate: 'fresh' in c ? `0 ${lerp(sent, -20, 0)}px` : undefined}}>
             <div style={{width: 78, height: 78, flexShrink: 0}}>
               <Avatar {...c.av} />
             </div>
@@ -455,7 +470,7 @@ const ReelUI: React.FC = () => {
             </div>
           </div>
         ))}
-        <div style={{position: 'absolute', left: 24, right: 24, top: SH - SHEET_TOP - 200, height: 110, display: 'flex', alignItems: 'center', gap: 18}}>
+        <div style={{position: 'absolute', left: 24, right: 24, top: SH - SHEET_TOP - 150, height: 110, display: 'flex', alignItems: 'center', gap: 18}}>
           <div style={{width: 84, height: 84, flexShrink: 0}}>
             <Avatar {...ME} />
           </div>
