@@ -439,7 +439,7 @@ const Review: React.FC = () => {
       <At x={540} y={170} s={lerp(Math.min(1, k1), 0.85, 1)} o={k1}>
         <A size={84}>before you</A>
       </At>
-      <At x={540} y={300} s={lerp(Math.min(1, k2), 0.85, 1)} o={k2}>
+      <At x={540} y={325} s={lerp(Math.min(1, k2), 0.85, 1)} o={k2}>
         <A size={150}>
           <Hi p={tween(t, 21.5, 0.3)}>change</Hi> the plan
         </A>
@@ -577,7 +577,7 @@ const Real: React.FC = () => {
         <A size={84}>was the plan</A>
       </At>
       {t >= 39.2 ? (
-        <At x={540} y={320} s={lerp(Math.min(1, k2), 0.8, 1)}>
+        <At x={540} y={355} s={lerp(Math.min(1, k2), 0.8, 1)}>
           <A size={190}>
             <Hi p={tween(t, 39.4, 0.35)}>realistic?</Hi>
           </A>

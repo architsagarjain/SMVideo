@@ -49,6 +49,6 @@ export const v9Config: ReelConfig = {
   broll: [],
   captions: captions as ReelConfig['captions'],
   tm: TM9,
-  grade: {filter: 'brightness(1.05) contrast(1.07) saturate(1.12)'},
+  grade: {filter: 'brightness(1.03) contrast(1.06) saturate(1.1)'}, // on top of the brightened, cleaned footage (shadows lifted, denoised, sharpened)
   cut: [C.hook, C.review, C.real, C.decide, C.cta], // her cut-out over graphics behind her
 };
