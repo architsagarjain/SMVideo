@@ -89,7 +89,7 @@ const hash = (a: number, b: number) => {
   return x - Math.floor(x);
 };
 /** One flap tile: spins through random characters until `settle`, then shows `ch`. */
-const Flap: React.FC<{ch: string; settle: number; start: number; w: number; h: number; color: string; seed: number; bg?: string}> = ({ch, settle, start, w, h, color, seed, bg = '#1A1D24'}) => {
+const Flap: React.FC<{ch: string; settle: number; start: number; w: number; h: number; color: string; seed: number; bg?: string}> = ({ch, settle, start, w, h, color, seed, bg = '#262A35'}) => {
   const t = useT();
   const f = useCurrentFrame();
   const spinning = t >= start && t < settle;
@@ -120,7 +120,7 @@ const ROWS = [
   {time: '09:15', dest: 'LONDON', status: 'ON TIME', at: 1.3, color: '#FFFFFF'},
   {time: '11:05', dest: 'SINGAPORE', status: 'BOARDING', at: 1.58, color: AMBER},
 ];
-const CW = 60, CH = 92;
+const CW = 94, CH = 132, ROW0 = 400, ROWH = 330;
 
 const DietStatus: React.FC = () => {
   const t = useT();
@@ -145,36 +145,27 @@ const Board: React.FC = () => {
   return (
     <AbsoluteFill style={{background: 'radial-gradient(120% 70% at 50% 40%, #1C2029 0%, #0B0D11 100%)', fontFamily: SANS}}>
       {/* header */}
-      <div style={{position: 'absolute', left: 60, right: 60, top: 150, height: 120, borderRadius: 18, background: AMBER, display: 'flex', alignItems: 'center', gap: 26, padding: '0 34px', boxSizing: 'border-box'}}>
+      <div style={{position: 'absolute', left: 60, right: 60, top: 140, height: 130, borderRadius: 18, background: AMBER, display: 'flex', alignItems: 'center', gap: 26, padding: '0 34px', boxSizing: 'border-box'}}>
         <Plane size={78} color={INK} />
         <div style={{fontWeight: 800, fontSize: 72, letterSpacing: 10, color: INK}}>DEPARTURES</div>
       </div>
-      <div style={{position: 'absolute', left: 70, top: 318, display: 'flex', gap: 316, fontWeight: 700, fontSize: 30, letterSpacing: 5, color: 'rgba(255,255,255,0.5)'}}>
-        <span>TIME · DESTINATION</span>
-      </div>
       {ROWS.map((r, i) => (
-        <div key={i} style={{position: 'absolute', left: 70, top: 380 + i * 250, display: 'flex', flexDirection: 'column', gap: 12}}>
-          <div style={{display: 'flex', gap: 30}}>
-            <FlapText text={r.time} at={r.at} len={5} w={CW} h={CH} color="#FFFFFF" seed={i * 3 + 1} />
-            <FlapText text={r.dest.padEnd(9)} at={r.at + 0.05} len={9} w={CW} h={CH} color="#FFFFFF" seed={i * 3 + 2} />
-          </div>
-          <div style={{marginLeft: 6 * (CW + 6) + 24 - 66}}>
-            <FlapText text={r.status.padEnd(9)} at={r.at + 0.12} len={9} w={CW} h={CH} color={r.color} seed={i * 3 + 3} />
-          </div>
+        <div key={i} style={{position: 'absolute', left: 64, top: ROW0 + i * ROWH, display: 'flex', flexDirection: 'column', gap: 10}}>
+          <div style={{fontWeight: 800, fontSize: 34, letterSpacing: 4, color: AMBER, opacity: tween(t, r.at, 0.2)}}>{r.time}</div>
+          <FlapText text={r.dest.padEnd(9)} at={r.at + 0.05} len={9} w={CW} h={CH} color="#FFFFFF" seed={i * 3 + 2} />
+          <FlapText text={r.status.padEnd(9)} at={r.at + 0.12} len={9} w={CW} h={CH} color={r.color} seed={i * 3 + 3} />
         </div>
       ))}
       {/* YOUR DIET row, highlighted when it gets cancelled */}
-      <div style={{position: 'absolute', left: 40, right: 40, top: 380 + 3 * 250 - 30, height: 250, borderRadius: 26, background: `rgba(255,77,77,${0.16 * red})`, border: `4px solid rgba(255,77,77,${0.9 * red * blink})`, boxSizing: 'border-box'}} />
-      <div style={{position: 'absolute', left: 70, top: 380 + 3 * 250, display: 'flex', flexDirection: 'column', gap: 12}}>
-        <div style={{display: 'flex', gap: 30}}>
-          <FlapText text="--:--" at={1.86} len={5} w={CW} h={CH} color="#FFFFFF" seed={40} />
-          <FlapText text="YOUR DIET" at={1.9} len={9} w={CW} h={CH} color="#FFFFFF" seed={41} />
-        </div>
-        <div style={{marginLeft: 6 * (CW + 6) + 24 - 66, opacity: t >= 3.95 ? blink : 1}}>
+      <div style={{position: 'absolute', left: 40, right: 40, top: ROW0 + 3 * ROWH - 22, height: 360, borderRadius: 26, background: `rgba(255,77,77,${0.16 * red})`, border: `5px solid rgba(255,77,77,${0.9 * red * blink})`, boxSizing: 'border-box'}} />
+      <div style={{position: 'absolute', left: 64, top: ROW0 + 3 * ROWH, display: 'flex', flexDirection: 'column', gap: 10}}>
+        <div style={{fontWeight: 800, fontSize: 34, letterSpacing: 4, color: AMBER, opacity: tween(t, 1.86, 0.2)}}>--:--</div>
+        <FlapText text="YOUR DIET" at={1.9} len={9} w={CW} h={CH} color="#FFFFFF" seed={41} />
+        <div style={{opacity: t >= 3.95 ? blink : 1}}>
           <DietStatus />
         </div>
       </div>
-      <div style={{position: 'absolute', left: 0, right: 0, bottom: 250, textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 70, color: '#fff', opacity: tween(t, 2.58, 0.35)}}>
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: 70, textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 72, color: '#fff', opacity: tween(t, 2.58, 0.35)}}>
         only works at home?
       </div>
     </AbsoluteFill>
@@ -356,10 +347,10 @@ const Travel: React.FC = () => {
     <>
       <Word text="a plan has to" at={24.72} out={27.4} y={190} size={84} serif />
       <Word text="work around" at={25.86} out={27.4} y={300} size={110} serif />
-      {t >= 27.62 ? <Word text="instead of assuming" at={27.62} out={out} y={150} size={64} serif /> : null}
+      {t >= 27.62 ? <Word text="instead of assuming" at={27.62} out={out} y={100} size={60} serif /> : null}
       {chips.map((c, i) =>
         t >= c.at ? (
-          <div key={i} style={{position: 'absolute', left: 540, top: 240 + i * 108, translate: '-50% 0', padding: '14px 34px', borderRadius: 50, background: 'rgba(20,17,14,0.66)', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', fontFamily: SANS, fontWeight: 800, fontSize: 50, color: '#fff', whiteSpace: 'nowrap', opacity: tween(t, c.at, 0.3) * (1 - tween(t, out, 0.22, EASE_IN)), scale: lerp(tween(t, c.at, 0.35, EASE_OUT), 0.85, 1)}}>
+          <div key={i} style={{position: 'absolute', left: 540, top: 150 + i * 92, translate: '-50% 0', padding: '12px 30px', borderRadius: 50, background: 'rgba(20,17,14,0.66)', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', fontFamily: SANS, fontWeight: 800, fontSize: 44, color: '#fff', whiteSpace: 'nowrap', opacity: tween(t, c.at, 0.3) * (1 - tween(t, out, 0.22, EASE_IN)), scale: lerp(tween(t, c.at, 0.35, EASE_OUT), 0.85, 1)}}>
             {c.text}
             {strike > 0 ? <div style={{position: 'absolute', left: 24, top: '50%', height: 8, width: `calc(${strike * 100}% - 48px)`, borderRadius: 4, background: RED}} /> : null}
           </div>
@@ -378,7 +369,7 @@ const Process: React.FC = () => {
       <Word text="my decision process for a" at={32.2} out={out} y={150} size={66} serif />
       <div style={{position: 'absolute', left: 540, top: 270, translate: '-50% -50%', display: 'flex', alignItems: 'center', gap: 24, padding: '20px 44px', borderRadius: 70, background: AMBER, boxShadow: '0 16px 40px rgba(0,0,0,0.35)', opacity: p * (1 - tween(t, out, 0.22, EASE_IN)), scale: lerp(p, 0.7, 1), fontFamily: SANS}}>
         <Plane size={80} color={INK} />
-        <div style={{fontWeight: 800, fontSize: 84, letterSpacing: -2, color: INK}}>TRAVEL DAY</div>
+        <div style={{fontWeight: 800, fontSize: 84, letterSpacing: -2, color: INK, whiteSpace: 'nowrap'}}>TRAVEL DAY</div>
       </div>
     </>
   );
