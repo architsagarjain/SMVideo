@@ -103,7 +103,7 @@ const BoxPhoto: React.FC<{r: Rect; t: number; badge?: number; claims?: number; b
     <>
       <Img src={staticFile('v10/photos/box.jpg')} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 62%', scale: 1 + push}} />
       {badge > 0 ? (
-        <div style={{position: 'absolute', left: r.w * 0.5, top: r.h * 0.5, translate: '-50% -50%'}}>
+        <div style={{position: 'absolute', left: r.w * lerp(claims > 0 ? tween(t, 9.25, 0.4, EASE_IN_OUT) : 0, 0.5, 0.7), top: r.h * lerp(claims > 0 ? tween(t, 9.25, 0.4, EASE_IN_OUT) : 0, 0.5, 0.6), translate: '-50% -50%'}}>
           <Sticker d={d} lines={question > 0.5 ? ['SOUNDS', 'HEALTHY?'] : ['SUGAR', 'FREE']} k={Math.max(0, badge) * (question > 0 ? lerp(Math.min(1, popAt(t, 67.7)), 1.25, 1) : 1)} color={question > 0.5 ? INK : GREEN} />
         </div>
       ) : null}
