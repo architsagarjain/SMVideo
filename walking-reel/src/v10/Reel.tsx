@@ -176,8 +176,8 @@ const Cards: React.FC = () => {
               <div style={{...rise(t, 1.2), textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 58, color: '#fff', textShadow: '0 4px 18px rgba(0,0,0,0.5)', whiteSpace: 'nowrap'}}>If you handed me a box of</div>
             </At>
             {t >= 2.5 ? (
-              <At x={540} y={390} s={lerp(Math.min(1, popAt(t, 2.54)), 1.3, 1)}>
-                <Tape size={110}>
+              <At x={540} y={390} s={lerp(Math.min(1, popAt(t, 2.54)), 1.1, 1)}>
+                <Tape size={96}>
                   <span style={{color: GREEN_D}}>sugar-free</span> mithai
                 </Tape>
               </At>
