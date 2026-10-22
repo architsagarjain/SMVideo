@@ -105,7 +105,7 @@ const fadeIn = (t: number, w: Win, d = 0.3) => tween(t, w.start, d) * (1 - tween
 // ===========================================================================
 // White wash over the top of the frame wherever words sit on the wall (replaces the blur)
 // ===========================================================================
-const WASH: Win[] = [C.open, C.intro, ...TIPS.map((k) => k.w), C.wins, C.something, C.should, C.done, C.cta];
+const WASH: Win[] = [C.open, C.intro, ...TIPS.map((k) => k.w), C.wins, C.home, C.something, C.should, C.done, C.cta];
 export const V5Wash: React.FC = () => {
   const t = useT();
   let o = 0;
@@ -369,8 +369,8 @@ export const V5Broll: React.FC = () => {
       {inside(t, C.gym) ? <Word text="NO GYM?" at={12.32} out={C.gym.end - 0.05} y={230} size={170} /> : null}
       {inside(t, C.home) ? (
         <>
-          <Word text="work out" at={13.72} out={C.home.end - 0.05} y={185} size={96} serif />
-          <Word text="AT HOME" at={13.82} out={C.home.end - 0.05} y={310} size={150} />
+          <Word text="work out" at={13.72} out={C.home.end - 0.05} y={185} size={96} serif color={INK} shadow={false} />
+          <Word text="AT HOME" at={13.82} out={C.home.end - 0.05} y={310} size={150} color={INK} shadow={false} />
         </>
       ) : null}
       {inside(t, C.hiit) ? <Timer /> : null}
