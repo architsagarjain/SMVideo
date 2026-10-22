@@ -101,7 +101,7 @@ const BoxPhoto: React.FC<{r: Rect; t: number; badge?: number; claims?: number; b
     <>
       <Img src={staticFile('v10/photos/box.jpg')} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 62%', scale: 1 + push}} />
       {badge > 0 ? (
-        <div style={{position: 'absolute', left: r.w * 0.6, top: r.h * 0.5, translate: '-50% -50%'}}>
+        <div style={{position: 'absolute', left: r.w * 0.5, top: r.h * 0.5, translate: '-50% -50%'}}>
           <Sticker d={d} lines={question > 0.5 ? ['SOUNDS', 'HEALTHY?'] : ['SUGAR', 'FREE']} k={Math.max(0, badge) * (question > 0 ? lerp(Math.min(1, popAt(t, 67.7)), 1.25, 1) : 1)} color={question > 0.5 ? RED : GREEN} />
         </div>
       ) : null}
@@ -239,7 +239,7 @@ const Rep: React.FC = () => {
         </div>
       ) : null}
       {stamp > 0 ? (
-        <div style={{position: 'absolute', left: 430, top: 130, translate: '-50% -50%'}}>
+        <div style={{position: 'absolute', left: 290, top: 310, translate: '-50% -50%'}}>
           <Sticker d={190} lines={['HEALTHY', '✓']} k={Math.max(0, stamp) * lerp(Math.min(1, stamp), 1.4, 1)} />
         </div>
       ) : null}
@@ -472,12 +472,12 @@ const Cta: React.FC = () => {
         </div>
       </At>
       {t >= 70.3 ? (
-        <At x={540} y={330} s={lerp(Math.min(1.1, k), 1.4, 1)} o={Math.min(1, k * 2)}>
-          <Tape size={150} bg={HL}>GUIDE</Tape>
+        <At x={540} y={335} s={lerp(Math.min(1.05, k), 1.12, 1)} o={Math.min(1, k * 2)}>
+          <Tape size={104} bg={HL}>GUIDE</Tape>
         </At>
       ) : null}
       {card > 0 ? (
-        <div style={{position: 'absolute', left: 540, top: lerp(card, 640, 520), translate: '-50% -50%', opacity: card, display: 'flex', alignItems: 'center', gap: 20, padding: '18px 34px 18px 18px', borderRadius: 26, background: '#fff', border: `5px solid ${INK}`, boxShadow: SHADOW}}>
+        <div style={{position: 'absolute', left: 540, top: lerp(card, 660, 548), translate: '-50% -50%', opacity: card, display: 'flex', alignItems: 'center', gap: 20, padding: '18px 34px 18px 18px', borderRadius: 26, background: '#fff', border: `5px solid ${INK}`, boxShadow: SHADOW}}>
           <div style={{width: 80, height: 80, borderRadius: 18, background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <Ico name="file-pdf" size={52} color="#fff" />
           </div>
@@ -503,7 +503,7 @@ const Caps: React.FC = () => {
   if (!chunk) return null;
   const k = tween(t, chunk[0].start - 0.04, 0.14);
   return (
-    <div style={{position: 'absolute', left: 40, right: 40, top: 1520, translate: `0 ${-50 + lerp(k, 10, 0)}%`, textAlign: 'center', opacity: k}}>
+    <div style={{position: 'absolute', left: 40, right: 40, top: inWin(t, [C.journey]) ? 560 : 1520, translate: `0 ${-50 + lerp(k, 10, 0)}%`, textAlign: 'center', opacity: k}}>
       <div style={{display: 'inline-block', padding: '10px 26px 14px', background: '#fff', border: `5px solid ${INK}`, borderRadius: 18, boxShadow: '0 12px 26px -10px rgba(0,0,0,0.45)', scale: lerp(k, 0.94, 1)}}>
         {chunk.map((w, i) => {
           const nextStart = chunk[i + 1]?.start ?? w.end + 0.3;
