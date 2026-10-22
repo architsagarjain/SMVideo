@@ -165,14 +165,14 @@ const boxPose = (t: number): Pose => {
   if (t < C.front.start) {
     const k = tween(t, C.hook.start, 0.85, EASE_OUT);
     const spin = tween(t, 5.48, 0.75, EASE_IN_OUT);
-    return {x: 540, y: lerp(k, 2350, 1210) + bob, s: lerp(k, 1.7, 1.05), ry: lerp(k, -70, -16) + 180 * spin + 30 * spin, rx: lerp(k, 25, -9), o: 1};
+    return {x: 540, y: lerp(k, 2350, 1270) + bob, s: lerp(k, 1.7, 1.05), ry: lerp(k, -70, -16) + 180 * spin + 30 * spin, rx: lerp(k, 25, -9), o: 1};
   }
   if (t < C.journey.start + 0.6) {
     const up = tween(t, C.front.start, 0.7, EASE_IN_OUT);
     const back = tween(t, 6.75, 0.7, EASE_IN_OUT); // spin back to the front on the way up
     const spin2 = tween(t, 11.34, 0.75, EASE_IN_OUT); // nutrition panel
     const out = tween(t, C.journey.start, 0.55, EASE_IN);
-    return {x: 540, y: lerp(up, 1210, 395) + bob * 0.6 - 900 * out, s: lerp(up, 1.05, 0.92), ry: 194 + 152 * back + 180 * spin2, rx: lerp(up, -9, -6), o: 1};
+    return {x: 540, y: lerp(up, 1270, 395) + bob * 0.6 - 900 * out, s: lerp(up, 1.05, 0.92), ry: 194 + 152 * back + 180 * spin2, rx: lerp(up, -9, -6), o: 1};
   }
   // near the end: does the box "sound healthy"?
   if (t >= 67.5 && t < C.cta.start + 0.4) {
@@ -290,7 +290,7 @@ const Hook: React.FC = () => {
           </div>
         </div>
       </At>
-      <Sparks at={1.92} x={540} y={1210} />
+      <Sparks at={1.92} x={540} y={1270} />
     </AbsoluteFill>
   );
 };
@@ -467,7 +467,7 @@ const Compare: React.FC = () => {
   return (
     <AbsoluteFill style={{opacity: o}}>
       <At x={540} y={230} s={lerp(Math.min(1, popAt(t, 37.48)), 0.8, 1)} o={tween(t, 37.4, 0.3)}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 40, padding: '26px 44px', borderRadius: 26, background: '#F7EFDD', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', fontFamily: SANS, color: '#141414'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 40, padding: '26px 44px', borderRadius: 26, background: '#F7EFDD', whiteSpace: 'nowrap', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', fontFamily: SANS, color: '#141414'}}>
           <span style={{fontWeight: 800, fontSize: 50}}>Energy</span>
           <span style={{fontWeight: 700, fontSize: 36, color: '#6B5E48', opacity: tween(t, 38.48, 0.3)}}>per 100 g</span>
           <span style={{fontWeight: 800, fontSize: 50, background: `rgba(245,195,91,${tween(t, 38.48, 0.3)})`, padding: '2px 12px', borderRadius: 8}}>400 kcal</span>
@@ -584,7 +584,7 @@ const Diwali: React.FC = () => {
       </div>
       {t >= 67.68 ? (
         <At x={540} y={640} s={Math.max(0, popAt(t, 68.04))}>
-          <GoldPill size={34}>“SOUNDS HEALTHY” ISN'T THE NUMBERS</GoldPill>
+          <GoldPill size={34}>CHECK THE LABEL, NOT THE CLAIM</GoldPill>
         </At>
       ) : null}
     </AbsoluteFill>
@@ -642,7 +642,7 @@ const Caps: React.FC = () => {
       {chunk.map((w, i) => {
         const key = KEY.has(w.text.toLowerCase().replace(/[.,?!]/g, ''));
         return (
-          <span key={i} style={{display: 'inline-block', margin: '0 0.13em', verticalAlign: 'baseline', ...(key ? {fontFamily: SERIF, fontStyle: 'italic', fontSize: 92, color: GOLD, textShadow: '0 0 24px rgba(245,170,60,0.5), 0 4px 14px rgba(0,0,0,0.6)'} : {fontFamily: SANS, fontWeight: 750, fontSize: 62, color: '#fff', textShadow: '0 4px 18px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.6)'})}}>
+          <span key={i} style={{display: 'inline-block', margin: '0 0.13em', verticalAlign: 'baseline', ...(key ? {fontFamily: SERIF, fontStyle: 'italic', fontSize: 104, color: GOLD, textShadow: '0 0 24px rgba(245,170,60,0.5), 0 4px 14px rgba(0,0,0,0.6)'} : {fontFamily: SANS, fontWeight: 750, fontSize: 70, color: '#fff', textShadow: '0 4px 18px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.6)'})}}>
             {w.text}
           </span>
         );
