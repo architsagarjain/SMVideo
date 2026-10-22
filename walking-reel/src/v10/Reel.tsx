@@ -156,7 +156,7 @@ const Cards: React.FC<{front?: boolean}> = ({front = false}) => {
               <>
                 <NutLabel w={b.w} h={b.h} hiE={tween(t, 12.9, 0.45)} hiF={tween(t, 13.4, 0.45)} />
                 <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: `${b.w * 0.035}px ${b.w * 0.05}px`, background: INK, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: b.w * 0.076, lineHeight: 1.12, opacity: bandB, translate: `0 ${lerp(bandB, 30, 0)}px`}}>
-                  BACK · what you
+                  BACK · What you
                   <br />
                   need to <span style={{color: HL}}>compare</span>
                 </div>
@@ -169,7 +169,7 @@ const Cards: React.FC<{front?: boolean}> = ({front = false}) => {
           r={a}
           ry={ry}
           radius={radius}
-          front={<BoxPhoto r={a} t={t} badge={badge} claims={split > 0.9 ? 1 : 0} band={'FRONT · what the brand\nwants you to see'} bandO={bandA} push={0.08 * (1 - shrink) * tween(t, C.hook.start, 2.5, (x) => x)} />}
+          front={<BoxPhoto r={a} t={t} badge={badge} claims={split > 0.9 ? 1 : 0} band={'FRONT · What the brand\nwants you to see'} bandO={bandA} push={0.08 * (1 - shrink) * tween(t, C.hook.start, 2.5, (x) => x)} />}
           back={<NutLabel w={a.w} h={a.h} />}
         />
         {/* hook words on the full-screen photo */}
@@ -204,11 +204,11 @@ const Cards: React.FC<{front?: boolean}> = ({front = false}) => {
           r={r}
           ry={180 * flip}
           radius={30}
-          front={<BoxPhoto r={r} t={t} badge={1} band={'YOUR DIWALI\nDECISION'} bandO={bandO} question={t >= 67.68 ? 1 : 0} />}
+          front={<BoxPhoto r={r} t={t} badge={1} band={'FRONT · The claim'} bandO={bandO} question={t >= 67.68 ? 1 : 0} />}
           back={
             <>
               <NutLabel w={r.w} h={r.h} hiE={tween(t, 69.3, 0.4)} />
-              <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: `${r.w * 0.035}px ${r.w * 0.05}px`, background: GREEN, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: r.w * 0.07, lineHeight: 1.15}}>CHECK THE LABEL ✓</div>
+              <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: `${r.w * 0.035}px ${r.w * 0.05}px`, background: GREEN, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: r.w * 0.07, lineHeight: 1.15}}>BACK · The facts ✓</div>
             </>
           }
         />
@@ -249,8 +249,8 @@ const Rep: React.FC = () => {
       ) : null}
       <Card r={{x: 570, y: TOP + 30, w: 440, h: 420}} k={panel}>
         <div style={{padding: '24px 28px', fontFamily: SANS, color: INK}}>
-          <div style={{fontWeight: 800, fontSize: 30, letterSpacing: 2, color: '#6A6A6A'}}>PERMISSION</div>
-          <div style={{fontWeight: 800, fontSize: 50, lineHeight: 1, borderBottom: `8px solid ${INK}`, paddingBottom: 10}}>to eat it</div>
+          <div style={{fontWeight: 800, fontSize: 30, letterSpacing: 2, color: '#6A6A6A'}}>THE HALO EFFECT</div>
+          <div style={{fontWeight: 800, fontSize: 44, lineHeight: 1, borderBottom: `8px solid ${INK}`, paddingBottom: 10, whiteSpace: 'nowrap'}}>“healthy” = more?</div>
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginTop: 22}}>
             {times.map((x, i) => {
               const on = popAt(t, x);
@@ -315,14 +315,23 @@ const Nine: React.FC = () => {
   return (
     <AbsoluteFill style={{opacity: o}}>
       <Card r={{x: 140, y: TOP, w: 800, h: 470}} k={k} bg={INK} border={false}>
-        <div style={{position: 'absolute', left: 0, right: 0, top: 46, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 60, color: '#fff'}}>
-          1 g of <span style={{color: HL}}>fat</span>
+        <div style={{position: 'absolute', left: 0, right: 0, top: 40, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 40, letterSpacing: 4, color: 'rgba(255,255,255,0.7)'}}>CALORIES PER GRAM</div>
+        <div style={{position: 'absolute', left: 40, right: 40, top: 110, display: 'flex', gap: 30}}>
+          {[
+            {name: 'FAT', n: '9', at: 33.58, hi: true},
+            {name: 'CARBS · PROTEIN', n: '4', at: 34.54, hi: false},
+          ].map((c, i) =>
+            t >= c.at - 0.02 ? (
+              <div key={i} style={{flex: 1, height: 300, borderRadius: 24, background: c.hi ? HL : 'rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, color: c.hi ? INK : '#fff', scale: lerp(Math.min(1, popAt(t, c.at)), 0.7, 1), opacity: Math.min(1, popAt(t, c.at) * 2)}}>
+                <div style={{fontWeight: 800, fontSize: 34, letterSpacing: 2}}>{c.name}</div>
+                <div style={{fontWeight: 800, fontSize: 170, lineHeight: 1, letterSpacing: -4}}>{c.n}</div>
+                <div style={{fontWeight: 700, fontSize: 30}}>kcal / g</div>
+              </div>
+            ) : (
+              <div key={i} style={{flex: 1}} />
+            ),
+          )}
         </div>
-        {t >= 33.5 ? (
-          <div style={{position: 'absolute', left: 0, right: 0, top: 150, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 230, lineHeight: 1, color: '#fff', letterSpacing: -6, scale: lerp(Math.min(1, nine), 1.3, 1), opacity: Math.min(1, nine * 2)}}>
-            ≈ 9 <span style={{fontSize: 110, letterSpacing: -2}}>kcal</span>
-          </div>
-        ) : null}
       </Card>
     </AbsoluteFill>
   );
@@ -358,7 +367,7 @@ const Compare: React.FC = () => {
       {t >= 39.96 ? (
         <At x={540} y={TOP + 462} s={Math.max(0, popAt(t, 39.96))}>
           <Tape size={40} bg={HL}>
-            <Ico name="scales" size={50} color={INK} /> then: MY ACTUAL PORTION
+            <Ico name="scales" size={50} color={INK} /> Then: MY ACTUAL PORTION
           </Tape>
         </At>
       ) : null}
@@ -372,7 +381,7 @@ const LINES: {at: number; l: string; r: string; big?: boolean; rule?: boolean; n
   {at: 49.6, l: '', r: '', rule: true},
   {at: 49.72, l: 'TOTAL', r: '120 kcal', big: true},
   {at: 52.56, l: 'ILLUSTRATIVE NUMBERS', r: '', box: true},
-  {at: 54.0, l: "* use YOUR product's numbers", r: '', note: true},
+  {at: 54.0, l: '* numbers differ brand to brand', r: '', note: true},
 ];
 const Receipt: React.FC = () => {
   const t = useT();
@@ -423,13 +432,13 @@ const Choose: React.FC = () => {
       <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0) 35%)'}} />
       <At x={540} y={240}>
         <div style={rise(t, 57.02)}>
-          <Tape size={46}>choose the one you</Tape>
+          <Tape size={46}>skip the “healthy” halo</Tape>
         </div>
       </At>
       {t >= 58.6 ? (
         <At x={540} y={370} s={lerp(Math.min(1, popAt(t, 58.72)), 1.3, 1)}>
-          <Tape size={96} bg={HL}>
-            actually enjoy <Ico name="heart" size={84} color={GREEN_D} />
+          <Tape size={78} bg={HL}>
+            pick your favourite <Ico name="heart" size={84} color={GREEN_D} />
           </Tape>
         </At>
       ) : null}
@@ -441,7 +450,7 @@ const EnjoyTag: React.FC = () => {
   if (t < 60.0 || t >= C.enjoy.end) return null;
   return (
     <At x={540} y={300} s={Math.max(0, popAt(t, 60.12))}>
-      <Tape size={70} bg={HL}>serve a portion</Tape>
+      <Tape size={60} bg={HL}>on a plate, not from the box</Tape>
     </At>
   );
 };
@@ -511,17 +520,8 @@ const Caps: React.FC = () => {
   const k = tween(t, chunk[0].start - 0.04, 0.14);
   return (
     <div style={{position: 'absolute', left: 40, right: 40, top: inWin(t, [C.journey]) ? 560 : 1520, translate: `0 ${-50 + lerp(k, 10, 0)}%`, textAlign: 'center', opacity: k}}>
-      <div style={{display: 'inline-block', padding: '10px 26px 14px', background: '#fff', border: `5px solid ${INK}`, borderRadius: 18, boxShadow: '0 12px 26px -10px rgba(0,0,0,0.45)', scale: lerp(k, 0.94, 1)}}>
-        {chunk.map((w, i) => {
-          const nextStart = chunk[i + 1]?.start ?? w.end + 0.3;
-          const on = t >= w.start - 0.03 && t < nextStart;
-          const key = KEY.has(w.text.toLowerCase().replace(/[.,?!]/g, ''));
-          return (
-            <span key={i} style={{display: 'inline-block', margin: '0 0.12em', fontFamily: SANS, fontWeight: 800, fontSize: 58, lineHeight: 1.15, color: key ? GREEN_D : INK, backgroundImage: `linear-gradient(${GREEN}, ${GREEN})`, backgroundRepeat: 'no-repeat', backgroundPosition: '0 100%', backgroundSize: `${on ? 100 : 0}% 7px`}}>
-              {w.text}
-            </span>
-          );
-        })}
+      <div style={{display: 'inline-block', padding: '12px 30px 14px', background: 'rgba(18,18,20,0.74)', borderRadius: 26, boxShadow: '0 10px 24px -10px rgba(0,0,0,0.4)', scale: lerp(k, 0.96, 1)}}>
+        <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 52, lineHeight: 1.2, color: '#FFFFFF', letterSpacing: -0.5, whiteSpace: 'nowrap'}}>{chunk.map((w) => w.text).join(' ')}</span>
       </div>
     </div>
   );
