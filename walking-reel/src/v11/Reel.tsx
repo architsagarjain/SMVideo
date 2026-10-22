@@ -203,10 +203,10 @@ const Hook: React.FC = () => {
   return (
     <AbsoluteFill style={{opacity: o}}>
       <At x={540} y={230} at={1.26} out={2.62}>
-        <Die size={70}>having lost weight</Die>
+        <Die size={84}>having lost weight</Die>
       </At>
       <At x={540} y={350} at={1.82} out={2.62}>
-        <Die size={150} color="#FF6B1A">myself</Die>
+        <Die size={170} color="#FF6B1A">myself</Die>
       </At>
       {t >= 2.78 ? (
         <div style={{position: 'absolute', left: lerp(side, 540, 250), top: 360, translate: '-50% -50%', scale: lerp(side, 1, 0.78) * Math.max(0, Math.min(1.1, popAt(t, 2.8)))}}>
@@ -219,17 +219,17 @@ const Hook: React.FC = () => {
         </div>
       ) : null}
       <At x={540} y={110} at={4.38} out={6.7}>
-        <Die size={72}>quick scale drop</Die>
+        <Die size={84}>quick scale drop</Die>
       </At>
       <Sparkles at={5.6} x={540} y={360} />
       <At x={760} y={250} at={7.2}>
-        <Die size={64}>as a coach,</Die>
+        <Die size={74}>as a coach,</Die>
       </At>
       <At x={760} y={360} at={8.94}>
-        <Die size={88} color="#FF6B1A">what</Die>
+        <Die size={100} color="#FF6B1A">what</Die>
       </At>
-      <At x={760} y={460} at={9.52}>
-        <Die size={88} color="#FF6B1A">caused it?</Die>
+      <At x={760} y={470} at={9.52}>
+        <Die size={100} color="#FF6B1A">caused it?</Die>
       </At>
       {t >= 9.3 ? (
         <div style={{position: 'absolute', left: lerp(tween(t, 9.3, 0.6, EASE_OUT), 520, 300), top: lerp(tween(t, 9.3, 0.6, EASE_OUT), 520, 330), translate: '-50% -50%', opacity: tween(t, 9.3, 0.2)}}>
@@ -249,35 +249,38 @@ const Rice: React.FC = () => {
   const val = roll(t, 65.9, 64.6, 12.78, 13.5);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={290} y={330} at={10.9}>
+      <At x={290} y={300} at={10.9}>
         <Card w={420} h={360} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <RiceBowl w={320} />
-          {t >= 11.32 ? (
+          {t >= 11.32 && t < 15.55 ? (
             <div style={{position: 'absolute', left: '50%', top: '50%', translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, 11.32)), 1.6, 1), opacity: Math.min(1, popAt(t, 11.32) * 2)}}>
               <Chip bg={RED} size={56}>STOP</Chip>
             </div>
           ) : null}
+          {t >= 15.6 ? (
+            <div style={{position: 'absolute', left: '50%', top: '50%', translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, 15.6)), 1.5, 1), opacity: Math.min(1, popAt(t, 15.6) * 2)}}>
+              <Chip bg={INK} size={52}>NOT PROVEN</Chip>
+            </div>
+          ) : null}
         </Card>
       </At>
-      <At x={800} y={330} at={12.62}>
+      <At x={800} y={300} at={12.62} out={15.1}>
         <Scale value={val} w={320} tone="down" />
       </At>
       {t >= 13.1 ? (
-        <At x={800} y={540} at={13.1} out={14.4}>
+        <At x={800} y={490} at={13.1} out={14.4}>
           <Chip bg={GREEN} size={36}>falls fast</Chip>
         </At>
       ) : null}
-      <At x={760} y={560} at={15.3}>
-        <div style={{position: 'relative'}}>
-          <Die size={58}>rice was blocking</Die>
-          <Die size={58} style={{marginTop: 8, textAlign: 'center'}}>fat loss?</Die>
-        </div>
+      <At x={790} y={230} at={15.3}>
+        <Die size={70}>rice was</Die>
       </At>
-      {t >= 15.3 ? (
-        <At x={290} y={560} at={15.6}>
-          <Chip bg={INK} size={48}>NOT PROVEN</Chip>
-        </At>
-      ) : null}
+      <At x={790} y={330} at={16.54}>
+        <Die size={70}>blocking</Die>
+      </At>
+      <At x={790} y={440} at={17.48}>
+        <Die size={84} color={RED}>fat loss?</Die>
+      </At>
     </AbsoluteFill>
   );
 };
@@ -293,17 +296,17 @@ const Glyco: React.FC = () => {
           <Tank t={t} n={6} drainAt={20.72} keep={2} />
         </div>
       </At>
-      <At x={770} y={190} at={19.36}>
-        <Die size={60}>less carbs</Die>
+      <At x={770} y={150} at={19.36}>
+        <Die size={70}>less carbs</Die>
       </At>
-      <At x={770} y={300} at={20.72}>
-        <Die size={60}>= less</Die>
+      <At x={770} y={255} at={20.72}>
+        <Die size={70}>= less</Die>
       </At>
-      <At x={770} y={410} at={21.26}>
+      <At x={770} y={365} at={21.26}>
         <Die size={104} color="#6D3BFF">glycogen</Die>
       </At>
-      <At x={770} y={530} at={22.42}>
-        <Chip bg="#6D3BFF" size={34}>the carbs your body stores</Chip>
+      <At x={770} y={480} at={22.42}>
+        <Chip bg="#6D3BFF" size={32}>the carbs your body stores</Chip>
       </At>
     </AbsoluteFill>
   );
@@ -321,19 +324,19 @@ const Water: React.FC = () => {
           <Tank t={t} n={6} drops={27.12} drainAt={28.4} keep={3} />
         </div>
       </At>
-      <At x={790} y={180} at={25.22}>
-        <Die size={58}>glycogen is stored</Die>
+      <At x={790} y={140} at={25.22}>
+        <Die size={62}>glycogen is stored</Die>
       </At>
-      <At x={790} y={290} at={26.54}>
-        <Die size={58}>with</Die>
+      <At x={790} y={240} at={26.54}>
+        <Die size={62}>with</Die>
       </At>
-      <At x={790} y={390} at={27.12}>
+      <At x={790} y={345} at={27.12}>
         <Die size={110} color={BLUE}>water</Die>
       </At>
       {t >= 29.8 ? (
-        <At x={790} y={560} at={29.8}>
+        <At x={810} y={475} at={29.8}>
           <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
-            <Scale value={val} w={190} tone="down" />
+            <Scale value={val} w={150} tone="down" />
             <Die size={48}>moves!</Die>
           </div>
         </At>
@@ -375,7 +378,7 @@ const Three: React.FC = () => {
         </Card>
       </At>
       {t >= 40.0 ? (
-        <At x={800} y={570} at={40.0}>
+        <At x={830} y={530} at={40.0}>
           <Chip bg={BLUE} size={40}>± it varies</Chip>
         </At>
       ) : null}
@@ -453,7 +456,7 @@ const Trend: React.FC = () => {
         </Card>
       </At>
       {t >= 53.74 ? (
-        <At x={760} y={560} at={53.74}>
+        <At x={760} y={525} at={53.74}>
           <Chip bg={GREEN} size={44}>the longer trend</Chip>
         </At>
       ) : null}
@@ -478,7 +481,7 @@ const Regain: React.FC = () => {
           ) : null}
         </div>
       </At>
-      <At x={780} y={200} at={57.42}>
+      <At x={780} y={160} at={57.42}>
         <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
           <Card w={140} h={120} pad={6} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <RiceBowl w={124} />
@@ -486,7 +489,7 @@ const Regain: React.FC = () => {
           <Die size={64}>carbs ↑</Die>
         </div>
       </At>
-      <At x={780} y={360} at={60.12}>
+      <At x={780} y={305} at={60.12}>
         <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
           <div style={{width: 110, height: 110, borderRadius: '50%', background: '#fff', boxShadow: STICK, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <Ico name="magnifying-glass" size={70} color={INK} />
@@ -494,7 +497,7 @@ const Regain: React.FC = () => {
           <Die size={64} color={BLUE}>context?</Die>
         </div>
       </At>
-      <At x={780} y={500} at={62.56}>
+      <At x={780} y={445} at={62.56}>
         <div style={{position: 'relative'}}>
           <Die size={70}>fat regain</Die>
           <Strike t={t} at={63.3} w={400} />
@@ -563,7 +566,7 @@ const Foods: React.FC = () => {
       <At x={540} y={250} at={72.1}>
         <Die size={72} color="#FF6B1A">you're allowed to eat</Die>
       </At>
-      <div style={{position: 'absolute', left: 540, top: 460, translate: '-50% -50%', display: 'flex', gap: 20}}>
+      <div style={{position: 'absolute', left: 540, top: 425, translate: '-50% -50%', display: 'flex', gap: 20}}>
         {FOODS.map((f, i) =>
           t >= f.at - 0.6 ? (
             <div key={i} style={{scale: Math.max(0, popAt(t, f.at - 0.6)), position: 'relative'}}>
@@ -595,7 +598,7 @@ const Cta: React.FC = () => {
           GUIDE
         </Die>
       </At>
-      <At x={540} y={520} at={74.8}>
+      <At x={540} y={495} at={74.8}>
         <Card pad={18} style={{display: 'flex', alignItems: 'center', gap: 18}}>
           <div style={{width: 80, height: 80, borderRadius: 22, background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <Ico name="file-pdf" size={52} color="#fff" />
@@ -626,7 +629,7 @@ const Caps: React.FC = () => {
         const nextStart = chunk[i + 1]?.start ?? w.end + 0.3;
         const on = t >= w.start - 0.03 && t < nextStart;
         return (
-          <span key={i} style={{display: 'inline-block', margin: '0 0.13em', fontFamily: BRIC, fontWeight: 800, fontSize: 80, lineHeight: 1.1, letterSpacing: -2, color: on ? ac : INK, WebkitTextStroke: '14px #fff', paintOrder: 'stroke fill', filter: 'drop-shadow(0 10px 12px rgba(40,25,10,0.3))', scale: on ? 1.06 : 1}}>
+          <span key={i} style={{display: 'inline-block', margin: '0 0.2em', fontFamily: BRIC, fontWeight: 800, fontSize: 76, lineHeight: 1.12, letterSpacing: -0.5, color: on ? ac : INK, WebkitTextStroke: '13px #fff', paintOrder: 'stroke fill', filter: 'drop-shadow(0 10px 12px rgba(40,25,10,0.3))', scale: on ? 1.06 : 1}}>
             {w.text}
           </span>
         );
