@@ -58,10 +58,10 @@ const Split: React.FC<{t: number; fat: number; at: number; leanAt: number; label
       </div>
       <div style={{position: 'relative', width: W, height: 86, borderRadius: 20, background: '#F4F1EB', overflow: 'hidden'}}>
         <div style={{position: 'absolute', left: 0, top: 0, height: 86, width: W * (fat / 100) * pf, background: HL, display: 'flex', alignItems: 'center', paddingLeft: 18, boxSizing: 'border-box', fontFamily: SANS, fontWeight: 800, fontSize: 36, whiteSpace: 'nowrap', overflow: 'hidden'}}>
-          {pf > 0.6 ? `${fat}% fat` : ''}
+          {pf > 0.6 ? (fat < 25 ? `${fat}%` : `${fat}% fat`) : ''}
         </div>
         <div style={{position: 'absolute', right: 0, top: 0, height: 86, width: W * ((100 - fat) / 100) * pl, background: INK, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 18, boxSizing: 'border-box', fontFamily: SANS, fontWeight: 800, fontSize: 36, whiteSpace: 'nowrap', overflow: 'hidden'}}>
-          {pl > 0.6 ? `${100 - fat}% lean` : ''}
+          {pl > 0.6 ? (100 - fat < 25 ? `${100 - fat}%` : `${100 - fat}% lean`) : ''}
         </div>
       </div>
     </div>
@@ -258,6 +258,14 @@ const Comp: React.FC = () => {
           </div>
           <Split t={t} fat={83} at={53.28} leanAt={57.3} label="full nights" icon="moon-stars" />
           {t >= 60.06 ? <Split t={t} fat={15} at={67.92} leanAt={64.4} label="−1 h nights" icon="moon" /> : <div style={{height: 114}} />}
+          <div style={{display: 'flex', gap: 26, justifyContent: 'flex-end', marginTop: 6, fontFamily: SANS, fontWeight: 800, fontSize: 24, color: MUTED}}>
+            <span style={{display: 'flex', alignItems: 'center', gap: 8}}>
+              <span style={{width: 22, height: 22, borderRadius: 6, background: HL}} /> body fat
+            </span>
+            <span style={{display: 'flex', alignItems: 'center', gap: 8}}>
+              <span style={{width: 22, height: 22, borderRadius: 6, background: INK}} /> lean mass
+            </span>
+          </div>
         </Card>
       </Pop>
     </AbsoluteFill>

@@ -162,10 +162,10 @@ const Names: React.FC = () => {
   const t = useT();
   const o = winVis(t, C.names);
   if (o <= 0) return null;
-  const card = (label: string, at: number, bg: string) => (
-    <Pop x={0} y={0} at={at}>
+  const card = (label: string, at: number, bg: string, base: number) => (
+    <Pop x={0} y={0} at={base}>
       <Card w={360} h={250} pad={24} style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-        <div style={{alignSelf: 'flex-start', padding: '6px 18px', borderRadius: 12, background: bg, fontFamily: SANS, fontWeight: 800, fontSize: 30}}>{label}</div>
+        <div style={{alignSelf: 'flex-start', padding: '6px 18px', borderRadius: 12, background: t >= at ? bg : '#ECE8E1', fontFamily: SANS, fontWeight: 800, fontSize: 30, color: t >= at ? INK : 'transparent', scale: t >= at ? lerp(Math.min(1, popAt(t, at)), 1.2, 1) : 1, minWidth: 140}}>{label}</div>
         {[0.8, 0.55, 0.7].map((w, i) => (
           <div key={i} style={{height: 18, width: `${w * 100}%`, borderRadius: 9, background: '#ECE8E1'}} />
         ))}
@@ -174,8 +174,8 @@ const Names: React.FC = () => {
   );
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 300, top: 300}}>{card('FULL BODY', 30.18, HL)}</div>
-      <div style={{position: 'absolute', left: 780, top: 300}}>{card('SPLIT', 31.96, '#D7E6FF')}</div>
+      <div style={{position: 'absolute', left: 300, top: 300}}>{card('FULL BODY', 30.18, HL, 26.48)}</div>
+      <div style={{position: 'absolute', left: 780, top: 300}}>{card('SPLIT', 31.96, '#D7E6FF', 26.7)}</div>
       {t >= 27.08 ? (
         <Pop x={540} y={300} at={27.76}>
           <div style={{width: 110, height: 110, borderRadius: '50%', background: INK, border: '6px solid #fff', boxShadow: CARD_SHADOW, display: 'flex', alignItems: 'center', justifyContent: 'center', color: HL, fontFamily: SANS, fontWeight: 800, fontSize: 70}}>≠</div>
