@@ -393,7 +393,7 @@ const Week: React.FC = () => {
   const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={190} at={43.3}>
+      <At x={540} y={190} at={42.1}>
         <Card w={900} h={240} pad={24}>
           <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 40, color: INK, marginBottom: 14}}>
             <span style={{color: GREEN}}>1</span> low-carb week
