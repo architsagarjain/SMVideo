@@ -4,6 +4,7 @@ import {ICONS} from '../explainer/icons';
 import {useT} from '../explainer/kit';
 import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {C, TIPS} from './config';
+import {HOOK} from './hooks';
 
 /**
  * Travel-day reel graphics. Hook: a split-flap departures board. Then the 3-tips style: cream bold
@@ -174,7 +175,7 @@ const Board: React.FC = () => {
 
 export const V8Hook: React.FC = () => {
   const t = useT();
-  if (t >= C.reveal.start + 0.6) return null;
+  if (HOOK !== 'board' || t >= C.reveal.start + 0.6) return null;
   const s = tween(t, C.reveal.start, 0.55, EASE_IN_OUT);
   if (s <= 0) return <Board />;
   // the board splits horizontally: top half slides up, bottom half slides down
@@ -198,7 +199,7 @@ export const V8Behind: React.FC = () => {
   const tip = TIPS.find((k) => inside(t, k.w));
   return (
     <>
-      {inside(t, C.reveal) ? <Rise text="FLIGHTS?" at={5.7} out={C.reveal.end - 0.2} y={470} size={230} /> : null}
+      {HOOK === 'board' && inside(t, C.reveal) ? <Rise text="FLIGHTS?" at={5.7} out={C.reveal.end - 0.2} y={470} size={230} /> : null}
       {inside(t, C.travel) ? <Rise text="TRAVEL" at={26.3} out={C.travel.end - 0.2} y={470} size={270} /> : null}
       {tip ? <Rise text={tip.n} at={tip.at} out={tip.w.end - 0.2} y={480} size={480} /> : null}
       {t >= C.cta.start ? <Rise text="GUIDE" at={73.52} out={999} y={480} size={270} /> : null}
@@ -209,7 +210,7 @@ export const V8Behind: React.FC = () => {
 /** A plane flying across behind her head on "flights". */
 export const V8PlaneBehind: React.FC = () => {
   const t = useT();
-  if (t < 5.4 || t > 6.6) return null;
+  if (HOOK !== 'board' || t < 5.4 || t > 6.6) return null;
   const p = tween(t, 5.4, 1.1, EASE_IN_OUT);
   const x = lerp(p, -160, 1240);
   const y = lerp(p, 300, 230);
@@ -259,7 +260,7 @@ export const V8Talk: React.FC = () => {
   const tip = TIPS.find((k) => inside(t, k.w));
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
-      {inside(t, C.reveal) ? <Word text="when your job keeps you on" at={4.6} out={C.reveal.end - 0.2} y={200} size={66} serif /> : null}
+      {HOOK === 'board' && inside(t, C.reveal) ? <Word text="when your job keeps you on" at={4.6} out={C.reveal.end - 0.2} y={200} size={66} serif /> : null}
       {inside(t, C.result) ? <ResultCard /> : null}
       {inside(t, C.disclaimer) ? (
         <>
