@@ -604,7 +604,6 @@ const LiveCaptions: React.FC = () => {
     if (t >= a && t < b) line = lines[k];
   }
   if (!line) return null;
-  if (t < 4.3) return null; // the hook banner + collage carry the words
   const y = cur.app === 'facetime' ? 1290 : cur.app === 'story' ? 1360 : 1450;
   return (
     <div style={{position: 'absolute', left: 450, top: y, translate: '-50% 0', padding: '12px 28px', borderRadius: 26, background: 'rgba(20,20,22,0.72)', color: '#fff', fontFamily: SANS, fontSize: 44, fontWeight: 700, whiteSpace: 'nowrap'}}>
@@ -664,8 +663,7 @@ const shakeAt = (t: number) => {
 
 /** Everything inside Base, so useT() reads source time through the time map. */
 /** Macro close-ups into the phone (reference-style): focus point in screen coords, zoom amount. */
-const MACROS = [
-  {a: 7.45, b: 11.6, m: 1.75, fx: 330, fy: (t: number) => (t < 9.2 ? 415 : 470)}, // Notes: breakfast, fruit being typed
+const MACROS: {a: number; b: number; m: number; fx: number; fy: (t: number) => number}[] = [
   {a: 22.05, b: 23.45, m: 1.55, fx: 560, fy: () => 420}, // Calculator: = 520
   {a: 31.85, b: 33.0, m: 1.45, fx: 330, fy: () => 600}, // Notes: green ticks
 ];
@@ -685,32 +683,6 @@ const Mat: React.FC = () => (
     <AbsoluteFill style={{background: 'radial-gradient(80% 60% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%)'}} />
   </AbsoluteFill>
 );
-/** Cut-paper collage letters (reference-style), dropped over her in the hook. */
-const PAPER = [
-  {ch: 'S', bg: '#FFFFFF', fg: '#C21DFF', at: 1.36},
-  {ch: 'T', bg: '#E9D5FF', fg: '#111111', at: 1.46},
-  {ch: 'O', bg: '#111111', fg: '#FFFFFF', at: 1.56},
-  {ch: 'P', bg: '#FFFFFF', fg: '#C21DFF', at: 1.66},
-];
-const Collage: React.FC = () => {
-  const t = useT();
-  if (t < 1.3 || t > 4.4) return null;
-  const out = 1 - tween(t, 4.0, 0.3, EASE_IN);
-  return (
-    <div style={{position: 'absolute', left: 540, top: 1300, translate: '-50% -50%', display: 'flex', gap: 14, opacity: out}}>
-      {PAPER.map((p, i) => {
-        const q = tween(t, p.at, 0.22, EASE_IN);
-        if (t < p.at) return <div key={i} style={{width: 200, height: 250}} />;
-        return (
-          <div key={i} style={{width: 200, height: 250, background: p.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 210, color: p.fg, lineHeight: 1, translate: `0 ${i % 2 ? 14 : -10}px`, scale: lerp(q, 1.7, 1), opacity: q, boxShadow: '0 14px 30px rgba(0,0,0,0.35)', clipPath: 'polygon(2% 4%, 18% 0%, 40% 3%, 63% 0%, 85% 2%, 100% 6%, 97% 30%, 100% 55%, 98% 80%, 100% 97%, 78% 100%, 55% 96%, 30% 100%, 8% 97%, 0% 100%, 3% 72%, 0% 45%, 2% 20%)'}}>
-            {p.ch}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
 const PhoneScene: React.FC = () => {
   const t = useT();
   const z = zoomAt(t);
@@ -765,7 +737,6 @@ const PhoneScene: React.FC = () => {
       ) : (
         phoneLayer
       )}
-      <Collage />
     </>
   );
 };
