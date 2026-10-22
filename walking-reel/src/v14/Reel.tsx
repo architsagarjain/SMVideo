@@ -33,7 +33,7 @@ const Ribbon: React.FC<{blocks: Block[]; ticks?: {h: number; o: number; bg?: str
         <div key={i} style={{position: 'absolute', left: hx(k.h) - 7, top: 14, width: 14, height: 64, borderRadius: 7, background: k.bg ?? INK, opacity: k.o, scale: `1 ${k.o}`}} />
       ))}
       {[9, 12, 15, 18, 21].map((h) => (
-        <div key={h} style={{position: 'absolute', left: hx(h), top: 98, translate: '-50% 0', fontFamily: SANS, fontWeight: 800, fontSize: 22, color: MUTED}}>{h <= 12 ? `${h} am`.replace('12 am', '12 pm') : `${h - 12} pm`}</div>
+        <div key={h} style={{position: 'absolute', left: hx(h), top: 98, translate: '-50% 0', fontFamily: SANS, fontWeight: 800, fontSize: 22, color: MUTED, whiteSpace: 'nowrap'}}>{h <= 12 ? `${h} am`.replace('12 am', '12 pm') : `${h - 12} pm`}</div>
       ))}
     </div>
     {note ? <div style={{marginTop: 14}}>{note}</div> : null}
@@ -317,13 +317,13 @@ const Meeting: React.FC = () => {
         <Ribbon
           blocks={[
             {from: 9, to: 18, bg: SEAT},
-            {from: 11, to: 12, bg: INK, fg: '#fff', label: 'meeting', o: meet},
+            {from: 10.6, to: 12.2, bg: INK, fg: '#fff', label: 'meeting', o: meet},
           ]}
           ticks={[
-            {h: 10.5, o: 1},
-            {h: lerp(after, 11.5, 12.15), o: 1, bg: after > 0.95 ? GREEN : RED},
-            {h: 12.5, o: 1},
-            {h: 13, o: 1},
+            {h: 10.0, o: 1},
+            {h: lerp(after, 11.4, 12.5), o: 1, bg: after > 0.95 ? GREEN : RED},
+            {h: 13.0, o: 1},
+            {h: 13.5, o: 1},
           ]}
           title={
             <H size={48}>

@@ -134,7 +134,7 @@ const Work: React.FC = () => {
 const STEPS = [
   {at: 19.86, label: 'TREND'},
   {at: 23.42, label: 'ROUTINE'},
-  {at: 27.56, label: 'OBSTACLE'},
+  {at: 27.56, label: 'BLOCKER'},
 ];
 const OBST = [
   {at: 30.74, t: 'portions vary', icon: 'bowl-food'},
@@ -150,9 +150,9 @@ const Funnel: React.FC = () => {
   STEPS.forEach((s, i) => (t >= s.at - 0.05 ? (k = i) : null));
   const sv = (i: number) => (i === k ? tween(t, STEPS[i].at, 0.3) : 0);
   const layers = [
-    {w: 300, y: 0},
-    {w: 230, y: 118},
-    {w: 160, y: 236},
+    {w: 320, y: 0},
+    {w: 270, y: 118},
+    {w: 220, y: 236},
   ];
   return (
     <AbsoluteFill style={{opacity: o}}>
@@ -241,7 +241,7 @@ const Row: React.FC<{t: number; at: number; then: number; icon: string; a: strin
       <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 34}}>{a}</span>
     </div>
     <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 60, color: INK, opacity: tween(t, then - 0.2, 0.2)}}>→</div>
-    <div style={{width: 400, height: 120, borderRadius: 24, background: HL, boxShadow: CARD_SHADOW, display: 'flex', alignItems: 'center', padding: '0 24px', boxSizing: 'border-box', fontFamily: SANS, fontWeight: 800, fontSize: 36, scale: Math.max(0, popAt(t, then))}}>{b}</div>
+    <div style={{width: 420, height: 120, borderRadius: 24, background: HL, boxShadow: CARD_SHADOW, display: 'flex', alignItems: 'center', padding: '0 24px', boxSizing: 'border-box', fontFamily: SANS, fontWeight: 800, fontSize: 32, whiteSpace: 'nowrap', scale: Math.max(0, popAt(t, then))}}>{b}</div>
   </div>
 );
 const Fixes: React.FC = () => {
