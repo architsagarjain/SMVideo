@@ -12,7 +12,7 @@ import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme
  *   scanner  - airport body scanner: a laser scans her, the monitor reads DIET PLAN NOT FOUND
  */
 export type HookKind = 'board' | 'sky' | 'passport' | 'scanner';
-export const HOOK: HookKind = ((getInputProps() as {hook?: HookKind}).hook ?? 'board') as HookKind;
+export const HOOK: HookKind = ((getInputProps() as {hook?: HookKind}).hook ?? 'sky') as HookKind; // chosen: sky
 export const HOOK_END = 6.6;
 
 const CREAM = '#F6E7C1';
@@ -82,9 +82,11 @@ const SkyFront: React.FC = () => {
         <path d="M -40 1690 L 700 1740 L 820 1735 L -40 1760 Z" fill="#B8C3CF" />
         <path d="M 640 1690 L 720 1560 L 760 1560 L 740 1712 Z" fill="#D9E1EA" />
       </svg>
-      <Line text="your diet at" at={1.34} out={HOOK_END - 0.3} y={200} size={96} serif />
-      <Line text="35,000 FT?" at={1.92} out={HOOK_END - 0.3} y={340} size={190} />
-      <Line text="only works at home" at={3.08} out={HOOK_END - 0.3} y={1410} size={70} serif />
+      <Line text="your diet at" at={1.34} out={4.3} y={200} size={96} serif />
+      <Line text="35,000 FT?" at={1.92} out={4.3} y={340} size={190} />
+      <Line text="if it only works at home" at={2.58} out={4.3} y={1440} size={68} serif />
+      <Line text="when your job keeps you on" at={4.46} out={HOOK_END - 0.3} y={200} size={70} serif />
+      <Line text="FLIGHTS?" at={5.7} out={HOOK_END - 0.3} y={340} size={200} />
     </AbsoluteFill>
   );
 };

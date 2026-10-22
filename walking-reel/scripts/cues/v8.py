@@ -15,18 +15,14 @@ def flaps(cue, at, n, gap=0.035, g=-27):
 
 
 def cues(cue, rng):
-    # departures board: rows clatter in, YOUR DIET flips to HOME ONLY, then CANCELLED
-    cue(1.01, "pack:notif", -19)
-    for at in (1.02, 1.3, 1.58):
-        flaps(cue, at, 9)
-    flaps(cue, 1.9, 9, g=-25)
-    flaps(cue, 3.08, 9, g=-24)
-    flaps(cue, 3.7, 9, g=-23)
-    cue(3.95, "pack:hit", -18)
-    # the board splits open on her, a plane flies behind her head
-    cue(4.46, "pack:whoosh_deep", -19)
-    cue(5.4, "pack:whoosh_cine", -21)
-    cue(5.75, "pack:hit", -22)
+    # sky hook: wind rushing past, the wing slides in, FLIGHTS? lands
+    cue(1.01, "pack:whoosh_cine", -20)
+    cue(1.92, "pack:hit", -21)
+    cue(2.32, "pack:whoosh_deep", -22)
+    cue(3.2, "pack:whoosh_soft", -27)
+    cue(4.46, "pack:whoosh_fast2", -24)
+    cue(5.7, "pack:hit", -20)
+    cue(6.15, "pack:whoosh_soft", -25)
     # results card
     cue(7.5, "pack:whoosh_soft", -24)
     for j in range(6):
@@ -57,11 +53,14 @@ def cues(cue, rng):
     flaps(cue, 48.3, 4, g=-26)
     flaps(cue, 48.6, 7, g=-25)
     cue(48.94, "pack:hit", -22)
-    # practical snack
-    cue(50.26, "pack:hit", -24)
-    for i in range(3):
-        cue(50.82 + i * 0.12, "pack:tick", -22)
-    cue(53.68, "pack:whoosh_fast", -25)
+    # airport X-ray: the bag rolls in, the beam sweeps, labels pop, CLEARED, airport food crossed out
+    cue(49.65, "pack:whoosh_soft", -23)
+    cue(50.0, "pack:whoosh_fast", -27)
+    for t0 in (50.82, 50.98, 51.14):
+        cue(t0, "pack:tick", -21)
+    cue(51.5, "pack:chime", -23)
+    cue(52.16, "pack:whoosh_fast2", -26)
+    cue(53.68, "pack:hit", -21)
     # training B-roll
     cue(54.9, "pack:whoosh_fast", -22)
     cue(57.3, "pack:whoosh_fast2", -23)

@@ -31,6 +31,7 @@ export type ReelConfig = {
   grade?: Grade; // colour grade on her talking-head footage only (not B-roll or cutaways)
   cut?: Win[]; // her cut-out drawn over the sharp footage (no wash), so text can sit behind her
   clean?: boolean; // small one-line captions in the lower third (reference-reel style)
+  pill?: boolean; // captions on a dark rounded pill (for white tops / bright backgrounds)
 };
 
 /** Snap every window and move boundary that falls inside a pause cut onto the cut itself,
@@ -227,6 +228,7 @@ export const Captions: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
           textShadow: '0 4px 18px rgba(0,0,0,0.55), 0 2px 4px rgba(0,0,0,0.45), 0 0 2px rgba(0,0,0,0.5)',
         }}
       >
+        <span style={cfg.pill ? {display: 'inline-block', padding: '10px 26px 12px', borderRadius: 22, background: 'rgba(20,17,14,0.62)', textShadow: 'none', boxShadow: '0 6px 20px rgba(0,0,0,0.25)'} : undefined}>
         {cfg.pop
           ? chunk.map((w, i) => {
               const nextStart = chunk[i + 1]?.start ?? w.end + 0.3;
@@ -239,6 +241,7 @@ export const Captions: React.FC<{cfg: ReelConfig}> = ({cfg}) => {
               );
             })
           : chunk.map((w) => w.text).join(' ')}
+        </span>
       </div>
     </AbsoluteFill>
   );

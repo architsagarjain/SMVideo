@@ -412,72 +412,97 @@ const DelayRow: React.FC = () => {
   );
 };
 
-// snack stickers (flat illustrations with a white sticker edge)
-type Kind = 'apple' | 'almond' | 'bar';
-const Art: React.FC<{kind: Kind}> = ({kind}) => {
-  if (kind === 'apple')
-    return (
-      <g>
-        <path d="M 50 30 C 38 22, 18 26, 18 50 C 18 72, 34 86, 44 84 C 48 83, 52 83, 56 84 C 66 86, 82 72, 82 50 C 82 26, 62 22, 50 30 Z" fill="#E84A3C" />
-        <path d="M 50 30 C 50 22, 52 16, 56 12" stroke="#6B4423" strokeWidth={5} fill="none" strokeLinecap="round" />
-        <path d="M 54 20 C 62 10, 74 12, 76 16 C 70 24, 60 24, 54 20 Z" fill="#4CAF50" />
-      </g>
-    );
-  if (kind === 'almond')
-    return (
-      <g>
-        {[
-          [34, 58, -30],
-          [62, 52, 25],
-          [48, 34, 0],
-        ].map(([x, y, r], i) => (
-          <g key={i} transform={`translate(${x} ${y}) rotate(${r})`}>
-            <path d="M 0 -20 C 12 -12, 14 8, 0 20 C -14 8, -12 -12, 0 -20 Z" fill="#B9773E" />
-            <path d="M 0 -14 C 4 -6, 4 6, 0 14" stroke="#8E5527" strokeWidth={2.5} fill="none" />
-          </g>
-        ))}
-      </g>
-    );
-  return (
-    <g>
-      <rect x={10} y={32} width={80} height={36} rx={8} fill="#6C4CD9" />
-      <text x={50} y={55} textAnchor="middle" fontFamily={SANS} fontWeight={800} fontSize={13} fill="#fff">
-        PROTEIN
-      </text>
-    </g>
-  );
-};
-const Sticker: React.FC<{kind: Kind; x: number; y: number; at: number; out: number}> = ({kind, x, y, at, out}) => {
-  const t = useT();
-  if (t < at - 0.02 || t > out + 0.3) return null;
-  const p = tween(t, at, 0.4, EASE_OUT);
-  return (
-    <div style={{position: 'absolute', left: x, top: y, width: 180, height: 180, translate: '-50% -50%', borderRadius: '50%', background: '#fff', boxShadow: '0 14px 34px rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: Math.min(1, p * 2) * (1 - tween(t, out, 0.25, EASE_IN)), scale: lerp(p, 0.4, 1) * (1 + 0.08 * Math.sin(Math.PI * p))}}>
-      <svg viewBox="0 0 100 100" width={140} height={140}>
-        <Art kind={kind} />
-      </svg>
-    </div>
-  );
-};
-
+/** "Carry a practical snack rather than depend entirely on airport choices": her carry-on bag rolls
+ * through an airport X-ray; the snacks inside show up in X-ray colours, get labelled and cleared. */
+const XRAY_ITEMS = [
+  {at: 50.82, label: 'almonds', x: 250, y: 300},
+  {at: 50.98, label: 'protein bar', x: 500, y: 250},
+  {at: 51.14, label: 'fruit', x: 740, y: 320},
+];
 const Snack: React.FC = () => {
   const t = useT();
+  const f = useCurrentFrame();
   const out = C.snack.end - 0.2;
-  const strike = tween(t, 53.68, 0.35, EASE_IN_OUT);
+  const o = tween(t, C.snack.start, 0.3) * (1 - tween(t, out, 0.22, EASE_IN));
+  const belt = tween(t, C.snack.start + 0.05, 0.75, EASE_OUT); // bag rolls in
+  const beam = tween(t, 50.0, 0.8, EASE_IN_OUT); // scan beam sweeps across
+  const cleared = tween(t, 51.5, 0.35, EASE_OUT);
+  const warn = tween(t, 52.16, 0.35, EASE_OUT); // after the snack words have gone
+  const cross = tween(t, 53.68, 0.3, EASE_OUT);
+  const bagX = lerp(belt, -760, 0);
+  const noise = (f % 4) * 0.6;
   return (
-    <>
-      <Word text="carry a" at={49.72} out={out} y={170} size={84} serif />
-      <Word text="PRACTICAL SNACK" at={50.26} out={out} y={290} size={120} shine />
-      <Sticker kind="almond" x={150} y={900} at={50.82} out={out} />
-      <Sticker kind="bar" x={930} y={880} at={50.94} out={out} />
-      <Sticker kind="apple" x={160} y={1150} at={51.06} out={out} />
-      {t >= 52.16 ? (
-        <div style={{position: 'absolute', left: 540, top: 420, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 14, padding: '14px 32px', borderRadius: 50, background: 'rgba(20,17,14,0.66)', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', fontFamily: SANS, fontWeight: 800, fontSize: 46, color: '#fff', whiteSpace: 'nowrap', opacity: tween(t, 52.16, 0.3) * (1 - tween(t, out, 0.22, EASE_IN))}}>
-          <Glyph name="fork-knife" size={46} color="#fff" /> only airport food
-          {strike > 0 ? <div style={{position: 'absolute', left: 24, top: '50%', height: 8, width: `calc(${strike * 100}% - 48px)`, borderRadius: 4, background: RED}} /> : null}
+    <div style={{position: 'absolute', inset: 0, opacity: o, pointerEvents: 'none'}}>
+      {/* the X-ray monitor */}
+      <div style={{position: 'absolute', left: 40, right: 40, top: 60, height: 470, borderRadius: 34, background: '#061428', border: '6px solid #2A3A52', boxShadow: '0 26px 60px rgba(0,0,0,0.45)', overflow: 'hidden', fontFamily: SANS}}>
+        {/* scan lines */}
+        <AbsoluteFill style={{backgroundImage: 'repeating-linear-gradient(to bottom, rgba(120,200,255,0.06) 0 2px, transparent 2px 6px)', translate: `0 ${noise}px`}} />
+        <div style={{position: 'absolute', left: 26, top: 20, display: 'flex', alignItems: 'center', gap: 14, fontFamily: 'monospace', fontWeight: 700, fontSize: 30, letterSpacing: 4, color: '#6FD3FF'}}>
+          <div style={{width: 14, height: 14, borderRadius: 7, background: Math.floor(f / 10) % 2 === 0 ? '#FF4D4D' : '#5A1E1E'}} />
+          X-RAY · CARRY-ON BAG
+        </div>
+        {/* the bag, drawn as an X-ray */}
+        <div style={{position: 'absolute', left: 90, top: 110, width: 820, height: 320, translate: `${bagX}px 0`}}>
+          <svg width={820} height={320} viewBox="0 0 820 320" style={{position: 'absolute', inset: 0}}>
+            <path d="M 300 40 L 300 12 Q 300 0 312 0 L 508 0 Q 520 0 520 12 L 520 40" fill="none" stroke="rgba(120,210,255,0.8)" strokeWidth={10} />
+            <rect x={20} y={40} width={780} height={270} rx={40} fill="rgba(80,170,255,0.10)" stroke="rgba(120,210,255,0.85)" strokeWidth={8} />
+            <line x1={410} y1={40} x2={410} y2={310} stroke="rgba(120,210,255,0.35)" strokeWidth={4} strokeDasharray="14 10" />
+            {/* almonds (organic: orange) */}
+            {[
+              [120, 190, -25],
+              [168, 210, 20],
+              [140, 240, 5],
+              [196, 172, -10],
+            ].map(([x, y, r], i) => (
+              <ellipse key={i} cx={x} cy={y} rx={22} ry={34} transform={`rotate(${r} ${x} ${y})`} fill="rgba(255,154,60,0.75)" stroke="rgba(255,200,120,0.9)" strokeWidth={3} />
+            ))}
+            {/* protein bar (dense: green-blue) */}
+            <rect x={330} y={160} width={190} height={70} rx={14} fill="rgba(60,220,170,0.6)" stroke="rgba(140,255,210,0.9)" strokeWidth={4} />
+            {/* fruit */}
+            <circle cx={640} cy={200} r={62} fill="rgba(255,154,60,0.55)" stroke="rgba(255,200,120,0.9)" strokeWidth={4} />
+            <path d="M 640 140 C 640 124, 646 114, 656 108" stroke="rgba(255,200,120,0.9)" strokeWidth={5} fill="none" />
+          </svg>
+        </div>
+        {/* sweep beam */}
+        {beam > 0 && beam < 1 ? <div style={{position: 'absolute', top: 90, bottom: 20, left: lerp(beam, 60, 960), width: 8, background: 'rgba(140,230,255,1)', boxShadow: '0 0 30px 12px rgba(80,200,255,0.7)'}} /> : null}
+        {/* labels */}
+        {XRAY_ITEMS.map((k, i) => {
+          const p = tween(t, k.at, 0.3, EASE_OUT);
+          if (p <= 0) return null;
+          return (
+            <div key={i} style={{position: 'absolute', left: k.x + 90, top: k.y - 150, translate: '-50% 0', padding: '8px 18px', borderRadius: 20, background: 'rgba(255,255,255,0.92)', color: INK, fontWeight: 800, fontSize: 32, whiteSpace: 'nowrap', opacity: p, scale: lerp(p, 0.7, 1)}}>
+              {k.label}
+            </div>
+          );
+        })}
+        {cleared > 0 ? (
+          <div style={{position: 'absolute', right: 26, top: 14, display: 'flex', alignItems: 'center', gap: 12, padding: '8px 22px', borderRadius: 26, background: '#1E8E5A', color: '#fff', fontWeight: 800, fontSize: 34, letterSpacing: 2, opacity: cleared, scale: lerp(cleared, 1.4, 1)}}>
+            ✓ CLEARED
+          </div>
+        ) : null}
+      </div>
+      {/* on a dark card: she wears white */}
+      {t < 52.15 ? (
+        <div style={{position: 'absolute', left: 540, top: 1110, translate: '-50% 0', padding: '20px 46px 26px', borderRadius: 36, background: 'rgba(20,17,14,0.72)', boxShadow: '0 16px 40px rgba(0,0,0,0.35)', textAlign: 'center', opacity: tween(t, 49.72, 0.3) * (1 - tween(t, 51.9, 0.22, EASE_IN)), scale: lerp(tween(t, 49.72, 0.35, EASE_OUT), 0.9, 1)}}>
+          <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 64, color: '#fff', lineHeight: 1}}>carry a</div>
+          <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 96, letterSpacing: -3, lineHeight: 1.05, whiteSpace: 'nowrap', opacity: tween(t, 50.26, 0.3), ...shine(t, 50.6, 0.7)}}>PRACTICAL SNACK</div>
         </div>
       ) : null}
-    </>
+      {/* rather than depend entirely on airport choices */}
+      {warn > 0 ? (
+        <div style={{position: 'absolute', left: 540, top: 1180, translate: '-50% 0', display: 'flex', alignItems: 'center', gap: 16, padding: '16px 34px', borderRadius: 50, background: 'rgba(20,17,14,0.72)', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', fontFamily: SANS, fontWeight: 800, fontSize: 46, color: '#fff', whiteSpace: 'nowrap', opacity: warn, scale: lerp(warn, 0.85, 1)}}>
+          <Glyph name="fork-knife" size={46} color="#fff" />
+          only airport food
+          {cross > 0 ? (
+            <div style={{width: 56, height: 56, borderRadius: 28, background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', scale: lerp(cross, 1.6, 1)}}>
+              <svg viewBox="0 0 100 100" width={30} height={30}>
+                <path d="M 22 22 L 78 78 M 78 22 L 22 78" stroke="#fff" strokeWidth={16} strokeLinecap="round" />
+              </svg>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
   );
 };
 

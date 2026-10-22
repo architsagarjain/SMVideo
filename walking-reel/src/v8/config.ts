@@ -24,7 +24,7 @@ export const C = {
   tip2: {start: 40.44, end: 42.3}, // 02 PICK PROTEIN
   protein: {start: 42.3, end: 45.7}, // protein options
   tip3: {start: 45.7, end: 49.6}, // 03 PLAN FOR DELAYS, MEAL DELAYED flap row
-  snack: {start: 49.6, end: 54.9}, // carry a practical snack, not airport choices
+  snack: {start: 49.6, end: 54.9}, // airport X-ray: her carry-on snack gets scanned and cleared
   train1: {start: 54.9, end: 57.3}, // B-roll push-ups
   train2: {start: 57.3, end: 59.2}, // B-roll dumbbells
   simpler: {start: 59.2, end: 61.9}, // B-roll machine: simpler session
@@ -56,7 +56,7 @@ retime(TM8, {}, moves);
 
 export const v8Config: ReelConfig = {
   dir: 'v8',
-  gfx: [C.hook],
+  gfx: [{start: C.hook.start, end: C.reveal.end}], // the sky hook carries its own words
   behind: [],
   moves,
   broll: [
@@ -70,5 +70,6 @@ export const v8Config: ReelConfig = {
   blur: 8, // slight portrait-mode blur; her feathered cut-out stays sharp on top
   clean: true,
   grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
-  noCaptions: [C.hook, C.tip1, C.tip2, C.cta],
+  noCaptions: [C.tip1, C.tip2, C.cta],
+  pill: true, // captions on a dark pill: she wears white
 };
