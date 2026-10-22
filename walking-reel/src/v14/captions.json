@@ -1,0 +1,983 @@
+[
+ [
+  {
+   "text": "When",
+   "start": 1.04,
+   "end": 1.14
+  },
+  {
+   "text": "I",
+   "start": 1.14,
+   "end": 1.28
+  },
+  {
+   "text": "am",
+   "start": 1.28,
+   "end": 1.34
+  }
+ ],
+ [
+  {
+   "text": "building",
+   "start": 1.34,
+   "end": 1.58
+  },
+  {
+   "text": "a",
+   "start": 1.58,
+   "end": 1.82
+  },
+  {
+   "text": "plan",
+   "start": 1.82,
+   "end": 2.04
+  }
+ ],
+ [
+  {
+   "text": "around",
+   "start": 2.04,
+   "end": 2.42
+  },
+  {
+   "text": "a",
+   "start": 2.42,
+   "end": 2.62
+  },
+  {
+   "text": "desk",
+   "start": 2.62,
+   "end": 2.8
+  }
+ ],
+ [
+  {
+   "text": "job,",
+   "start": 2.8,
+   "end": 3.08
+  }
+ ],
+ [
+  {
+   "text": "I",
+   "start": 3.38,
+   "end": 3.4
+  },
+  {
+   "text": "want",
+   "start": 3.4,
+   "end": 3.66
+  },
+  {
+   "text": "to",
+   "start": 3.66,
+   "end": 3.8
+  }
+ ],
+ [
+  {
+   "text": "know",
+   "start": 3.8,
+   "end": 3.96
+  },
+  {
+   "text": "what",
+   "start": 3.96,
+   "end": 4.2
+  },
+  {
+   "text": "happens",
+   "start": 4.2,
+   "end": 4.64
+  }
+ ],
+ [
+  {
+   "text": "during",
+   "start": 4.64,
+   "end": 5.06
+  },
+  {
+   "text": "the",
+   "start": 5.06,
+   "end": 5.32
+  },
+  {
+   "text": "hours",
+   "start": 5.32,
+   "end": 5.68
+  }
+ ],
+ [
+  {
+   "text": "between",
+   "start": 5.68,
+   "end": 6.18
+  },
+  {
+   "text": "workouts",
+   "start": 6.18,
+   "end": 6.68
+  },
+  {
+   "text": "because",
+   "start": 6.68,
+   "end": 7.42
+  }
+ ],
+ [
+  {
+   "text": "a",
+   "start": 7.42,
+   "end": 7.62
+  },
+  {
+   "text": "training",
+   "start": 7.62,
+   "end": 7.92
+  },
+  {
+   "text": "session",
+   "start": 7.92,
+   "end": 8.28
+  }
+ ],
+ [
+  {
+   "text": "is",
+   "start": 8.28,
+   "end": 8.52
+  },
+  {
+   "text": "only",
+   "start": 8.52,
+   "end": 8.78
+  },
+  {
+   "text": "one",
+   "start": 8.78,
+   "end": 9.14
+  }
+ ],
+ [
+  {
+   "text": "part",
+   "start": 9.14,
+   "end": 9.5
+  },
+  {
+   "text": "of",
+   "start": 9.5,
+   "end": 9.84
+  },
+  {
+   "text": "your",
+   "start": 9.84,
+   "end": 9.98
+  }
+ ],
+ [
+  {
+   "text": "day.",
+   "start": 9.98,
+   "end": 10.22
+  }
+ ],
+ [
+  {
+   "text": "In",
+   "start": 10.72,
+   "end": 10.78
+  },
+  {
+   "text": "a",
+   "start": 10.78,
+   "end": 10.94
+  },
+  {
+   "text": "controlled",
+   "start": 10.94,
+   "end": 11.32
+  }
+ ],
+ [
+  {
+   "text": "trial,",
+   "start": 11.32,
+   "end": 11.84
+  }
+ ],
+ [
+  {
+   "text": "24",
+   "start": 12.26,
+   "end": 12.74
+  },
+  {
+   "text": "inactive",
+   "start": 12.74,
+   "end": 13.48
+  },
+  {
+   "text": "adults",
+   "start": 13.48,
+   "end": 13.88
+  }
+ ],
+ [
+  {
+   "text": "with",
+   "start": 13.88,
+   "end": 14.34
+  },
+  {
+   "text": "type",
+   "start": 14.34,
+   "end": 14.7
+  },
+  {
+   "text": "2",
+   "start": 14.7,
+   "end": 14.94
+  }
+ ],
+ [
+  {
+   "text": "diabetes",
+   "start": 14.94,
+   "end": 15.42
+  },
+  {
+   "text": "took",
+   "start": 15.42,
+   "end": 16.04
+  },
+  {
+   "text": "3-minute",
+   "start": 16.04,
+   "end": 16.8
+  }
+ ],
+ [
+  {
+   "text": "activity",
+   "start": 16.8,
+   "end": 17.4
+  },
+  {
+   "text": "breaks",
+   "start": 17.4,
+   "end": 17.8
+  },
+  {
+   "text": "every",
+   "start": 17.8,
+   "end": 18.26
+  }
+ ],
+ [
+  {
+   "text": "30",
+   "start": 18.26,
+   "end": 18.66
+  },
+  {
+   "text": "minutes",
+   "start": 18.66,
+   "end": 18.98
+  },
+  {
+   "text": "or",
+   "start": 18.98,
+   "end": 19.68
+  }
+ ],
+ [
+  {
+   "text": "remained",
+   "start": 19.68,
+   "end": 20.28
+  },
+  {
+   "text": "seated.",
+   "start": 20.28,
+   "end": 20.8
+  }
+ ],
+ [
+  {
+   "text": "Walking",
+   "start": 21.54,
+   "end": 21.9
+  },
+  {
+   "text": "breaks",
+   "start": 21.9,
+   "end": 22.36
+  },
+  {
+   "text": "reduced",
+   "start": 22.36,
+   "end": 23.08
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 23.08,
+   "end": 23.56
+  },
+  {
+   "text": "measured",
+   "start": 23.56,
+   "end": 23.98
+  },
+  {
+   "text": "incremental",
+   "start": 23.98,
+   "end": 24.8
+  }
+ ],
+ [
+  {
+   "text": "post-meal",
+   "start": 24.8,
+   "end": 25.62
+  },
+  {
+   "text": "glucose",
+   "start": 25.62,
+   "end": 26.08
+  },
+  {
+   "text": "response",
+   "start": 26.08,
+   "end": 26.72
+  }
+ ],
+ [
+  {
+   "text": "by",
+   "start": 26.72,
+   "end": 27.36
+  },
+  {
+   "text": "approximately",
+   "start": 27.36,
+   "end": 28.14
+  },
+  {
+   "text": "39%.",
+   "start": 28.14,
+   "end": 29.62
+  }
+ ],
+ [
+  {
+   "text": "That",
+   "start": 30.04,
+   "end": 30.44
+  },
+  {
+   "text": "isn't",
+   "start": 30.44,
+   "end": 30.84
+  },
+  {
+   "text": "a",
+   "start": 30.84,
+   "end": 31.08
+  }
+ ],
+ [
+  {
+   "text": "39",
+   "start": 31.08,
+   "end": 31.48
+  },
+  {
+   "text": "%",
+   "start": 31.48,
+   "end": 31.96
+  },
+  {
+   "text": "fall",
+   "start": 31.96,
+   "end": 32.38
+  }
+ ],
+ [
+  {
+   "text": "in",
+   "start": 32.38,
+   "end": 32.84
+  },
+  {
+   "text": "someone's",
+   "start": 32.84,
+   "end": 33.28
+  },
+  {
+   "text": "blood",
+   "start": 33.28,
+   "end": 33.52
+  }
+ ],
+ [
+  {
+   "text": "glucose",
+   "start": 33.52,
+   "end": 33.94
+  },
+  {
+   "text": "level",
+   "start": 33.94,
+   "end": 34.42
+  },
+  {
+   "text": "and",
+   "start": 34.42,
+   "end": 35.12
+  }
+ ],
+ [
+  {
+   "text": "it",
+   "start": 35.12,
+   "end": 35.38
+  },
+  {
+   "text": "isn't",
+   "start": 35.38,
+   "end": 35.82
+  },
+  {
+   "text": "a",
+   "start": 35.82,
+   "end": 36.02
+  }
+ ],
+ [
+  {
+   "text": "fat",
+   "start": 36.02,
+   "end": 36.22
+  },
+  {
+   "text": "loss",
+   "start": 36.22,
+   "end": 36.4
+  },
+  {
+   "text": "percentage.",
+   "start": 36.4,
+   "end": 36.9
+  }
+ ],
+ [
+  {
+   "text": "I",
+   "start": 37.56,
+   "end": 37.68
+  },
+  {
+   "text": "also",
+   "start": 37.68,
+   "end": 37.98
+  },
+  {
+   "text": "wouldn't",
+   "start": 37.98,
+   "end": 38.26
+  }
+ ],
+ [
+  {
+   "text": "promise",
+   "start": 38.26,
+   "end": 38.6
+  },
+  {
+   "text": "the",
+   "start": 38.6,
+   "end": 38.84
+  },
+  {
+   "text": "same",
+   "start": 38.84,
+   "end": 39.1
+  }
+ ],
+ [
+  {
+   "text": "response",
+   "start": 39.1,
+   "end": 39.58
+  },
+  {
+   "text": "to",
+   "start": 39.58,
+   "end": 39.92
+  },
+  {
+   "text": "every",
+   "start": 39.92,
+   "end": 40.36
+  }
+ ],
+ [
+  {
+   "text": "healthy",
+   "start": 40.36,
+   "end": 40.86
+  },
+  {
+   "text": "working",
+   "start": 40.86,
+   "end": 41.26
+  },
+  {
+   "text": "woman.",
+   "start": 41.26,
+   "end": 41.58
+  }
+ ],
+ [
+  {
+   "text": "But",
+   "start": 42.26,
+   "end": 42.48
+  },
+  {
+   "text": "it",
+   "start": 42.48,
+   "end": 42.76
+  },
+  {
+   "text": "gives",
+   "start": 42.76,
+   "end": 43.0
+  }
+ ],
+ [
+  {
+   "text": "us",
+   "start": 43.0,
+   "end": 43.16
+  },
+  {
+   "text": "a",
+   "start": 43.16,
+   "end": 43.4
+  },
+  {
+   "text": "specific",
+   "start": 43.4,
+   "end": 43.82
+  }
+ ],
+ [
+  {
+   "text": "movement",
+   "start": 43.82,
+   "end": 44.3
+  },
+  {
+   "text": "pattern",
+   "start": 44.3,
+   "end": 44.78
+  },
+  {
+   "text": "to",
+   "start": 44.78,
+   "end": 45.2
+  }
+ ],
+ [
+  {
+   "text": "consider.",
+   "start": 45.2,
+   "end": 45.68
+  }
+ ],
+ [
+  {
+   "text": "During",
+   "start": 46.38,
+   "end": 46.7
+  },
+  {
+   "text": "a",
+   "start": 46.7,
+   "end": 47.18
+  },
+  {
+   "text": "long",
+   "start": 47.18,
+   "end": 47.58
+  }
+ ],
+ [
+  {
+   "text": "desk",
+   "start": 47.58,
+   "end": 48.2
+  },
+  {
+   "text": "block,",
+   "start": 48.2,
+   "end": 48.7
+  }
+ ],
+ [
+  {
+   "text": "set",
+   "start": 49.02,
+   "end": 49.36
+  },
+  {
+   "text": "a",
+   "start": 49.36,
+   "end": 49.58
+  },
+  {
+   "text": "reminder",
+   "start": 49.58,
+   "end": 50.16
+  }
+ ],
+ [
+  {
+   "text": "for",
+   "start": 50.16,
+   "end": 50.9
+  },
+  {
+   "text": "a",
+   "start": 50.9,
+   "end": 51.04
+  },
+  {
+   "text": "few",
+   "start": 51.04,
+   "end": 51.22
+  }
+ ],
+ [
+  {
+   "text": "minutes",
+   "start": 51.22,
+   "end": 51.52
+  },
+  {
+   "text": "of",
+   "start": 51.52,
+   "end": 51.72
+  },
+  {
+   "text": "suitable",
+   "start": 51.72,
+   "end": 52.14
+  }
+ ],
+ [
+  {
+   "text": "light",
+   "start": 52.14,
+   "end": 52.52
+  },
+  {
+   "text": "movement.",
+   "start": 52.52,
+   "end": 53.06
+  }
+ ],
+ [
+  {
+   "text": "Choose",
+   "start": 53.54,
+   "end": 53.82
+  },
+  {
+   "text": "an",
+   "start": 53.82,
+   "end": 54.06
+  },
+  {
+   "text": "indoor",
+   "start": 54.06,
+   "end": 54.42
+  }
+ ],
+ [
+  {
+   "text": "route",
+   "start": 54.42,
+   "end": 54.72
+  },
+  {
+   "text": "or",
+   "start": 54.72,
+   "end": 55.18
+  },
+  {
+   "text": "walk",
+   "start": 55.18,
+   "end": 55.54
+  }
+ ],
+ [
+  {
+   "text": "to",
+   "start": 55.54,
+   "end": 55.82
+  },
+  {
+   "text": "the",
+   "start": 55.82,
+   "end": 55.96
+  },
+  {
+   "text": "water",
+   "start": 55.96,
+   "end": 56.16
+  }
+ ],
+ [
+  {
+   "text": "station.",
+   "start": 56.16,
+   "end": 56.6
+  }
+ ],
+ [
+  {
+   "text": "If",
+   "start": 57.07,
+   "end": 57.46
+  },
+  {
+   "text": "a",
+   "start": 57.46,
+   "end": 57.62
+  },
+  {
+   "text": "meeting",
+   "start": 57.62,
+   "end": 57.84
+  }
+ ],
+ [
+  {
+   "text": "interrupts,",
+   "start": 57.84,
+   "end": 58.4
+  }
+ ],
+ [
+  {
+   "text": "resume",
+   "start": 58.82,
+   "end": 58.84
+  },
+  {
+   "text": "the",
+   "start": 58.84,
+   "end": 59.24
+  },
+  {
+   "text": "break",
+   "start": 59.24,
+   "end": 59.82
+  }
+ ],
+ [
+  {
+   "text": "afterwards.",
+   "start": 59.82,
+   "end": 60.54
+  }
+ ],
+ [
+  {
+   "text": "And",
+   "start": 61.18,
+   "end": 61.26
+  },
+  {
+   "text": "build",
+   "start": 61.26,
+   "end": 61.56
+  },
+  {
+   "text": "this",
+   "start": 61.56,
+   "end": 61.86
+  }
+ ],
+ [
+  {
+   "text": "alongside",
+   "start": 61.86,
+   "end": 62.42
+  },
+  {
+   "text": "your",
+   "start": 62.42,
+   "end": 62.72
+  },
+  {
+   "text": "training",
+   "start": 62.72,
+   "end": 63.16
+  }
+ ],
+ [
+  {
+   "text": "rather",
+   "start": 63.16,
+   "end": 63.82
+  },
+  {
+   "text": "than",
+   "start": 63.82,
+   "end": 64.32
+  },
+  {
+   "text": "expecting",
+   "start": 64.32,
+   "end": 64.88
+  }
+ ],
+ [
+  {
+   "text": "one",
+   "start": 64.88,
+   "end": 65.32
+  },
+  {
+   "text": "evening",
+   "start": 65.32,
+   "end": 65.64
+  },
+  {
+   "text": "workout",
+   "start": 65.64,
+   "end": 66.04
+  }
+ ],
+ [
+  {
+   "text": "to",
+   "start": 66.04,
+   "end": 66.6
+  },
+  {
+   "text": "cover",
+   "start": 66.6,
+   "end": 66.9
+  },
+  {
+   "text": "every",
+   "start": 66.9,
+   "end": 67.46
+  }
+ ],
+ [
+  {
+   "text": "aspect",
+   "start": 67.46,
+   "end": 68.04
+  },
+  {
+   "text": "of",
+   "start": 68.04,
+   "end": 68.54
+  },
+  {
+   "text": "an",
+   "start": 68.54,
+   "end": 68.84
+  }
+ ],
+ [
+  {
+   "text": "otherwise",
+   "start": 68.84,
+   "end": 69.2
+  },
+  {
+   "text": "seated",
+   "start": 69.2,
+   "end": 69.9
+  },
+  {
+   "text": "day.",
+   "start": 69.9,
+   "end": 70.44
+  }
+ ],
+ [
+  {
+   "text": "Comment",
+   "start": 71.04,
+   "end": 71.28
+  },
+  {
+   "text": "GUIDE",
+   "start": 71.28,
+   "end": 71.66
+  },
+  {
+   "text": "and",
+   "start": 71.66,
+   "end": 72.2
+  }
+ ],
+ [
+  {
+   "text": "I'll",
+   "start": 72.2,
+   "end": 72.46
+  },
+  {
+   "text": "send",
+   "start": 72.46,
+   "end": 72.58
+  },
+  {
+   "text": "you",
+   "start": 72.58,
+   "end": 72.74
+  }
+ ],
+ [
+  {
+   "text": "my",
+   "start": 72.74,
+   "end": 72.9
+  },
+  {
+   "text": "free",
+   "start": 72.9,
+   "end": 73.26
+  },
+  {
+   "text": "fat",
+   "start": 73.26,
+   "end": 73.6
+  }
+ ],
+ [
+  {
+   "text": "loss",
+   "start": 73.6,
+   "end": 73.84
+  },
+  {
+   "text": "guide.",
+   "start": 73.84,
+   "end": 74.14
+  }
+ ]
+]

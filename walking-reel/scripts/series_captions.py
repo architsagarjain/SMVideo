@@ -17,6 +17,10 @@ FIXES = {
     'v9': [(24.96, 'tread', 'trend'), (74.98, 'guide', 'GUIDE')],
     'v10': [(70.32, 'guide', 'GUIDE')],
     'v11': [(68.62, 'vein', 'weigh-in'), (73.66, 'guide', 'GUIDE')],
+    'v15': [],
+    'v12': [(73.62, 'Come', 'Comment'), (73.76, 'and', None), (73.96, 'guide', 'GUIDE')],
+    'v13': [(40.30, 'reputable', 'repeatable'), (73.56, 'guide', 'GUIDE')],
+    'v14': [(58.82, 'the', 'resume'), (58.84, 'break', 'the'), (59.24, 'resume', 'break'), (71.28, 'guide', 'GUIDE')],
     'v7': [(45.14, 'Come', 'Comment'), (45.26, 'and', None), (45.44, 'snack', 'SNACK')],
     'sabudana': [(5.70, 'light', '"light"'), (3.64, 'I', "I've"), (3.66, 'have', None), (23.84, 'I', "I'm"), (24.04, 'am', None)],
 }
