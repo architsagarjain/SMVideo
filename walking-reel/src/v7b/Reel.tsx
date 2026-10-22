@@ -340,9 +340,9 @@ const NormalFront: React.FC = () => {
   const chip = tween(t, 27.36, 0.35, EASE_OUT);
   return (
     <AbsoluteFill style={{pointerEvents: 'none', fontFamily: SANS}}>
-      <div style={{position: 'absolute', left: SW / 2, top: 330, translate: '-50% -50%', opacity: o(24.48, 27.2), fontFamily: SERIF, fontStyle: 'italic', fontSize: 76, color: '#fff', whiteSpace: 'nowrap', textShadow: '0 0 30px rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.4)'}}>and it felt like you ate</div>
+      <div style={{position: 'absolute', left: SW / 2, top: 470, translate: '-50% -50%', opacity: o(24.48, 27.2), fontFamily: SERIF, fontStyle: 'italic', fontSize: 76, color: '#fff', whiteSpace: 'nowrap', textShadow: '0 0 30px rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.4)'}}>and it felt like you ate</div>
       {chip > 0 ? (
-        <div style={{position: 'absolute', left: SW / 2, top: 330, translate: '-50% -50%', display: 'flex', alignItems: 'center', gap: 16, padding: '16px 30px 16px 16px', borderRadius: 60, background: '#F6E7C1', boxShadow: '0 16px 40px rgba(0,0,0,0.35)', opacity: chip * (1 - tween(t, C.face2.end - 0.25, 0.2)), scale: lerp(chip, 0.7, 1)}}>
+        <div style={{position: 'absolute', left: SW / 2, top: 450, translate: '-50% -50%', display: 'flex', alignItems: 'center', gap: 16, padding: '16px 30px 16px 16px', borderRadius: 60, background: '#F6E7C1', boxShadow: '0 16px 40px rgba(0,0,0,0.35)', opacity: chip * (1 - tween(t, C.face2.end - 0.25, 0.2)), scale: lerp(chip, 0.7, 1)}}>
           <div style={{width: 64, height: 64, borderRadius: 16, background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <svg viewBox="0 0 100 100" width={44} height={44}>
               <path d="M 22 52 L 42 70 L 78 32" fill="none" stroke="#F6E7C1" strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - tween(t, 27.5, 0.25)} />
@@ -378,8 +378,20 @@ const Banner: React.FC<{at: number; out: number; app: string; icon: React.ReactN
   );
 };
 
-const Bubble: React.FC<{text: string; at: number; out: number; y: number; me?: boolean}> = ({text, at, out, y, me}) => {
+const Bubble: React.FC<{text: string; at: number; out: number; y: number; me?: boolean; typing?: number}> = ({text, at, out, y, me, typing}) => {
   const t = useT();
+  const f = useCurrentFrame();
+  if (typing !== undefined && t >= typing && t < at) {
+    // iMessage typing indicator first
+    const p = tween(t, typing, 0.25, EASE_OUT);
+    return (
+      <div style={{position: 'absolute', top: y, [me ? 'right' : 'left']: 30, padding: '26px 30px', borderRadius: 44, background: me ? BLUE : 'rgba(58,58,60,0.92)', display: 'flex', gap: 12, opacity: p, scale: lerp(p, 0.6, 1), transformOrigin: me ? 'right bottom' : 'left bottom', boxShadow: '0 10px 30px rgba(0,0,0,0.25)'}}>
+        {[0, 1, 2].map((i) => (
+          <div key={i} style={{width: 18, height: 18, borderRadius: 9, background: '#fff', opacity: 0.45 + 0.55 * Math.max(0, Math.sin((f / 30) * 9 - i * 0.9))}} />
+        ))}
+      </div>
+    );
+  }
   if (t < at - 0.02 || t > out + 0.25) return null;
   const p = tween(t, at, 0.35, EASE_OUT);
   const o = Math.min(1, p * 2) * (1 - tween(t, out, 0.22, EASE_IN));
@@ -558,8 +570,8 @@ const Overlays: React.FC = () => {
         title="STOP eating healthy snacks"
         body="if you’re trying to lose fat"
       />
-      <Bubble text="that sounds wrong" at={4.88} out={C.face1.end - 0.15} y={250} />
-      <Bubble text="hear me out" at={5.98} out={C.face1.end - 0.15} y={370} me />
+      <Bubble text="that sounds wrong" at={4.88} out={C.face1.end - 0.15} y={250} typing={4.4} />
+      <Bubble text="hear me out" at={5.98} out={C.face1.end - 0.15} y={370} me typing={5.5} />
       <Alert />
       <ReelUI />
       <Banner
@@ -592,7 +604,8 @@ const LiveCaptions: React.FC = () => {
     if (t >= a && t < b) line = lines[k];
   }
   if (!line) return null;
-  const y = cur.app === 'facetime' ? 1352 : cur.app === 'story' ? 1400 : 1524;
+  if (t < 4.3) return null; // the hook banner + collage carry the words
+  const y = cur.app === 'facetime' ? 1290 : cur.app === 'story' ? 1360 : 1450;
   return (
     <div style={{position: 'absolute', left: 450, top: y, translate: '-50% 0', padding: '12px 28px', borderRadius: 26, background: 'rgba(20,20,22,0.72)', color: '#fff', fontFamily: SANS, fontSize: 44, fontWeight: 700, whiteSpace: 'nowrap'}}>
       {line.map((w) => w.text).join(' ')}
@@ -650,9 +663,60 @@ const shakeAt = (t: number) => {
 };
 
 /** Everything inside Base, so useT() reads source time through the time map. */
+/** Macro close-ups into the phone (reference-style): focus point in screen coords, zoom amount. */
+const MACROS = [
+  {a: 7.45, b: 11.6, m: 1.75, fx: 330, fy: (t: number) => (t < 9.2 ? 415 : 470)}, // Notes: breakfast, fruit being typed
+  {a: 22.05, b: 23.45, m: 1.55, fx: 560, fy: () => 420}, // Calculator: = 520
+  {a: 31.85, b: 33.0, m: 1.45, fx: 330, fy: () => 600}, // Notes: green ticks
+];
+const macroAt = (t: number) => {
+  for (const mc of MACROS) {
+    if (t >= mc.a && t < mc.b + 0.5) {
+      const k = tween(t, mc.a, 0.5, EASE_IN_OUT) * (1 - tween(t, mc.b, 0.5, EASE_IN_OUT));
+      return {k, m: mc.m, fx: mc.fx, fy: mc.fy(t)};
+    }
+  }
+  return {k: 0, m: 1, fx: SW / 2, fy: SH / 2};
+};
+const Mat: React.FC = () => (
+  <AbsoluteFill style={{background: '#0E3B2C'}}>
+    <AbsoluteFill style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.07) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,0.07) 2px, transparent 2px)', backgroundSize: '45px 45px'}} />
+    <AbsoluteFill style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.16) 3px, transparent 3px), linear-gradient(90deg, rgba(255,255,255,0.16) 3px, transparent 3px)', backgroundSize: '225px 225px'}} />
+    <AbsoluteFill style={{background: 'radial-gradient(80% 60% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%)'}} />
+  </AbsoluteFill>
+);
+/** Cut-paper collage letters (reference-style), dropped over her in the hook. */
+const PAPER = [
+  {ch: 'S', bg: '#FFFFFF', fg: '#C21DFF', at: 1.36},
+  {ch: 'T', bg: '#E9D5FF', fg: '#111111', at: 1.46},
+  {ch: 'O', bg: '#111111', fg: '#FFFFFF', at: 1.56},
+  {ch: 'P', bg: '#FFFFFF', fg: '#C21DFF', at: 1.66},
+];
+const Collage: React.FC = () => {
+  const t = useT();
+  if (t < 1.3 || t > 4.4) return null;
+  const out = 1 - tween(t, 4.0, 0.3, EASE_IN);
+  return (
+    <div style={{position: 'absolute', left: 540, top: 1300, translate: '-50% -50%', display: 'flex', gap: 14, opacity: out}}>
+      {PAPER.map((p, i) => {
+        const q = tween(t, p.at, 0.22, EASE_IN);
+        if (t < p.at) return <div key={i} style={{width: 200, height: 250}} />;
+        return (
+          <div key={i} style={{width: 200, height: 250, background: p.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 210, color: p.fg, lineHeight: 1, translate: `0 ${i % 2 ? 14 : -10}px`, scale: lerp(q, 1.7, 1), opacity: q, boxShadow: '0 14px 30px rgba(0,0,0,0.35)', clipPath: 'polygon(2% 4%, 18% 0%, 40% 3%, 63% 0%, 85% 2%, 100% 6%, 97% 30%, 100% 55%, 98% 80%, 100% 97%, 78% 100%, 55% 96%, 30% 100%, 8% 97%, 0% 100%, 3% 72%, 0% 45%, 2% 20%)'}}>
+            {p.ch}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const PhoneScene: React.FC = () => {
   const t = useT();
   const z = zoomAt(t);
+  const mac = macroAt(t);
+  // canvas position of the macro focus point (before any scaling)
+  const ox = PX + BEZ + mac.fx, oy = PY + BEZ + mac.fy;
   const scale = lerp(z, BASE, FILL);
   const radius = lerp(z, 128, 0);
   const moving = z > 0.02 && z < 0.98;
@@ -661,10 +725,9 @@ const PhoneScene: React.FC = () => {
   const btn = (side: 'l' | 'r', top: number, h: number) => (
     <div style={{position: 'absolute', [side === 'l' ? 'left' : 'right']: -7, top, width: 9, height: h, borderRadius: 4, background: 'linear-gradient(to right, #6E6E73, #C7C7CC 50%, #6E6E73)'}} />
   );
-  return (
-    <>
-      <AbsoluteFill style={{background: 'radial-gradient(120% 80% at 50% 30%, #F8EFE4 0%, #EADCCB 100%)'}} />
+  const phoneLayer = (
       <AbsoluteFill style={{scale, transformOrigin: '540px 960px', translate: `${shakeAt(t)}px 0`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
+      <AbsoluteFill style={{transformOrigin: `${ox}px ${oy}px`, scale: lerp(mac.k, 1, mac.m), translate: `${(540 - ox) * mac.k}px ${(960 - oy) * mac.k}px`}}>
         <div style={{position: 'absolute', left: PX, top: PY, width: W, height: H}}>
           {/* side buttons */}
           {btn('l', 300, 62)}
@@ -687,6 +750,22 @@ const PhoneScene: React.FC = () => {
           </div>
         </div>
       </AbsoluteFill>
+      </AbsoluteFill>
+  );
+  return (
+    <>
+      <Mat />
+      {mac.k > 0.01 ? (
+        <>
+          {/* macro depth of field: a blurred copy, with the sharp phone masked to the middle band */}
+          <AbsoluteFill style={{filter: `blur(${9 * mac.k}px)`}}>{phoneLayer}</AbsoluteFill>
+          <AbsoluteFill style={{maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0) 4%, #000 34%, #000 66%, rgba(0,0,0,0) 96%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0) 4%, #000 34%, #000 66%, rgba(0,0,0,0) 96%)'}}>{phoneLayer}</AbsoluteFill>
+          <AbsoluteFill style={{background: `radial-gradient(70% 45% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,${0.35 * mac.k}) 100%)`}} />
+        </>
+      ) : (
+        phoneLayer
+      )}
+      <Collage />
     </>
   );
 };

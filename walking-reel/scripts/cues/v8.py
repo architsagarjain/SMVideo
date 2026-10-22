@@ -19,7 +19,7 @@ def cues(cue, rng):
     cue(1.01, "pack:whoosh_cine", -20)
     cue(1.92, "pack:hit", -21)
     cue(2.32, "pack:whoosh_deep", -22)
-    cue(3.2, "pack:whoosh_soft", -27)
+    cue(3.0, "pack:whoosh_cine", -22)  # the closer plane flies past behind her
     cue(4.46, "pack:whoosh_fast2", -24)
     cue(5.7, "pack:hit", -20)
     cue(6.15, "pack:whoosh_soft", -25)

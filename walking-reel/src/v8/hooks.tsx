@@ -66,7 +66,28 @@ const SkyBack: React.FC = () => {
     <AbsoluteFill style={{opacity: o}}>
       <AbsoluteFill style={{background: 'linear-gradient(to bottom, #2F7FD6 0%, #6FB2F0 45%, #CFE8FB 100%)'}} />
       <Clouds front={false} />
+      <PlaneBy at={1.05} dur={2.2} y0={760} y1={700} size={70} trail={0.5} />
+      <PlaneBy at={3.0} dur={1.7} y0={640} y1={560} size={170} trail={0.85} />
     </AbsoluteFill>
+  );
+};
+
+/** A plane flying across the sky behind her, leaving a contrail. */
+const PlaneBy: React.FC<{at: number; dur: number; y0: number; y1: number; size: number; trail: number}> = ({at, dur, y0, y1, size, trail}) => {
+  const t = useT();
+  if (t < at || t > at + dur + 0.6) return null;
+  const p = tween(t, at, dur, (x) => x);
+  const x = lerp(p, -size * 1.5, 1080 + size);
+  const y = lerp(p, y0, y1);
+  const fade = 1 - tween(t, at + dur, 0.6);
+  const ang = (Math.atan2(y1 - y0, 1080 + size * 2.5) * 180) / Math.PI;
+  return (
+    <>
+      <div style={{position: 'absolute', left: x - 1400, top: y + size * 0.47, width: 1400, height: Math.max(4, size * 0.07), borderRadius: 4, background: `linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,${trail}))`, opacity: fade, rotate: `${ang}deg`, transformOrigin: 'right center', filter: 'blur(1.5px)'}} />
+      <div style={{position: 'absolute', left: x - size * 0.5, top: y, rotate: `${ang}deg`, filter: 'drop-shadow(0 6px 12px rgba(0,40,80,0.35))'}}>
+        <Plane size={size} color="#FFFFFF" />
+      </div>
+    </>
   );
 };
 const SkyFront: React.FC = () => {
