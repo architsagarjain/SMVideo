@@ -5,15 +5,16 @@ import captions from './captions.json';
 
 /**
  * Check-in reel ("your coach cuts your food after every heavier weigh-in").
- * Look: dark LCD-scale hook behind her cut-out, then an editorial split screen: her in a rounded
- * card at the bottom, white infographic cards on top. Bold condensed captions (Anton) with the
+ * Look: an editorial split screen from the first frame: her in a rounded card at the bottom, white
+ * infographic cards on top (hook: a bathroom scale climbs while the coach cuts the plate). Bold condensed captions (Anton) with the
  * spoken word in yellow. Her own B-roll for the "all at once" montage. Times are source seconds.
  */
 export const TM9 = timemap as TimeMap;
 export const V9_FRAMES = TM9.frames;
 
 export const C = {
-  hook: {start: 1.03, end: 7.9}, // LCD scale climbing, coach texts "cut 300 kcal", ASK WHAT THEY CHECKED FIRST
+  hook: {start: 1.03, end: 7.9}, // whole hook: card (scale, coach texts, plate cut) then ASK WHAT THEY CHECKED FIRST
+  hookCard: {start: 1.03, end: 5.14}, // split from the first frame: bathroom scale climbs, coach cuts the plate
   study: {start: 7.9, end: 17.3}, // 42 women, +0.45 kg, mostly water
   single: {start: 17.3, end: 20.9}, // one reading can mislead (noisy chart, one spike)
   review: {start: 20.9, end: 24.1}, // before changing the plan, here's what I'd review
@@ -38,7 +39,7 @@ for (const s of STEPS) s.at = Math.max(s.at, C.check.start);
 
 // her card in split mode (screen px)
 export const CARD = {x: 36, y: 880, w: 1008, h: 1000, r: 54, s: 1.0};
-export const SPLIT = [C.study, C.single, C.check, C.vs, C.measured];
+export const SPLIT = [C.hookCard, C.study, C.single, C.check, C.vs, C.measured];
 
 export const v9Config: ReelConfig = {
   dir: 'v9',

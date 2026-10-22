@@ -29,7 +29,7 @@ const MERGED = (() => {
   return out;
 })();
 const splitAt = (t: number) => {
-  for (const w of MERGED) if (t >= w.start - 0.01 && t < w.end + 0.5) return tween(t, w.start, 0.42, EASE_IN_OUT) * (1 - tween(t, w.end, 0.42, EASE_IN_OUT));
+  for (const w of MERGED) if (t >= w.start - 0.01 && t < w.end + 0.5) return (w.start < 1.2 ? 1 : tween(t, w.start, 0.42, EASE_IN_OUT)) * (1 - tween(t, w.end, 0.42, EASE_IN_OUT));
   return 0;
 };
 
@@ -79,10 +79,7 @@ const At: React.FC<{x: number; y: number; o?: number; s?: number; children: Reac
     <div style={{position: 'absolute', left: x, top: y, translate: align === 'center' ? '-50% -50%' : '0 -50%', opacity: Math.min(1, o), scale: s, transformOrigin: align === 'center' ? 'center' : 'left center'}}>{children}</div>
   );
 const Hi: React.FC<{p: number; color?: string; children: React.ReactNode}> = ({p, color = YEL, children}) => (
-  <span style={{position: 'relative', display: 'inline-block', padding: '0 0.12em'}}>
-    <span style={{position: 'absolute', left: 0, top: '8%', bottom: '4%', width: `${p * 100}%`, background: color, zIndex: 0}} />
-    <span style={{position: 'relative', zIndex: 1}}>{children}</span>
-  </span>
+  <span style={{display: 'inline-block', lineHeight: 1.22, padding: '0 0.13em', margin: '0 0.02em', borderRadius: '0.06em', backgroundImage: `linear-gradient(${color}, ${color})`, backgroundRepeat: 'no-repeat', backgroundSize: `${p * 100}% 100%`, color: INK}}>{children}</span>
 );
 const Tag: React.FC<{text: string; bg?: string; fg?: string; size?: number; icon?: string}> = ({text, bg = INK, fg = '#fff', size = 34, icon}) => (
   <div style={{display: 'inline-flex', alignItems: 'center', gap: size * 0.35, padding: `${size * 0.32}px ${size * 0.7}px`, borderRadius: 999, background: bg, color: fg, fontFamily: SANS, fontWeight: 800, fontSize: size, letterSpacing: size * 0.08, whiteSpace: 'nowrap'}}>
@@ -92,85 +89,175 @@ const Tag: React.FC<{text: string; bg?: string; fg?: string; size?: number; icon
 );
 
 // ---------------------------------------------------------------------------
-// HOOK: dark room, LCD scale climbing behind her, coach texts, then the question
+// HOOK (split from the first frame): bathroom scale climbs, coach texts, the plate gets cut,
+// then she goes full frame and the question lands behind her head
 // ---------------------------------------------------------------------------
-const lcdValue = (t: number) => {
-  if (t < 1.3) return '88.8';
+const scaleValue = (t: number) => {
+  if (t < 1.25) return '88.8';
   const roll = (a: number, b: number, t0: number, t1: number) => (a + Math.round((b - a) * 10 * tween(t, t0, t1 - t0, (x) => x)) / 10).toFixed(1);
   if (t < 3.08) return roll(61.9, 62.4, 1.44, 1.72);
   return roll(62.4, 62.9, 3.1, 3.82);
 };
-const HookBack: React.FC = () => {
-  const t = useT();
-  const w = C.hook;
-  if (t >= w.end + 0.3) return null;
-  const dark = 1 - tween(t, w.end - 0.1, 0.3);
-  const lcdOut = tween(t, 5.1, 0.25, EASE_IN);
-  const boot = t < 1.3 ? (Math.floor(t * 30) % 3 === 0 ? 0.35 : 1) : 1;
-  const bump = Math.max(0, 1 - tween(t, 1.72, 0.3)) * (t >= 1.72 ? 1 : 0) + Math.max(0, 1 - tween(t, 3.82, 0.3)) * (t >= 3.82 ? 1 : 0);
-  const k1 = tween(t, 5.14, 0.3, EASE_OUT);
-  const k2 = tween(t, 6.66, 0.3, EASE_OUT);
+const BathScale: React.FC<{t: number}> = ({t}) => {
+  const k = popAt(t, C.hook.start);
+  const bump = (at: number) => (t >= at ? Math.max(0, 1 - tween(t, at, 0.35)) : 0);
+  const boot = t < 1.25 ? (Math.floor(t * 30) % 4 === 0 ? 0.3 : 1) : 1;
   return (
-    <AbsoluteFill>
-      <AbsoluteFill style={{background: 'radial-gradient(70% 45% at 50% 28%, rgba(60,8,6,0.9) 0%, rgba(8,8,10,0.94) 70%)', opacity: dark}} />
-      {lcdOut < 1 ? (
-        <div style={{position: 'absolute', left: 540, top: 330, translate: '-50% -50%', opacity: boot * (1 - lcdOut), scale: (1 + 0.04 * bump) * lerp(lcdOut, 1, 1.25)}}>
-          <div style={{display: 'flex', alignItems: 'flex-end', gap: 22}}>
-            <SevenSeg text={lcdValue(t)} h={330} on={RED} off="rgba(255,59,48,0.08)" glow="rgba(255,59,48,0.8)" />
-            <A size={90} color={RED} style={{marginBottom: 6, textShadow: '0 0 20px rgba(255,59,48,0.7)'}}>kg</A>
-          </div>
+    <div style={{position: 'absolute', left: 300, top: 505, translate: '-50% -50%', width: 420, height: 420, scale: Math.max(0, k) * (1 + 0.035 * (bump(1.72) + bump(3.82)))}}>
+      <div style={{position: 'absolute', inset: 0, borderRadius: 84, background: 'linear-gradient(150deg, #FFFFFF 0%, #EEF1F3 55%, #DCE1E5 100%)', boxShadow: '0 30px 50px -20px rgba(0,0,0,0.35), inset 0 2px 0 #fff, inset 0 -8px 16px rgba(0,0,0,0.06)'}} />
+      <div style={{position: 'absolute', inset: 14, borderRadius: 72, border: '2px solid rgba(255,255,255,0.9)', background: 'linear-gradient(160deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%)'}} />
+      {/* display */}
+      <div style={{position: 'absolute', left: 60, right: 60, top: 54, height: 118, borderRadius: 24, background: '#1E2629', boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12}}>
+        <div style={{opacity: boot}}>
+          <SevenSeg text={scaleValue(t)} h={76} on={t >= 1.72 ? '#FF6B5E' : '#DFFBF0'} off="rgba(223,251,240,0.06)" glow={t >= 1.72 ? 'rgba(255,90,70,0.7)' : 'rgba(190,255,230,0.6)'} />
         </div>
-      ) : null}
-      {/* the question, behind her head */}
-      {t >= 5.1 ? (
-        <>
-          <At x={540} y={250} o={k1 * dark} s={lerp(k1, 1.35, 1)}>
-            <A size={150} color="#fff">ask what they</A>
-          </At>
-          <At x={540} y={430} o={k2 * dark} s={lerp(k2, 1.35, 1)}>
-            <A size={150} color="#fff">
-              checked <span style={{color: INK}}><Hi p={tween(t, 6.92, 0.25)}>first</Hi></span>
-            </A>
-          </At>
-        </>
-      ) : null}
-    </AbsoluteFill>
+        <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 26, color: '#9FB4AC', marginTop: 34}}>kg</span>
+      </div>
+      {/* footprints */}
+      {[-1, 1].map((sd) => (
+        <svg key={sd} width={80} height={150} viewBox="0 0 80 150" style={{position: 'absolute', left: 210 + sd * 58 - 40, top: 218, opacity: 0.12}}>
+          <ellipse cx={40} cy={86} rx={30} ry={56} fill={INK} />
+          {[0, 1, 2, 3, 4].map((i) => (
+            <circle key={i} cx={sd < 0 ? 18 + i * 11 : 62 - i * 11} cy={20 - (i === 0 ? 0 : 4) + i * 1.5} r={i === 0 ? 9 : 6} fill={INK} />
+          ))}
+        </svg>
+      ))}
+    </div>
   );
 };
-const Bubble: React.FC<{at: number; y: number; text: string; sub: string}> = ({at, y, text, sub}) => {
-  const t = useT();
-  if (t < at) return null;
-  const p = popAt(t, at);
+// plate: rice / dal / sabzi / roti; two wedges get cut away
+const FOOD = [
+  {a0: 0, a1: 130, c: '#F4E6C8'},
+  {a0: 130, a1: 205, c: '#F2B33D'},
+  {a0: 205, a1: 290, c: '#7CB342'},
+  {a0: 290, a1: 360, c: '#D9A066'},
+];
+const CUTS = [
+  {a0: 270, a1: 360, at: 1.95, label: '−300 KCAL'},
+  {a0: 215, a1: 270, at: 3.86, label: '−200 MORE'},
+];
+const arc = (cx: number, cy: number, r: number, a0: number, a1: number) => {
+  const p = (a: number) => [cx + r * Math.cos(((a - 90) * Math.PI) / 180), cy + r * Math.sin(((a - 90) * Math.PI) / 180)];
+  const [x0, y0] = p(a0);
+  const [x1, y1] = p(a1);
+  return `M${cx} ${cy} L${x0} ${y0} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1} ${y1} Z`;
+};
+const Plate: React.FC<{t: number}> = ({t}) => {
+  const k = popAt(t, 1.2);
+  if (t < 1.2) return null;
+  const R = 150;
+  const pieces: {a0: number; a1: number; c: string; g: number}[] = [];
+  for (const f of FOOD) {
+    const cutsIn = [f.a0, ...CUTS.flatMap((c) => [c.a0, c.a1]).filter((x) => x > f.a0 && x < f.a1), f.a1].sort((x, y) => x - y);
+    for (let i = 0; i < cutsIn.length - 1; i++) {
+      const m = (cutsIn[i] + cutsIn[i + 1]) / 2;
+      const g = CUTS.findIndex((c) => m > c.a0 && m < c.a1) + 1;
+      pieces.push({a0: cutsIn[i], a1: cutsIn[i + 1], c: f.c, g});
+    }
+  }
   return (
-    <div style={{position: 'absolute', left: 540, top: y, translate: '-50% -50%', scale: lerp(Math.min(p, 1.1), 0.7, 1), opacity: Math.min(1, p * 2), display: 'flex', alignItems: 'center', gap: 22, padding: '22px 34px 22px 22px', borderRadius: 40, background: 'rgba(255,255,255,0.97)', boxShadow: '0 20px 50px rgba(0,0,0,0.45)', width: 860}}>
-      <div style={{width: 92, height: 92, borderRadius: 46, background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}>
-        <Ico name="scissors" size={52} color={RED} />
+    <div style={{position: 'absolute', left: 785, top: 505, translate: '-50% -50%', scale: Math.max(0, k)}}>
+      <svg width={460} height={460} viewBox="-230 -230 460 460" style={{overflow: 'visible'}}>
+        <circle r={205} fill="#FFFFFF" stroke="#ECE8E0" strokeWidth={6} style={{filter: 'drop-shadow(0 16px 20px rgba(0,0,0,0.18))'}} />
+        <circle r={172} fill="none" stroke="#F2EFE9" strokeWidth={4} />
+        {pieces.map((pc, i) => {
+          let dx = 0;
+          let dy = 0;
+          let o = 1;
+          if (pc.g > 0) {
+            const c = CUTS[pc.g - 1];
+            const d = tween(t, c.at, 0.55, EASE_IN);
+            const mid = (((c.a0 + c.a1) / 2 - 90) * Math.PI) / 180;
+            dx = Math.cos(mid) * 260 * d;
+            dy = Math.sin(mid) * 260 * d + 200 * d * d;
+            o = 1 - tween(t, c.at + 0.3, 0.3);
+          }
+          return o > 0 ? <path key={i} d={arc(dx, dy, R, pc.a0, pc.a1)} fill={pc.c} opacity={o} stroke="#fff" strokeWidth={3} /> : null;
+        })}
+        {/* the cut line + scissors */}
+        {CUTS.map((c, i) => {
+          const s0 = c.at - 0.3;
+          if (t < s0 || t > c.at + 0.2) return null;
+          const p = tween(t, s0, 0.3, (x) => x);
+          const a = ((c.a0 - 90) * Math.PI) / 180;
+          return (
+            <g key={i}>
+              <line x1={0} y1={0} x2={Math.cos(a) * R * 1.2 * p} y2={Math.sin(a) * R * 1.2 * p} stroke={RED} strokeWidth={6} strokeDasharray="10 10" />
+            </g>
+          );
+        })}
+      </svg>
+      {CUTS.map((c, i) =>
+        t >= c.at ? (
+          <div key={i} style={{position: 'absolute', left: 230 - 115, top: 230 + 205 + 30 + i * 0, translate: '-50% -50%', scale: Math.max(0, popAt(t, c.at)), opacity: i === 0 && t >= CUTS[1].at ? 0 : 1}}>
+            <Tag text={c.label} bg={RED} size={34} icon="scissors" />
+          </div>
+        ) : null,
+      )}
+    </div>
+  );
+};
+const Notif: React.FC<{t: number; at: number; out: number; text: string}> = ({t, at, out, text}) => {
+  if (t < at || t > out + 0.3) return null;
+  const k = tween(t, at, 0.4, EASE_OUT);
+  const o = 1 - tween(t, out, 0.25, EASE_IN);
+  return (
+    <div style={{position: 'absolute', left: 540, top: lerp(k, 40, 160) - lerp(1 - o, 0, 60), translate: '-50% -50%', opacity: k * o, display: 'flex', alignItems: 'center', gap: 22, padding: '18px 34px 18px 18px', borderRadius: 34, background: '#F3F1EC', boxShadow: '0 12px 30px -12px rgba(0,0,0,0.3)', width: 900, boxSizing: 'border-box'}}>
+      <div style={{width: 80, height: 80, borderRadius: 22, background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}>
+        <Ico name="chat-circle-dots" size={48} color="#fff" />
       </div>
       <div style={{fontFamily: SANS}}>
-        <div style={{fontSize: 28, fontWeight: 800, color: '#8A877F', letterSpacing: 1}}>COACH · now</div>
-        <div style={{fontSize: 46, fontWeight: 800, color: INK, letterSpacing: -0.5, whiteSpace: 'nowrap'}}>{text}</div>
-        <div style={{fontSize: 34, fontWeight: 700, color: RED, whiteSpace: 'nowrap'}}>{sub}</div>
+        <div style={{fontSize: 26, fontWeight: 800, color: '#8A877F', letterSpacing: 1}}>COACH · now</div>
+        <div style={{fontSize: 44, fontWeight: 800, color: INK, letterSpacing: -0.5, whiteSpace: 'nowrap'}}>{text}</div>
       </div>
     </div>
   );
 };
-const HookFront: React.FC = () => {
+const HookCard: React.FC = () => {
   const t = useT();
-  if (t < C.hook.start || t > 5.6) return null;
-  const out = 1 - tween(t, 5.1, 0.3, EASE_IN);
-  const up = tween(t, 3.08, 0.35, EASE_OUT);
+  const w = C.hookCard;
+  if (t < w.start || t > w.end + 0.5) return null;
   const chip = popAt(t, 1.74);
   return (
-    <AbsoluteFill style={{opacity: out, translate: `0 ${lerp(1 - out, 0, 120)}px`}}>
-      {t >= 1.74 ? (
-        <div style={{position: 'absolute', left: 540, top: 560, translate: '-50% -50%', scale: Math.max(0, chip)}}>
-          <Tag text={t < 3.82 ? '+0.5 KG' : '+1.0 KG'} bg={RED} size={44} />
-        </div>
+    <AbsoluteFill>
+      {t < 1.72 ? (
+        <At x={92} y={160} align="left" o={1 - tween(t, 1.6, 0.12)}>
+          <Tag text="WEIGH-IN DAY" size={34} icon="scales" />
+        </At>
       ) : null}
-      <AbsoluteFill style={{translate: `0 ${-175 * up}px`}}>
-        <Bubble at={1.72} y={1240} text="Weight's up. Cutting 300 kcal." sub="from tomorrow" />
-      </AbsoluteFill>
-      <Bubble at={3.08} y={1240} text="Up again?! Cut 200 more." sub="after every heavier weigh-in" />
+      <Notif t={t} at={1.72} out={3.08} text="Weight's up. Cutting 300 kcal." />
+      <Notif t={t} at={3.08} out={99} text="Up again?! Cut 200 more." />
+      <BathScale t={t} />
+      {t >= 1.74 ? (
+        <At x={300} y={770} s={Math.max(0, chip) * (t >= 3.82 ? lerp(Math.min(1, popAt(t, 3.82)), 1.15, 1) : 1)}>
+          <Tag text={t < 3.82 ? '▲ 0.5 KG' : '▲ 1.0 KG'} bg={RED} size={34} />
+        </At>
+      ) : null}
+      <Plate t={t} />
+    </AbsoluteFill>
+  );
+};
+/** Full frame after the card: the question behind her head. */
+const Question: React.FC = () => {
+  const t = useT();
+  const w = C.hook;
+  if (t < C.hookCard.end - 0.05 || t >= w.end + 0.3) return null;
+  const o = 1 - tween(t, w.end - 0.1, 0.3);
+  const k1 = tween(t, 5.14, 0.32, EASE_OUT);
+  const k2 = tween(t, 6.66, 0.32, EASE_OUT);
+  return (
+    <AbsoluteFill style={{opacity: o}}>
+      <TopWash o={1} />
+      <At x={540} y={190} o={k1} s={lerp(k1, 1.3, 1)}>
+        <A size={140}>ask what they</A>
+      </At>
+      {t >= 6.6 ? (
+        <At x={540} y={380} o={k2} s={lerp(k2, 1.3, 1)}>
+          <A size={140}>
+            checked <Hi p={tween(t, 6.92, 0.25)}>first</Hi>
+          </A>
+        </At>
+      ) : null}
     </AbsoluteFill>
   );
 };
@@ -231,12 +318,12 @@ const Study: React.FC = () => {
             </At>
           ) : null}
           {/* cycle strip */}
-          <div style={{position: 'absolute', left: 92, top: 580, display: 'flex', gap: 12, opacity: tween(t, 12.96, 0.3)}}>
+          <div style={{position: 'absolute', left: 92, top: 585, display: 'flex', gap: 10, opacity: tween(t, 12.96, 0.3)}}>
             {Array.from({length: 7}, (_, i) => {
               const red = i >= 2 && i <= 4;
               const p = popAt(t, 13.0 + i * 0.07);
               return (
-                <div key={i} style={{width: 58, height: 150, borderRadius: 16, background: red ? 'rgba(255,59,48,0.14)' : '#F1EFEA', border: `3px solid ${red ? RED : '#E2DED6'}`, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 12, scale: Math.max(0, p)}}>
+                <div key={i} style={{width: 52, height: 140, borderRadius: 14, background: red ? 'rgba(255,59,48,0.14)' : '#F1EFEA', border: `3px solid ${red ? RED : '#E2DED6'}`, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 12, scale: Math.max(0, p)}}>
                   {red ? <Ico name="drop" size={40} color={RED} /> : null}
                 </div>
               );
@@ -244,8 +331,8 @@ const Study: React.FC = () => {
           </div>
           {/* water drop */}
           {t >= 15.44 ? (
-            <div style={{position: 'absolute', left: 640, top: 560, display: 'flex', alignItems: 'center', gap: 24, opacity: tween(t, 15.44, 0.3), scale: lerp(Math.min(1, popAt(t, 15.44)), 0.8, 1)}}>
-              <svg width={150} height={190} viewBox="0 0 100 126">
+            <div style={{position: 'absolute', left: 575, top: 575, display: 'flex', alignItems: 'center', gap: 20, opacity: tween(t, 15.44, 0.3), scale: lerp(Math.min(1, popAt(t, 15.44)), 0.8, 1)}}>
+              <svg width={124} height={156} viewBox="0 0 100 126">
                 <defs>
                   <clipPath id="drop9">
                     <path d="M50 4 C50 4 8 52 8 80 a42 42 0 0 0 84 0 C92 52 50 4 50 4Z" />
@@ -259,7 +346,7 @@ const Study: React.FC = () => {
               </svg>
               <div>
                 <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 32, color: '#8A877F', letterSpacing: 3}}>MOSTLY</div>
-                <A size={100} color={BLUE}>water</A>
+                <A size={92} color={BLUE}>water</A>
               </div>
             </div>
           ) : null}
@@ -814,6 +901,7 @@ const Scene: React.FC = () => {
     <>
       {p > 0 ? <Paper /> : null}
       <TopCard p={p}>
+        <HookCard />
         <Study />
         <Single />
         <Checklist />
@@ -822,7 +910,7 @@ const Scene: React.FC = () => {
       </TopCard>
       <HerFrame p={p}>
         <Footage cfg={cfg} />
-        <HookBack />
+        <Question />
         <Review />
         <Real />
         <Decide />
@@ -830,7 +918,6 @@ const Scene: React.FC = () => {
         <Subject cfg={cfg} />
         <GradeOverlay cfg={cfg} />
       </HerFrame>
-      <HookFront />
       <Montage />
       <Caps p={p} />
     </>

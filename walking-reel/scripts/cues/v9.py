@@ -8,17 +8,21 @@ BROLL = []
 
 
 def cues(cue, rng):
-    # hook: scale boots, digits climb, coach texts arrive, the question slams
-    cue(1.03, "pack:whoosh_deep", -20)
+    # hook: scale boots, digits climb, coach texts arrive, the plate gets cut, the question slams
+    cue(1.03, "pack:whoosh_soft", -24)
     for j in range(3):
-        cue(1.05 + j * 0.09, "pack:tick", -22)
+        cue(1.05 + j * 0.08, "pack:tick", -24)
+    cue(1.2, "pack:tick", -25)
     for j in range(5):
         cue(1.44 + j * 0.06, "pack:key", -27)
     cue(1.72, "pack:notif", -18)
+    cue(1.95, "pack:shutter", -22)
+    cue(2.0, "pack:whoosh_fast", -25)
     for j in range(5):
         cue(3.1 + j * 0.14, "pack:key", -27)
     cue(3.08, "pack:notif", -18)
-    cue(3.82, "pack:tick", -22)
+    cue(3.86, "pack:shutter", -22)
+    cue(3.9, "pack:whoosh_fast", -25)
     cue(5.0, "pack:whoosh_fast2", -22)
     cue(5.14, "pack:hit", -17)
     cue(6.66, "pack:hit", -22)
