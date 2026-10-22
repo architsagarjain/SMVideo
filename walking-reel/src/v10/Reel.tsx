@@ -1,590 +1,458 @@
 import React from 'react';
-import {AbsoluteFill, random} from 'remotion';
+import {AbsoluteFill, Img, staticFile} from 'remotion';
 import {Base, BrollCuts, Footage, GradeOverlay, Subject, inWin} from '../series/core';
 import {useT} from '../explainer/kit';
 import {Ico, chunkAt, popAt, vis} from '../series/kit2';
-import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
+import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, lerp, tween} from '../theme';
 import {C, v10Config as cfg} from './config';
 
-const GOLD = '#F5C35B';
-const GOLD2 = '#D99A2B';
-const CREAM = '#FFF4DE';
-const PLUM = '#3A0E1E';
-const MAROON = '#7E1640';
+const INK = '#111111';
+const GREEN = '#10B26C';
+const GREEN_D = '#08824D';
+const RED = '#E5372B';
+const HL = '#FFE45C';
+const PAPER = '#FFFDF7';
+const MONO = "'DejaVu Sans Mono', 'Liberation Mono', monospace";
+const SHADOW = '0 26px 50px -18px rgba(0,0,0,0.45)';
+
+type Rect = {x: number; y: number; w: number; h: number};
+const lerpR = (p: number, a: Rect, b: Rect): Rect => ({x: lerp(p, a.x, b.x), y: lerp(p, a.y, b.y), w: lerp(p, a.w, b.w), h: lerp(p, a.h, b.h)});
+const FULL: Rect = {x: 0, y: 0, w: 1080, h: 1920};
+const MID: Rect = {x: 330, y: 70, w: 420, h: 530};
+const LEFT: Rect = {x: 70, y: 70, w: 420, h: 530};
+const RIGHT: Rect = {x: 590, y: 70, w: 420, h: 530};
+
+const At: React.FC<{x: number; y: number; o?: number; s?: number; children: React.ReactNode}> = ({x, y, o = 1, s = 1, children}) =>
+  o <= 0 ? null : <div style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', opacity: Math.min(1, o), scale: s}}>{children}</div>;
+const rise = (t: number, at: number): React.CSSProperties => {
+  const p = tween(t, at, 0.4, EASE_OUT);
+  return {opacity: p, translate: `0 ${lerp(p, 26, 0)}px`};
+};
+/** Label tape: white strip, thick black border. */
+const Tape: React.FC<{size?: number; children: React.ReactNode; bg?: string; fg?: string; style?: React.CSSProperties}> = ({size = 44, children, bg = '#fff', fg = INK, style}) => (
+  <div style={{display: 'inline-flex', alignItems: 'center', gap: size * 0.3, padding: `${size * 0.16}px ${size * 0.45}px ${size * 0.2}px`, background: bg, color: fg, border: `${Math.max(3, size * 0.1)}px solid ${INK}`, borderRadius: size * 0.28, fontFamily: SANS, fontWeight: 800, fontSize: size, letterSpacing: -size * 0.01, whiteSpace: 'nowrap', boxShadow: '0 10px 24px -10px rgba(0,0,0,0.45)', ...style}}>{children}</div>
+);
+/** Marker highlight that sweeps across inline text. */
+const Mark: React.FC<{p: number; children: React.ReactNode}> = ({p, children}) => (
+  <span style={{backgroundImage: `linear-gradient(${HL}, ${HL})`, backgroundRepeat: 'no-repeat', backgroundSize: `${p * 100}% 100%`, padding: '0 0.08em', borderRadius: 4}}>{children}</span>
+);
+/** Green marketing sticker (round). */
+const Sticker: React.FC<{d: number; lines: string[]; color?: string; k?: number}> = ({d, lines, color = GREEN, k = 1}) => (
+  <div style={{width: d, height: d, borderRadius: '50%', background: color, border: `${d * 0.035}px solid #fff`, boxShadow: `0 ${d * 0.06}px ${d * 0.14}px rgba(0,0,0,0.35)`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: SANS, fontWeight: 800, lineHeight: 0.98, textAlign: 'center', scale: k}}>
+    {lines.map((l, i) => (
+      <div key={i} style={{fontSize: d * (lines.length > 2 ? 0.15 : 0.19), letterSpacing: d * 0.004}}>{l}</div>
+    ))}
+  </div>
+);
 
 // ---------------------------------------------------------------------------
-// Night backdrop: plum wash, golden bokeh, a warm glow behind her, fairy lights
+// Nutrition label (designed at 420 x 530)
 // ---------------------------------------------------------------------------
-const BOKEH = Array.from({length: 26}, (_, i) => {
-  const side = random(`bs${i}`) < 0.5 ? -1 : 1;
-  const x = 540 + side * lerp(random(`bx${i}`), 220, 560);
-  return {x, y: lerp(random(`by${i}`), 80, 1500), d: lerp(random(`bd${i}`), 40, 170), hue: random(`bh${i}`), ph: random(`bp${i}`) * 6.28, sp: lerp(random(`bv${i}`), 6, 18)};
-});
-const Night: React.FC = () => {
-  const t = useT();
-  return (
-    <AbsoluteFill>
-      <AbsoluteFill style={{background: `radial-gradient(85% 55% at 50% 38%, rgba(92,26,52,0.86) 0%, rgba(40,10,24,0.93) 60%, rgba(18,5,12,0.96) 100%)`}} />
-      {BOKEH.map((b, i) => {
-        const tw = 0.55 + 0.45 * Math.sin(t * 1.6 + b.ph);
-        const col = b.hue < 0.6 ? '255,190,90' : b.hue < 0.85 ? '255,140,80' : '255,120,160';
-        return (
-          <div key={i} style={{position: 'absolute', left: b.x, top: b.y - t * b.sp, width: b.d, height: b.d, translate: '-50% -50%', borderRadius: '50%', background: `radial-gradient(circle, rgba(${col},0.55) 0%, rgba(${col},0.32) 55%, rgba(${col},0) 72%)`, opacity: tw, filter: 'blur(3px)'}} />
-        );
-      })}
-      {/* back glow so her black top separates from the night */}
-      <AbsoluteFill style={{background: 'radial-gradient(42% 30% at 50% 52%, rgba(255,170,80,0.32) 0%, rgba(255,170,80,0) 100%)'}} />
-    </AbsoluteFill>
-  );
-};
-const BULBS = 17;
-const Garland: React.FC = () => {
-  const t = useT();
-  if (inWin(t, [C.enjoy])) return null;
-  const pts = Array.from({length: BULBS}, (_, i) => {
-    const u = i / (BULBS - 1);
-    const x = lerp(u, -30, 1110);
-    const y = 34 + 120 * (1 - Math.pow(2 * u - 1, 2));
-    return {x, y};
-  });
-  const path = pts.map((p, i) => `${i ? 'L' : 'M'}${p.x} ${p.y - 14}`).join(' ');
-  return (
-    <AbsoluteFill>
-      <svg width={1080} height={300} style={{position: 'absolute', left: 0, top: 0}}>
-        <path d={path} fill="none" stroke="rgba(30,10,10,0.8)" strokeWidth={3} />
-      </svg>
-      {pts.map((p, i) => {
-        const on = tween(t, C.hook.start + 0.05 + i * 0.03, 0.12);
-        const tw = 0.75 + 0.25 * Math.sin(t * 3 + i * 1.7);
-        const col = i % 3 === 0 ? '255,150,90' : '255,206,120';
-        return (
-          <div key={i} style={{position: 'absolute', left: p.x, top: p.y, translate: '-50% -50%', width: 22, height: 28, borderRadius: '50% 50% 46% 46%', background: `rgba(${col},1)`, opacity: on * tw, boxShadow: `0 0 18px 8px rgba(${col},0.55), 0 0 50px 20px rgba(${col},0.22)`}} />
-        );
-      })}
-    </AbsoluteFill>
-  );
-};
-
-// ---------------------------------------------------------------------------
-// The mithai box (CSS 3D)
-// ---------------------------------------------------------------------------
-const BW = 560;
-const BH = 400;
-const BD = 140;
-const Front: React.FC<{t: number; rings: number}> = ({t, rings}) => {
-  const glint = tween(t, 2.5, 0.7, EASE_IN_OUT);
-  return (
-    <div style={{position: 'absolute', inset: 0, borderRadius: 10, background: `linear-gradient(160deg, #9C2257 0%, ${MAROON} 45%, #4E0C2A 100%)`, overflow: 'hidden', boxShadow: 'inset 0 0 40px rgba(0,0,0,0.35)'}}>
-      <div style={{position: 'absolute', inset: 16, border: `3px solid ${GOLD}`, borderRadius: 6}} />
-      <div style={{position: 'absolute', inset: 26, border: `1.5px solid rgba(245,195,91,0.6)`, borderRadius: 4}} />
-      {/* corner motifs */}
-      {[
-        [40, 40],
-        [BW - 40, 40],
-        [40, BH - 40],
-        [BW - 40, BH - 40],
-      ].map(([x, y], i) => (
-        <svg key={i} width={60} height={60} viewBox="-30 -30 60 60" style={{position: 'absolute', left: x - 30, top: y - 30}}>
-          {Array.from({length: 8}, (_, k) => (
-            <ellipse key={k} cx={0} cy={-13} rx={5} ry={11} fill={GOLD} opacity={0.85} transform={`rotate(${k * 45})`} />
-          ))}
-          <circle r={5} fill="#FFE7A8" />
-        </svg>
-      ))}
-      <div style={{position: 'absolute', left: 0, right: 0, top: 70, textAlign: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 20, letterSpacing: 7, color: GOLD}}>DIWALI SPECIAL</div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 104, textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 108, lineHeight: 1, color: '#FFE3A3', textShadow: '0 3px 0 rgba(0,0,0,0.25)'}}>Kaju Katli</div>
-      {/* claims */}
-      <div style={{position: 'absolute', left: 0, right: 0, top: 250, display: 'flex', justifyContent: 'center', gap: 18}}>
-        <div style={{padding: '10px 22px', borderRadius: 40, background: GOLD, color: '#4E0C2A', fontFamily: SANS, fontWeight: 800, fontSize: 30, letterSpacing: 2, boxShadow: rings > 0 ? `0 0 0 ${8 * rings}px rgba(255,231,168,0.35), 0 0 30px rgba(255,210,120,${0.8 * rings})` : undefined}}>SUGAR FREE</div>
-        <div style={{padding: '10px 22px', borderRadius: 40, border: `2.5px solid ${GOLD}`, color: '#FFE3A3', fontFamily: SERIF, fontStyle: 'italic', fontSize: 34, boxShadow: rings > 0 ? `0 0 0 ${8 * rings}px rgba(255,231,168,0.25), 0 0 30px rgba(255,210,120,${0.6 * rings})` : undefined}}>guilt-free</div>
-      </div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 330, textAlign: 'center', fontFamily: SANS, fontWeight: 600, fontSize: 19, letterSpacing: 4, color: 'rgba(255,227,163,0.85)'}}>NO ADDED SUGAR · NET WT 500 g</div>
-      {/* glint */}
-      <div style={{position: 'absolute', top: -100, bottom: -100, width: 120, left: lerp(glint, -200, BW + 100), background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,246,220,0.55) 50%, rgba(255,255,255,0) 100%)', transform: 'skewX(-20deg)'}} />
-    </div>
-  );
-};
-const ROWS: [string, string, string?][] = [
-  ['Energy', '400 kcal', 'hi'],
-  ['Protein', '9 g'],
-  ['Carbohydrate', '40 g'],
-  ['  of which sugars', '2 g'],
-  ['Fat', '22 g', 'hi'],
-  ['  of which saturates', '7 g'],
+const ROWS: [string, string, boolean, 'e' | 'f' | null][] = [
+  ['Energy', '400 kcal', true, 'e'],
+  ['Protein', '9 g', true, null],
+  ['Carbohydrate', '40 g', true, null],
+  ['   of which sugars', '2 g', false, null],
+  ['Fat', '22 g', true, 'f'],
+  ['   of which saturates', '7 g', false, null],
 ];
-const Back: React.FC<{hi: number}> = ({hi}) => (
-  <div style={{position: 'absolute', inset: 0, borderRadius: 10, background: '#F7EFDD', overflow: 'hidden', padding: 22, boxShadow: 'inset 0 0 30px rgba(120,80,20,0.15)'}}>
-    <div style={{border: '4px solid #141414', height: '100%', boxSizing: 'border-box', padding: '10px 18px', fontFamily: SANS, color: '#141414'}}>
-      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '8px solid #141414', paddingBottom: 4}}>
-        <span style={{fontWeight: 800, fontSize: 34, letterSpacing: -0.5}}>Nutrition Information</span>
-        <span style={{fontWeight: 700, fontSize: 22}}>per 100 g</span>
+const NutLabel: React.FC<{w: number; hiE?: number; hiF?: number; title?: string}> = ({w, hiE = 0, hiF = 0, title = 'Nutrition Facts'}) => (
+  <div style={{position: 'absolute', left: 0, top: 0, width: 420, height: 530, transformOrigin: '0 0', scale: w / 420, background: PAPER, padding: 16, boxSizing: 'border-box'}}>
+    <div style={{border: `6px solid ${INK}`, height: '100%', boxSizing: 'border-box', padding: '10px 16px', fontFamily: SANS, color: INK}}>
+      <div style={{fontWeight: 800, fontSize: 44, letterSpacing: -1.5, lineHeight: 1}}>{title}</div>
+      <div style={{display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 20, padding: '6px 0 4px', borderBottom: `12px solid ${INK}`}}>
+        <span>Serving</span>
+        <span>per 100 g</span>
       </div>
-      {ROWS.map(([k, v, h], i) => (
-        <div key={i} style={{position: 'relative', display: 'flex', justifyContent: 'space-between', fontSize: 25, fontWeight: k.startsWith(' ') ? 500 : 750, padding: '5px 4px 4px', borderBottom: '2px solid #141414', whiteSpace: 'pre'}}>
-          {h ? <div style={{position: 'absolute', left: -6, right: -6, top: 0, bottom: 0, background: `rgba(245,195,91,${0.85 * hi})`, borderRadius: 4}} /> : null}
-          <span style={{position: 'relative'}}>{k}</span>
-          <span style={{position: 'relative'}}>{v}</span>
+      {ROWS.map(([k, v, bold, h], i) => {
+        const p = h === 'e' ? hiE : h === 'f' ? hiF : 0;
+        return (
+          <div key={i} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: k === 'Energy' ? 30 : 23, fontWeight: bold ? 800 : 500, padding: '7px 0 6px', borderBottom: `${k === 'Energy' ? 6 : 2}px solid ${INK}`, whiteSpace: 'pre'}}>
+            <Mark p={p}>{k}</Mark>
+            <Mark p={p}>{v}</Mark>
+          </div>
+        );
+      })}
+      <div style={{fontSize: 15, fontWeight: 600, color: '#6A6A6A', paddingTop: 8}}>* Illustrative values</div>
+    </div>
+  </div>
+);
+
+// ---------------------------------------------------------------------------
+// The box card: full-screen photo -> card -> flips to its label; splits into FRONT / BACK
+// ---------------------------------------------------------------------------
+const Flip: React.FC<{r: Rect; ry: number; front: React.ReactNode; back: React.ReactNode; radius: number; o?: number}> = ({r, ry, front, back, radius, o = 1}) => {
+  if (o <= 0) return null;
+  const face = (child: React.ReactNode, b: boolean) => (
+    <div style={{position: 'absolute', inset: 0, borderRadius: radius, overflow: 'hidden', backfaceVisibility: 'hidden', transform: b ? 'rotateY(180deg)' : undefined, boxShadow: SHADOW, background: '#fff'}}>{child}</div>
+  );
+  return (
+    <div style={{position: 'absolute', left: r.x, top: r.y, width: r.w, height: r.h, perspective: 2200, opacity: o}}>
+      <div style={{position: 'absolute', inset: 0, transformStyle: 'preserve-3d', transform: `rotateY(${ry}deg)`}}>
+        {face(front, false)}
+        {face(back, true)}
+      </div>
+    </div>
+  );
+};
+const BoxPhoto: React.FC<{r: Rect; t: number; badge?: number; claims?: number; band?: string; bandO?: number; question?: number; push?: number}> = ({r, t, badge = 0, claims = 0, band, bandO = 0, question = 0, push = 0}) => {
+  const d = r.w * 0.36;
+  return (
+    <>
+      <Img src={staticFile('v10/photos/box.jpg')} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 62%', scale: 1 + push}} />
+      {badge > 0 ? (
+        <div style={{position: 'absolute', left: r.w * 0.6, top: r.h * 0.5, translate: '-50% -50%'}}>
+          <Sticker d={d} lines={question > 0.5 ? ['SOUNDS', 'HEALTHY?'] : ['SUGAR', 'FREE']} k={Math.max(0, badge) * (question > 0 ? lerp(Math.min(1, popAt(t, 67.7)), 1.25, 1) : 1)} color={question > 0.5 ? RED : GREEN} />
         </div>
-      ))}
-      <div style={{fontSize: 16, fontWeight: 600, color: '#6B5E48', paddingTop: 6}}>Illustrative values</div>
-    </div>
-  </div>
-);
-const Side: React.FC<{w: number}> = ({w}) => (
-  <div style={{position: 'absolute', inset: 0, background: `linear-gradient(180deg, #5E0F30, #3E0A20)`}}>
-    <div style={{position: 'absolute', left: 0, right: 0, top: BH / 2 - 10, height: 20, background: GOLD2, opacity: 0.9}} />
-    <div style={{position: 'absolute', left: w / 2 - 1, top: 0, bottom: 0, width: 2, background: 'rgba(245,195,91,0.4)'}} />
-  </div>
-);
-type Pose = {x: number; y: number; s: number; ry: number; rx: number; o: number};
-const MithaiBox: React.FC<{pose: Pose; t: number; rings?: number; hi?: number}> = ({pose, t, rings = 0, hi = 0}) => {
-  if (pose.o <= 0) return null;
-  const face = (tr: string, w: number, h: number, child: React.ReactNode) => (
-    <div style={{position: 'absolute', left: (BW - w) / 2, top: (BH - h) / 2, width: w, height: h, transform: tr, backfaceVisibility: 'hidden'}}>{child}</div>
-  );
-  return (
-    <div style={{position: 'absolute', left: pose.x, top: pose.y, width: 0, height: 0, perspective: 1900, opacity: pose.o}}>
-      {/* shadow */}
-      <div style={{position: 'absolute', left: -BW * 0.45 * pose.s, top: BH * 0.58 * pose.s, width: BW * 0.9 * pose.s, height: 60 * pose.s, borderRadius: '50%', background: 'radial-gradient(closest-side, rgba(0,0,0,0.45), rgba(0,0,0,0))', filter: 'blur(6px)'}} />
-      <div style={{position: 'absolute', left: -BW / 2, top: -BH / 2, width: BW, height: BH, transformStyle: 'preserve-3d', transform: `scale(${pose.s}) rotateX(${pose.rx}deg) rotateY(${pose.ry}deg)`}}>
-        {face(`translateZ(${BD / 2}px)`, BW, BH, <Front t={t} rings={rings} />)}
-        {face(`rotateY(180deg) translateZ(${BD / 2}px)`, BW, BH, <Back hi={hi} />)}
-        {face(`rotateY(90deg) translateZ(${BW / 2}px)`, BD, BH, <Side w={BD} />)}
-        {face(`rotateY(-90deg) translateZ(${BW / 2}px)`, BD, BH, <Side w={BD} />)}
-        {face(`rotateX(90deg) translateZ(${BH / 2}px)`, BW, BD, <div style={{position: 'absolute', inset: 0, background: `linear-gradient(90deg, ${GOLD2}, ${GOLD} 50%, ${GOLD2})`}} />)}
-        {face(`rotateX(-90deg) translateZ(${BH / 2}px)`, BW, BD, <div style={{position: 'absolute', inset: 0, background: '#2A0716'}} />)}
-      </div>
-    </div>
-  );
-};
-
-/** Where the box is: handed in, spun round, carried up top, spun again, thrown out; back near the end. */
-const boxPose = (t: number): Pose => {
-  const bob = Math.sin(t * 2.2) * 8;
-  // hook: handed to camera
-  if (t < C.front.start) {
-    const k = tween(t, C.hook.start, 0.85, EASE_OUT);
-    const spin = tween(t, 5.48, 0.75, EASE_IN_OUT);
-    return {x: 540, y: lerp(k, 2350, 1270) + bob, s: lerp(k, 1.7, 1.05), ry: lerp(k, -70, -16) + 180 * spin + 30 * spin, rx: lerp(k, 25, -9), o: 1};
-  }
-  if (t < C.journey.start + 0.6) {
-    const up = tween(t, C.front.start, 0.7, EASE_IN_OUT);
-    const back = tween(t, 6.75, 0.7, EASE_IN_OUT); // spin back to the front on the way up
-    const spin2 = tween(t, 11.34, 0.75, EASE_IN_OUT); // nutrition panel
-    const out = tween(t, C.journey.start, 0.55, EASE_IN);
-    return {x: 540, y: lerp(up, 1270, 395) + bob * 0.6 - 900 * out, s: lerp(up, 1.05, 0.92), ry: 194 + 152 * back + 180 * spin2, rx: lerp(up, -9, -6), o: 1};
-  }
-  // near the end: does the box "sound healthy"?
-  if (t >= 67.5 && t < C.cta.start + 0.4) {
-    const k = popAt(t, 67.6);
-    const out = tween(t, C.cta.start, 0.3, EASE_IN);
-    return {x: 540, y: 380 + bob * 0.5, s: lerp(Math.min(1.2, k), 0.4, 0.62), ry: -14 + Math.sin(t * 1.3) * 5, rx: -6, o: Math.min(1, k * 2) * (1 - out)};
-  }
-  return {x: 0, y: 0, s: 1, ry: 0, rx: 0, o: 0};
-};
-
-// ---------------------------------------------------------------------------
-// Typography helpers
-// ---------------------------------------------------------------------------
-const Sans: React.FC<{size: number; color?: string; weight?: number; caps?: boolean; children: React.ReactNode; style?: React.CSSProperties}> = ({size, color = '#fff', weight = 700, caps, children, style}) => (
-  <div style={{fontFamily: SANS, fontWeight: weight, fontSize: size, color, letterSpacing: caps ? size * 0.12 : -size * 0.01, textTransform: caps ? 'uppercase' : undefined, whiteSpace: 'nowrap', lineHeight: 1.05, textShadow: '0 4px 20px rgba(0,0,0,0.45)', ...style}}>{children}</div>
-);
-const Serif: React.FC<{size: number; color?: string; children: React.ReactNode; style?: React.CSSProperties}> = ({size, color = GOLD, children, style}) => (
-  <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: size, color, whiteSpace: 'nowrap', lineHeight: 1, textShadow: '0 0 30px rgba(245,170,60,0.45), 0 4px 16px rgba(0,0,0,0.4)', ...style}}>{children}</div>
-);
-const At: React.FC<{x: number; y: number; o?: number; s?: number; children: React.ReactNode; align?: 'center' | 'left'}> = ({x, y, o = 1, s = 1, children, align = 'center'}) =>
-  o <= 0 ? null : (
-    <div style={{position: 'absolute', left: x, top: y, translate: align === 'center' ? '-50% -50%' : '0 -50%', opacity: Math.min(1, o), scale: s, transformOrigin: align === 'center' ? 'center' : 'left center'}}>{children}</div>
-  );
-/** Word reveal: blur + rise. */
-const rise = (t: number, at: number) => {
-  const p = tween(t, at, 0.45, EASE_OUT);
-  return {opacity: p, translate: `0 ${lerp(p, 30, 0)}px`, filter: p < 1 ? `blur(${lerp(p, 12, 0)}px)` : undefined} as React.CSSProperties;
-};
-const GoldPill: React.FC<{children: React.ReactNode; size?: number; fill?: boolean}> = ({children, size = 34, fill}) => (
-  <div style={{display: 'inline-flex', alignItems: 'center', gap: size * 0.4, padding: `${size * 0.35}px ${size * 0.8}px`, borderRadius: 999, border: `2.5px solid ${GOLD}`, background: fill ? GOLD : 'rgba(40,10,20,0.6)', color: fill ? PLUM : GOLD, fontFamily: SANS, fontWeight: 800, fontSize: size, letterSpacing: size * 0.1, whiteSpace: 'nowrap', boxShadow: '0 0 30px rgba(245,170,60,0.3)'}}>{children}</div>
-);
-
-/** Little kaju katli diamond with silver leaf. */
-const Katli: React.FC<{size: number}> = ({size}) => (
-  <svg width={size} height={size * 0.62} viewBox="0 0 100 62">
-    <path d="M50 2 L98 31 L50 60 L2 31 Z" fill="#EAD8B4" stroke="#C7A974" strokeWidth={2} />
-    <path d="M50 8 L88 31 L50 54 L12 31 Z" fill="url(#varq)" opacity={0.9} />
-    <defs>
-      <linearGradient id="varq" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#FFFFFF" />
-        <stop offset="0.5" stopColor="#D8D8D8" />
-        <stop offset="1" stopColor="#F6F6F6" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-const Cashew: React.FC<{size: number}> = ({size}) => (
-  <svg width={size} height={size} viewBox="0 0 100 100">
-    <path d="M30 78 C8 62 10 26 40 14 C62 6 86 16 88 34 C90 46 78 50 70 44 C62 38 50 40 46 52 C42 64 52 74 46 84 C42 90 36 84 30 78 Z" fill="#EFCF95" stroke="#C99B55" strokeWidth={3} />
-    <path d="M34 30 C46 22 64 20 76 28" fill="none" stroke="#FFF0CC" strokeWidth={4} strokeLinecap="round" opacity={0.8} />
-  </svg>
-);
-const Ghee: React.FC<{size: number}> = ({size}) => (
-  <svg width={size} height={size * 1.25} viewBox="0 0 100 125">
-    <defs>
-      <linearGradient id="ghee" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stopColor="#FFE08A" />
-        <stop offset="1" stopColor="#E09A1E" />
-      </linearGradient>
-    </defs>
-    <path d="M50 4 C50 4 10 52 10 80 a40 40 0 0 0 80 0 C90 52 50 4 50 4Z" fill="url(#ghee)" />
-    <ellipse cx={36} cy={76} rx={9} ry={16} fill="#FFF6D6" opacity={0.7} />
-  </svg>
-);
-const Diya: React.FC<{size: number; lit: number; t: number; i: number}> = ({size, lit, t, i}) => {
-  const fl = 1 + Math.sin(t * 14 + i * 2) * 0.06;
-  return (
-    <div style={{position: 'relative', width: size, height: size}}>
-      {lit > 0 ? (
-        <>
-          <div style={{position: 'absolute', left: size / 2, top: size * 0.28, translate: '-50% -50%', width: size * 1.4, height: size * 1.4, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,190,90,0.55), rgba(255,190,90,0) 65%)', opacity: lit}} />
-          <svg width={size * 0.36} height={size * 0.5} viewBox="0 0 36 50" style={{position: 'absolute', left: size * 0.32, top: size * 0.02, scale: `${lit} ${lit * fl}`, transformOrigin: '50% 100%'}}>
-            <path d="M18 2 C26 16 32 26 32 34 a14 14 0 0 1 -28 0 C4 26 10 16 18 2Z" fill="#FFB43A" />
-            <path d="M18 16 C22 24 25 30 25 35 a7 7 0 0 1 -14 0 C11 30 14 24 18 16Z" fill="#FFF3C4" />
-          </svg>
-        </>
       ) : null}
-      <svg width={size} height={size * 0.5} viewBox="0 0 100 50" style={{position: 'absolute', left: 0, top: size * 0.5}}>
-        <path d="M4 6 Q50 14 96 6 Q90 44 50 46 Q10 44 4 6Z" fill="#B5541E" />
-        <path d="M4 6 Q50 14 96 6" fill="none" stroke="#F2A65A" strokeWidth={4} />
-        <path d="M20 26 Q50 34 80 26" fill="none" stroke={GOLD} strokeWidth={3} opacity={0.8} />
-      </svg>
-    </div>
+      {claims > 0 ? (
+        <div style={{position: 'absolute', left: r.w * 0.06, top: r.h * 0.08, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: r.w * 0.025}}>
+          {['GUILT-FREE', 'NO ADDED SUGAR', 'NATURAL'].map((c, i) => {
+            const k = popAt(t, 9.5 + i * 0.3);
+            return k > 0 ? (
+              <div key={i} style={{scale: Math.max(0, k), transformOrigin: 'left center', padding: `${r.w * 0.012}px ${r.w * 0.035}px`, borderRadius: 999, background: GREEN, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: r.w * 0.06, whiteSpace: 'nowrap', border: `${r.w * 0.006}px solid #fff`}}>
+                {c}
+              </div>
+            ) : null;
+          })}
+        </div>
+      ) : null}
+      {band ? (
+        <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: `${r.w * 0.035}px ${r.w * 0.05}px`, background: INK, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: r.w * 0.076, lineHeight: 1.12, whiteSpace: 'pre-line', opacity: bandO, translate: `0 ${lerp(bandO, 30, 0)}px`}}>{band}</div>
+      ) : null}
+    </>
   );
+};
+const Cards: React.FC = () => {
+  const t = useT();
+  // hook + front
+  if (t < C.journey.start) {
+    const shrink = tween(t, 3.62, 0.6, EASE_IN_OUT);
+    const flip = tween(t, 5.48, 0.7, EASE_IN_OUT);
+    const split = tween(t, 6.68, 0.6, EASE_IN_OUT);
+    const out = tween(t, C.journey.start - 0.4, 0.35, EASE_IN);
+    let a = lerpR(shrink, FULL, MID);
+    a = lerpR(split, a, LEFT);
+    a = {...a, y: a.y - 700 * out};
+    const ry = 180 * flip - 180 * split; // back to the photo when it moves left
+    const radius = lerp(shrink, 0, 30);
+    const b = {...lerpR(split, MID, RIGHT), y: lerpR(split, MID, RIGHT).y - 700 * out};
+    const badge = popAt(t, 2.54);
+    const bandA = tween(t, 7.16, 0.35);
+    const bandB = tween(t, 11.48, 0.35);
+    return (
+      <AbsoluteFill>
+        {split > 0 ? (
+          <Flip
+            r={b}
+            ry={0}
+            radius={30}
+            o={Math.min(1, split * 3)}
+            front={
+              <>
+                <NutLabel w={b.w} hiE={tween(t, 12.9, 0.45)} hiF={tween(t, 13.4, 0.45)} />
+                <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: `${b.w * 0.035}px ${b.w * 0.05}px`, background: INK, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: b.w * 0.076, lineHeight: 1.12, opacity: bandB, translate: `0 ${lerp(bandB, 30, 0)}px`}}>
+                  BACK · what you
+                  <br />
+                  need to <span style={{color: HL}}>compare</span>
+                </div>
+              </>
+            }
+            back={null}
+          />
+        ) : null}
+        <Flip
+          r={a}
+          ry={ry}
+          radius={radius}
+          front={<BoxPhoto r={a} t={t} badge={badge} claims={split > 0.9 ? 1 : 0} band={'FRONT · what the brand\nwants you to see'} bandO={bandA} push={0.08 * (1 - shrink) * tween(t, C.hook.start, 2.5, (x) => x)} />}
+          back={<NutLabel w={a.w} />}
+        />
+        {/* hook words on the full-screen photo */}
+        {shrink < 1 ? (
+          <AbsoluteFill style={{opacity: 1 - shrink}}>
+            <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 38%)'}} />
+            <At x={540} y={230}>
+              <div style={{...rise(t, 1.2), textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 58, color: '#fff', textShadow: '0 4px 18px rgba(0,0,0,0.5)', whiteSpace: 'nowrap'}}>If you handed me a box of</div>
+            </At>
+            {t >= 2.5 ? (
+              <At x={540} y={390} s={lerp(Math.min(1, popAt(t, 2.54)), 1.3, 1)}>
+                <Tape size={110}>
+                  <span style={{color: GREEN_D}}>sugar-free</span> mithai
+                </Tape>
+              </At>
+            ) : null}
+          </AbsoluteFill>
+        ) : null}
+      </AbsoluteFill>
+    );
+  }
+  // the box again near the end
+  if (t >= C.decide.start && t < C.cta.start + 0.4) {
+    const k = tween(t, C.decide.start + 0.3, 0.5, EASE_OUT);
+    const out = tween(t, C.cta.start, 0.35, EASE_IN);
+    const r = {...MID, y: lerp(k, -620, MID.y) - 700 * out};
+    const flip = tween(t, 68.9, 0.7, EASE_IN_OUT);
+    const bandO = tween(t, 63.86, 0.35);
+    return (
+      <AbsoluteFill>
+        <Flip
+          r={r}
+          ry={180 * flip}
+          radius={30}
+          front={<BoxPhoto r={r} t={t} badge={1} band={'YOUR DIWALI\nDECISION'} bandO={bandO} question={t >= 67.68 ? 1 : 0} />}
+          back={
+            <>
+              <NutLabel w={r.w} hiE={tween(t, 69.3, 0.4)} />
+              <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: `${r.w * 0.035}px ${r.w * 0.05}px`, background: GREEN, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: r.w * 0.07, lineHeight: 1.15}}>CHECK THE LABEL ✓</div>
+            </>
+          }
+        />
+      </AbsoluteFill>
+    );
+  }
+  return null;
 };
 
 // ---------------------------------------------------------------------------
 // Sections
 // ---------------------------------------------------------------------------
-const Hook: React.FC = () => {
-  const t = useT();
-  const w = C.hook;
-  if (t >= w.end + 0.3) return null;
-  const a = vis(t, 1.2, 3.5, 0.3, 0.3);
-  const b = vis(t, 3.62, w.end - 0.1, 0.3, 0.3);
-  return (
-    <AbsoluteFill>
-      <At x={540} y={300} o={a}>
-        <div style={{textAlign: 'center'}}>
-          <div style={rise(t, 1.22)}>
-            <Sans size={56}>If you handed me a box of</Sans>
-          </div>
-          <div style={{...rise(t, 2.5), marginTop: 18}}>
-            <Serif size={150}>sugar-free mithai,</Serif>
-          </div>
-        </div>
-      </At>
-      <At x={540} y={300} o={b}>
-        <div style={{textAlign: 'center'}}>
-          <div style={rise(t, 3.62)}>
-            <Sans size={56}>the first thing I'd do is</Sans>
-          </div>
-          <div style={{...rise(t, 5.45), marginTop: 18, scale: lerp(tween(t, 5.45, 0.5), 1.25, 1)}}>
-            <Serif size={176}>turn it around.</Serif>
-          </div>
-        </div>
-      </At>
-      <Sparks at={1.92} x={540} y={1270} />
-    </AbsoluteFill>
+const Card: React.FC<{r: Rect; k: number; children: React.ReactNode; bg?: string; border?: boolean}> = ({r, k, children, bg = PAPER, border = true}) =>
+  k <= 0 ? null : (
+    <div style={{position: 'absolute', left: r.x, top: r.y, width: r.w, height: r.h, borderRadius: 30, background: bg, border: border ? `6px solid ${INK}` : undefined, boxSizing: 'border-box', boxShadow: SHADOW, overflow: 'hidden', scale: lerp(Math.min(1, k), 0.85, 1), opacity: Math.min(1, k * 2)}}>{children}</div>
   );
-};
-const Sparks: React.FC<{at: number; x: number; y: number; n?: number}> = ({at, x, y, n = 30}) => {
-  const t = useT();
-  if (t < at || t > at + 1.2) return null;
-  const d = t - at;
-  return (
-    <>
-      {Array.from({length: n}, (_, i) => {
-        const a = random(`sa${i}`) * Math.PI * 2;
-        const v = lerp(random(`sv${i}`), 300, 900);
-        const px = x + Math.cos(a) * v * d;
-        const py = y + Math.sin(a) * v * d + 500 * d * d;
-        const s = lerp(random(`ss${i}`), 8, 20) * (1 - d / 1.2);
-        return <div key={i} style={{position: 'absolute', left: px, top: py, width: s, height: s, translate: '-50% -50%', rotate: '45deg', background: i % 3 ? GOLD : '#FFF1C9', boxShadow: `0 0 12px ${GOLD}`, opacity: 1 - d / 1.2}} />;
-      })}
-    </>
-  );
-};
-const FrontLabels: React.FC = () => {
-  const t = useT();
-  const w = C.front;
-  const a = vis(t, 9.2, 11.2, 0.35, 0.3);
-  const b = vis(t, 12.24, w.end - 0.5, 0.35, 0.3);
-  return (
-    <>
-      <At x={540} y={120} o={a}>
-        <div style={rise(t, 9.2)}>
-          <Sans size={44} caps weight={800} color={CREAM}>
-            what the <span style={{fontFamily: SERIF, fontStyle: 'italic', textTransform: 'none', letterSpacing: 0, fontSize: 70, color: GOLD}}>brand</span> wants you to notice
-          </Sans>
-        </div>
-      </At>
-      <At x={540} y={120} o={b}>
-        <div style={rise(t, 12.24)}>
-          <Sans size={44} caps weight={800} color={CREAM}>
-            what you need to <span style={{fontFamily: SERIF, fontStyle: 'italic', textTransform: 'none', letterSpacing: 0, fontSize: 70, color: GOLD}}>compare</span>
-          </Sans>
-        </div>
-      </At>
-    </>
-  );
-};
-const Journey: React.FC = () => {
-  const t = useT();
-  const w = C.journey;
-  const o = vis(t, 15.3, w.end - 0.25);
-  if (o <= 0) return null;
-  const d = tween(t, 16.4, 1.1, EASE_IN_OUT);
-  return (
-    <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={250}>
-        <div style={rise(t, 15.86)}>
-          <Sans size={50} caps weight={800} color={CREAM}>my</Sans>
-        </div>
-      </At>
-      <At x={540} y={360}>
-        <div style={rise(t, 16.24)}>
-          <Serif size={130}>weight-loss journey</Serif>
-        </div>
-      </At>
-      <svg width={1080} height={600} style={{position: 'absolute', left: 0, top: 0, clipPath: `inset(0 ${(1 - d) * 100}% 0 0)`}}>
-        <path d="M150 500 C 330 430, 420 560, 560 480 S 820 420, 930 470" fill="none" stroke={GOLD} strokeWidth={6} strokeLinecap="round" strokeDasharray="2 18" opacity={0.9} />
-        {[0, 0.5, 1].map((u, i) => (d >= u ? <circle key={i} cx={lerp(u, 150, 930)} cy={[500, 480, 470][i]} r={14} fill={GOLD} /> : null))}
-      </svg>
-    </AbsoluteFill>
-  );
-};
 const Rep: React.FC = () => {
   const t = useT();
   const w = C.rep;
-  const o = vis(t, 19.0, w.end - 0.25);
+  const o = vis(t, w.start, w.end - 0.25);
   if (o <= 0) return null;
-  const n = t < 22.3 ? 1 : t < 22.9 ? 2 : t < 23.6 ? 3 : t < 24.2 ? 5 : 7;
-  const halo = tween(t, 20.12, 0.5);
+  const plate = popAt(t, 19.0);
+  const stamp = popAt(t, 20.12);
+  const panel = popAt(t, 21.6);
+  const times = [21.9, 22.3, 22.64, 22.92, 23.3, 23.6, 24.0, 24.24];
+  const n = times.filter((x) => t >= x).length;
   return (
     <AbsoluteFill style={{opacity: o}}>
-      {/* halo over the pile */}
-      <div style={{position: 'absolute', left: 540, top: 250, translate: '-50% -50%', width: lerp(halo, 100, 300), height: lerp(halo, 30, 70), borderRadius: '50%', border: `10px solid ${GOLD}`, boxShadow: '0 0 40px rgba(255,200,90,0.9), inset 0 0 20px rgba(255,200,90,0.7)', opacity: halo}} />
-      {t >= 20.12 ? (
-        <At x={540} y={130} o={halo}>
-          <Serif size={84}>“healthy”</Serif>
-        </At>
+      {plate > 0 ? (
+        <div style={{position: 'absolute', left: 70, top: 90, width: 440, height: 440, borderRadius: 30, overflow: 'hidden', border: '10px solid #fff', boxShadow: SHADOW, scale: lerp(Math.min(1, plate), 0.85, 1), opacity: Math.min(1, plate * 2)}}>
+          <Img src={staticFile('v10/photos/plate.jpg')} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+        </div>
       ) : null}
-      <div style={{position: 'absolute', left: 540, top: 395, translate: '-50% -50%', display: 'flex', gap: 6}}>
-        {Array.from({length: n}, (_, i) => (
-          <div key={i} style={{scale: Math.max(0, popAt(t, i === 0 ? 19.1 : [22.3, 22.9, 23.6, 23.6, 24.2, 24.2][i - 1]))}}>
-            <Katli size={n > 4 ? 120 : 160} />
+      {stamp > 0 ? (
+        <div style={{position: 'absolute', left: 430, top: 130, translate: '-50% -50%'}}>
+          <Sticker d={190} lines={['HEALTHY', '✓']} k={Math.max(0, stamp) * lerp(Math.min(1, stamp), 1.4, 1)} />
+        </div>
+      ) : null}
+      <Card r={{x: 570, y: 100, w: 440, h: 420}} k={panel}>
+        <div style={{padding: '24px 28px', fontFamily: SANS, color: INK}}>
+          <div style={{fontWeight: 800, fontSize: 30, letterSpacing: 2, color: '#6A6A6A'}}>PERMISSION</div>
+          <div style={{fontWeight: 800, fontSize: 50, lineHeight: 1, borderBottom: `8px solid ${INK}`, paddingBottom: 10}}>to eat it</div>
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginTop: 22}}>
+            {times.map((x, i) => {
+              const on = popAt(t, x);
+              return (
+                <div key={i} style={{height: 92, borderRadius: 14, background: '#EDEBE4', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  {on > 0 ? (
+                    <svg width={78} height={50} viewBox="0 0 100 62" style={{scale: Math.max(0, on)}}>
+                      <path d="M50 2 L98 31 L50 60 L2 31 Z" fill="#EAD8B4" stroke="#B9965C" strokeWidth={3} />
+                      <path d="M50 10 L86 31 L50 52 L14 31 Z" fill="#E4E4E4" />
+                    </svg>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
-        ))}
-      </div>
-      {t >= 21.76 ? (
-        <At x={540} y={530} s={Math.max(0, popAt(t, 21.76))}>
-          <GoldPill size={32}>
-            <Ico name="seal-check" size={38} color={GOLD} /> PERMISSION GRANTED
-          </GoldPill>
-        </At>
-      ) : null}
+          <div style={{marginTop: 16, fontWeight: 800, fontSize: 34, display: 'flex', justifyContent: 'space-between'}}>
+            <span>pieces</span>
+            <span style={{color: n > 4 ? RED : INK}}>× {Math.max(1, n)}</span>
+          </div>
+        </div>
+      </Card>
     </AbsoluteFill>
   );
 };
 const Nuts: React.FC = () => {
   const t = useT();
   const w = C.nuts;
-  const o = vis(t, 25.0, w.end - 0.25);
+  const o = vis(t, w.start, w.end - 0.25);
   if (o <= 0) return null;
+  const k = popAt(t, 25.2);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={240}>
-        <div style={rise(t, 25.0)}>
-          <Sans size={50} caps weight={800} color={CREAM}>sugar-free can</Sans>
-        </div>
-      </At>
-      <At x={540} y={350}>
-        <div style={rise(t, 26.8)}>
-          <Serif size={150}>still contain</Serif>
-        </div>
-      </At>
-      {t >= 29.9 ? (
-        <At x={200} y={600} s={Math.max(0, popAt(t, 29.9))}>
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6}}>
-            <div style={{width: 210, height: 210, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,214,140,0.25), rgba(255,214,140,0.05))', border: `3px solid ${GOLD}`, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-              <Cashew size={150} />
-            </div>
-            <GoldPill size={30} fill>NUTS</GoldPill>
+      <Card r={{x: 70, y: 90, w: 940, h: 470}} k={k}>
+        <div style={{padding: '26px 34px', fontFamily: SANS, color: INK}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `10px solid ${INK}`, paddingBottom: 10}}>
+            <span style={{fontWeight: 800, fontSize: 52, letterSpacing: -1}}>Ingredients</span>
+            <span style={{padding: '6px 18px', borderRadius: 999, background: GREEN, color: '#fff', fontWeight: 800, fontSize: 28}}>SUGAR FREE</span>
           </div>
-        </At>
-      ) : null}
-      {t >= 30.8 ? (
-        <At x={880} y={600} s={Math.max(0, popAt(t, 30.8))}>
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6}}>
-            <div style={{width: 210, height: 210, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,214,140,0.25), rgba(255,214,140,0.05))', border: `3px solid ${GOLD}`, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-              <Ghee size={120} />
-            </div>
-            <GoldPill size={30} fill>FAT</GoldPill>
+          <div style={{fontWeight: 600, fontSize: 44, lineHeight: 1.42, marginTop: 18}}>
+            <Mark p={tween(t, 29.9, 0.4)}>
+              <b>Cashew nuts</b> (45%)
+            </Mark>
+            , milk solids, <Mark p={tween(t, 30.8, 0.35)}><b>ghee</b></Mark>, sweetener (maltitol), cardamom, silver leaf.
           </div>
-        </At>
-      ) : null}
+          <div style={{position: 'absolute', left: 34, bottom: 26, display: 'flex', gap: 14}}>
+            {t >= 29.9 ? <Tape size={34} bg={HL} style={{scale: Math.max(0, popAt(t, 29.9))}}>NUTS</Tape> : null}
+            {t >= 30.8 ? <Tape size={34} bg={HL} style={{scale: Math.max(0, popAt(t, 30.8))}}>+ FAT</Tape> : null}
+          </div>
+          <div style={{position: 'absolute', right: 34, bottom: 30, fontSize: 18, fontWeight: 600, color: '#777'}}>* illustrative</div>
+        </div>
+      </Card>
     </AbsoluteFill>
   );
 };
 const Nine: React.FC = () => {
   const t = useT();
   const w = C.nine;
-  const o = vis(t, 31.76, w.end - 0.25);
+  const o = vis(t, w.start, w.end - 0.25);
   if (o <= 0) return null;
-  const k = popAt(t, 33.58);
+  const k = popAt(t, 31.8);
+  const nine = popAt(t, 33.58);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={250} y={330} s={lerp(Math.min(1, k), 0.6, 1)} o={Math.min(1, k * 2)}>
-        <Serif size={560} style={{lineHeight: 0.8}}>9</Serif>
-      </At>
-      <div style={{position: 'absolute', left: 470, top: 200}}>
-        <div style={rise(t, 34.04)}>
-          <Sans size={110} weight={800}>kcal</Sans>
+      <Card r={{x: 140, y: 90, w: 800, h: 470}} k={k} bg={INK} border={false}>
+        <div style={{position: 'absolute', left: 0, right: 0, top: 46, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 60, color: '#fff'}}>
+          1 g of <span style={{color: HL}}>fat</span>
         </div>
-        <div style={{...rise(t, 34.54), marginTop: 10}}>
-          <Sans size={50} caps weight={800} color={CREAM}>per gram</Sans>
-        </div>
-        <div style={{...rise(t, 32.0), marginTop: 18, display: 'flex', alignItems: 'center', gap: 14}}>
-          <Ghee size={44} />
-          <Sans size={50} caps weight={800} color={GOLD}>of fat</Sans>
-        </div>
-      </div>
+        {t >= 33.5 ? (
+          <div style={{position: 'absolute', left: 0, right: 0, top: 150, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 230, lineHeight: 1, color: '#fff', letterSpacing: -6, scale: lerp(Math.min(1, nine), 1.3, 1), opacity: Math.min(1, nine * 2)}}>
+            ≈ 9 <span style={{fontSize: 110, letterSpacing: -2}}>kcal</span>
+          </div>
+        ) : null}
+      </Card>
     </AbsoluteFill>
   );
 };
+const MiniLabel: React.FC<{name: string; kcal: string; hi: number}> = ({name, kcal, hi}) => (
+  <div style={{padding: '22px 26px', fontFamily: SANS, color: INK}}>
+    <div style={{fontWeight: 800, fontSize: 30, letterSpacing: 2, color: '#6A6A6A'}}>{name}</div>
+    <div style={{fontWeight: 800, fontSize: 44, lineHeight: 1, borderBottom: `10px solid ${INK}`, paddingBottom: 10}}>Nutrition</div>
+    <div style={{display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 26, padding: '10px 0', borderBottom: `3px solid ${INK}`}}>
+      <span>Energy</span>
+      <Mark p={hi}>per 100 g</Mark>
+    </div>
+    <div style={{fontWeight: 800, fontSize: 86, letterSpacing: -2, marginTop: 10}}>
+      <Mark p={hi}>{kcal}</Mark>
+      <span style={{fontSize: 36}}> kcal</span>
+    </div>
+  </div>
+);
 const Compare: React.FC = () => {
   const t = useT();
   const w = C.compare;
-  const o = vis(t, 36.4, w.end - 0.25);
+  const o = vis(t, w.start, w.end - 0.25);
   if (o <= 0) return null;
+  const hi = tween(t, 38.48, 0.45);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={230} s={lerp(Math.min(1, popAt(t, 37.48)), 0.8, 1)} o={tween(t, 37.4, 0.3)}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 40, padding: '26px 44px', borderRadius: 26, background: '#F7EFDD', whiteSpace: 'nowrap', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', fontFamily: SANS, color: '#141414'}}>
-          <span style={{fontWeight: 800, fontSize: 50}}>Energy</span>
-          <span style={{fontWeight: 700, fontSize: 36, color: '#6B5E48', opacity: tween(t, 38.48, 0.3)}}>per 100 g</span>
-          <span style={{fontWeight: 800, fontSize: 50, background: `rgba(245,195,91,${tween(t, 38.48, 0.3)})`, padding: '2px 12px', borderRadius: 8}}>400 kcal</span>
-        </div>
-      </At>
-      <svg width={1080} height={700} style={{position: 'absolute', left: 0, top: 0, opacity: tween(t, 39.96, 0.3)}}>
-        <path d={`M540 315 L540 ${lerp(tween(t, 39.96, 0.4), 315, 415)}`} stroke={GOLD} strokeWidth={6} strokeDasharray="4 14" strokeLinecap="round" />
-      </svg>
-      {t >= 40.14 ? (
-        <At x={540} y={480} s={Math.max(0, popAt(t, 40.14))}>
-          <GoldPill size={40} fill>
-            <Ico name="scales" size={48} color={PLUM} /> MY PORTION = ?
-          </GoldPill>
+      <Card r={{x: 70, y: 90, w: 430, h: 400}} k={popAt(t, 36.64)}>
+        <MiniLabel name="SWEET A" kcal="400" hi={hi} />
+      </Card>
+      <Card r={{x: 580, y: 90, w: 430, h: 400}} k={popAt(t, 37.0)}>
+        <MiniLabel name="SWEET B" kcal="480" hi={hi} />
+      </Card>
+      {t >= 39.96 ? (
+        <At x={540} y={540} s={Math.max(0, popAt(t, 39.96))}>
+          <Tape size={44} bg={HL}>
+            <Ico name="scales" size={50} color={INK} /> then: MY ACTUAL PORTION
+          </Tape>
         </At>
       ) : null}
     </AbsoluteFill>
   );
 };
-const Calc: React.FC = () => {
+const LINES: {at: number; l: string; r: string; big?: boolean; rule?: boolean; note?: boolean}[] = [
+  {at: 44.18, l: 'KAJU KATLI', r: '30 g'},
+  {at: 46.14, l: 'LABEL', r: '400 kcal/100 g'},
+  {at: 48.36, l: '30 × 400 ÷ 100', r: ''},
+  {at: 49.6, l: '', r: '', rule: true},
+  {at: 49.72, l: 'TOTAL', r: '120 kcal', big: true},
+  {at: 54.0, l: "* use YOUR product's numbers", r: '', note: true},
+];
+const Receipt: React.FC = () => {
   const t = useT();
   const w = C.calc;
-  const o = vis(t, 42.6, w.end - 0.3, 0.35, 0.3);
+  const o = vis(t, w.start, w.end - 0.3);
   if (o <= 0) return null;
-  const drop = tween(t, 43.6, 0.45, EASE_IN);
-  const g = Math.round(30 * tween(t, 44.1, 0.5, EASE_OUT));
-  const big = popAt(t, 49.72);
-  const line = (at: number, child: React.ReactNode) => <div style={rise(t, at)}>{child}</div>;
+  const head = tween(t, 42.9, 0.4, EASE_OUT);
+  const shown = LINES.filter((x) => t >= x.at - 0.05);
+  const lineH = (x: (typeof LINES)[number]) => (x.big ? 92 : x.rule ? 30 : x.note ? 50 : 64);
+  const H = 120 * head + shown.reduce((s, x) => s + lineH(x) * tween(t, x.at - 0.05, 0.22, EASE_OUT), 0) + 40;
+  const stamp = popAt(t, 52.56);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 50, top: 70, width: 980, height: 520, borderRadius: 44, background: 'rgba(30,8,18,0.72)', border: `2.5px solid rgba(245,195,91,0.7)`, boxShadow: '0 30px 80px rgba(0,0,0,0.5), inset 0 0 60px rgba(245,170,60,0.12)'}} />
-      <At x={540} y={125}>
-        <Sans size={30} caps weight={800} color={GOLD}>for example</Sans>
-      </At>
-      {/* kitchen scale */}
-      <div style={{position: 'absolute', left: 110, top: 200, width: 330, height: 330}}>
-        <div style={{position: 'absolute', left: 110, top: lerp(drop, -60, 70), opacity: tween(t, 43.4, 0.2)}}>
-          <Katli size={120} />
-        </div>
-        <div style={{position: 'absolute', left: 30, top: 150, width: 270, height: 26, borderRadius: 12, background: '#DADADA', boxShadow: 'inset 0 -5px 0 rgba(0,0,0,0.15)'}} />
-        <div style={{position: 'absolute', left: 10, top: 175, width: 310, height: 150, borderRadius: 30, background: '#F4F1EA', boxShadow: '0 16px 40px rgba(0,0,0,0.45)'}}>
-          <div style={{position: 'absolute', left: 55, top: 32, width: 200, height: 84, borderRadius: 14, background: '#1D2A24', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#9CFFB8', textShadow: '0 0 12px rgba(120,255,160,0.6)'}}>{g} g</div>
+      {/* printer slot */}
+      <div style={{position: 'absolute', left: 200, top: 48, width: 680, height: 34, borderRadius: 17, background: INK, boxShadow: '0 10px 20px -6px rgba(0,0,0,0.4)'}} />
+      <div style={{position: 'absolute', left: 240, top: 64, width: 600, height: H, background: PAPER, boxShadow: SHADOW, overflow: 'hidden', clipPath: `polygon(0 0, 100% 0, 100% calc(100% - 14px), ${Array.from({length: 21}, (_, i) => `${100 - i * 5}% ${i % 2 ? 'calc(100% - 14px)' : '100%'}`).join(', ')})`}}>
+        <div style={{padding: '34px 40px 0', fontFamily: MONO, color: INK}}>
+          <div style={{textAlign: 'center', fontWeight: 700, fontSize: 32, letterSpacing: 2}}>*** PORTION CHECK ***</div>
+          <div style={{textAlign: 'center', fontSize: 22, color: '#666', marginTop: 4}}>for example</div>
+          <div style={{borderBottom: `3px dashed ${INK}`, margin: '16px 0 10px'}} />
+          {shown.map((x, i) =>
+            x.rule ? (
+              <div key={i} style={{borderBottom: `3px dashed ${INK}`, margin: '10px 0 14px'}} />
+            ) : (
+              <div key={i} style={{display: 'flex', justifyContent: 'space-between', fontSize: x.big ? 56 : x.note ? 26 : 36, fontWeight: x.big || x.note ? 700 : 400, color: x.note ? RED : INK, lineHeight: x.big ? '80px' : x.note ? '46px' : '60px', ...rise(t, x.at)}}>
+                <span>{x.l}</span>
+                <span>{x.big ? <Mark p={tween(t, 49.9, 0.4)}>{x.r}</Mark> : x.r}</span>
+              </div>
+            ),
+          )}
         </div>
       </div>
-      {/* equation */}
-      <div style={{position: 'absolute', left: 500, top: 190, fontFamily: SANS, color: '#fff'}}>
-        {line(44.18, <Sans size={74} weight={800}>30 g</Sans>)}
-        {line(46.14, <Sans size={74} weight={800}><span style={{color: GOLD}}>×</span> 400 kcal</Sans>)}
-        {line(48.36, <Sans size={74} weight={800}><span style={{color: GOLD}}>÷</span> 100 g</Sans>)}
-      </div>
-      {t >= 49.72 ? (
-        <At x={735} y={500} s={lerp(Math.min(1.1, big), 1.4, 1)} o={Math.min(1, big * 2)}>
-          <Serif size={130}>= 120 kcal</Serif>
-        </At>
+      {stamp > 0 ? (
+        <div style={{position: 'absolute', left: 752, top: 343, translate: '-50% -50%', scale: Math.max(0, stamp) * lerp(Math.min(1, stamp), 1.5, 1), padding: '2px 12px', border: `4px solid ${RED}`, borderRadius: 10, color: RED, fontFamily: SANS, fontWeight: 800, fontSize: 27, letterSpacing: 3, background: 'rgba(255,253,247,0.85)'}}>ILLUSTRATIVE</div>
       ) : null}
-      {t >= 52.4 ? (
-        <At x={540} y={630} s={Math.max(0, popAt(t, 52.4))}>
-          <GoldPill size={28}>*ILLUSTRATIVE · USE YOUR PRODUCT'S LABEL</GoldPill>
+    </AbsoluteFill>
+  );
+};
+const Choose: React.FC = () => {
+  const t = useT();
+  const w = C.choose;
+  if (t < w.start || t >= w.end) return null;
+  const p = tween(t, w.start, w.end - w.start, (x) => x);
+  const k = tween(t, w.start, 0.35, EASE_OUT);
+  return (
+    <AbsoluteFill style={{background: INK}}>
+      <Img src={staticFile('v10/photos/shop.jpg')} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: `${lerp(p, 30, 60)}% 50%`, scale: lerp(k, 1.15, 1.04) + 0.06 * p}} />
+      <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0) 35%)'}} />
+      <At x={540} y={240}>
+        <div style={rise(t, 57.02)}>
+          <Tape size={46}>choose the one you</Tape>
+        </div>
+      </At>
+      {t >= 58.6 ? (
+        <At x={540} y={370} s={lerp(Math.min(1, popAt(t, 58.72)), 1.3, 1)}>
+          <Tape size={96} bg={HL}>
+            actually enjoy <Ico name="heart" size={84} color={RED} />
+          </Tape>
         </At>
       ) : null}
     </AbsoluteFill>
   );
 };
-const EnjoyOverlay: React.FC = () => {
+const EnjoyTag: React.FC = () => {
   const t = useT();
-  const w = C.enjoy;
-  if (t < w.start || t >= w.end) return null;
+  if (t < 60.0 || t >= C.enjoy.end) return null;
+  return (
+    <At x={540} y={300} s={Math.max(0, popAt(t, 60.12))}>
+      <Tape size={70} bg={HL}>serve a portion</Tape>
+    </At>
+  );
+};
+const Journey: React.FC = () => {
+  const t = useT();
+  if (t < C.journey.start || t >= C.journey.end) return null;
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(30,8,18,0.6) 0%, rgba(30,8,18,0) 32%)'}} />
-      <At x={540} y={230}>
-        <div style={rise(t, 57.02)}>
-          <Sans size={52} caps weight={800} color={CREAM}>choose the sweet you</Sans>
+      <At x={540} y={260}>
+        <div style={rise(t, 15.86)}>
+          <Tape size={44}>my</Tape>
         </div>
       </At>
-      <At x={540} y={340}>
-        <div style={rise(t, 58.72)}>
-          <Serif size={140}>actually enjoy</Serif>
-        </div>
-      </At>
-      {t >= 60.12 ? (
-        <At x={540} y={480} s={Math.max(0, popAt(t, 60.12))}>
-          <GoldPill size={36} fill>
-            <Ico name="heart" size={40} color={PLUM} /> SERVE A PORTION
-          </GoldPill>
-        </At>
-      ) : null}
-    </AbsoluteFill>
-  );
-};
-const Diwali: React.FC = () => {
-  const t = useT();
-  const w = C.diwali;
-  const o = vis(t, 62.3, w.end - 0.25);
-  if (o <= 0) return null;
-  const txt = vis(t, 62.6, 67.4, 0.3, 0.3);
-  return (
-    <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={220} o={txt}>
-        <div style={rise(t, 63.4)}>
-          <Sans size={50} caps weight={800} color={CREAM}>your</Sans>
-        </div>
-      </At>
-      <At x={540} y={330} o={txt}>
-        <div style={rise(t, 63.86)}>
-          <Serif size={150}>Diwali decision</Serif>
-        </div>
-      </At>
-      <div style={{position: 'absolute', left: 540, top: 510, translate: '-50% -50%', display: 'flex', gap: 34, opacity: txt}}>
-        {Array.from({length: 5}, (_, i) => (
-          <div key={i} style={{translate: `0 ${Math.abs(i - 2) * -14}px`}}>
-            <Diya size={110} lit={tween(t, 63.9 + i * 0.12, 0.3)} t={t} i={i} />
-          </div>
-        ))}
-      </div>
-      {t >= 67.68 ? (
-        <At x={540} y={640} s={Math.max(0, popAt(t, 68.04))}>
-          <GoldPill size={34}>CHECK THE LABEL, NOT THE CLAIM</GoldPill>
+      {t >= 16.2 ? (
+        <At x={540} y={380} s={lerp(Math.min(1, popAt(t, 16.24)), 1.25, 1)}>
+          <Tape size={90} bg={HL}>weight-loss journey</Tape>
         </At>
       ) : null}
     </AbsoluteFill>
@@ -598,26 +466,24 @@ const Cta: React.FC = () => {
   const card = tween(t, 71.66, 0.45, EASE_OUT);
   return (
     <AbsoluteFill>
-      <At x={540} y={200}>
+      <At x={540} y={170}>
         <div style={rise(t, 70.06)}>
-          <Sans size={60} caps weight={800} color={CREAM}>comment</Sans>
+          <Tape size={52}>comment</Tape>
         </div>
       </At>
-      {t >= 70.32 ? (
-        <At x={540} y={340} s={lerp(Math.min(1.1, k), 1.4, 1)} o={Math.min(1, k * 2)}>
-          <div style={{padding: '0 50px 14px', borderRadius: 999, border: `4px solid ${GOLD}`, background: 'rgba(40,10,20,0.6)', boxShadow: '0 0 50px rgba(245,170,60,0.55)'}}>
-            <Serif size={180}>GUIDE</Serif>
-          </div>
+      {t >= 70.3 ? (
+        <At x={540} y={330} s={lerp(Math.min(1.1, k), 1.4, 1)} o={Math.min(1, k * 2)}>
+          <Tape size={150} bg={HL}>GUIDE</Tape>
         </At>
       ) : null}
       {card > 0 ? (
-        <div style={{position: 'absolute', left: 540, top: lerp(card, 700, 545), translate: '-50% -50%', opacity: card, display: 'flex', alignItems: 'center', gap: 20, padding: '18px 34px 18px 18px', borderRadius: 30, background: CREAM, boxShadow: '0 20px 50px rgba(0,0,0,0.45)'}}>
-          <div style={{width: 80, height: 80, borderRadius: 20, background: MAROON, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Ico name="file-pdf" size={52} color={GOLD} />
+        <div style={{position: 'absolute', left: 540, top: lerp(card, 640, 520), translate: '-50% -50%', opacity: card, display: 'flex', alignItems: 'center', gap: 20, padding: '18px 34px 18px 18px', borderRadius: 26, background: '#fff', border: `5px solid ${INK}`, boxShadow: SHADOW}}>
+          <div style={{width: 80, height: 80, borderRadius: 18, background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <Ico name="file-pdf" size={52} color="#fff" />
           </div>
           <div style={{fontFamily: SANS}}>
-            <div style={{fontSize: 38, fontWeight: 800, color: PLUM, whiteSpace: 'nowrap'}}>Free Fat Loss Guide</div>
-            <div style={{fontSize: 26, fontWeight: 700, color: '#8A6B4A'}}>straight to your DMs</div>
+            <div style={{fontSize: 38, fontWeight: 800, color: INK, whiteSpace: 'nowrap'}}>Free Fat Loss Guide</div>
+            <div style={{fontSize: 26, fontWeight: 700, color: '#777'}}>sent to your DMs</div>
           </div>
         </div>
       ) : null}
@@ -626,65 +492,57 @@ const Cta: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// Captions: clean sans, key words swapped for gold serif italics
+// Captions: label tape, spoken word underlined in green, key words in green
 // ---------------------------------------------------------------------------
-const KEY = new Set(['mithai', 'around', 'front', 'brand', 'nutrition', 'compare', 'journey', 'reputation', 'permission', 'nuts', 'fat', '9', '100', 'portion', '30', '400', '120', 'illustrative', 'enjoy', 'diwali', 'healthy', 'guide', 'sugar-free']);
-const NO_CAPS = [C.hook, {start: C.cta.start + 0.2, end: 999}];
+const KEY = new Set(['sugar-free', 'mithai', 'around', 'front', 'brand', 'nutrition', 'panel', 'compare', 'journey', 'reputation', 'permission', 'nuts', 'fat', '9', '100', 'portion', '30', '400', '120', 'illustrative', 'enjoy', 'diwali', 'healthy', 'guide']);
+const NO_CAPS = [{start: C.hook.start, end: 3.62}, {start: C.cta.start + 0.2, end: 999}];
 const Caps: React.FC = () => {
   const t = useT();
   if (inWin(t, NO_CAPS)) return null;
   const chunk = chunkAt(cfg.captions, t);
   if (!chunk) return null;
-  const k = tween(t, chunk[0].start - 0.04, 0.16);
-  const y = inWin(t, [C.calc]) ? 1520 : 1500;
+  const k = tween(t, chunk[0].start - 0.04, 0.14);
   return (
-    <div style={{position: 'absolute', left: 40, right: 40, top: y, translate: `0 ${-50 + lerp(k, 10, 0)}%`, textAlign: 'center', opacity: k, filter: k < 1 ? `blur(${lerp(k, 6, 0)}px)` : undefined}}>
-      {chunk.map((w, i) => {
-        const key = KEY.has(w.text.toLowerCase().replace(/[.,?!]/g, ''));
-        return (
-          <span key={i} style={{display: 'inline-block', margin: '0 0.13em', verticalAlign: 'baseline', ...(key ? {fontFamily: SERIF, fontStyle: 'italic', fontSize: 104, color: GOLD, textShadow: '0 0 24px rgba(245,170,60,0.5), 0 4px 14px rgba(0,0,0,0.6)'} : {fontFamily: SANS, fontWeight: 750, fontSize: 70, color: '#fff', textShadow: '0 4px 18px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.6)'})}}>
-            {w.text}
-          </span>
-        );
-      })}
+    <div style={{position: 'absolute', left: 40, right: 40, top: 1520, translate: `0 ${-50 + lerp(k, 10, 0)}%`, textAlign: 'center', opacity: k}}>
+      <div style={{display: 'inline-block', padding: '10px 26px 14px', background: '#fff', border: `5px solid ${INK}`, borderRadius: 18, boxShadow: '0 12px 26px -10px rgba(0,0,0,0.45)', scale: lerp(k, 0.94, 1)}}>
+        {chunk.map((w, i) => {
+          const nextStart = chunk[i + 1]?.start ?? w.end + 0.3;
+          const on = t >= w.start - 0.03 && t < nextStart;
+          const key = KEY.has(w.text.toLowerCase().replace(/[.,?!]/g, ''));
+          return (
+            <span key={i} style={{display: 'inline-block', margin: '0 0.12em', fontFamily: SANS, fontWeight: 800, fontSize: 58, lineHeight: 1.15, color: key ? GREEN_D : INK, backgroundImage: `linear-gradient(${GREEN}, ${GREEN})`, backgroundRepeat: 'no-repeat', backgroundPosition: '0 100%', backgroundSize: `${on ? 100 : 0}% 7px`}}>
+              {w.text}
+            </span>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 // ---------------------------------------------------------------------------
-const Scene: React.FC = () => {
-  const t = useT();
-  const pose = boxPose(t);
-  const rings = vis(t, 9.5, 11.2, 0.3, 0.3);
-  const hi = tween(t, 12.7, 0.4);
-  return (
-    <>
-      <Footage cfg={cfg} />
-      <Night />
-      <Garland />
-      <Subject cfg={cfg} />
-      <GradeOverlay cfg={cfg} />
-      <Journey />
-      <Rep />
-      <Nuts />
-      <Nine />
-      <Compare />
-      <Calc />
-      <Diwali />
-      <Cta />
-      <FrontLabels />
-      <Hook />
-      <MithaiBox pose={pose} t={t} rings={rings} hi={hi} />
-      <BrollCuts cfg={cfg} />
-      <EnjoyOverlay />
-      <Caps />
-    </>
-  );
-};
+const Scene: React.FC = () => (
+  <>
+    <Footage cfg={cfg} />
+    <GradeOverlay cfg={cfg} />
+    <Rep />
+    <Nuts />
+    <Nine />
+    <Compare />
+    <Receipt />
+    <Subject cfg={cfg} />
+    <Cards />
+    <Cta />
+    <BrollCuts cfg={cfg} />
+    <Journey />
+    <EnjoyTag />
+    <Choose />
+    <Caps />
+  </>
+);
 
 export const V10Reel: React.FC = () => (
-  <Base cfg={{...cfg, shakes: [1.92, 49.72]}}>
+  <Base cfg={{...cfg, shakes: [2.54, 20.12, 49.72]}}>
     <Scene />
   </Base>
 );
-
