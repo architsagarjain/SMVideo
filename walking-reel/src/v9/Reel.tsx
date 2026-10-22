@@ -497,12 +497,12 @@ const Real: React.FC = () => {
         </At>
       ) : null}
       {t >= 40.52 ? (
-        <At x={190} y={540} s={Math.max(0, popAt(t, 40.52))}>
+        <At x={215} y={540} s={Math.max(0, popAt(t, 40.52))}>
           <Tag text="FOLLOWABLE" bg={MINT} size={34} icon="check-circle" />
         </At>
       ) : null}
       {t >= 40.96 ? (
-        <At x={900} y={540} s={Math.max(0, popAt(t, 40.96))}>
+        <At x={865} y={540} s={Math.max(0, popAt(t, 40.96))}>
           <Tag text="TOO HARD" bg={RED} size={34} icon="x-circle" />
         </At>
       ) : null}
@@ -731,7 +731,7 @@ const Decide: React.FC = () => {
         </div>
       </div>
       {t >= 71.06 ? (
-        <At x={750} y={590} s={Math.max(0, popAt(t, 71.06))}>
+        <At x={870} y={610} s={Math.max(0, popAt(t, 71.06))}>
           <Tag text="FOR NOW" bg={YEL} fg={INK} size={34} icon="pause" />
         </At>
       ) : null}
