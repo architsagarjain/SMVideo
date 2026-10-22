@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, OffthreadVideo, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {ICONS} from '../explainer/icons';
 import {useT} from '../explainer/kit';
-import {Base, Footage} from '../series/core';
+import {Base, Footage, Subject} from '../series/core';
 import {outAt} from '../series/timemap';
 import {EASE_IN, EASE_IN_OUT, EASE_OUT, FPS, SANS, SERIF, lerp, tween} from '../theme';
 import {App, C, ITEMS, Rect, SCENES, TMP, phoneConfig as cfg} from './config';
@@ -12,7 +12,8 @@ import {App, C, ITEMS, Rect, SCENES, TMP, phoneConfig as cfg} from './config';
  * Calculator, Calendar, an Instagram story and the Instagram comment sheet.
  */
 const SW = 900, SH = 1600; // phone screen
-const PX = 70, PY = 140, BEZ = 20; // phone frame position and bezel
+const BEZ = 22; // titanium rim + black bezel
+const PX = 540 - (SW / 2 + BEZ), PY = 960 - (SH / 2 + BEZ); // phone centred on the canvas
 const BLUE = '#0A84FF';
 const RED = '#FF3B30';
 const GREEN = '#34C759';
@@ -301,7 +302,56 @@ const Her: React.FC = () => {
   return (
     <div style={{position: 'absolute', left: r.x, top: r.y, width: r.w, height: r.h, borderRadius: r.r, overflow: 'hidden', opacity: o, scale: sc, boxShadow: pip ? '0 18px 40px rgba(0,0,0,0.35)' : undefined, outline: pip ? '5px solid #fff' : undefined, background: '#000'}}>
       <Footage cfg={cfg} />
+      {inside(t, C.face2) ? <NormalBehind /> : null}
+      {inside(t, C.face2) ? <Subject cfg={cfg} /> : null}
     </div>
+  );
+};
+
+// ===========================================================================
+// The zoom: the reel opens full-frame and pulls back to the phone; mid-reel it pushes into the
+// screen and plays as a normal full-frame talking video, then pulls back out.
+// ===========================================================================
+const BASE = 1.1; // phone size on the canvas
+const FILL = 1080 / SW; // the screen exactly fills the canvas
+const zoomAt = (t: number) => {
+  const intro = 1 - tween(t, C.face1.start + 0.5, 0.65, EASE_IN_OUT);
+  const mid = tween(t, C.face2.start, 0.55, EASE_IN_OUT) * (1 - tween(t, C.face2.end, 0.5, EASE_IN_OUT));
+  return Math.max(intro, mid);
+};
+
+/** Behind her head while she is full-frame. */
+const NormalBehind: React.FC = () => {
+  const t = useT();
+  const p = tween(t, 25.66, 0.55, EASE_OUT);
+  const o = 1 - tween(t, C.face2.end - 0.3, 0.25, EASE_IN);
+  if (t < 25.64) return null;
+  return (
+    <div style={{position: 'absolute', left: SW / 2, top: 640, translate: '-50% -50%', overflow: 'hidden', padding: '0 16px', opacity: o, filter: 'drop-shadow(0 0 26px rgba(0,0,0,0.45)) drop-shadow(0 8px 20px rgba(0,0,0,0.3))'}}>
+      <div style={{translate: `0 ${lerp(p, 70, 0)}%`, scale: lerp(p, 1.12, 1), fontFamily: SANS, fontWeight: 800, fontSize: 200, letterSpacing: -10, lineHeight: 0.92, color: '#F6E7C1', whiteSpace: 'nowrap'}}>NOTHING</div>
+    </div>
+  );
+};
+/** Words in front of her in the full-frame part. */
+const NormalFront: React.FC = () => {
+  const t = useT();
+  if (!inside(t, C.face2)) return null;
+  const o = (a: number, b: number) => tween(t, a, 0.3) * (1 - tween(t, b, 0.22, EASE_IN));
+  const chip = tween(t, 27.36, 0.35, EASE_OUT);
+  return (
+    <AbsoluteFill style={{pointerEvents: 'none', fontFamily: SANS}}>
+      <div style={{position: 'absolute', left: SW / 2, top: 330, translate: '-50% -50%', opacity: o(24.48, 27.2), fontFamily: SERIF, fontStyle: 'italic', fontSize: 76, color: '#fff', whiteSpace: 'nowrap', textShadow: '0 0 30px rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.4)'}}>and it felt like you ate</div>
+      {chip > 0 ? (
+        <div style={{position: 'absolute', left: SW / 2, top: 330, translate: '-50% -50%', display: 'flex', alignItems: 'center', gap: 16, padding: '16px 30px 16px 16px', borderRadius: 60, background: '#F6E7C1', boxShadow: '0 16px 40px rgba(0,0,0,0.35)', opacity: chip * (1 - tween(t, C.face2.end - 0.25, 0.2)), scale: lerp(chip, 0.7, 1)}}>
+          <div style={{width: 64, height: 64, borderRadius: 16, background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <svg viewBox="0 0 100 100" width={44} height={44}>
+              <path d="M 22 52 L 42 70 L 78 32" fill="none" stroke="#F6E7C1" strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - tween(t, 27.5, 0.25)} />
+            </svg>
+          </div>
+          <div style={{fontWeight: 800, fontSize: 58, color: INK, letterSpacing: -2, whiteSpace: 'nowrap'}}>I've done this too</div>
+        </div>
+      ) : null}
+    </AbsoluteFill>
   );
 };
 
@@ -493,7 +543,8 @@ const Overlays: React.FC = () => {
   const cur = SCENES[i];
   return (
     <>
-      {cur.app === 'facetime' ? <FaceTimeUI w={cur.w} /> : null}
+      {cur.app === 'facetime' && cur.w !== C.face2 ? <FaceTimeUI w={cur.w} /> : null}
+      <NormalFront />
       {/* hook */}
       <Banner
         at={C.face1.start + 0.02}
@@ -509,8 +560,6 @@ const Overlays: React.FC = () => {
       />
       <Bubble text="that sounds wrong" at={4.88} out={C.face1.end - 0.15} y={250} />
       <Bubble text="hear me out" at={5.98} out={C.face1.end - 0.15} y={370} me />
-      <Bubble text="and it felt like I ate nothing" at={24.48} out={C.face2.end - 0.2} y={250} me />
-      <Bubble text="I’ve done this too" at={27.36} out={C.face2.end - 0.2} y={370} me />
       <Alert />
       <ReelUI />
       <Banner
@@ -556,21 +605,37 @@ const StatusBar: React.FC = () => {
   const cur = SCENES[sceneIndex(t)];
   const dark = cur.app === 'notes' || cur.app === 'notes2' || cur.app === 'calendar';
   const c = dark ? INK : '#fff';
+  const o = 1 - zoomAt(t);
+  const IW = 290, IH = 84; // Dynamic Island
   return (
-    <>
-      <div style={{position: 'absolute', left: 64, top: 30, fontFamily: SANS, fontSize: 34, fontWeight: 800, color: c}}>9:41</div>
-      <div style={{position: 'absolute', left: SW / 2 - 125, top: 18, width: 250, height: 72, borderRadius: 36, background: '#000'}} />
-      <div style={{position: 'absolute', right: 56, top: 38, display: 'flex', alignItems: 'flex-end', gap: 12}}>
-        <div style={{display: 'flex', alignItems: 'flex-end', gap: 4}}>
-          {[10, 15, 20, 25].map((h) => (
-            <div key={h} style={{width: 7, height: h, borderRadius: 2, background: c}} />
-          ))}
-        </div>
-        <div style={{width: 50, height: 25, borderRadius: 8, border: `3px solid ${c}`, boxSizing: 'border-box', padding: 3, opacity: 0.95}}>
-          <div style={{width: '78%', height: '100%', borderRadius: 3, background: c}} />
-        </div>
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
+      <div style={{position: 'absolute', left: SW / 2 - IW / 2, top: 24, width: IW, height: IH, borderRadius: IH / 2, background: '#000', opacity: o}}>
+        <div style={{position: 'absolute', right: 26, top: IH / 2 - 13, width: 26, height: 26, borderRadius: 13, background: 'radial-gradient(circle at 40% 40%, #2A3444 0%, #0B0E14 60%)'}} />
       </div>
-    </>
+      <div style={{opacity: o}}>
+        <div style={{position: 'absolute', left: 0, width: SW / 2 - IW / 2, top: 38, textAlign: 'center', fontFamily: SANS, fontSize: 40, fontWeight: 700, letterSpacing: -0.5, color: c}}>9:41</div>
+        <div style={{position: 'absolute', right: 0, width: SW / 2 - IW / 2, top: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12}}>
+          <div style={{display: 'flex', alignItems: 'flex-end', gap: 4, height: 26}}>
+            {[10, 15, 20, 26].map((h) => (
+              <div key={h} style={{width: 7, height: h, borderRadius: 2, background: c}} />
+            ))}
+          </div>
+          <svg viewBox="0 0 40 30" width={36} height={27}>
+            <path d="M 20 27 L 26 20 A 9 9 0 0 0 14 20 Z" fill={c} />
+            <path d="M 9 15 A 16 16 0 0 1 31 15" stroke={c} strokeWidth={4.5} fill="none" strokeLinecap="round" />
+            <path d="M 3 9 A 24 24 0 0 1 37 9" stroke={c} strokeWidth={4.5} fill="none" strokeLinecap="round" />
+          </svg>
+          <div style={{display: 'flex', alignItems: 'center', gap: 2}}>
+            <div style={{width: 52, height: 26, borderRadius: 8, border: `2.5px solid ${dark ? 'rgba(17,17,17,0.45)' : 'rgba(255,255,255,0.5)'}`, boxSizing: 'border-box', padding: 2.5}}>
+              <div style={{width: '82%', height: '100%', borderRadius: 4, background: c}} />
+            </div>
+            <div style={{width: 4, height: 9, borderRadius: '0 3px 3px 0', background: dark ? 'rgba(17,17,17,0.45)' : 'rgba(255,255,255,0.5)'}} />
+          </div>
+        </div>
+        {/* home indicator */}
+        <div style={{position: 'absolute', left: SW / 2 - 150, bottom: 16, width: 300, height: 10, borderRadius: 5, background: dark ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.9)'}} />
+      </div>
+    </AbsoluteFill>
   );
 };
 
@@ -584,20 +649,50 @@ const shakeAt = (t: number) => {
   return dx;
 };
 
-export const PhoneReel: React.FC = () => {
+/** Everything inside Base, so useT() reads source time through the time map. */
+const PhoneScene: React.FC = () => {
   const t = useT();
+  const z = zoomAt(t);
+  const scale = lerp(z, BASE, FILL);
+  const radius = lerp(z, 128, 0);
+  const moving = z > 0.02 && z < 0.98;
+  const blur = moving ? 7 * Math.sin(Math.PI * z) : 0;
+  const W = SW + 2 * BEZ, H = SH + 2 * BEZ;
+  const btn = (side: 'l' | 'r', top: number, h: number) => (
+    <div style={{position: 'absolute', [side === 'l' ? 'left' : 'right']: -7, top, width: 9, height: h, borderRadius: 4, background: 'linear-gradient(to right, #6E6E73, #C7C7CC 50%, #6E6E73)'}} />
+  );
   return (
-    <Base cfg={cfg}>
+    <>
       <AbsoluteFill style={{background: 'radial-gradient(120% 80% at 50% 30%, #F8EFE4 0%, #EADCCB 100%)'}} />
-      <div style={{position: 'absolute', left: PX, top: PY, width: SW + 2 * BEZ, height: SH + 2 * BEZ, borderRadius: 140, background: 'linear-gradient(160deg, #3A3A3C, #1C1C1E 40%, #2C2C2E)', boxShadow: '0 60px 120px rgba(80,55,30,0.35), inset 0 0 0 3px rgba(255,255,255,0.08)', translate: `${shakeAt(t)}px 0`}}>
-        <div style={{position: 'absolute', left: BEZ, top: BEZ, width: SW, height: SH, borderRadius: 120, overflow: 'hidden', background: '#000'}}>
-          <Apps />
-          <Her />
-          <Overlays />
-          <LiveCaptions />
-          <StatusBar />
+      <AbsoluteFill style={{scale, transformOrigin: '540px 960px', translate: `${shakeAt(t)}px 0`, filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>
+        <div style={{position: 'absolute', left: PX, top: PY, width: W, height: H}}>
+          {/* side buttons */}
+          {btn('l', 300, 62)}
+          {btn('l', 420, 120)}
+          {btn('l', 570, 120)}
+          {btn('r', 470, 190)}
+          {/* titanium rim */}
+          <div style={{position: 'absolute', inset: 0, borderRadius: 150, background: 'linear-gradient(135deg, #A1A1A6 0%, #E5E5EA 18%, #8E8E93 40%, #D1D1D6 62%, #7C7C80 82%, #C7C7CC 100%)', boxShadow: '0 50px 110px rgba(80,55,30,0.35)'}} />
+          {/* black bezel */}
+          <div style={{position: 'absolute', inset: 6, borderRadius: 144, background: '#050505'}} />
+          {/* screen */}
+          <div style={{position: 'absolute', left: BEZ, top: BEZ, width: SW, height: SH, borderRadius: radius, overflow: 'hidden', background: '#000'}}>
+            <Apps />
+            <Her />
+            <Overlays />
+            <LiveCaptions />
+            <StatusBar />
+            {/* glass sheen */}
+            <AbsoluteFill style={{background: 'linear-gradient(125deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 28%)', opacity: 1 - z, pointerEvents: 'none'}} />
+          </div>
         </div>
-      </div>
-    </Base>
+      </AbsoluteFill>
+    </>
   );
 };
+
+export const PhoneReel: React.FC = () => (
+  <Base cfg={cfg}>
+    <PhoneScene />
+  </Base>
+);

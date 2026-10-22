@@ -11,6 +11,7 @@ ITEMS = [(7.72, 9), (9.3, 5), (12.0, 18), (14.18, 11), (17.18, 14)]  # (typing s
 def cues(cue, rng):
     # hook: a notification banner on frame one
     cue(0.92, "pack:notif", -16)
+    cue(1.4, "pack:whoosh_soft", -24)  # pull back to reveal the phone
     # chat bubbles
     cue(4.88, "pack:tick", -20)
     cue(5.98, "pack:chime2", -24)
@@ -25,12 +26,12 @@ def cues(cue, rng):
         cue(19.98 + j * 0.09, "pack:tick", -25)
     cue(22.3, "pack:hit", -21)
     cue(22.86, "pack:chime2", -26)
-    # back on the call
-    cue(23.86, "pack:whoosh_soft", -25)
-    cue(24.48, "pack:chime2", -25)
+    # zoom through the screen to full-frame, then back out
+    cue(23.86, "pack:whoosh_cine", -21)
+    cue(25.66, "pack:hit", -21)
     cue(27.36, "pack:chime2", -25)
     # Notes again: the foods aren't the problem, green ticks
-    cue(28.6, "pack:whoosh_soft", -25)
+    cue(28.6, "pack:whoosh_deep", -22)
     for j in range(0, 27, 3):
         cue(29.28 + j * 0.04, "pack:key", -25)
     for i in range(5):

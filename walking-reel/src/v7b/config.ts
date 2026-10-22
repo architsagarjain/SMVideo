@@ -69,4 +69,5 @@ export const phoneConfig: ReelConfig = {
   tm: TMP,
   clean: true,
   grade: {filter: 'brightness(1.08) contrast(1.08) saturate(1.18)'}, // "Bright & Clean"
+  cut: [C.face2], // her cut-out on top while she is full-frame (word behind her head)
 };
