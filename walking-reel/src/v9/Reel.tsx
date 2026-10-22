@@ -192,7 +192,7 @@ const Study: React.FC = () => {
   const w = C.study;
   const oA = vis(t, w.start + 0.15, 10.1);
   const oB = vis(t, 10.16, w.end - 0.25);
-  const n = Math.round(42 * tween(t, 8.7, 0.6, (x) => x));
+  const n = Math.round(42 * tween(t, 8.2, 0.75, (x) => x));
   const kg = (0.45 * tween(t, 10.92, 1.04, EASE_OUT)).toFixed(2);
   const water = tween(t, 15.6, 1.2, EASE_IN_OUT);
   return (
@@ -202,15 +202,15 @@ const Study: React.FC = () => {
           <At x={92} y={130} align="left">
             <Tag text="IN A STUDY OF" size={32} icon="magnifying-glass" />
           </At>
-          {t >= 8.68 ? (
+          {t >= 8.18 ? (
             <>
-              <At x={92} y={430} align="left" s={lerp(Math.min(1, popAt(t, 8.7)), 0.8, 1)}>
+              <At x={92} y={430} align="left" s={lerp(Math.min(1, popAt(t, 8.2)), 0.8, 1)}>
                 <A size={330}>{n}</A>
               </At>
               <At x={98} y={680} align="left">
                 <A size={96}>women</A>
               </At>
-              <PersonGrid at={8.74} t={t} />
+              <PersonGrid at={8.24} t={t} />
             </>
           ) : null}
         </AbsoluteFill>
@@ -593,7 +593,7 @@ const Measured: React.FC = () => {
   const flip = tween(t, 56.3, 0.6, EASE_IN_OUT);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={150} o={tween(t, 51.76, 0.3)}>
+      <At x={540} y={150} o={tween(t, 51.24, 0.3)}>
         <A size={70}>
           if the pattern says <Hi p={tween(t, 53.04, 0.3)}>adjust</Hi>
         </A>

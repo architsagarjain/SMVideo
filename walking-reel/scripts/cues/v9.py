@@ -26,7 +26,7 @@ def cues(cue, rng):
     # study card
     cue(7.9, "pack:whoosh_cine", -22)
     for j in range(8):
-        cue(8.74 + j * 0.09, "pack:tick", -29)
+        cue(8.24 + j * 0.09, "pack:tick", -29)
     cue(10.16, "pack:whoosh_soft", -26)
     for j in range(6):
         cue(10.92 + j * 0.16, "pack:tick", -28)
