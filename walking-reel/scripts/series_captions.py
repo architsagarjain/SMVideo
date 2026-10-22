@@ -14,6 +14,8 @@ FIXES = {
     # large-v3 hears "I've" / "I'm" here
     'v5': [(17.72, 'HIT', 'HIIT')],
     'v8': [(73.52, 'guide', 'GUIDE')],
+    'v9': [(24.96, 'tread', 'trend'), (74.98, 'guide', 'GUIDE')],
+    'v10': [(70.32, 'guide', 'GUIDE')],
     'v7': [(45.14, 'Come', 'Comment'), (45.26, 'and', None), (45.44, 'snack', 'SNACK')],
     'sabudana': [(5.70, 'light', '"light"'), (3.64, 'I', "I've"), (3.66, 'have', None), (23.84, 'I', "I'm"), (24.04, 'am', None)],
 }

@@ -1,0 +1,944 @@
+[
+ [
+  {
+   "text": "If",
+   "start": 1.1,
+   "end": 1.22
+  },
+  {
+   "text": "you",
+   "start": 1.22,
+   "end": 1.38
+  },
+  {
+   "text": "handed",
+   "start": 1.38,
+   "end": 1.62
+  }
+ ],
+ [
+  {
+   "text": "me",
+   "start": 1.62,
+   "end": 1.82
+  },
+  {
+   "text": "a",
+   "start": 1.82,
+   "end": 2.0
+  },
+  {
+   "text": "box",
+   "start": 2.0,
+   "end": 2.2
+  }
+ ],
+ [
+  {
+   "text": "of",
+   "start": 2.2,
+   "end": 2.54
+  },
+  {
+   "text": "sugar-free",
+   "start": 2.54,
+   "end": 2.96
+  },
+  {
+   "text": "mithai,",
+   "start": 2.96,
+   "end": 3.38
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 3.62,
+   "end": 3.8
+  },
+  {
+   "text": "first",
+   "start": 3.8,
+   "end": 4.12
+  },
+  {
+   "text": "thing",
+   "start": 4.12,
+   "end": 4.4
+  }
+ ],
+ [
+  {
+   "text": "I'd",
+   "start": 4.4,
+   "end": 4.86
+  },
+  {
+   "text": "do",
+   "start": 4.86,
+   "end": 5.04
+  },
+  {
+   "text": "is",
+   "start": 5.04,
+   "end": 5.48
+  }
+ ],
+ [
+  {
+   "text": "turn",
+   "start": 5.48,
+   "end": 5.68
+  },
+  {
+   "text": "it",
+   "start": 5.68,
+   "end": 5.84
+  },
+  {
+   "text": "around.",
+   "start": 5.84,
+   "end": 6.18
+  }
+ ],
+ [
+  {
+   "text": "Because",
+   "start": 6.68,
+   "end": 6.94
+  },
+  {
+   "text": "the",
+   "start": 6.94,
+   "end": 7.16
+  },
+  {
+   "text": "front",
+   "start": 7.16,
+   "end": 7.4
+  }
+ ],
+ [
+  {
+   "text": "of",
+   "start": 7.4,
+   "end": 7.6
+  },
+  {
+   "text": "the",
+   "start": 7.6,
+   "end": 7.74
+  },
+  {
+   "text": "box",
+   "start": 7.74,
+   "end": 8.0
+  }
+ ],
+ [
+  {
+   "text": "tells",
+   "start": 8.0,
+   "end": 8.4
+  },
+  {
+   "text": "me",
+   "start": 8.4,
+   "end": 8.66
+  },
+  {
+   "text": "what",
+   "start": 8.66,
+   "end": 8.88
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 8.88,
+   "end": 9.2
+  },
+  {
+   "text": "brand",
+   "start": 9.2,
+   "end": 9.5
+  },
+  {
+   "text": "wants",
+   "start": 9.5,
+   "end": 9.9
+  }
+ ],
+ [
+  {
+   "text": "me",
+   "start": 9.9,
+   "end": 10.22
+  },
+  {
+   "text": "to",
+   "start": 10.22,
+   "end": 10.42
+  },
+  {
+   "text": "notice,",
+   "start": 10.42,
+   "end": 10.8
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 11.34,
+   "end": 11.48
+  },
+  {
+   "text": "nutrition",
+   "start": 11.48,
+   "end": 11.88
+  },
+  {
+   "text": "panel",
+   "start": 11.88,
+   "end": 12.24
+  }
+ ],
+ [
+  {
+   "text": "tells",
+   "start": 12.24,
+   "end": 12.68
+  },
+  {
+   "text": "me",
+   "start": 12.68,
+   "end": 12.88
+  },
+  {
+   "text": "what",
+   "start": 12.88,
+   "end": 13.08
+  }
+ ],
+ [
+  {
+   "text": "I",
+   "start": 13.08,
+   "end": 13.38
+  },
+  {
+   "text": "need",
+   "start": 13.38,
+   "end": 13.66
+  },
+  {
+   "text": "to",
+   "start": 13.66,
+   "end": 13.86
+  }
+ ],
+ [
+  {
+   "text": "compare.",
+   "start": 13.86,
+   "end": 14.24
+  }
+ ],
+ [
+  {
+   "text": "That's",
+   "start": 14.98,
+   "end": 15.38
+  },
+  {
+   "text": "something",
+   "start": 15.38,
+   "end": 15.86
+  },
+  {
+   "text": "my",
+   "start": 15.86,
+   "end": 16.24
+  }
+ ],
+ [
+  {
+   "text": "weight",
+   "start": 16.24,
+   "end": 16.44
+  },
+  {
+   "text": "loss",
+   "start": 16.44,
+   "end": 16.66
+  },
+  {
+   "text": "journey",
+   "start": 16.66,
+   "end": 16.92
+  }
+ ],
+ [
+  {
+   "text": "has",
+   "start": 16.92,
+   "end": 17.22
+  },
+  {
+   "text": "made",
+   "start": 17.22,
+   "end": 17.52
+  },
+  {
+   "text": "me",
+   "start": 17.52,
+   "end": 17.84
+  }
+ ],
+ [
+  {
+   "text": "appreciate.",
+   "start": 17.84,
+   "end": 18.44
+  }
+ ],
+ [
+  {
+   "text": "A",
+   "start": 18.96,
+   "end": 19.22
+  },
+  {
+   "text": "food's",
+   "start": 19.22,
+   "end": 20.12
+  },
+  {
+   "text": "reputation",
+   "start": 20.12,
+   "end": 20.12
+  }
+ ],
+ [
+  {
+   "text": "can",
+   "start": 20.12,
+   "end": 20.56
+  },
+  {
+   "text": "influence",
+   "start": 20.56,
+   "end": 21.1
+  },
+  {
+   "text": "how",
+   "start": 21.1,
+   "end": 21.52
+  }
+ ],
+ [
+  {
+   "text": "much",
+   "start": 21.52,
+   "end": 21.76
+  },
+  {
+   "text": "permission",
+   "start": 21.76,
+   "end": 22.26
+  },
+  {
+   "text": "we",
+   "start": 22.26,
+   "end": 22.64
+  }
+ ],
+ [
+  {
+   "text": "give",
+   "start": 22.64,
+   "end": 22.92
+  },
+  {
+   "text": "ourselves",
+   "start": 22.92,
+   "end": 23.6
+  },
+  {
+   "text": "to",
+   "start": 23.6,
+   "end": 24.24
+  }
+ ],
+ [
+  {
+   "text": "eat",
+   "start": 24.24,
+   "end": 24.42
+  },
+  {
+   "text": "it.",
+   "start": 24.42,
+   "end": 24.92
+  }
+ ],
+ [
+  {
+   "text": "Sugar-free",
+   "start": 24.92,
+   "end": 25.98
+  },
+  {
+   "text": "mithai",
+   "start": 25.98,
+   "end": 26.44
+  },
+  {
+   "text": "can",
+   "start": 26.44,
+   "end": 26.8
+  }
+ ],
+ [
+  {
+   "text": "still",
+   "start": 26.8,
+   "end": 27.2
+  },
+  {
+   "text": "contain",
+   "start": 27.2,
+   "end": 27.82
+  },
+  {
+   "text": "substantial",
+   "start": 27.82,
+   "end": 28.88
+  }
+ ],
+ [
+  {
+   "text": "amounts",
+   "start": 28.88,
+   "end": 29.5
+  },
+  {
+   "text": "of",
+   "start": 29.5,
+   "end": 29.9
+  },
+  {
+   "text": "nuts",
+   "start": 29.9,
+   "end": 30.22
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 30.22,
+   "end": 30.8
+  },
+  {
+   "text": "fat.",
+   "start": 30.8,
+   "end": 31.24
+  }
+ ],
+ [
+  {
+   "text": "Fat",
+   "start": 31.76,
+   "end": 32.2
+  },
+  {
+   "text": "provides",
+   "start": 32.2,
+   "end": 32.84
+  },
+  {
+   "text": "approximately",
+   "start": 32.84,
+   "end": 33.58
+  }
+ ],
+ [
+  {
+   "text": "9",
+   "start": 33.58,
+   "end": 34.04
+  },
+  {
+   "text": "calories",
+   "start": 34.04,
+   "end": 34.54
+  },
+  {
+   "text": "per",
+   "start": 34.54,
+   "end": 35.14
+  }
+ ],
+ [
+  {
+   "text": "gram.",
+   "start": 35.14,
+   "end": 35.54
+  }
+ ],
+ [
+  {
+   "text": "So",
+   "start": 36.3,
+   "end": 36.36
+  },
+  {
+   "text": "I'd",
+   "start": 36.36,
+   "end": 36.64
+  },
+  {
+   "text": "compare",
+   "start": 36.64,
+   "end": 37.14
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 37.14,
+   "end": 37.48
+  },
+  {
+   "text": "calories",
+   "start": 37.48,
+   "end": 38.0
+  },
+  {
+   "text": "per",
+   "start": 38.0,
+   "end": 38.48
+  }
+ ],
+ [
+  {
+   "text": "100",
+   "start": 38.48,
+   "end": 39.0
+  },
+  {
+   "text": "grams,",
+   "start": 39.0,
+   "end": 39.4
+  }
+ ],
+ [
+  {
+   "text": "then",
+   "start": 39.96,
+   "end": 40.14
+  },
+  {
+   "text": "calculate",
+   "start": 40.14,
+   "end": 40.68
+  },
+  {
+   "text": "my",
+   "start": 40.68,
+   "end": 40.98
+  }
+ ],
+ [
+  {
+   "text": "actual",
+   "start": 40.98,
+   "end": 41.6
+  },
+  {
+   "text": "portion.",
+   "start": 41.6,
+   "end": 42.12
+  }
+ ],
+ [
+  {
+   "text": "For",
+   "start": 42.9,
+   "end": 43.0
+  },
+  {
+   "text": "example,",
+   "start": 43.0,
+   "end": 43.54
+  }
+ ],
+ [
+  {
+   "text": "30",
+   "start": 44.18,
+   "end": 44.44
+  },
+  {
+   "text": "grams",
+   "start": 44.44,
+   "end": 44.82
+  },
+  {
+   "text": "of",
+   "start": 44.82,
+   "end": 45.14
+  }
+ ],
+ [
+  {
+   "text": "a",
+   "start": 45.14,
+   "end": 45.38
+  },
+  {
+   "text": "sweet",
+   "start": 45.38,
+   "end": 45.64
+  },
+  {
+   "text": "labeled",
+   "start": 45.64,
+   "end": 46.14
+  }
+ ],
+ [
+  {
+   "text": "400",
+   "start": 46.14,
+   "end": 47.16
+  },
+  {
+   "text": "calories",
+   "start": 47.16,
+   "end": 47.9
+  },
+  {
+   "text": "per",
+   "start": 47.9,
+   "end": 48.36
+  }
+ ],
+ [
+  {
+   "text": "100",
+   "start": 48.36,
+   "end": 48.8
+  },
+  {
+   "text": "grams",
+   "start": 48.8,
+   "end": 49.18
+  },
+  {
+   "text": "provides",
+   "start": 49.18,
+   "end": 49.72
+  }
+ ],
+ [
+  {
+   "text": "120",
+   "start": 49.72,
+   "end": 50.66
+  },
+  {
+   "text": "calories.",
+   "start": 50.66,
+   "end": 51.28
+  }
+ ],
+ [
+  {
+   "text": "Those",
+   "start": 51.28,
+   "end": 52.16
+  },
+  {
+   "text": "are",
+   "start": 52.16,
+   "end": 52.56
+  },
+  {
+   "text": "illustrative",
+   "start": 52.56,
+   "end": 53.12
+  }
+ ],
+ [
+  {
+   "text": "numbers,",
+   "start": 53.12,
+   "end": 53.64
+  }
+ ],
+ [
+  {
+   "text": "you'd",
+   "start": 53.92,
+   "end": 54.12
+  },
+  {
+   "text": "use",
+   "start": 54.12,
+   "end": 54.48
+  },
+  {
+   "text": "your",
+   "start": 54.48,
+   "end": 54.76
+  }
+ ],
+ [
+  {
+   "text": "product",
+   "start": 54.76,
+   "end": 55.1
+  },
+  {
+   "text": "numbers.",
+   "start": 55.1,
+   "end": 55.66
+  }
+ ],
+ [
+  {
+   "text": "Then",
+   "start": 56.62,
+   "end": 57.02
+  },
+  {
+   "text": "choose",
+   "start": 57.02,
+   "end": 57.56
+  },
+  {
+   "text": "the",
+   "start": 57.56,
+   "end": 58.2
+  }
+ ],
+ [
+  {
+   "text": "sweet",
+   "start": 58.2,
+   "end": 58.4
+  },
+  {
+   "text": "you",
+   "start": 58.4,
+   "end": 58.72
+  },
+  {
+   "text": "actually",
+   "start": 58.72,
+   "end": 59.16
+  }
+ ],
+ [
+  {
+   "text": "enjoy",
+   "start": 59.16,
+   "end": 59.58
+  },
+  {
+   "text": "and",
+   "start": 59.58,
+   "end": 60.12
+  },
+  {
+   "text": "serve",
+   "start": 60.12,
+   "end": 60.56
+  }
+ ],
+ [
+  {
+   "text": "a",
+   "start": 60.56,
+   "end": 60.96
+  },
+  {
+   "text": "portion",
+   "start": 60.96,
+   "end": 61.26
+  },
+  {
+   "text": "of",
+   "start": 61.26,
+   "end": 61.48
+  }
+ ],
+ [
+  {
+   "text": "it.",
+   "start": 61.48,
+   "end": 61.76
+  }
+ ],
+ [
+  {
+   "text": "I",
+   "start": 62.54,
+   "end": 62.6
+  },
+  {
+   "text": "don't",
+   "start": 62.6,
+   "end": 63.08
+  },
+  {
+   "text": "want",
+   "start": 63.08,
+   "end": 63.4
+  }
+ ],
+ [
+  {
+   "text": "your",
+   "start": 63.4,
+   "end": 63.86
+  },
+  {
+   "text": "Diwali",
+   "start": 63.86,
+   "end": 64.26
+  },
+  {
+   "text": "decision",
+   "start": 64.26,
+   "end": 64.76
+  }
+ ],
+ [
+  {
+   "text": "to",
+   "start": 64.76,
+   "end": 65.1
+  },
+  {
+   "text": "depend",
+   "start": 65.1,
+   "end": 65.5
+  },
+  {
+   "text": "entirely",
+   "start": 65.5,
+   "end": 66.28
+  }
+ ],
+ [
+  {
+   "text": "on",
+   "start": 66.28,
+   "end": 66.7
+  },
+  {
+   "text": "whether",
+   "start": 66.7,
+   "end": 67.04
+  },
+  {
+   "text": "the",
+   "start": 67.04,
+   "end": 67.68
+  }
+ ],
+ [
+  {
+   "text": "box",
+   "start": 67.68,
+   "end": 68.04
+  },
+  {
+   "text": "sounds",
+   "start": 68.04,
+   "end": 68.64
+  },
+  {
+   "text": "healthy",
+   "start": 68.64,
+   "end": 69.04
+  }
+ ],
+ [
+  {
+   "text": "or",
+   "start": 69.04,
+   "end": 69.22
+  },
+  {
+   "text": "not.",
+   "start": 69.22,
+   "end": 69.54
+  }
+ ],
+ [
+  {
+   "text": "Comment",
+   "start": 70.06,
+   "end": 70.32
+  },
+  {
+   "text": "GUIDE",
+   "start": 70.32,
+   "end": 70.72
+  },
+  {
+   "text": "and",
+   "start": 70.72,
+   "end": 71.24
+  }
+ ],
+ [
+  {
+   "text": "I'll",
+   "start": 71.24,
+   "end": 71.66
+  },
+  {
+   "text": "send",
+   "start": 71.66,
+   "end": 71.8
+  },
+  {
+   "text": "you",
+   "start": 71.8,
+   "end": 71.98
+  }
+ ],
+ [
+  {
+   "text": "my",
+   "start": 71.98,
+   "end": 72.2
+  },
+  {
+   "text": "free",
+   "start": 72.2,
+   "end": 72.6
+  },
+  {
+   "text": "fat",
+   "start": 72.6,
+   "end": 72.92
+  }
+ ],
+ [
+  {
+   "text": "loss",
+   "start": 72.92,
+   "end": 73.16
+  },
+  {
+   "text": "guide.",
+   "start": 73.16,
+   "end": 73.5
+  }
+ ]
+]

@@ -22,12 +22,18 @@ import {PhoneReel} from './v7b/Reel';
 import {PHONE_FRAMES} from './v7b/config';
 import {V8Reel} from './v8/Reel';
 import {V8_FRAMES} from './v8/config';
+import {V9Reel} from './v9/Reel';
+import {V9_FRAMES} from './v9/config';
+import {V10Reel} from './v10/Reel';
+import {V10_FRAMES} from './v10/config';
 import {SLEEP_FRAMES} from './sleep/config';
 import {DURATION_FRAMES, FPS, HEIGHT, WIDTH} from './theme';
 
 export const Root: React.FC = () => {
   return (
     <>
+    <Composition id="MithaiBox" component={V10Reel} durationInFrames={V10_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="CheckIn" component={V9Reel} durationInFrames={V9_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="TravelReel" component={V8Reel} durationInFrames={V8_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="SnackPhone" component={PhoneReel} durationInFrames={PHONE_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="SnackReel" component={V7Reel} durationInFrames={V7_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
