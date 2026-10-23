@@ -13,11 +13,11 @@ export const V14_FRAMES = TM14.frames;
 
 export const C = {
   hook: {start: 1.02, end: 10.4}, // a desk day: one workout, many seated hours
-  deskBroll: {start: 2.36, end: 4.2}, // B-roll: her at the desk
+  deskBroll: {start: 1.02, end: 5.2}, // B-roll opener: her at the desk, the sitting clock racing
   trial: {start: 10.4, end: 21.0}, // 24 adults, breaks every 30 min vs seated
   glucose: {start: 21.0, end: 29.9}, // post-meal glucose curve, -39% incremental response
-  not: {start: 29.9, end: 37.0}, // what -39% is NOT
-  promise: {start: 37.0, end: 45.9}, // results vary; but a pattern to try
+  not: {start: 29.9, end: 37.9}, // what -39% is NOT (true / false swipe cards)
+  promise: {start: 37.9, end: 45.9}, // results vary; but a pattern to try
   reminder: {start: 45.9, end: 53.4}, // set a reminder: a few minutes of light movement
   walk: {start: 53.4, end: 56.7}, // B-roll: walking (indoor route / water station)
   meeting: {start: 56.7, end: 60.8}, // meeting blocks a break -> do it after
