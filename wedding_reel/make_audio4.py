@@ -1,8 +1,8 @@
-"""Cuts the chosen song to the reel window (music only, no sound effects), with a pre-drop dip and a reverb-tail ending. Usage: python3 make_audio2.py SONG.wav OUT.wav"""
+"""Cuts the chosen song to the reel window (music only, no sound effects), with a pre-drop dip and a reverb-tail ending. Usage: python3 make_audio4.py SONG.wav OUT.wav"""
 import sys, wave
 import numpy as np
 from scipy import signal
-from plan2 import *
+from plan4 import *
 import sfx
 from sfx import SR
 
@@ -17,8 +17,8 @@ dip = np.ones(N); i0, i1 = int((tb(DROP_BEAT) - BEAT * .9) * SR), int(tb(DROP_BE
 dip[i0:i1] = np.linspace(1, .45, i1 - i0)
 music *= dip[:, None]
 
-# ending: low-pass sweep + reverb tail over the last 3 beats so the song resolves instead of being chopped
-e0 = tb(N_BEATS - 3); ei = int(e0 * SR)
+# ending: low-pass sweep + reverb tail over the last ~2 s so the song resolves instead of being chopped
+e0 = DUR - 1.9; ei = int(e0 * SR)
 tail = music[ei:].copy()
 cut = np.linspace(9000, 500, len(tail)); out = np.zeros_like(tail); blk = 2048
 for i in range(0, len(tail), blk):
