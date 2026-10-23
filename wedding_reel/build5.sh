@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Rebuilds the v5 reel (1080x1920, 60 fps).
+# Rebuilds the v6 reel (1080x1920, 60 fps).
 # Usage: ./build5.sh RAW_DIR SONG.mp3
 #   RAW_DIR holds the Drive clips renamed c1.mp4 ... c8.mp4 (Drive-listing order); SONG.mp3 is "Where's The Party Tonight".
 set -euo pipefail
@@ -12,4 +12,4 @@ for i in 0 1 2 3; do echo "file '$W/c$((i*Q)).mp4'"; done > "$W/list.txt"
 ffmpeg -v error -y -f concat -safe 0 -i "$W/list.txt" -c copy "$W/v.mp4"
 mkdir -p output
 ffmpeg -y -i "$W/v.mp4" -i "$W/mix.wav" -filter_complex "[1:a]loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=out:st=30.05:d=0.35[a]" \
-  -map 0:v -map "[a]" -c:v libx264 -preset slow -crf 19 -maxrate 22M -bufsize 44M -pix_fmt yuv420p -profile:v high -c:a aac -b:a 192k -ar 48000 -movflags +faststart output/shaadi_mangalam_reel_v5.mp4
+  -map 0:v -map "[a]" -c:v libx264 -preset slow -crf 19 -maxrate 22M -bufsize 44M -pix_fmt yuv420p -profile:v high -c:a aac -b:a 192k -ar 48000 -movflags +faststart output/shaadi_mangalam_reel_v6.mp4

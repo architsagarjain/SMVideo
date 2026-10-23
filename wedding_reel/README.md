@@ -1,12 +1,12 @@
 # Shaadi Mangalam wedding reel
 
-`output/shaadi_mangalam_reel_v5.mp4`: 1080x1920 (9:16), 60 fps, 30.4 s, H.264 (about 16 Mbps) + AAC, -14 LUFS.
+`output/shaadi_mangalam_reel_v6.mp4`: 1080x1920 (9:16), 60 fps, 30.4 s, H.264 (about 16 Mbps) + AAC, -14 LUFS.
 
 ## What's in it
 - **Calm pacing:** 14 shots, each at least 4 beats (about 1.75 s) and most about 1.75 to 2.6 s, instead of the sub-second cuts in v4. Every cut lands on a beat of the song's 137.42 BPM grid.
-- **Story order:** hero shot with the title, the groom waits, the bride arrives, the drop (7.0 s), the rituals, the celebration, the romance, then the supplied end cut (`assets/end_cut.mp4`, used untouched).
+- **Story order:** hero shot, the groom waits, the bride arrives, the drop (7.0 s), the rituals, the celebration, the romance, then the supplied end cut (`assets/end_cut.mp4`, used untouched).
 - **Clean effects:** a small, consistent transition set (whip-pan, zoom-through, soft dissolve, light leak, flash dip) and one hit on the drop. No strip cascade, split screen, spin, heart, iris, glitch, per-beat zoom or shake.
-- **Title:** "Where Beautiful / Stories Begin." in Poppins Medium, ivory white, fading up line by line, then "SHAADI MANGALAM". It sits on a soft scrim in the lower third, clear of faces, and fades out before the first cut.
+- **Captions:** small Poppins Medium text in one fixed maroon box at the top (like the POV reference), present from the first frame until just before the end cut. The box stays put and only the words change at each section: "Where Beautiful Stories Begin." (intro), "Meet someone who feels right." (she arrives), "Celebrate with the people you love." (rituals and dance), "Find your forever on Shaadi Mangalam." (romance). The text is centred in the box both ways (measured on the encoded video: left and right gaps within 2 px, gaps above and below the capitals within 1 px). Edit `CAPTIONS` and `BOX` in `render5.py` to change wording or position.
 - **Music:** "Where's The Party Tonight", trimmed from the quiet pad into the drop. Music only, no sound effects.
 - **Look:** per-shot exposure matching, a split-toned cinematic grade, soft warm glow, fine film grain, sharpening of the 720p footage. Each source window is checked so no shot straddles a different scene (`check_plan.py`).
 

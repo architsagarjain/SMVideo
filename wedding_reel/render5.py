@@ -187,33 +187,36 @@ def grade4(img, n):
     return img
 
 
-# ------------------------------------------------------------------ title
+# ------------------------------------------------------------------ captions
+CAPTIONS = [("Where Beautiful Stories Begin.", 0, 16), ("Meet someone who feels right.", 16, 36),
+            ("Celebrate with the people you love.", 36, 52), ("Find your forever on Shaadi Mangalam.", 52, 62)]   # (text, from beat, to beat)
+BOX = (110, 250, 970, 350)                                      # fixed maroon caption box, like the POV reference
+MAROON = np.array([91, 10, 31], np.float32)
 class Title:
-    """Intro title in a clean sans-serif: two lines that fade up one after the other, then the brand line, on a soft scrim."""
-    LINES = ("Where Beautiful", "Stories Begin.")
+    """Four small Poppins captions in one fixed maroon box at the top. The box stays; only the words change."""
     def __init__(self):
-        fl, fb = font(F_POP, 108), font(F_POP, 30)
-        self.lines = []
-        for i, txt in enumerate(self.LINES):
-            l, t, r, b = fl.getbbox(txt); im = Image.new("L", (r - l + 40, b - t + 40), 0); ImageDraw.Draw(im).text((20 - l, 20 - t), txt, font=fl, fill=255)
-            m = np.asarray(im, np.float32) / 255; self.lines.append((m, int(W / 2 - m.shape[1] / 2), 1290 + i * 132 + t - 20))
-        gm = Image.new("L", (W, H), 0); gd = ImageDraw.Draw(gm); txt = "SHAADI MANGALAM"; wb = [gd.textlength(c, font=fb) for c in txt]
-        x = W / 2 - (sum(wb) + 14 * (len(txt) - 1)) / 2
-        for c, w in zip(txt, wb): gd.text((x, 1650), c, font=fb, fill=255); x += w + 14
-        gd.line([(480, 1608), (600, 1608)], fill=255, width=2); self.brand = np.asarray(gm, np.float32) / 255
-        self.scrim = (np.clip((yy[:, :1] - 1100) / 820, 0, 1) ** 1.5).astype(np.float32)
+        f = font(F_POP, 36); self.caps = []
+        for txt, b0, b1 in CAPTIONS:
+            l, t, r, b = f.getbbox(txt); im = Image.new("L", (r - l + 20, b - t + 20), 0); ImageDraw.Draw(im).text((10 - l, 10 - t), txt, font=f, fill=255)
+            m = np.asarray(im, np.float32) / 255; cy = (BOX[1] + BOX[3]) / 2
+            ht, hb = f.getbbox("H")[1], f.getbbox("H")[3]                  # cap-height band: top of capitals .. baseline (descenders ignored)
+            cap_row = (10 - t) + (ht + hb) / 2                              # row of the cap-band centre inside the mask
+            self.caps.append((m, int(round((BOX[0] + BOX[2]) / 2 - m.shape[1] / 2)), int(round(cy - cap_row)), tb(b0), tb(b1)))
     def apply(self, img, t):
-        t0, tE = tb(2), tb(7.4)
-        if not (t0 - .02 <= t < tE): return img
-        fade = 1 - smooth((t - (tE - .45)) / .45); ivory = np.zeros((H, W), np.float32)
-        for i, (m, x0, y0) in enumerate(self.lines):
-            a = ease_out((t - t0 - i * .28) / .7)
+        tE = tb(END_BEAT) - .4
+        if t >= tE + .3: return img
+        box = smooth((t - .1) / .4) * (1 - smooth((t - tE) / .3)); x0, y0, x1, y1 = BOX
+        reg = img[y0 - 14:y1 + 14, x0 - 14:x1 + 14]; sh = np.zeros(reg.shape[:2], np.float32); sh[14 + 6:-14 + 6, 14:-14] = 1
+        reg *= 1 - .22 * cv2.GaussianBlur(sh, (0, 0), 9)[..., None] * box                               # faint lift off the footage
+        img[y0:y1, x0:x1] = img[y0:y1, x0:x1] * (1 - box) + MAROON * box
+        for i, (m, x, y, ta, tn) in enumerate(self.caps):
+            last = i == len(self.caps) - 1
+            a = smooth((t - ta) / .3) * (1.0 if last else 1 - smooth((t - (tn - .2)) / .2)) * box
+            if i == 0: a = min(1.0, smooth((t - .25) / .4)) * (1 - smooth((t - (tn - .2)) / .2)) * box
             if a <= 0: continue
-            y = y0 + int((1 - a) * 26); h, w = m.shape; ivory[y:y + h, x0:x0 + w] = np.maximum(ivory[y:y + h, x0:x0 + w], m * a)
-        gold = self.brand * ease_out((t - tb(3.8)) / .6)
-        sc = self.scrim * smooth((t - t0 + .3) / .6) * fade * .5; img = img * (1 - sc[..., None])
-        both = np.maximum(ivory, gold) * fade; sh = np.roll(cv2.GaussianBlur(both, (0, 0), 9), 5, 0); img = img * (1 - .5 * sh[..., None])
-        ia = (ivory * fade)[..., None]; img = img * (1 - ia) + IVORY * ia; ga = (gold * fade)[..., None]; return img * (1 - ga) + GOLD * ga
+            yy_ = y + int((1 - smooth((t - ta) / .3)) * 10) if i else y; h, w = m.shape
+            img[yy_:yy_ + h, x:x + w] = img[yy_:yy_ + h, x:x + w] * (1 - m[..., None] * a) + IVORY * (m[..., None] * a)
+        return img
 
 
 # ------------------------------------------------------------------ the reel
