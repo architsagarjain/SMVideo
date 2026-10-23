@@ -65,14 +65,15 @@ const HookWatch: React.FC = () => {
   const late = p > 0.8;
   return (
     <AbsoluteFill>
-      <Pop x={540} y={300} at={1.25}>
-        <Watch scale={0.86}>
+      {/* sits in the free space to her left, clear of her head */}
+      <Pop x={195} y={430} at={1.25}>
+        <Watch scale={0.66}>
           <Ring p={p * 0.9} color={late ? RED : HL}>
-            <div style={{fontSize: 22, fontWeight: 800, letterSpacing: 4, color: '#9A9A9F'}}>SITTING</div>
-            <div style={{fontSize: 74, fontWeight: 800, fontVariantNumeric: 'tabular-nums', lineHeight: 1.05}}>
+            <div style={{fontSize: 21, fontWeight: 800, letterSpacing: 3, color: '#9A9A9F'}}>SITTING</div>
+            <div style={{fontSize: 80, fontWeight: 800, fontVariantNumeric: 'tabular-nums', lineHeight: 1.05}}>
               {Math.floor(mins / 60)}:{String(mins % 60).padStart(2, '0')}
             </div>
-            <div style={{fontSize: 22, fontWeight: 700, color: '#9A9A9F'}}>Since 9 AM</div>
+            <div style={{fontSize: 21, fontWeight: 700, color: '#9A9A9F'}}>Since 9 AM</div>
           </Ring>
         </Watch>
       </Pop>
