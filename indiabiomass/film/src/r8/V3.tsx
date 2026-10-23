@@ -73,16 +73,71 @@ const Board: React.FC = () => {
 const Question: React.FC = () => {
   const f = useCurrentFrame();
   const chips = [['YOUR RAW MATERIAL', W('raw', 0, 6)], ['BUYERS NEAR YOU', W('buying')]] as const;
+  // the two products side by side; they shrink back once "it depends" starts so the answer has room
+  const card = (src: string, label: string, x: number, k: number) => {
+    const t = lerp(f, [T.q + 4 + k * 5, T.q + 18 + k * 5], [0, 1], E.out);
+    return (
+      <div style={{ position: 'absolute', left: x, top: 560, width: 420, height: 420, opacity: t, transform: `translateY(${(1 - t) * 50}px)` }}>
+        <div style={{ position: 'absolute', inset: 0, borderRadius: 28, overflow: 'hidden', border: '3px solid rgba(232,176,75,0.6)', boxShadow: '0 30px 70px rgba(0,0,0,0.5)' }}>
+          <Media src={src} from={T.q} to={T.brand} a={[1.25, 0, 0]} b={[1.08, 0, 0]} grade="golden" />
+          <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(3,24,15,0) 55%, rgba(3,24,15,0.85) 100%)' }} />
+        </div>
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 22, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 46, color: '#fff', letterSpacing: '-0.01em' }}>{label}</div>
+      </div>
+    );
+  };
+  const shrink = lerp(f, [T.dep - 6, T.dep + 12], [0, 1], E.inOut);
   return (
     <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 40%, #0A4A31 0%, ${C.forest} 45%, #03180F 100%)` }}>
-      <Headline text={'WHICH ONE\nSHOULD YOU MAKE?'} at={T.q} top={420} size={92} />
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 720, textAlign: 'center', fontFamily: F.label, fontWeight: 600, fontSize: 28, letterSpacing: '0.2em', color: C.harvest, opacity: lerp(f, [T.dep, T.dep + 10], [0, 1]) }}>IT DEPENDS ON</div>
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 800, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 26 }}>
+      <Headline text={'WHICH ONE\nSHOULD YOU MAKE?'} at={T.q} top={250} size={92} />
+      <AbsoluteFill style={{ transform: `translateY(${-40 * shrink}px) scale(${1 - 0.2 * shrink})`, transformOrigin: '50% 560px' }}>
+        {card('V3_1.jpg', 'PELLET', 90, 0)}
+        {card('V3_2.jpg', 'BRIQUETTE', 570, 1)}
+        <div style={{ position: 'absolute', left: 540 - 56, top: 714, width: 112, height: 112, borderRadius: 56, background: C.harvest, display: 'grid', placeItems: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 64, color: C.ink, boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+          transform: `scale(${lerp(f, [T.q + 14, T.q + 24], [0, 1], E.back)})` }}>?</div>
+      </AbsoluteFill>
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 960, textAlign: 'center', fontFamily: F.label, fontWeight: 600, fontSize: 30, letterSpacing: '0.2em', color: C.harvest, opacity: lerp(f, [T.dep, T.dep + 10], [0, 1]) }}>IT DEPENDS ON</div>
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 1020, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22 }}>
         {chips.map(([txt, at]) => {
           const t = lerp(f, [at - 3, at + 10], [0, 1], E.back);
-          return <div key={txt} style={{ opacity: Math.min(1, t), transform: `scale(${0.8 + 0.2 * t})`, fontFamily: F.display, fontWeight: 800, fontSize: 52, color: C.ink, background: C.harvest, borderRadius: 999, padding: '20px 44px' }}>{txt}</div>;
+          return <div key={txt} style={{ opacity: Math.min(1, t), transform: `scale(${0.8 + 0.2 * t})`, fontFamily: F.display, fontWeight: 800, fontSize: 52, color: C.ink, background: C.harvest, borderRadius: 999, padding: '18px 44px' }}>{txt}</div>;
         })}
       </div>
+    </AbsoluteFill>
+  );
+};
+
+/** Closing line: the three groups as photo cards that link up to one point. */
+const Together: React.FC = () => {
+  const f = useCurrentFrame();
+  const roles = [
+    { k: 'PELLET\nMAKERS', src: 'V3_1.jpg', at: T.brand },
+    { k: 'BRIQUETTE\nMAKERS', src: 'V3_5.jpg', at: W('briquette', 0, 7) },
+    { k: 'THE\nBUYERS', src: 'V3_4.mp4', at: W('buyers', 0, 7) },
+  ];
+  const join = lerp(f, [W('IndiaBiomass', 0, 7) - 6, W('IndiaBiomass', 0, 7) + 12], [0, 1], E.inOut);
+  const xs = [60, 390, 720], top = 560, w = 300, h = 430, hub = 1130;
+  return (
+    <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 45%, #0A4A31 0%, ${C.forest} 40%, #03180F 100%)` }}>
+      <Headline text={'ONE PLACE\nFOR ALL OF THEM'} at={T.brand + 2} top={250} size={84} />
+      {roles.map((r, i) => {
+        const t = lerp(f, [r.at - 3, r.at + 11], [0, 1], E.back);
+        return (
+          <div key={r.k} style={{ position: 'absolute', left: xs[i], top, width: w, height: h, borderRadius: 26, overflow: 'hidden', border: `3px solid ${C.harvest}`, boxShadow: '0 30px 70px rgba(0,0,0,0.5)', opacity: Math.min(1, t), transform: `translateY(${(1 - Math.min(1, t)) * 60}px) scale(${0.9 + 0.1 * t})` }}>
+            <Media src={r.src} from={r.at} to={END} a={[1.3, 0, 0]} b={[1.1, 0, 0]} grade="golden" />
+            <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(3,24,15,0) 45%, rgba(3,24,15,0.9) 100%)' }} />
+            <div style={{ position: 'absolute', left: 0, right: 0, bottom: 24, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 40, lineHeight: 1.02, color: '#fff', whiteSpace: 'pre-line' }}>{r.k}</div>
+          </div>
+        );
+      })}
+      <svg width={1080} height={1920} style={{ position: 'absolute', inset: 0 }}>
+        {xs.map((x, i) => {
+          const x0 = x + w / 2, y0 = top + h, x1 = 540, y1 = hub;
+          return <line key={i} x1={x0} y1={y0} x2={x0 + (x1 - x0) * join} y2={y0 + (y1 - y0) * join} stroke={C.harvest} strokeWidth={6} strokeLinecap="round" opacity={join > 0 ? 1 : 0} />;
+        })}
+        <circle cx={540} cy={hub} r={20 * lerp(f, [W('IndiaBiomass', 0, 7) + 10, W('IndiaBiomass', 0, 7) + 16], [0, 1], E.back)} fill={C.harvest} stroke="#fff" strokeWidth={4} />
+      </svg>
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 1190, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 54, color: C.harvest, letterSpacing: '-0.01em', opacity: lerp(f, [W('together', 0, 7) - 6, W('together', 0, 7) + 4], [0, 1]) }}>BRINGING THEM TOGETHER</div>
     </AbsoluteFill>
   );
 };
@@ -99,10 +154,7 @@ export const V3: React.FC = () => {
         <Frame src="V3_3.jpg" from={T.kilns - 4} to={T.cost} x={600} y={620} w={400} h={260} at={T.kilns - 4} />
       </Span>
       <Span from={T.q} to={T.brand}><Question /></Span>
-      <Span from={T.brand} to={END}>
-        <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 45%, #0A4A31 0%, ${C.forest} 40%, #03180F 100%)` }} />
-        <Headline text={'PELLET MAKERS.\nBRIQUETTE MAKERS.\nTHE BUYERS FOR BOTH.'} at={T.brand + 4} top={300} size={66} />
-      </Span>
+      <Span from={T.brand} to={END}><Together /></Span>
     </Shell8>
   );
 };
