@@ -1,8 +1,8 @@
-"""Cuts the chosen song to the reel window (music only, no sound effects), with a pre-drop dip and a reverb-tail ending. Usage: python3 make_audio4.py SONG.wav OUT.wav"""
+"""Cuts the chosen song to the reel window (music only, no sound effects), with a pre-drop dip and a reverb-tail ending. Usage: python3 make_audio5.py SONG.wav OUT.wav"""
 import sys, wave
 import numpy as np
 from scipy import signal
-from plan4 import *
+from plan5 import *
 import sfx
 from sfx import SR
 

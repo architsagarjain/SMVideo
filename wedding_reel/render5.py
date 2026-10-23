@@ -1,16 +1,16 @@
-"""Renderer v4 (60 fps, 1080x1920). Story-ordered, velocity-ramped, beat-locked wedding reel.
-Usage: python3 render4.py RAW_DIR OUT.mp4 START END                (render frames START..END-1)
-       python3 render4.py RAW_DIR - --stills t1,t2,... DIR         (write still frames)"""
+"""Renderer v5 (60 fps, 1080x1920). Calm, clean, beat-locked wedding reel with a simple title.
+Usage: python3 render5.py RAW_DIR OUT.mp4 START END                (render frames START..END-1)
+       python3 render5.py RAW_DIR - --stills t1,t2,... DIR         (write still frames)"""
 import sys, os, math, subprocess
 import numpy as np, cv2
 from PIL import Image, ImageDraw, ImageFont
-from plan4 import *
+from plan5 import *
 import render_reel as rr
 from render_reel import (Clip, zoom_img, screen, hblur, mix, flash_overlay, smooth, ease_io, ease_out, clamp, kf,
                          whip, tr_zoomin, tr_spin, tr_flash, tr_iris, tr_diag, tr_lightleak, tr_softzoom, xx, yy)
 
 HERE = os.path.dirname(os.path.abspath(__file__)); FD = os.path.join(HERE, "..", "fonts")
-F_CINZEL, F_PINYON = os.path.join(FD, "Cinzel-Var.ttf"), os.path.join(FD, "PinyonScript-Regular.ttf")
+F_POP = os.path.join(FD, "Poppins-Medium.ttf")
 IVORY = np.array([255, 250, 240], np.float32); GOLD = np.array([236, 205, 140], np.float32)
 _fc = {}
 def font(p, s, wght=None):
@@ -111,6 +111,15 @@ class EndClip:
     def free(self): pass
 
 
+def whip(A, B, p, d):
+    """Whip-pan: both shots slide with directional motion blur (softer than the library version)."""
+    e = ease_io(p); de = (3 * (2 * p) ** 2 if p < .5 else 3 * (2 - 2 * p) ** 2) / 2; ax = 1 if d in "lr" else 0
+    k = min(150, .045 * (W if ax else H) * de)
+    if ax:
+        o = int(e * W); v = np.concatenate([A[:, o:], B[:, :o]], 1) if d == "l" else np.concatenate([B[:, W - o:], A[:, :W - o]], 1)
+    else:
+        o = int(e * H); v = np.concatenate([A[o:], B[:o]], 0) if d == "u" else np.concatenate([B[H - o:], A[:H - o]], 0)
+    return hblur(v, k, ax) * (1 + .05 * math.sin(math.pi * p))
 # ------------------------------------------------------------------ extra transitions / overlays
 def heart_mask(S, hh=H // 2, ww=W // 2, cy=.45):
     X = (np.arange(ww, dtype=np.float32)[None, :] * 2 - W / 2) / max(S, 1e-3); Y = -(np.arange(hh, dtype=np.float32)[:, None] * 2 - H * cy) / max(S, 1e-3)
@@ -137,26 +146,20 @@ def light_leak(img, t, t0, dur, seed=0):
 
 # ------------------------------------------------------------------ beat-driven camera / effects
 def beat_amp(k):
-    if k == DROP_BEAT: return .09, .20
-    if k >= END_BEAT - 4: return 0, .1
-    if k > DROP_BEAT: return (.035, .11) if k % 4 == 0 else (.012, .10)
-    return (.015, .12) if k % 4 == 0 else (0, .1)
+    return (.08, .20) if k == DROP_BEAT else (0, .1)
 def punch(t):
-    z = 1.0; k = int(t / BEAT)
-    for kk in (k - 1, k, k + 1):
-        dt = t - tb(kk)
-        if kk >= 0 and dt >= 0: a, dec = beat_amp(kk); z *= 1 + a * math.exp(-dt / dec)
-    return z
+    dt = t - tb(DROP_BEAT)
+    return 1 + .08 * math.exp(-dt / .20) if dt >= 0 else 1.0
 def shake(t):
     dx = dy = 0.0; k = int(t / BEAT)
     for kk in (k - 1, k):
         dt = t - tb(kk)
-        if kk < DROP_BEAT or kk >= END_BEAT - 4 or dt < 0: continue
-        A, dec = (22, .22) if kk == DROP_BEAT else ((5, .12) if kk % 4 == 0 else (0, .1)); e = A * math.exp(-dt / dec)
+        if kk != DROP_BEAT or dt < 0: continue
+        A, dec = 16, .20; e = A * math.exp(-dt / dec)
         dx += e * math.cos(kk * 2.399 + 60 * dt); dy += e * math.sin(kk * 2.399 + 47 * dt)
     return dx, dy
 def ca_amount(t):
-    dt = t - tb(DROP_BEAT); return 14 * math.exp(-dt / .28) if dt >= 0 else 0.0
+    dt = t - tb(DROP_BEAT); return 8 * math.exp(-dt / .25) if dt >= 0 else 0.0
 def chroma(img, px):
     if px < .7: return img
     out = img.copy()
@@ -180,56 +183,43 @@ def grade4(img, n):
     img = cv2.LUT(np.clip(img, 0, 255).astype(np.uint8), LUT4).astype(np.float32)
     small = cv2.resize(img, (W // 4, H // 4), interpolation=cv2.INTER_AREA); hi = np.clip(small - 185, 0, None) * 1.7        # warm halation
     glow = cv2.resize(cv2.GaussianBlur(hi, (0, 0), 10), (W, H)); img = screen(img, np.clip(glow * np.float32([1, .78, .62]), 0, 255) * .6)
-    ln = img.mean(2, keepdims=True) / 255; img = img * VIG + GRAIN[n % 8][..., None] * 4.6 * (.55 + .45 * (1 - ln))             # vignette + film grain
+    ln = img.mean(2, keepdims=True) / 255; img = img * VIG + GRAIN[n % 8][..., None] * 3.2 * (.55 + .45 * (1 - ln))             # vignette + film grain
     return img
 
 
 # ------------------------------------------------------------------ title
 class Title:
-    """Intro title: tracked Cinzel capitals, Pinyon Script line that writes on left to right, brand line, all on a soft scrim."""
-    CAPS = "WHERE BEAUTIFUL"
+    """Intro title in a clean sans-serif: two lines that fade up one after the other, then the brand line, on a soft scrim."""
+    LINES = ("Where Beautiful", "Stories Begin.")
     def __init__(self):
-        fc, fb, fs = font(F_CINZEL, 56, 500), font(F_CINZEL, 34, 600), font(F_PINYON, 190)
-        d0 = ImageDraw.Draw(Image.new("L", (10, 10))); tr = 16; ws = [d0.textlength(c, font=fc) for c in self.CAPS]
-        x = W / 2 - (sum(ws) + tr * (len(self.CAPS) - 1)) / 2; self.letters = []
-        for c, w in zip(self.CAPS, ws):
-            if c != " ":
-                l, t, r, b = fc.getbbox(c); im = Image.new("L", (r - l + 8, b - t + 8), 0); ImageDraw.Draw(im).text((4 - l, 4 - t), c, font=fc, fill=255)
-                self.letters.append((np.asarray(im, np.float32) / 255, int(x + l - 4), 1330 + t - 4, len(self.letters)))
-            x += w + tr
-        l, t, r, b = fs.getbbox("Stories Begin."); im = Image.new("L", (r - l + 60, b - t + 60), 0); ImageDraw.Draw(im).text((30 - l, 30 - t), "Stories Begin.", font=fs, fill=255)
-        self.script = np.asarray(im, np.float32) / 255; self.sx = int(W / 2 - self.script.shape[1] / 2); self.sy = 1400 + t - 30
-        gm = Image.new("L", (W, H), 0); gd = ImageDraw.Draw(gm); xb = 0; txt = "SHAADI MANGALAM"
-        wb = [gd.textlength(c, font=fb) for c in txt]; xb = W / 2 - (sum(wb) + 16 * (len(txt) - 1)) / 2
-        for c, w in zip(txt, wb): gd.text((xb, 1700), c, font=fb, fill=255); xb += w + 16
-        gd.line([(440, 1660), (640, 1660)], fill=255, width=2); self.brand = np.asarray(gm, np.float32) / 255
-        self.scrim = (np.clip((yy[:, :1] - 1050) / 870, 0, 1) ** 1.5).astype(np.float32)
+        fl, fb = font(F_POP, 108), font(F_POP, 30)
+        self.lines = []
+        for i, txt in enumerate(self.LINES):
+            l, t, r, b = fl.getbbox(txt); im = Image.new("L", (r - l + 40, b - t + 40), 0); ImageDraw.Draw(im).text((20 - l, 20 - t), txt, font=fl, fill=255)
+            m = np.asarray(im, np.float32) / 255; self.lines.append((m, int(W / 2 - m.shape[1] / 2), 1290 + i * 132 + t - 20))
+        gm = Image.new("L", (W, H), 0); gd = ImageDraw.Draw(gm); txt = "SHAADI MANGALAM"; wb = [gd.textlength(c, font=fb) for c in txt]
+        x = W / 2 - (sum(wb) + 14 * (len(txt) - 1)) / 2
+        for c, w in zip(txt, wb): gd.text((x, 1650), c, font=fb, fill=255); x += w + 14
+        gd.line([(480, 1608), (600, 1608)], fill=255, width=2); self.brand = np.asarray(gm, np.float32) / 255
+        self.scrim = (np.clip((yy[:, :1] - 1100) / 820, 0, 1) ** 1.5).astype(np.float32)
     def apply(self, img, t):
-        tA, tS, tB, tE = tb(4.5), tb(5.0), tb(6.0), tb(9)
-        if not (tA - .02 <= t < tE): return img
-        fade = 1 - smooth((t - (tE - .3)) / .3); ivory = np.zeros((H, W), np.float32); glint = np.zeros((H, W), np.float32)
-        for m, x0, y0, i in self.letters:
-            a = ease_out((t - tA - i * .04) / .3)
+        t0, tE = tb(2), tb(7.4)
+        if not (t0 - .02 <= t < tE): return img
+        fade = 1 - smooth((t - (tE - .45)) / .45); ivory = np.zeros((H, W), np.float32)
+        for i, (m, x0, y0) in enumerate(self.lines):
+            a = ease_out((t - t0 - i * .28) / .7)
             if a <= 0: continue
-            y0 += int((1 - a) * 16); h, w = m.shape; ivory[y0:y0 + h, x0:x0 + w] = np.maximum(ivory[y0:y0 + h, x0:x0 + w], m * a)
-        p = smooth((t - tS) / .8)
-        if p > 0:
-            sm = self.script; h, w = sm.shape; soft = 170; edge = p * (w + soft) - soft; col = np.clip((edge - np.arange(w)) / soft, 0, 1)[None, :]
-            y0 = self.sy + int((1 - p) * 22); reg = sm * col; ivory[y0:y0 + h, self.sx:self.sx + w] = np.maximum(ivory[y0:y0 + h, self.sx:self.sx + w], reg)
-            gx = (t - (tS + .95)) / .7 * (w + 360) - 180
-            if 0 <= (t - (tS + .95)) / .7 <= 1: glint[y0:y0 + h, self.sx:self.sx + w] = np.exp(-((np.arange(w)[None, :] + np.arange(h)[:, None] * .4 - gx) / 70) ** 2) * sm
-        ab = ease_out((t - tB) / .5); gold = self.brand * ab
-        sc = self.scrim * smooth((t - tA + .25) / .5) * fade * .62; img = img * (1 - sc[..., None])
-        both = np.maximum(ivory, gold) * fade; sh = np.roll(cv2.GaussianBlur(both, (0, 0), 10), 6, 0); img = img * (1 - .55 * sh[..., None])
-        img = screen(img, IVORY * (cv2.GaussianBlur(ivory * fade, (0, 0), 24)[..., None] * .30))
-        ia = (ivory * fade)[..., None]; col = IVORY * (1 - glint[..., None]) + np.float32([255, 205, 120]) * glint[..., None]
-        img = img * (1 - ia) + col * ia; ga = (gold * fade)[..., None]; return img * (1 - ga) + GOLD * ga
+            y = y0 + int((1 - a) * 26); h, w = m.shape; ivory[y:y + h, x0:x0 + w] = np.maximum(ivory[y:y + h, x0:x0 + w], m * a)
+        gold = self.brand * ease_out((t - tb(3.8)) / .6)
+        sc = self.scrim * smooth((t - t0 + .3) / .6) * fade * .5; img = img * (1 - sc[..., None])
+        both = np.maximum(ivory, gold) * fade; sh = np.roll(cv2.GaussianBlur(both, (0, 0), 9), 5, 0); img = img * (1 - .5 * sh[..., None])
+        ia = (ivory * fade)[..., None]; img = img * (1 - ia) + IVORY * ia; ga = (gold * fade)[..., None]; return img * (1 - ga) + GOLD * ga
 
 
 # ------------------------------------------------------------------ the reel
 TRANS_FN = {"zoomin": lambda A, B, p: tr_zoomin(A, B, p), "spin+": lambda A, B, p: tr_spin(A, B, p, 1), "spin-": lambda A, B, p: tr_spin(A, B, p, -1),
             "flash": lambda A, B, p: streak(tr_flash(A, B, p), .55 * math.sin(math.pi * p)), "glowdip": lambda A, B, p: tr_flash(A, B, p, peak=.85, zoom=.05),
-            "zoomflash": lambda A, B, p: streak(tr_zoomin(A, B, p, flash=.5), .9 * math.sin(math.pi * p)), "iris": lambda A, B, p: tr_iris(A, B, p),
+            "zoomflash": lambda A, B, p: streak(tr_zoomin(A, B, p, flash=.4), .7 * math.sin(math.pi * p)), "iris": lambda A, B, p: tr_iris(A, B, p),
             "diag": lambda A, B, p: tr_diag(A, B, p), "lightleak": lambda A, B, p: tr_lightleak(A, B, p), "softzoom": lambda A, B, p: tr_softzoom(A, B, p),
             "heart": lambda A, B, p: tr_heart(A, B, p)}
 class Reel4:
@@ -255,11 +245,8 @@ class Reel4:
         if SHOTS[idx]["kind"] != "endclip":
             img = translate(img, *shake(t)); img = chroma(img, ca_amount(t) + (9 * math.sin(math.pi * tp) if tkind and tkind.startswith(("whip", "spin", "zoom")) else 0))
             for i, (b, d) in enumerate(LEAKS): img = light_leak(img, t, tb(b), d, i)
-            for k in range(DROP_BEAT, END_BEAT - 4, 4):
-                dt = t - tb(k)
-                if 0 <= dt < .2: img = flash_overlay(img, (.30 if k == DROP_BEAT else .07) * math.exp(-dt / .06))
             img = grade4(sharpen(img), n); img = self.title.apply(img, t)
-        if t < .1: img = img * (t / .1)
+        if t < .5: img = img * smooth(t / .5)
         if t > DUR - .25: img = img * (1 - smooth((t - (DUR - .25)) / .25))
         return np.clip(img, 0, 255).astype(np.uint8)
 

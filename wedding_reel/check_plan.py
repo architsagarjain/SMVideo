@@ -1,8 +1,9 @@
 """Checks that every shot window (including speed ramps and transition pre/post-roll) stays inside one source shot.
-Usage: python3 check_plan.py SHOTS_JSON   (JSON of scene-cut times per clip number, from ffmpeg scene detection)"""
+Usage: python3 check_plan.py SHOTS_JSON [plan_module]   (JSON of scene-cut times per clip number, from ffmpeg scene detection)"""
 import json, sys
 import numpy as np
-from plan4 import *
+import importlib
+P = importlib.import_module(sys.argv[2] if len(sys.argv) > 2 else 'plan5'); SHOTS = P.SHOTS
 cuts = {int(k): v for k, v in json.load(open(sys.argv[1])).items()}
 def window(clip, src, speed, dur, pre, post):
     dt = 1 / 600; tl = np.arange(-pre, dur + post, dt); f = np.clip(tl / dur, 0, 1)
