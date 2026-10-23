@@ -32,7 +32,7 @@ const Clip: React.FC<{src: string; at: number; until: number; style?: React.CSSP
 // ---------------------------------------------------------------------------
 const OPEN_END = 2.36;
 const PANELS = [
-  {src: 'b_eat.mp4', at: 3.68, chip: '−300 kcal', icon: 'fork-knife', from: -1, pos: 'center 28%'},
+  {src: 'b_eat.mp4', at: 3.68, chip: '−300 kcal', icon: 'fork-knife', from: -1, pos: 'center 39%'},
   {src: 'b_tread.mp4', at: 4.64, chip: '+4,000 Steps', icon: 'sneaker-move', from: 1, pos: 'center 40%'},
   {src: 'b_db.mp4', at: 5.48, chip: '+2 Sessions', icon: 'barbell', from: -1, pos: 'center 25%'},
 ];
@@ -79,7 +79,7 @@ const HookBroll: React.FC = () => {
         const flash = t >= STAMP ? 0.5 + 0.5 * Math.cos((t - STAMP) * 18) * Math.exp(-(t - STAMP) * 3) : 0;
         return (
           <div key={i} style={{position: 'absolute', left: 0, top: i * 640, width: 1080, height: 640, overflow: 'hidden', translate: `${x}px 0`, background: INK, borderTop: i ? '6px solid #fff' : undefined, boxSizing: 'border-box'}}>
-            <Clip src={p.src} at={p.at - 0.1} until={SPLIT + 0.5} style={{scale: lerp(inn, 1.15, 1.03), objectPosition: p.pos}} />
+            <Clip src={p.src} at={p.at - 0.1} until={SPLIT + 0.5} style={{scale: lerp(inn, 1.07, 1.0), objectPosition: p.pos}} />
             <div style={{position: 'absolute', left: 40, bottom: 34, scale: chipK, transformOrigin: 'left bottom'}}>
               <Tag bg={flash > 0.5 ? RED : HL} fg={flash > 0.5 ? '#fff' : INK} size={44}>
                 <Ico name={p.icon} size={46} color={flash > 0.5 ? '#fff' : INK} /> {p.chip}
@@ -207,15 +207,18 @@ const OBST = [
 ];
 const FOUND = 36.2;
 /** A panel that slides in from the right and out to the left. */
-const Slide: React.FC<{t: number; a: number; b: number; children: React.ReactNode}> = ({t, a, b, children}) => {
-  if (t < a - 0.05 || t > b + 0.4) return null;
-  const x = (1 - tween(t, a - 0.05, 0.38, EASE_OUT)) * 960 - tween(t, b - 0.05, 0.38, EASE_IN) * 960;
-  return <div style={{position: 'absolute', inset: 0, translate: `${x}px 0`}}>{children}</div>;
+const Slide: React.FC<{t: number; a: number; b: number; wipe?: boolean; children: React.ReactNode}> = ({t, a, b, wipe, children}) => {
+  if (t < a || t > b + 0.2) return null;
+  const inn = tween(t, a + 0.1, 0.35, EASE_OUT);
+  const out = tween(t, b - 0.08, 0.18, EASE_IN);
+  // a dark panel wipes down instead of fading (a half-faded dark panel reads as grey)
+  if (wipe) return <div style={{position: 'absolute', inset: 0, opacity: 1 - out, clipPath: `inset(0 0 ${(1 - tween(t, a, 0.4, EASE_IN_OUT)) * 100}% 0)`}}>{children}</div>;
+  return <div style={{position: 'absolute', inset: 0, opacity: inn * (1 - out), translate: `0 ${lerp(inn, 26, 0) - out * 14}px`}}>{children}</div>;
 };
 const Lens: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}) => (
   <div style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', scale: s, pointerEvents: 'none'}}>
-    <div style={{width: 150, height: 150, borderRadius: '50%', border: `12px solid ${INK}`, background: 'rgba(255,255,255,0.18)', boxShadow: 'inset 0 0 0 4px rgba(255,255,255,0.7), 0 14px 26px -10px rgba(0,0,0,0.5)', boxSizing: 'border-box'}} />
-    <div style={{position: 'absolute', left: 118, top: 118, width: 70, height: 22, borderRadius: 11, background: INK, rotate: '45deg', transformOrigin: 'left center'}} />
+    <div style={{width: 100, height: 100, borderRadius: '50%', border: `9px solid ${INK}`, background: 'rgba(255,255,255,0.12)', boxShadow: 'inset 0 0 0 4px rgba(255,255,255,0.7), 0 14px 26px -10px rgba(0,0,0,0.5)', boxSizing: 'border-box'}} />
+    <div style={{position: 'absolute', left: 82, top: 20, width: 50, height: 16, borderRadius: 8, background: INK, rotate: '-45deg', transformOrigin: 'left center'}} />
   </div>
 );
 const CaseBoard: React.FC = () => {
@@ -299,7 +302,7 @@ const CaseBoard: React.FC = () => {
                 </div>
               </div>
             </Slide>
-            <Slide t={t} a={CLUES[2].at} b={99}>
+            <Slide t={t} a={CLUES[2].at} b={99} wipe>
               <div style={{position: 'absolute', inset: 0, background: INK}}>
                 <div style={{position: 'absolute', left: 28, top: 18}}>
                   <H size={50} color="#fff">
@@ -323,7 +326,7 @@ const CaseBoard: React.FC = () => {
                     </div>
                   );
                 })}
-                {t >= OBST[0].at - 0.2 && t < FOUND + 0.4 ? <Lens x={lx} y={212} s={Math.min(1, popAt(t, OBST[0].at - 0.2)) * (1 - tween(t, FOUND + 0.05, 0.3, EASE_IN))} /> : null}
+                {t >= OBST[0].at - 0.2 && t < FOUND + 0.4 ? <Lens x={lx} y={172} s={Math.min(1, popAt(t, OBST[0].at - 0.2)) * (1 - tween(t, FOUND + 0.05, 0.3, EASE_IN))} /> : null}
                 {found ? (
                   <div style={{position: 'absolute', left: cx(0), top: 336, translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, FOUND + 0.1)), 1.8, 1), opacity: tween(t, FOUND + 0.1, 0.1)}}>
                     <div style={{padding: '4px 16px', border: `5px solid ${RED}`, borderRadius: 10, background: '#fff', color: RED, fontFamily: SANS, fontWeight: 800, fontSize: 30, letterSpacing: 3}}>FOUND</div>
