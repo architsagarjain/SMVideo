@@ -4,7 +4,7 @@ import {Base, Footage, GradeOverlay, Subject} from '../series/core';
 import {outAt} from '../series/timemap';
 import {useT} from '../explainer/kit';
 import {Ico, popAt} from '../series/kit2';
-import {CARD_SHADOW, Card, CommentCta, H, HL, Hi, INK, Kicker, MUTED, PillCaps, Pop, Tag, TopWash, rise, winVis} from '../series/kit3';
+import {CARD_SHADOW, Card, H, HL, Hi, INK, Kicker, MUTED, PillCaps, Pop, Tag, TopWash, rise, winVis} from '../series/kit3';
 import {EASE_IN_OUT, EASE_OUT, FPS, SANS, lerp, tween} from '../theme';
 import {C, TM12, v12Config as cfg} from './config';
 
@@ -22,10 +22,36 @@ const SPLIT = [
 ];
 const FULL = [true, false, true, false, true, false, false];
 
+/** Yellow highlight that wipes in, then a light sweep runs across it. */
+const Shine: React.FC<{t: number; at: number; children: React.ReactNode}> = ({t, at, children}) => {
+  const sw = tween(t, at + 0.28, 0.55, EASE_IN_OUT);
+  return (
+    <span style={{position: 'relative', display: 'inline-block'}}>
+      <Hi p={tween(t, at, 0.3)}>{children}</Hi>
+      {sw > 0 && sw < 1 ? (
+        <span style={{position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: '0.08em', pointerEvents: 'none'}}>
+          <span style={{position: 'absolute', top: 0, bottom: 0, width: '45%', left: `${lerp(sw, -50, 110)}%`, background: 'linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,0.85), rgba(255,255,255,0))'}} />
+        </span>
+      ) : null}
+    </span>
+  );
+};
+/** Calendar-page entrance: the card flips down from its top edge. */
+const FlipIn: React.FC<{x: number; y: number; at: number; children: React.ReactNode}> = ({x, y, at, children}) => {
+  const t = useT();
+  if (t < at) return null;
+  const k = tween(t, at, 0.6, EASE_OUT);
+  return (
+    <div style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', perspective: 1800}}>
+      <div style={{transformOrigin: '50% 0%', transform: `rotateX(${lerp(k, -100, 0)}deg)`, opacity: Math.min(1, k * 3)}}>{children}</div>
+    </div>
+  );
+};
+
 // ---------------------------------------------------------------------------
 // The planner: one card, seven days; cells change with the story
 // ---------------------------------------------------------------------------
-type Cell = {text: string; bg: string; fg?: string; o?: number; s?: number; mark?: 'x' | 'ok' | null; shift?: number};
+type Cell = {text: string; bg: string; fg?: string; o?: number; s?: number; mark?: 'x' | 'ok' | null; shift?: number; dy?: number; ghost?: {text: string; bg: string; p: number}};
 const Planner: React.FC<{cells: Cell[]; title?: React.ReactNode; w?: number}> = ({cells, title, w = 960}) => {
   const cw = (w - 56 - 6 * 10) / 7;
   return (
@@ -38,7 +64,12 @@ const Planner: React.FC<{cells: Cell[]; title?: React.ReactNode; w?: number}> = 
             <div key={i} style={{width: cw, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10}}>
               <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 24, letterSpacing: 2, color: MUTED}}>{d}</div>
               <div style={{position: 'relative', width: cw, height: 150, borderRadius: 18, background: '#F4F1EB'}}>
-                <div style={{position: 'absolute', inset: 0, borderRadius: 18, background: c.bg, color: c.fg ?? INK, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: c.text.length > 6 ? 19 : 22, letterSpacing: 0.5, textAlign: 'center', lineHeight: 1.1, opacity: c.o ?? 1, scale: c.s ?? 1, translate: `${(c.shift ?? 0) * (cw + 10)}px 0`, whiteSpace: 'pre-line'}}>
+                {c.ghost && c.ghost.p < 1 ? (
+                  <div style={{position: 'absolute', inset: 0, borderRadius: 18, background: c.ghost.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 22, color: INK, opacity: 1 - c.ghost.p, translate: `${(i % 2 ? 1 : -1) * 40 * c.ghost.p}px ${320 * c.ghost.p * c.ghost.p}px`, rotate: `${(i % 2 ? 1 : -1) * 28 * c.ghost.p}deg`}}>
+                    {c.ghost.text}
+                  </div>
+                ) : null}
+                <div style={{position: 'absolute', inset: 0, borderRadius: 18, background: c.bg, color: c.fg ?? INK, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: c.text.length > 6 ? 19 : 22, letterSpacing: 0.5, textAlign: 'center', lineHeight: 1.1, opacity: c.o ?? 1, scale: c.s ?? 1, translate: `${(c.shift ?? 0) * (cw + 10)}px ${c.dy ?? 0}px`, whiteSpace: 'pre-line', boxShadow: (c.dy ?? 0) < -2 ? '0 18px 24px -10px rgba(0,0,0,0.3)' : undefined}}>
                   {c.text}
                 </div>
                 {c.mark ? (
@@ -65,22 +96,31 @@ const Hook: React.FC = () => {
   const t = useT();
   const o = winVis(t, C.hook, 0.01);
   if (o <= 0) return null;
-  const cells = splitCells(t, 1.0);
-  // a busy week lands on top of the split
   const busy = ['', 'LATE\nCALL', '', 'SCHOOL\nRUN', 'DEADLINE', '', ''];
-  const crash = tween(t, 5.28, 0.3);
-  const view = cells.map((c, i) => (busy[i] && t >= 5.28 ? {...c, text: busy[i], bg: INK, fg: '#fff', s: lerp(Math.min(1, popAt(t, 5.28 + i * 0.05)), 1.3, 1), mark: null} : {...c, mark: t >= 2.92 && busy[i] === '' && c.text && crash > 0.5 ? ('x' as const) : null}));
+  const view: Cell[] = SPLIT.map((sp, i) => {
+    const k = popAt(t, 0.95 + i * 0.09);
+    const drop: Cell = {text: sp.m, bg: sp.c, o: Math.min(1, k * 3), dy: lerp(Math.min(1, k), -260, 0)};
+    if (!busy[i]) return {...drop, mark: t >= 5.6 && sp.m ? 'x' : null};
+    const at = 5.28 + i * 0.06;
+    if (t < at) return drop;
+    const kb = popAt(t, at);
+    return {text: busy[i], bg: INK, fg: '#fff', dy: lerp(Math.min(1, kb), -300, 0), ghost: {text: sp.m, bg: sp.c, p: tween(t, at + 0.08, 0.7, (x) => x)}};
+  });
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <Pop x={540} y={290} at={0.9}>
+      <Pop x={540} y={290} at={0.86}>
         <Planner
           cells={view}
           title={
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <H size={56}>
-                one muscle <Hi p={tween(t, 1.6, 0.3)}>a day</Hi>
+                One muscle <Shine t={t} at={1.6}>a day</Shine>
               </H>
-              {t >= 5.28 ? <Tag bg={RED} size={30}>+ a busy week</Tag> : null}
+              {t >= 5.28 ? (
+                <div style={{scale: lerp(Math.min(1, popAt(t, 5.28)), 1.4, 1)}}>
+                  <Tag bg={RED} size={30}>+ A Busy Week</Tag>
+                </div>
+              ) : null}
             </div>
           }
         />
@@ -140,7 +180,7 @@ const Volume: React.FC = () => {
   const sets = [20.6, 20.8, 21.0, 21.2, 21.4, 21.6, 21.8, 22.0];
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 540, top: 130, translate: '-50% -50%', ...rise(t, 20.28)}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 112, textAlign: 'center', ...rise(t, 20.28)}}>
         <Kicker>VOLUME</Kicker>
       </div>
       <div style={{position: 'absolute', left: 540, top: 250, translate: '-50% -50%', display: 'flex', gap: 14}}>
@@ -152,7 +192,7 @@ const Volume: React.FC = () => {
       </div>
       <Pop x={540} y={410} at={23.34}>
         <Tag bg={HL} fg={INK} size={40}>
-          <Ico name="lock-simple" size={42} color={INK} /> keep it equal
+          <Ico name="lock-simple" size={42} color={INK} /> Keep It Equal
         </Tag>
       </Pop>
     </AbsoluteFill>
@@ -181,9 +221,9 @@ const Names: React.FC = () => {
           <div style={{width: 110, height: 110, borderRadius: '50%', background: INK, border: '6px solid #fff', boxShadow: CARD_SHADOW, display: 'flex', alignItems: 'center', justifyContent: 'center', color: HL, fontFamily: SANS, fontWeight: 800, fontSize: 70}}>≠</div>
         </Pop>
       ) : null}
-      <div style={{position: 'absolute', left: 540, top: 100, translate: '-50% -50%', ...rise(t, 26.08)}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 70, display: 'flex', justifyContent: 'center', ...rise(t, 26.08)}}>
         <H size={56}>
-          a name <Hi p={tween(t, 28.3, 0.3)}>isn't a plan</Hi>
+          A name <Shine t={t} at={28.3}>isn't a plan</Shine>
         </H>
       </div>
     </AbsoluteFill>
@@ -197,19 +237,19 @@ const Three: React.FC = () => {
   const cells = morph < 0.5 ? splitCells(t, C.three.start + 0.1).map((c) => ({...c, o: (c.o ?? 1) * (1 - morph * 2)})) : fullCells(t, 34.4);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <Pop x={540} y={290} at={C.three.start + 0.1}>
+      <FlipIn x={540} y={290} at={C.three.start + 0.05}>
         <Planner
           cells={cells}
           title={
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <H size={56}>
-                <Hi p={tween(t, 34.6, 0.3)}>Mon · Wed · Fri</Hi>
+                <Shine t={t} at={34.6}>Mon · Wed · Fri</Shine>
               </H>
-              <Tag size={28}>busy-week plan</Tag>
+              <Tag size={28}>Busy-Week Plan</Tag>
             </div>
           }
         />
-      </Pop>
+      </FlipIn>
     </AbsoluteFill>
   );
 };
@@ -225,19 +265,19 @@ const Meeting: React.FC = () => {
   });
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <Pop x={540} y={290} at={C.meeting.start + 0.1}>
+      <FlipIn x={540} y={290} at={C.meeting.start + 0.05}>
         <Planner
           cells={cells}
           title={
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <H size={56}>
-                plans <Hi p={tween(t, 45.3, 0.3)}>bend</Hi>
+                Plans <Shine t={t} at={45.3}>bend</Shine>
               </H>
-              {t >= 46.82 ? <Tag bg={GREEN} size={28}>nothing missed</Tag> : null}
+              {t >= 46.82 ? <Tag bg={GREEN} size={28}>Nothing Missed</Tag> : null}
             </div>
           }
         />
-      </Pop>
+      </FlipIn>
     </AbsoluteFill>
   );
 };
@@ -255,19 +295,22 @@ const Moves: React.FC = () => {
   const dur = Math.round(outAt(TM12, w.end) * FPS) - from;
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 540, top: 90, translate: '-50% -50%', ...rise(t, 50.5)}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 72, textAlign: 'center', ...rise(t, 50.5)}}>
         <Kicker>3 MOVEMENT PATTERNS</Kicker>
       </div>
       {CLIPS.map((c, i) => {
-        const k = popAt(t, c.at - 0.5);
-        if (k <= 0) return null;
+        const s0 = c.at - 0.6;
+        if (t < s0) return null;
+        const inn = tween(t, s0, 0.18, EASE_OUT);
+        const k = tween(t, s0 + 0.42, 0.45, EASE_IN_OUT);
+        const r = {x: lerp(k, 0, 90 + i * 310), y: lerp(k, 0, 130), w: lerp(k, 1080, 280), h: lerp(k, 1920, 340)};
         return (
-          <div key={i} style={{position: 'absolute', left: 90 + i * 310, top: 130, width: 280, height: 340, borderRadius: 30, overflow: 'hidden', border: '8px solid #fff', boxShadow: CARD_SHADOW, scale: lerp(Math.min(1.05, k), 0.7, 1), opacity: Math.min(1, k * 2), background: INK}}>
+          <div key={i} style={{position: 'absolute', left: r.x, top: r.y, width: r.w, height: r.h, borderRadius: lerp(k, 0, 30), overflow: 'hidden', border: `${lerp(k, 0, 8)}px solid #fff`, boxSizing: 'border-box', boxShadow: k > 0.5 ? CARD_SHADOW : undefined, opacity: inn, background: INK}}>
             <Sequence from={from} durationInFrames={dur} layout="none">
-              <OffthreadVideo src={staticFile(`v12/${c.src}`)} muted style={{position: 'absolute', left: '50%', top: '50%', width: 1080, height: 1920, translate: '-50% -50%', scale: 0.36}} />
+              <OffthreadVideo src={staticFile(`v12/${c.src}`)} muted style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', scale: lerp(inn, 1.12, 1)}} />
             </Sequence>
-            <div style={{position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center'}}>
-              <span style={{padding: '6px 18px', borderRadius: 12, background: t >= c.at ? HL : '#fff', fontFamily: SANS, fontWeight: 800, fontSize: 30, color: INK}}>{c.label}</span>
+            <div style={{position: 'absolute', left: 0, right: 0, bottom: lerp(k, 560, 14), textAlign: 'center'}}>
+              <span style={{display: 'inline-block', padding: '6px 18px', borderRadius: 12, background: HL, fontFamily: SANS, fontWeight: 800, fontSize: lerp(k, 120, 30), color: INK}}>{c.label}</span>
             </div>
           </div>
         );
@@ -280,9 +323,9 @@ const Keep: React.FC = () => {
   const o = winVis(t, C.keep);
   if (o <= 0) return null;
   const items = [
-    {t: 'same plan, weekly', at: 56.84, icon: 'arrows-clockwise'},
-    {t: 'last reps feel hard', at: 59.54, icon: 'fire'},
-    {t: 'write it down', at: 60.88, icon: 'check-circle'},
+    {t: 'Same plan, weekly', at: 56.84, icon: 'arrows-clockwise'},
+    {t: 'Last reps feel hard', at: 59.54, icon: 'fire'},
+    {t: 'Write it down', at: 60.88, icon: 'check-circle'},
   ];
   return (
     <AbsoluteFill style={{opacity: o}}>
@@ -307,9 +350,9 @@ const Enjoy: React.FC = () => {
   if (o <= 0) return null;
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <Pop x={540} y={290} at={63.04}>
-        <Planner cells={splitCells(t, 63.1).map((c, i) => ({...c, mark: i < 6 && t >= 64.6 + i * 0.06 ? 'ok' : null}))} w={900} title={<H size={52}>your split, your call</H>} />
-      </Pop>
+      <FlipIn x={540} y={290} at={62.9}>
+        <Planner cells={splitCells(t, 63.1).map((c, i) => ({...c, mark: i < 6 && t >= 64.6 + i * 0.06 ? 'ok' : null}))} w={900} title={<H size={52}>Your split, <Shine t={t} at={64.2}>your call</Shine></H>} />
+      </FlipIn>
     </AbsoluteFill>
   );
 };
@@ -319,7 +362,7 @@ const Calendar: React.FC = () => {
   if (o <= 0) return null;
   const mini = (busy: boolean, at: number) => (
     <Card w={420} h={330} pad={22}>
-      <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 30, marginBottom: 12}}>{busy ? 'looks impressive' : 'actually doable'}</div>
+      <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 30, marginBottom: 12}}>{busy ? 'Looks impressive' : 'Actually doable'}</div>
       <div style={{display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6}}>
         {Array.from({length: 28}, (_, i) => {
           const on = busy ? (i * 7) % 5 !== 0 : [0, 2, 4].includes(i % 7);
@@ -346,6 +389,49 @@ const Calendar: React.FC = () => {
   );
 };
 
+const LETTERS = ['G', 'U', 'I', 'D', 'E'];
+const Cta: React.FC = () => {
+  const t = useT();
+  if (t < C.cta.start) return null;
+  const dm = tween(t, 75.1, 0.4, EASE_OUT);
+  return (
+    <AbsoluteFill>
+      <FlipIn x={540} y={300} at={C.cta.start}>
+        <Card w={960} pad={28}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18}}>
+            <H size={54}>
+              Comment <Shine t={t} at={74.5}>this word</Shine>
+            </H>
+            <Ico name="chat-circle-dots" size={56} color={INK} />
+          </div>
+          <div style={{display: 'flex', gap: 10}}>
+            {DAYS.map((d, i) => {
+              const L = LETTERS[i];
+              const ang = L ? tween(t, 73.9 + i * 0.13, 0.42, EASE_IN_OUT) * 180 : 0;
+              const back = ang >= 90;
+              return (
+                <div key={i} style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10}}>
+                  <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 24, letterSpacing: 2, color: MUTED}}>{d}</div>
+                  <div style={{width: '100%', height: 150, perspective: 900}}>
+                    <div style={{width: '100%', height: '100%', borderRadius: 18, background: back ? HL : '#F4F1EB', transform: `rotateX(${back ? ang - 180 : ang}deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 96, color: INK, boxShadow: back ? '0 14px 24px -12px rgba(0,0,0,0.35)' : undefined}}>
+                      {back ? L : ''}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{display: 'flex', justifyContent: 'center', marginTop: 20, opacity: dm, translate: `0 ${lerp(dm, 16, 0)}px`}}>
+            <Tag bg={INK} size={30}>
+              <Ico name="file-pdf" size={34} color={HL} /> Free Fat Loss Guide → Your DMs
+            </Tag>
+          </div>
+        </Card>
+      </FlipIn>
+    </AbsoluteFill>
+  );
+};
+
 // ---------------------------------------------------------------------------
 const WASH = [C.hook, C.study, C.volume, C.names, C.three, C.meeting, C.moves, C.keep, C.enjoy, C.calendar, C.cta];
 const Scene: React.FC = () => (
@@ -359,18 +445,18 @@ const Scene: React.FC = () => (
     <Names />
     <Three />
     <Meeting />
-    <Moves />
     <Keep />
     <Enjoy />
     <Calendar />
-    <CommentCta start={C.cta.start} word="GUIDE" typeAt={73.96} dmAt={75.1} top={70} Ico={Ico} />
+    <Cta />
     <Subject cfg={cfg} />
+    <Moves />
     <PillCaps cfg={cfg} hide={[{start: C.cta.start + 0.3, end: 999}]} />
   </>
 );
 
 export const V12Reel: React.FC = () => (
-  <Base cfg={{...cfg, shakes: [5.28, 44.22]}}>
+  <Base cfg={{...cfg, shakes: [5.28, 14.5, 44.22]}}>
     <Scene />
   </Base>
 );

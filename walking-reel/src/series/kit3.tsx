@@ -56,7 +56,7 @@ export const Kicker: React.FC<{children: React.ReactNode; color?: string}> = ({c
 );
 export const rise = (t: number, at: number, d = 0.4): React.CSSProperties => {
   const p = tween(t, at, d, EASE_OUT);
-  return {opacity: p, translate: `0 ${lerp(p, 24, 0)}px`};
+  return {opacity: p, transform: `translateY(${lerp(p, 24, 0)}px)`};
 };
 
 /** Dark-pill subtitles (the style picked for the mithai reel). */
