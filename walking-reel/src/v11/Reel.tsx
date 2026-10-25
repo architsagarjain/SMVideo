@@ -427,29 +427,38 @@ const Foods: React.FC = () => {
     </AbsoluteFill>
   );
 };
-/** Ending: the scale spells GUIDE. */
+/** Ending: like the coin weighing machines, the scale prints a fortune card - "Comment GUIDE". */
 const Cta: React.FC = () => {
   const t = useT();
   if (t < C.cta.start) return null;
-  const word = 'GUIdE';
-  const n = Math.max(0, Math.min(5, Math.floor((t - 73.66) / 0.09) + 1));
-  const text = (word.slice(0, n) + '     ').slice(0, 5);
-  const sent = popAt(t, 74.8);
+  const PRINT = 73.5;
+  const card = tween(t, PRINT, 0.9, EASE_OUT);
+  const shake = t >= PRINT && t < PRINT + 0.9 ? Math.sin((t - PRINT) * 70) * 3 * (1 - (t - PRINT) / 0.9) : 0;
+  const word = tween(t, 73.66, 0.35, EASE_OUT);
+  const dm = popAt(t, 74.8);
+  const SCALE_Y = 440;
   return (
     <AbsoluteFill>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 76, textAlign: 'center', opacity: tween(t, C.cta.start + 0.1, 0.3)}}>
-        <Kicker color={INK}>COMMENT</Kicker>
-      </div>
-      <Pop x={540} y={320} at={C.cta.start + 0.1}>
-        <Scale text={text} size={360} />
-      </Pop>
-      {t >= 74.8 ? (
-        <div style={{position: 'absolute', left: 540, top: 538, translate: '-50% -50%', scale: Math.min(1, sent)}}>
-          <Tag bg={INK} size={30}>
-            <Ico name="paper-plane-right" size={32} color={HL} /> Free Guide · Your DMs
-          </Tag>
+      {/* the card slides up out of the slot at the top of the scale (drawn behind the scale) */}
+      <div style={{position: 'absolute', left: 540, top: lerp(card, SCALE_Y - 120, 36), translate: '-50% 0', width: 600, borderRadius: 22, background: '#fff', boxShadow: CARD_SHADOW, padding: '20px 30px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, opacity: tween(t, PRINT, 0.15)}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 10, fontFamily: SANS, fontWeight: 800, fontSize: 24, letterSpacing: 6, color: MUTED}}>
+          <span style={{color: HL}}>★</span> YOUR FORTUNE <span style={{color: HL}}>★</span>
         </div>
-      ) : null}
+        <div style={{display: 'flex', alignItems: 'center', gap: 20}}>
+          <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 52, color: INK}}>Comment</span>
+          <span style={{padding: '2px 22px', borderRadius: 14, background: INK, color: HL, fontFamily: SANS, fontWeight: 800, fontSize: 76, letterSpacing: 4, lineHeight: 1.15, scale: lerp(word, 0.6, 1), opacity: word}}>GUIDE</span>
+        </div>
+        <div style={{height: 40, display: 'flex', alignItems: 'center'}}>
+          {t >= 74.8 ? (
+            <div style={{display: 'flex', alignItems: 'center', gap: 10, fontFamily: SANS, fontWeight: 800, fontSize: 30, color: INK, scale: Math.min(1, dm)}}>
+              <Ico name="paper-plane-right" size={32} color={INK} /> Free Guide · Your DMs
+            </div>
+          ) : null}
+        </div>
+      </div>
+      <div style={{position: 'absolute', left: 540, top: SCALE_Y, translate: `calc(-50% + ${shake}px) -50%`, scale: Math.min(1, popAt(t, C.cta.start + 0.05))}}>
+        <Scale text="69.5" size={300} />
+      </div>
     </AbsoluteFill>
   );
 };

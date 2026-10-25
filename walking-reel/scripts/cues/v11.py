@@ -64,8 +64,9 @@ def cues(cue, rng):
     cue(69.82, "pack:whoosh_fast", -24)
     cue(70.7, "pack:whoosh_soft", -25)
     cue(71.0, "pack:chime2", -24)
-    # ending: the scale spells GUIDE
+    # ending: the scale prints a fortune card - Comment GUIDE
     cue(73.3, "pack:whoosh_soft", -24)
-    for j in range(5):
-        cue(73.66 + j * 0.09, "pack:tick", -22)
+    for j in range(10):
+        cue(73.5 + j * 0.08, "pack:key", -27)  # printing rattle
+    cue(73.7, "pack:hit", -22)
     cue(74.8, "pack:notif", -20)
