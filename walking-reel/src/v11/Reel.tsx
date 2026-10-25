@@ -1,671 +1,482 @@
 import React from 'react';
-import {AbsoluteFill, random, staticFile} from 'remotion';
-import {loadFont} from '@remotion/fonts';
-import {Base, Footage, Subject, inWin} from '../series/core';
+import {AbsoluteFill} from 'remotion';
+import {Base, Footage, GradeOverlay, Subject} from '../series/core';
 import {useT} from '../explainer/kit';
-import {Ico, SevenSeg, chunkAt, popAt, vis} from '../series/kit2';
-import {EASE_IN, EASE_IN_OUT, EASE_OUT, lerp, tween} from '../theme';
+import {Ico, SevenSeg, popAt} from '../series/kit2';
+import {CARD_SHADOW, Card, H, HL, Hi, INK, Kicker, MUTED, PAPER, PillCaps, Pop, Tag, TopWash, winVis} from '../series/kit3';
+import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, lerp, tween} from '../theme';
 import {C, v11Config as cfg} from './config';
 
-const BRIC = 'Bricolage';
-loadFont({family: BRIC, url: staticFile('fonts/BricolageGrotesque.ttf'), weight: '200 800'});
-
-const INK = '#1A1714';
-const RED = '#E8452C';
-const BLUE = '#1E6BFF';
-const AMBER = '#FFB020';
-const GREEN = '#12A150';
-const STICK = '0 20px 36px -14px rgba(60,40,20,0.35)';
+/**
+ * Rice / water weight, in the batch look (her room, soft white wash, white cards, dark-pill captions).
+ * Signature: a bathroom scale whose display reacts to the story, and a glycogen "sponge" that holds
+ * water - squeezed, the drops run out and the scale falls; refilled, it rises again (water, not fat).
+ * The scale spells GUIDE at the end. Times are source seconds.
+ */
+const RED = '#E5484D';
+const GREEN = '#17A34A';
+const WATER = '#3BA3F5';
+const SPONGE_D = '#E9B800';
 
 // ---------------------------------------------------------------------------
-// Backdrop: pastel per section, colours blend at each change
+// Signature 1: the bathroom scale
 // ---------------------------------------------------------------------------
-const SEC = [
-  {w: C.hook, bg: '#FFE6A0', ac: '#FF6B1A'},
-  {w: C.rice, bg: '#FFD3C0', ac: RED},
-  {w: C.glyco, bg: '#E4D9FF', ac: '#6D3BFF'},
-  {w: C.water, bg: '#CFE5FF', ac: BLUE},
-  {w: C.three, bg: '#CFE5FF', ac: BLUE},
-  {w: C.week, bg: '#D2F0DD', ac: GREEN},
-  {w: C.trend, bg: '#D2F0DD', ac: GREEN},
-  {w: C.regain, bg: '#CFE5FF', ac: BLUE},
-  {w: C.foods, bg: '#FFE6A0', ac: '#FF6B1A'},
-  {w: C.cta, bg: '#FFD3C0', ac: RED},
-];
-const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const mix = (a: string, b: string, p: number) => {
-  const A = hex(a);
-  const B = hex(b);
-  return `rgb(${A.map((v, i) => Math.round(lerp(p, v, B[i]))).join(',')})`;
-};
-const secAt = (t: number) => {
-  let k = 0;
-  SEC.forEach((s, i) => (t >= s.w.start - 0.01 ? (k = i) : null));
-  return k;
-};
-const colorsAt = (t: number) => {
-  const k = secAt(t);
-  const p = k > 0 ? tween(t, SEC[k].w.start, 0.45, EASE_IN_OUT) : 1;
-  const prev = SEC[Math.max(0, k - 1)];
-  return {bg: mix(prev.bg, SEC[k].bg, p), ac: p < 0.5 ? prev.ac : SEC[k].ac};
-};
-const REVEAL = 0.94; // "Having": the room floods away into the studio
-const revealAt = (t: number) => tween(t, REVEAL, 0.6, EASE_IN_OUT);
-
-const Backdrop: React.FC = () => {
+const Scale: React.FC<{text: string; size?: number; blink?: boolean}> = ({text, size = 360, blink}) => {
   const t = useT();
-  const {bg} = colorsAt(t);
-  const r = revealAt(t);
-  if (r <= 0) return null;
+  const on = blink && Math.floor(t * 4) % 2 === 1 ? 'rgba(255,214,10,0.25)' : HL;
   return (
-    <AbsoluteFill style={{clipPath: r < 1 ? `circle(${lerp(r, 0, 2300)}px at 540px 720px)` : undefined}}>
-      <AbsoluteFill style={{background: bg}} />
-      <AbsoluteFill style={{background: 'radial-gradient(55% 38% at 50% 40%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%)'}} />
-      <AbsoluteFill style={{backgroundImage: `url(${staticFile('v11/noise.png')})`, backgroundSize: '256px 256px', opacity: 0.5, mixBlendMode: 'multiply'}} />
-      <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(60,30,10,0.12) 100%)'}} />
-    </AbsoluteFill>
-  );
-};
-/** White sticker outline (pre-dilated matte) + soft shadow, following her camera moves. */
-const olCfg = {...cfg, dir: 'v11/ol', grade: {}};
-const Outline: React.FC = () => {
-  const t = useT();
-  const r = revealAt(t);
-  if (r <= 0) return null;
-  return (
-    <AbsoluteFill style={{opacity: Math.min(1, r * 1.6), filter: 'drop-shadow(0 18px 26px rgba(60,35,15,0.32))'}}>
-      <Subject cfg={olCfg} />
-    </AbsoluteFill>
-  );
-};
-
-// ---------------------------------------------------------------------------
-// Sticker kit
-// ---------------------------------------------------------------------------
-const At: React.FC<{x: number; y: number; at?: number; out?: number; children: React.ReactNode}> = ({x, y, at = -1, out = 9999, children}) => {
-  const t = useT();
-  if (t < at || t > out + 0.3) return null;
-  const k = at < 0 ? 1 : popAt(t, at);
-  const o = 1 - tween(t, out, 0.25, EASE_IN);
-  return <div style={{position: 'absolute', left: x, top: y, translate: `-50% ${lerp(Math.min(1, k), -30, -50)}%`, scale: lerp(Math.min(1.1, k), 0.6, 1), opacity: Math.min(1, k * 2) * o}}>{children}</div>;
-};
-/** Die-cut text: ink (or accent) with a thick white border and a soft shadow. */
-const Die: React.FC<{size: number; color?: string; stroke?: number; children: React.ReactNode; style?: React.CSSProperties}> = ({size, color = INK, stroke, children, style}) => (
-  <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: size, lineHeight: 1, letterSpacing: -size * 0.03, color, WebkitTextStroke: `${stroke ?? Math.max(8, size * 0.16)}px #fff`, paintOrder: 'stroke fill', whiteSpace: 'nowrap', filter: 'drop-shadow(0 12px 14px rgba(60,40,20,0.22))', ...style}}>{children}</div>
-);
-const Card: React.FC<{w?: number; h?: number; pad?: number; children: React.ReactNode; style?: React.CSSProperties}> = ({w, h, pad = 26, children, style}) => (
-  <div style={{width: w, height: h, padding: pad, boxSizing: 'border-box', borderRadius: 44, background: '#fff', boxShadow: STICK, position: 'relative', ...style}}>{children}</div>
-);
-const Chip: React.FC<{bg: string; fg?: string; size?: number; children: React.ReactNode}> = ({bg, fg = '#fff', size = 40, children}) => (
-  <div style={{display: 'inline-flex', alignItems: 'center', gap: size * 0.3, padding: `${size * 0.22}px ${size * 0.55}px`, borderRadius: 999, background: bg, color: fg, fontFamily: BRIC, fontWeight: 800, fontSize: size, whiteSpace: 'nowrap', border: `${size * 0.14}px solid #fff`, boxShadow: STICK}}>{children}</div>
-);
-
-// illustrations ------------------------------------------------------------
-const roll = (t: number, a: number, b: number, t0: number, t1: number) => (a + Math.round((b - a) * 10 * tween(t, t0, t1 - t0, (x) => x)) / 10).toFixed(1);
-const Scale: React.FC<{value: string; w?: number; tone?: 'down' | 'up' | null}> = ({value, w = 360, tone = null}) => {
-  const s = w / 360;
-  return (
-    <div style={{width: 360 * s, height: 360 * s, position: 'relative'}}>
-      <div style={{position: 'absolute', inset: 0, borderRadius: 80 * s, background: '#FFFFFF', boxShadow: STICK}} />
-      <div style={{position: 'absolute', inset: 16 * s, borderRadius: 66 * s, background: 'linear-gradient(160deg, #F4F4F2, #E2E3E1)', border: `${5 * s}px solid ${INK}`}} />
-      <div style={{position: 'absolute', left: 52 * s, right: 52 * s, top: 56 * s, height: 104 * s, borderRadius: 20 * s, background: tone === 'down' ? '#BFE8C2' : tone === 'up' ? '#FFC9BE' : '#D6E7D2', border: `${5 * s}px solid ${INK}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 * s}}>
-        <SevenSeg text={value} h={64 * s} on={INK} off="rgba(0,0,0,0.06)" />
-        <span style={{fontFamily: BRIC, fontWeight: 800, fontSize: 24 * s, color: INK, marginTop: 30 * s}}>kg</span>
+    <div style={{position: 'relative', width: size, height: size, borderRadius: size * 0.16, background: 'linear-gradient(160deg, #FFFFFF, #ECEAE5)', boxShadow: `${CARD_SHADOW}, inset 0 0 0 ${size * 0.02}px #DCD8D0`}}>
+      <div style={{position: 'absolute', left: size * 0.14, top: size * 0.1, width: size * 0.72, height: size * 0.3, borderRadius: size * 0.05, background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5)'}}>
+        <SevenSeg text={text} h={size * 0.17} on={on} off="rgba(255,255,255,0.06)" glow="rgba(255,214,10,0.5)" />
       </div>
-      {[-1, 1].map((d) => (
-        <div key={d} style={{position: 'absolute', left: 180 * s + d * 62 * s - 40 * s, top: 196 * s, width: 80 * s, height: 120 * s, borderRadius: 40 * s, background: 'rgba(26,23,20,0.12)'}} />
+      {[0.27, 0.73].map((x, i) => (
+        <div key={i} style={{position: 'absolute', left: size * x - size * 0.12, top: size * 0.52, width: size * 0.24, height: size * 0.36, borderRadius: size * 0.1, background: '#E2DED6'}} />
       ))}
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: size * 0.04, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: size * 0.05, letterSpacing: 4, color: '#B8B2A8'}}>KG</div>
     </div>
   );
 };
-const RiceBowl: React.FC<{w?: number}> = ({w = 300}) => (
-  <svg width={w} height={w * 0.8} viewBox="0 0 300 240">
-    <path d="M40 120 C 40 60, 260 60, 260 120 Z" fill="#FFFFFF" stroke={INK} strokeWidth={6} />
-    {Array.from({length: 26}, (_, i) => (
-      <ellipse key={i} cx={70 + random(`rx${i}`) * 160} cy={82 + random(`ry${i}`) * 34} rx={7} ry={3.6} fill="#F1EEE6" stroke="#CFC8B8" strokeWidth={1.5} transform={`rotate(${random(`rr${i}`) * 180} ${70 + random(`rx${i}`) * 160} ${82 + random(`ry${i}`) * 34})`} />
-    ))}
-    <path d="M24 118 H276 C 270 190, 220 222, 150 222 C 80 222, 30 190, 24 118 Z" fill={BLUE} stroke={INK} strokeWidth={6} />
-    {[0, 1, 2, 3, 4].map((i) => (
-      <circle key={i} cx={70 + i * 40} cy={160 + (i % 2) * 14} r={9} fill="#fff" opacity={0.85} />
-    ))}
-    <rect x={110} y={218} width={80} height={14} rx={6} fill={INK} />
-  </svg>
-);
-const Drop: React.FC<{w: number; color?: string}> = ({w, color = BLUE}) => (
-  <svg width={w} height={w * 1.25} viewBox="0 0 100 125">
-    <path d="M50 6 C50 6 12 54 12 82 a38 38 0 0 0 76 0 C88 54 50 6 50 6Z" fill={color} stroke={INK} strokeWidth={6} />
-    <ellipse cx={36} cy={80} rx={8} ry={14} fill="#fff" opacity={0.6} />
-  </svg>
-);
-const Block: React.FC<{w: number; label?: string}> = ({w, label}) => (
-  <div style={{width: w, height: w * 0.62, borderRadius: w * 0.12, background: AMBER, border: `${Math.max(4, w * 0.04)}px solid ${INK}`, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: BRIC, fontWeight: 800, fontSize: w * 0.22, color: INK}}>{label}</div>
-);
-/** Glycogen tank: blocks stacked; `n` of them remain; optional water drops beside each. */
-const Tank: React.FC<{t: number; n: number; drops?: number; drainAt?: number; keep?: number}> = ({t, n, drops = 0, drainAt, keep = 2}) => (
-  <div style={{position: 'relative', width: 300, height: 430}}>
-    <div style={{position: 'absolute', left: 110, top: 0, width: 80, height: 26, borderRadius: 10, background: INK}} />
-    <div style={{position: 'absolute', left: 30, top: 20, width: 240, height: 410, borderRadius: 40, background: '#fff', border: `6px solid ${INK}`, boxSizing: 'border-box', boxShadow: STICK}} />
-    {Array.from({length: n}, (_, i) => {
-      const gone = drainAt !== undefined && i >= keep ? tween(t, drainAt + (n - 1 - i) * 0.12, 0.45, EASE_IN) : 0;
-      const y = 360 - i * 64;
-      return (
-        <React.Fragment key={i}>
-          <div style={{position: 'absolute', left: 58, top: y - gone * 60, opacity: 1 - gone}}>
-            <Block w={184} />
-          </div>
-          {drops > 0 ? (
-            <div style={{position: 'absolute', left: 250, top: y - 6 - gone * 60, display: 'flex', gap: 2, opacity: (1 - gone) * Math.min(1, popAt(t, drops + i * 0.08))}}>
-              {[0, 1, 2].map((d) => (
-                <Drop key={d} w={30} />
-              ))}
-            </div>
-          ) : null}
-        </React.Fragment>
-      );
-    })}
-  </div>
-);
-const Sparkles: React.FC<{at: number; x: number; y: number}> = ({at, x, y}) => {
-  const t = useT();
-  if (t < at || t > at + 1.4) return null;
-  const d = t - at;
-  return (
-    <>
-      {Array.from({length: 14}, (_, i) => {
-        const a = (i / 14) * Math.PI * 2 + random(`sk${i}`) * 0.4;
-        const v = lerp(random(`sv${i}`), 240, 420);
-        const p = tween(t, at, 0.7, EASE_OUT);
-        const s = lerp(random(`ss${i}`), 26, 46) * (1 - tween(t, at + 0.6, 0.7));
-        return (
-          <svg key={i} width={s} height={s} viewBox="-10 -10 20 20" style={{position: 'absolute', left: x + Math.cos(a) * v * p - s / 2, top: y + Math.sin(a) * v * p - s / 2 + 60 * d * d}}>
-            <path d="M0 -10 L2.5 -2.5 L10 0 L2.5 2.5 L0 10 L-2.5 2.5 L-10 0 L-2.5 -2.5Z" fill={i % 3 === 0 ? '#FF6B1A' : i % 3 === 1 ? '#FFFFFF' : AMBER} stroke={INK} strokeWidth={1.4} />
-          </svg>
-        );
-      })}
-    </>
-  );
-};
-const Strike: React.FC<{t: number; at: number; w: number; color?: string}> = ({t, at, w, color = RED}) => {
-  const p = tween(t, at, 0.3, EASE_OUT);
-  return p > 0 ? <div style={{position: 'absolute', left: '50%', top: '52%', width: w * p, height: 14, translate: '-50% -50%', borderRadius: 7, background: color, border: '4px solid #fff', boxShadow: STICK}} /> : null;
-};
+const fmt = (v: number) => v.toFixed(1);
+/** Number rolling from a to b between t0 and t0+d (display flicker while it moves). */
+const roll = (t: number, t0: number, d: number, a: number, b: number) => a + (b - a) * tween(t, t0, d, EASE_OUT);
 
 // ---------------------------------------------------------------------------
-// Sections (behind her head unless noted)
+// Signature 2: the glycogen sponge
+// ---------------------------------------------------------------------------
+const HOLES = [
+  [0.14, 0.3, 0.07], [0.33, 0.62, 0.09], [0.52, 0.28, 0.06], [0.7, 0.58, 0.08], [0.86, 0.3, 0.05], [0.22, 0.78, 0.05], [0.62, 0.82, 0.05], [0.44, 0.48, 0.04], [0.8, 0.82, 0.04],
+];
+/** wet 0..1 = water held; squeeze 0..1 = squashed. */
+const Sponge: React.FC<{w: number; h: number; wet: number; squeeze?: number}> = ({w, h, wet, squeeze = 0}) => (
+  <div style={{position: 'relative', width: w, height: h, scale: `${1 + squeeze * 0.1} ${1 - squeeze * 0.3}`, transformOrigin: 'center bottom'}}>
+    <div style={{position: 'absolute', inset: 0, borderRadius: h * 0.22, background: HL, boxShadow: CARD_SHADOW, overflow: 'hidden'}}>
+      {HOLES.map(([x, y, r], i) => (
+        <div key={i} style={{position: 'absolute', left: x * w - r * w, top: y * h - r * w, width: r * w * 2, height: r * w * 2, borderRadius: '50%', background: SPONGE_D, overflow: 'hidden'}}>
+          <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: `${wet * 100}%`, background: WATER}} />
+        </div>
+      ))}
+      <div style={{position: 'absolute', inset: 0, background: `linear-gradient(180deg, rgba(59,163,245,${0.28 * wet}), rgba(59,163,245,${0.12 * wet}))`}} />
+    </div>
+  </div>
+);
+const Drop: React.FC<{s: number; color?: string}> = ({s, color = WATER}) => (
+  <svg width={s} height={s * 1.35} viewBox="0 0 20 27">
+    <path d="M10 0 C 10 0, 0 12, 0 17 A 10 10 0 0 0 20 17 C 20 12, 10 0, 10 0 Z" fill={color} />
+    <ellipse cx={6.5} cy={17} rx={2.2} ry={3.4} fill="rgba(255,255,255,0.55)" />
+  </svg>
+);
+/** Drops falling from (x, y) - each spawned at its own time, falls and fades. */
+const Falling: React.FC<{t: number; at: number; n: number; x: number; y: number; spread: number; up?: boolean}> = ({t, at, n, x, y, spread, up}) => (
+  <>
+    {Array.from({length: n}, (_, i) => {
+      const t0 = at + i * 0.12;
+      const k = (t - t0) / 0.7;
+      if (k < 0 || k > 1) return null;
+      const dx = ((i * 37) % 100) / 100 - 0.5;
+      const fy = up ? lerp(k, 170, 0) : lerp(k * k, 0, 170);
+      return (
+        <div key={i} style={{position: 'absolute', left: x + dx * spread - 11, top: y + fy, opacity: up ? Math.min(1, k * 3) * (1 - Math.max(0, k - 0.85) * 6) : 1 - Math.max(0, k - 0.6) * 2.5}}>
+          <Drop s={22} />
+        </div>
+      );
+    })}
+  </>
+);
+
+// ---------------------------------------------------------------------------
+// Scenes
 // ---------------------------------------------------------------------------
 const Hook: React.FC = () => {
   const t = useT();
-  const w = C.hook;
-  if (t >= w.end + 0.3) return null;
-  const o = 1 - tween(t, w.end - 0.2, 0.3);
-  const side = tween(t, 6.86, 0.5, EASE_IN_OUT);
-  const val = t < 4.38 ? '68.4' : roll(t, 68.4, 65.9, 4.38, 5.2);
+  const o = winVis(t, C.hook, 0.01);
+  if (o <= 0) return null;
+  const v = roll(t, 4.5, 0.9, 72.4, 70.6);
+  const moving = t > 4.5 && t < 5.4;
+  const q = t >= 9.52;
+  const party = Math.max(0, t - 5.72);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={230} at={1.26} out={2.62}>
-        <Die size={84}>having lost weight</Die>
-      </At>
-      <At x={540} y={350} at={1.82} out={2.62}>
-        <Die size={170} color="#FF6B1A">myself</Die>
-      </At>
-      {t >= 2.78 ? (
-        <div style={{position: 'absolute', left: lerp(side, 540, 250), top: 360, translate: '-50% -50%', scale: lerp(side, 1, 0.78) * Math.max(0, Math.min(1.1, popAt(t, 2.8)))}}>
-          <Scale value={val} tone={t >= 4.38 ? 'down' : null} />
-          {t >= 5.0 ? (
-            <div style={{position: 'absolute', right: -60, top: -30, scale: Math.max(0, popAt(t, 5.0))}}>
-              <Chip bg={GREEN} size={46}>−2.5 kg!</Chip>
+      <Pop x={540} y={300} at={1.0}>
+        <div style={{position: 'relative'}}>
+          <Scale text={q ? '--.-' : moving ? fmt(v + (Math.floor(t * 30) % 3) * 0.1) : fmt(v)} blink={q} />
+          {t >= 5.2 && !q ? (
+            <div style={{position: 'absolute', left: 300, top: -14, scale: Math.min(1, popAt(t, 5.2))}}>
+              <Tag bg={GREEN} size={34}>
+                ▼ 1.8 kg
+              </Tag>
             </div>
           ) : null}
+          {party > 0 && party < 1.8 && !q
+            ? Array.from({length: 18}, (_, i) => {
+                const a = (i / 18) * Math.PI * 2;
+                const r = 120 + party * 160;
+                return <div key={i} style={{position: 'absolute', left: 180 + Math.cos(a) * r - 7, top: 180 + Math.sin(a) * r * 0.8 + party * party * 60 - 7, width: 14, height: 14, borderRadius: 3, background: i % 3 === 0 ? HL : i % 3 === 1 ? INK : GREEN, opacity: 1 - party / 1.8}} />;
+              })
+            : null}
         </div>
-      ) : null}
-      <At x={540} y={110} at={4.38} out={6.7}>
-        <Die size={84}>quick scale drop</Die>
-      </At>
-      <Sparkles at={5.6} x={540} y={360} />
-      <At x={760} y={250} at={7.2}>
-        <Die size={74}>as a coach,</Die>
-      </At>
-      <At x={760} y={360} at={8.94}>
-        <Die size={100} color="#FF6B1A">what</Die>
-      </At>
-      <At x={760} y={470} at={9.52}>
-        <Die size={100} color="#FF6B1A">caused it?</Die>
-      </At>
-      {t >= 9.3 ? (
-        <div style={{position: 'absolute', left: lerp(tween(t, 9.3, 0.6, EASE_OUT), 520, 300), top: lerp(tween(t, 9.3, 0.6, EASE_OUT), 520, 330), translate: '-50% -50%', opacity: tween(t, 9.3, 0.2)}}>
-          <div style={{width: 150, height: 150, borderRadius: '50%', background: '#fff', boxShadow: STICK, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Ico name="magnifying-glass" size={96} color={INK} />
-          </div>
-        </div>
-      ) : null}
+      </Pop>
     </AbsoluteFill>
   );
 };
+const Bowl: React.FC<{s?: number}> = ({s = 1}) => (
+  <svg width={220 * s} height={150 * s} viewBox="0 0 220 150">
+    <ellipse cx={110} cy={58} rx={92} ry={44} fill="#FFFFFF" />
+    {Array.from({length: 26}, (_, i) => (
+      <ellipse key={i} cx={40 + ((i * 53) % 140)} cy={34 + ((i * 29) % 40)} rx={6} ry={3} fill="#E9E4D8" />
+    ))}
+    <path d="M10 66 Q 110 72 210 66 Q 200 140 110 142 Q 20 140 10 66 Z" fill={INK} />
+    <path d="M10 66 Q 110 72 210 66" stroke="#3A3A3A" strokeWidth={6} fill="none" />
+  </svg>
+);
 const Rice: React.FC = () => {
   const t = useT();
-  const w = C.rice;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
+  const o = winVis(t, C.rice);
   if (o <= 0) return null;
-  const val = roll(t, 65.9, 64.6, 12.78, 13.5);
+  const phase2 = tween(t, 14.4, 0.3);
+  const cross = tween(t, 11.64, 0.35, EASE_OUT);
+  const v = roll(t, 12.8, 0.8, 70.6, 69.1);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={290} y={300} at={10.9}>
-        <Card w={420} h={360} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <RiceBowl w={320} />
-          {t >= 11.32 && t < 15.55 ? (
-            <div style={{position: 'absolute', left: '50%', top: '50%', translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, 11.32)), 1.6, 1), opacity: Math.min(1, popAt(t, 11.32) * 2)}}>
-              <Chip bg={RED} size={56}>STOP</Chip>
+      <Pop x={540} y={300} at={10.8}>
+        <Card w={900} h={400} pad={30}>
+          {phase2 < 1 ? (
+            <div style={{position: 'absolute', inset: 30, display: 'flex', alignItems: 'center', justifyContent: 'space-around', opacity: 1 - phase2}}>
+              <div style={{position: 'relative'}}>
+                <Bowl />
+                <svg width={220} height={150} style={{position: 'absolute', left: 0, top: 0}}>
+                  <line x1={30} y1={20} x2={190} y2={140} stroke={RED} strokeWidth={14} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - cross} />
+                </svg>
+                <div style={{textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 30, marginTop: 8}}>No Rice</div>
+              </div>
+              <Ico name="arrow-right" size={64} color={MUTED} />
+              <Scale text={fmt(v)} size={250} />
             </div>
           ) : null}
-          {t >= 15.6 ? (
-            <div style={{position: 'absolute', left: '50%', top: '50%', translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, 15.6)), 1.5, 1), opacity: Math.min(1, popAt(t, 15.6) * 2)}}>
-              <Chip bg={INK} size={52}>NOT PROVEN</Chip>
+          {phase2 > 0 ? (
+            <div style={{position: 'absolute', inset: 30, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 34, opacity: phase2, translate: `0 ${lerp(phase2, 20, 0)}px`}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 26}}>
+                <Bowl s={0.7} />
+                <svg width={170} height={40}>
+                  <line x1={10} y1={20} x2={150} y2={20} stroke={INK} strokeWidth={8} strokeDasharray="6 14" strokeLinecap="round" />
+                  <path d="M150 6 L 166 20 L 150 34" fill="none" stroke={INK} strokeWidth={8} strokeLinecap="round" />
+                </svg>
+                <div style={{display: 'flex', alignItems: 'center', gap: 10, padding: '14px 22px', borderRadius: 20, background: PAPER}}>
+                  <Ico name="fire" size={50} color={INK} />
+                  <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 40}}>Fat Loss</span>
+                </div>
+              </div>
+              {t >= 15.3 ? (
+                <div style={{scale: lerp(Math.min(1, popAt(t, 15.3)), 1.4, 1)}}>
+                  <Tag bg={RED} size={40}>
+                    Not Proven
+                  </Tag>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </Card>
-      </At>
-      <At x={800} y={300} at={12.62} out={15.1}>
-        <Scale value={val} w={320} tone="down" />
-      </At>
-      {t >= 13.1 ? (
-        <At x={800} y={490} at={13.1} out={14.4}>
-          <Chip bg={GREEN} size={36}>falls fast</Chip>
-        </At>
-      ) : null}
-      <At x={790} y={230} at={15.3}>
-        <Die size={70}>rice was</Die>
-      </At>
-      <At x={790} y={330} at={16.54}>
-        <Die size={70}>blocking</Die>
-      </At>
-      <At x={790} y={440} at={17.48}>
-        <Die size={84} color={RED}>fat loss?</Die>
-      </At>
+      </Pop>
     </AbsoluteFill>
   );
 };
+/** Glycogen + water: the sponge fills, then gets squeezed and the scale falls. */
+const SQUEEZE = 28.18;
 const Glyco: React.FC = () => {
   const t = useT();
-  const w = C.glyco;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
+  const w = {start: C.glyco.start, end: C.water.end};
+  const o = winVis(t, w);
   if (o <= 0) return null;
+  const shrink = tween(t, 20.72, 0.6, EASE_IN_OUT) * 0.12; // reducing carbs reduces glycogen
+  const wet = tween(t, 26.54, 0.8, EASE_OUT) * (1 - tween(t, SQUEEZE + 0.2, 1.2, EASE_IN_OUT) * 0.7);
+  const sq = t < SQUEEZE ? 0 : Math.sin(Math.min(1, (t - SQUEEZE) / 1.4) * Math.PI) * 1;
+  const v = roll(t, SQUEEZE + 0.4, 1.4, 70.6, 69.1);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={290} y={330} at={18.9}>
-        <div style={{scale: 0.95}}>
-          <Tank t={t} n={6} drainAt={20.72} keep={2} />
-        </div>
-      </At>
-      <At x={770} y={150} at={19.36}>
-        <Die size={70}>less carbs</Die>
-      </At>
-      <At x={770} y={255} at={20.72}>
-        <Die size={70}>= less</Die>
-      </At>
-      <At x={770} y={365} at={21.26}>
-        <Die size={104} color="#6D3BFF">glycogen</Die>
-      </At>
-      <At x={770} y={480} at={22.42}>
-        <Chip bg="#6D3BFF" size={32}>the carbs your body stores</Chip>
-      </At>
-    </AbsoluteFill>
-  );
-};
-const Water: React.FC = () => {
-  const t = useT();
-  const w = C.water;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
-  if (o <= 0) return null;
-  const val = roll(t, 65.9, 65.0, 29.8, 30.4);
-  return (
-    <AbsoluteFill style={{opacity: o}}>
-      <At x={280} y={330} at={24.98}>
-        <div style={{scale: 0.95}}>
-          <Tank t={t} n={6} drops={27.12} drainAt={28.4} keep={3} />
-        </div>
-      </At>
-      <At x={790} y={140} at={25.22}>
-        <Die size={62}>glycogen is stored</Die>
-      </At>
-      <At x={790} y={240} at={26.54}>
-        <Die size={62}>with</Die>
-      </At>
-      <At x={790} y={345} at={27.12}>
-        <Die size={110} color={BLUE}>water</Die>
-      </At>
-      {t >= 29.8 ? (
-        <At x={810} y={475} at={29.8}>
-          <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
-            <Scale value={val} w={150} tone="down" />
-            <Die size={48}>moves!</Die>
+      <Pop x={540} y={300} at={18.9}>
+        <Card w={900} h={420} pad={30}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <H size={50}>
+              {t < 24.9 ? (
+                <>
+                  Your <Hi p={tween(t, 21.26, 0.3)}>carb stores</Hi>
+                </>
+              ) : (
+                <>
+                  Stores hold <Hi p={tween(t, 27.12, 0.3)}>water</Hi>
+                </>
+              )}
+            </H>
+            {t >= 22.42 ? (
+              <div style={{scale: Math.min(1, popAt(t, 22.42))}}>
+                <Tag bg={INK} size={26}>Glycogen</Tag>
+              </div>
+            ) : null}
           </div>
-        </At>
-      ) : null}
+          <div style={{position: 'absolute', left: 60, top: 140}}>
+            <div style={{width: 360, height: 220, display: 'flex', alignItems: 'flex-end', justifyContent: 'center'}}>
+              <div style={{scale: 1 - shrink}}>
+                <Sponge w={340} h={180} wet={wet} squeeze={sq} />
+              </div>
+            </div>
+            <Falling t={t} at={26.54} n={8} x={180} y={-150} spread={260} up />
+            <Falling t={t} at={SQUEEZE + 0.15} n={12} x={180} y={210} spread={280} />
+          </div>
+          <div style={{position: 'absolute', right: 50, top: 150, opacity: tween(t, 27.6, 0.4)}}>
+            <Scale text={fmt(v)} size={230} />
+          </div>
+        </Card>
+      </Pop>
     </AbsoluteFill>
   );
 };
 const Three: React.FC = () => {
   const t = useT();
-  const w = C.three;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
+  const o = winVis(t, C.three);
   if (o <= 0) return null;
+  const vary = tween(t, 40.0, 0.3);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={120} at={31.78}>
-        <Chip bg={INK} size={36}>
-          <Ico name="magnifying-glass" size={40} color="#fff" /> HUMAN RESEARCH
-        </Chip>
-      </At>
-      <At x={540} y={370} at={33.06}>
-        <Card w={960} h={330} pad={30}>
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-around', height: '100%'}}>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, opacity: tween(t, 37.1, 0.3), scale: lerp(Math.min(1, popAt(t, 37.1)), 0.6, 1)}}>
-              <Block w={170} label="1 g" />
-              <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 34, color: INK}}>glycogen</div>
+      <Pop x={540} y={300} at={31.8}>
+        <Card w={900} h={400} pad={30}>
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+            <Kicker>PER GRAM OF GLYCOGEN</Kicker>
+          </div>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 40, marginTop: 40}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, scale: Math.min(1, popAt(t, 32.3))}}>
+              <div style={{width: 130, height: 130, borderRadius: 26, background: HL, boxShadow: CARD_SHADOW}} />
+              <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 40}}>1 g</span>
             </div>
-            <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 110, color: INK, opacity: tween(t, 36.38, 0.3)}}>≈</div>
+            <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 90, color: MUTED, opacity: tween(t, 33.06, 0.3)}}>≈</span>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12}}>
-              <div style={{display: 'flex', gap: 10, height: 130, alignItems: 'flex-end'}}>
-                {[33.64, 34.1, 34.54].map((a, i) => (
-                  <div key={i} style={{scale: Math.max(0, popAt(t, a))}}>
-                    <Drop w={86} />
-                  </div>
-                ))}
+              <div style={{display: 'flex', gap: 14, alignItems: 'flex-end', height: 130}}>
+                {[0, 1, 2].map((i) => {
+                  const s = 1 + (vary > 0 ? Math.sin(t * 6 + i * 2) * 0.16 * vary : 0);
+                  return (
+                    <div key={i} style={{scale: Math.max(0, Math.min(1, popAt(t, 33.64 + i * 0.16))) * s, transformOrigin: 'center bottom'}}>
+                      <Drop s={70} />
+                    </div>
+                  );
+                })}
               </div>
-              <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 34, color: BLUE, opacity: tween(t, 35.82, 0.3)}}>~3 g water</div>
+              <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 40, opacity: tween(t, 34.1, 0.3)}}>~3 g water</span>
             </div>
           </div>
         </Card>
-      </At>
-      {t >= 40.0 ? (
-        <At x={830} y={530} at={40.0}>
-          <Chip bg={BLUE} size={40}>± it varies</Chip>
-        </At>
-      ) : null}
+      </Pop>
     </AbsoluteFill>
   );
 };
+const MONTHS = ['Oct', 'Nov', 'Dec'];
 const Week: React.FC = () => {
   const t = useT();
-  const w = C.week;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
+  const o = winVis(t, C.week);
   if (o <= 0) return null;
-  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const wk = tween(t, 43.74, 0.4, EASE_OUT);
+  const stretch = tween(t, 46.6, 1.0, EASE_IN_OUT) * (1 - tween(t, 48.28, 0.5, EASE_IN_OUT));
+  const W = 820;
+  const weekW = W / 13;
+  const barW = weekW * wk + (W - weekW) * stretch;
+  const no = t >= 48.8;
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={190} at={42.1}>
-        <Card w={900} h={240} pad={24}>
-          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 40, color: INK, marginBottom: 14}}>
-            <span style={{color: GREEN}}>1</span> low-carb week
-          </div>
-          <div style={{display: 'flex', gap: 12}}>
-            {days.map((d, i) => (
-              <div key={i} style={{flex: 1, height: 100, borderRadius: 22, background: tween(t, 43.74 + i * 0.07, 0.2) > 0.5 ? '#DFF5E7' : '#F3F1EC', border: `5px solid ${INK}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: BRIC, fontWeight: 800, fontSize: 40, color: INK}}>
-                {d}
+      <Pop x={540} y={300} at={42.0}>
+        <Card w={900} h={380} pad={40}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <H size={50}>
+              One week <Hi p={tween(t, 44.4, 0.3)}>≠ a rule</Hi>
+            </H>
+            {no ? (
+              <div style={{scale: Math.min(1, popAt(t, 48.8))}}>
+                <Tag bg={RED} size={28}>Too Soon</Tag>
               </div>
-            ))}
+            ) : null}
+          </div>
+          <div style={{position: 'relative', width: W, marginTop: 40}}>
+            <div style={{display: 'flex'}}>
+              {MONTHS.map((m) => (
+                <div key={m} style={{flex: 1, fontFamily: SANS, fontWeight: 800, fontSize: 30, color: MUTED, paddingLeft: 8}}>{m}</div>
+              ))}
+            </div>
+            <div style={{position: 'relative', height: 90, marginTop: 12, borderRadius: 18, background: PAPER, overflow: 'hidden'}}>
+              {Array.from({length: 12}, (_, i) => (
+                <div key={i} style={{position: 'absolute', left: (i + 1) * weekW, top: 0, bottom: 0, width: 3, background: '#E6E1D8'}} />
+              ))}
+              <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: barW, borderRadius: 18, background: stretch > 0.05 ? RED : HL, display: 'flex', alignItems: 'center', paddingLeft: 18, boxSizing: 'border-box', fontFamily: SANS, fontWeight: 800, fontSize: 30, color: stretch > 0.05 ? '#fff' : INK, whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                {stretch > 0.3 ? 'No Rice Until December?' : ''}
+              </div>
+            </div>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 26, color: MUTED, marginTop: 12, opacity: wk}}>↑ one low-carb week</div>
           </div>
         </Card>
-      </At>
-      <At x={540} y={420} at={46.22}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 20}}>
-          <div style={{position: 'relative'}}>
-            <Card w={150} h={130} pad={8} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-              <RiceBowl w={130} />
-            </Card>
-          </div>
-          <div style={{position: 'relative'}}>
-            <Die size={76}>
-              no rice till <span style={{color: GREEN}}>December?</span>
-            </Die>
-            <Strike t={t} at={48.8} w={760} />
-          </div>
-        </div>
-      </At>
+      </Pop>
     </AbsoluteFill>
   );
 };
-const DOTS = [65.3, 65.0, 65.4, 64.9, 65.1, 64.6, 64.9, 64.4, 64.7, 64.3, 64.6, 64.1, 64.4, 64.0];
+const DAYS = [70.1, 69.6, 70.3, 69.4, 69.9, 69.2, 69.5];
 const Trend: React.FC = () => {
   const t = useT();
-  const w = C.trend;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
+  const o = winVis(t, C.trend);
   if (o <= 0) return null;
-  const W = 840;
-  const H = 260;
-  const x = (i: number) => 40 + (i / (DOTS.length - 1)) * (W - 80);
-  const y = (v: number) => 30 + ((65.6 - v) / 1.8) * (H - 60);
-  const avg = DOTS.map((_, i) => {
-    const sl = DOTS.slice(Math.max(0, i - 2), Math.min(DOTS.length, i + 3));
-    return sl.reduce((s, v) => s + v, 0) / sl.length;
-  });
-  const p = tween(t, 53.56, 0.8, EASE_IN_OUT);
+  const avg = tween(t, 53.74, 0.5, EASE_OUT);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={320} at={50.0}>
-        <Card w={900} h={420} pad={30}>
-          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 40, color: INK}}>
-            keep intake <span style={{color: GREEN}}>consistent</span>
-          </div>
-          <svg width={W} height={H} style={{marginTop: 20}}>
-            {DOTS.map((v, i) => (
-              <circle key={i} cx={x(i)} cy={y(v)} r={13 * Math.max(0, popAt(t, 50.66 + i * 0.07))} fill={p > 0 ? '#BDB7AC' : INK} />
+      <Pop x={540} y={300} at={50.0}>
+        <Card w={900} h={380} pad={30}>
+          <Kicker>THIS WEEK'S WEIGH-INS</Kicker>
+          <div style={{display: 'flex', gap: 10, marginTop: 20}}>
+            {DAYS.map((d, i) => (
+              <div key={i} style={{flex: 1, height: 96, borderRadius: 14, background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center', scale: Math.max(0, Math.min(1, popAt(t, 50.3 + i * 0.22))), opacity: lerp(avg, 1, 0.45)}}>
+                <SevenSeg text={fmt(d)} h={30} on={HL} off="rgba(255,255,255,0.05)" />
+              </div>
             ))}
-            {p > 0 ? <path d={avg.map((v, i) => `${i ? 'L' : 'M'}${x(i)} ${y(v)}`).join(' ')} fill="none" stroke={GREEN} strokeWidth={14} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - p} /> : null}
-          </svg>
+          </div>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 22, marginTop: 26, opacity: avg, translate: `0 ${lerp(avg, 20, 0)}px`}}>
+            <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 38}}>7-Day Average</span>
+            <div style={{padding: '12px 22px', borderRadius: 16, background: INK}}>
+              <SevenSeg text="69.7" h={56} on={HL} off="rgba(255,255,255,0.05)" glow="rgba(255,214,10,0.5)" />
+            </div>
+          </div>
         </Card>
-      </At>
-      {t >= 53.74 ? (
-        <At x={760} y={525} at={53.74}>
-          <Chip bg={GREEN} size={44}>the longer trend</Chip>
-        </At>
-      ) : null}
+      </Pop>
     </AbsoluteFill>
   );
 };
 const Regain: React.FC = () => {
   const t = useT();
-  const w = C.regain;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
+  const o = winVis(t, C.regain);
   if (o <= 0) return null;
-  const val = roll(t, 65.0, 65.8, 56.34, 56.9);
+  const wet = 0.3 + 0.7 * tween(t, 56.34, 1.4, EASE_OUT);
+  const v = roll(t, 56.6, 1.2, 69.1, 69.9);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <At x={270} y={330} at={55.44}>
-        <div style={{position: 'relative'}}>
-          <Scale value={val} w={330} tone={t >= 56.34 ? 'up' : null} />
-          {t >= 56.9 ? (
-            <div style={{position: 'absolute', right: -50, top: -30, scale: Math.max(0, popAt(t, 56.9))}}>
-              <Chip bg={RED} size={42}>+0.8</Chip>
-            </div>
-          ) : null}
-        </div>
-      </At>
-      <At x={780} y={160} at={57.42}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
-          <Card w={140} h={120} pad={6} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <RiceBowl w={124} />
-          </Card>
-          <Die size={64}>carbs ↑</Die>
-        </div>
-      </At>
-      <At x={780} y={305} at={60.12}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
-          <div style={{width: 110, height: 110, borderRadius: '50%', background: '#fff', boxShadow: STICK, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Ico name="magnifying-glass" size={70} color={INK} />
+      <Pop x={540} y={300} at={55.2}>
+        <Card w={900} h={400} pad={30}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <H size={50}>
+              Carbs <Hi p={tween(t, 58.48, 0.3)}>back in</Hi>
+            </H>
+            {t >= 60.68 ? (
+              <div style={{scale: lerp(Math.min(1, popAt(t, 60.68)), 1.3, 1)}}>
+                <Tag bg={WATER} size={30}>
+                  <Ico name="drop" size={32} color="#fff" /> Water, Not Fat
+                </Tag>
+              </div>
+            ) : null}
           </div>
-          <Die size={64} color={BLUE}>context?</Die>
-        </div>
-      </At>
-      <At x={780} y={445} at={62.56}>
-        <div style={{position: 'relative'}}>
-          <Die size={70}>fat regain</Die>
-          <Strike t={t} at={63.3} w={400} />
-        </div>
-      </At>
-    </AbsoluteFill>
-  );
-};
-const FOODS: {n: string; at: number; draw: React.ReactNode}[] = [
-  {n: 'rice', at: 70.98, draw: <RiceBowl w={150} />},
-  {
-    n: 'roti',
-    at: 71.4,
-    draw: (
-      <svg width={130} height={130} viewBox="0 0 100 100">
-        <circle cx={50} cy={50} r={44} fill="#E9C38A" stroke={INK} strokeWidth={5} />
-        {[0, 1, 2, 3, 4].map((i) => (
-          <circle key={i} cx={30 + (i * 13) % 45} cy={32 + (i * 17) % 40} r={5} fill="#B9803F" opacity={0.7} />
-        ))}
-      </svg>
-    ),
-  },
-  {
-    n: 'dal',
-    at: 71.88,
-    draw: (
-      <svg width={150} height={120} viewBox="0 0 150 120">
-        <ellipse cx={75} cy={48} rx={62} ry={18} fill={AMBER} stroke={INK} strokeWidth={5} />
-        <path d="M13 48 C 16 98, 134 98, 137 48" fill="#FFFFFF" stroke={INK} strokeWidth={5} />
-      </svg>
-    ),
-  },
-  {
-    n: 'fruit',
-    at: 72.3,
-    draw: (
-      <svg width={120} height={130} viewBox="0 0 100 110">
-        <path d="M50 30 C 20 10, 4 40, 12 68 C 20 98, 40 104, 50 96 C 60 104, 80 98, 88 68 C 96 40, 80 10, 50 30Z" fill={RED} stroke={INK} strokeWidth={5} />
-        <path d="M50 30 C 50 18, 56 10, 64 6" fill="none" stroke={INK} strokeWidth={5} strokeLinecap="round" />
-        <path d="M54 18 C 66 8, 80 12, 82 20 C 70 26, 60 24, 54 18Z" fill={GREEN} stroke={INK} strokeWidth={4} />
-      </svg>
-    ),
-  },
-];
-const Foods: React.FC = () => {
-  const t = useT();
-  const w = C.foods;
-  const o = vis(t, w.start + 0.2, w.end - 0.25);
-  if (o <= 0) return null;
-  return (
-    <AbsoluteFill style={{opacity: o}}>
-      <At x={540} y={150} at={65.06} out={69.6}>
-        <Die size={66}>understand your results</Die>
-      </At>
-      <At x={540} y={360} at={68.16} out={69.6}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 22}}>
-          <Scale value="65.8" w={220} />
-          <Die size={64}>
-            one <span style={{color: '#FF6B1A'}}>weigh-in</span>
-          </Die>
-        </div>
-      </At>
-      <At x={540} y={150} at={69.82}>
-        <Die size={60}>shouldn't change what</Die>
-      </At>
-      <At x={540} y={250} at={72.1}>
-        <Die size={72} color="#FF6B1A">you're allowed to eat</Die>
-      </At>
-      <div style={{position: 'absolute', left: 540, top: 425, translate: '-50% -50%', display: 'flex', gap: 20}}>
-        {FOODS.map((f, i) =>
-          t >= f.at - 0.6 ? (
-            <div key={i} style={{scale: Math.max(0, popAt(t, f.at - 0.6)), position: 'relative'}}>
-              <Card w={210} h={190} pad={6} style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                {f.draw}
-              </Card>
-              {t >= f.at ? (
-                <div style={{position: 'absolute', right: -14, top: -14, width: 64, height: 64, borderRadius: '50%', background: GREEN, border: '5px solid #fff', boxShadow: STICK, display: 'flex', alignItems: 'center', justifyContent: 'center', scale: Math.max(0, popAt(t, f.at))}}>
-                  <Ico name="check-circle" size={44} color="#fff" />
+          <div style={{position: 'absolute', left: 60, top: 130}}>
+            <div style={{width: 360, height: 220, display: 'flex', alignItems: 'flex-end', justifyContent: 'center'}}>
+              <Sponge w={340} h={180} wet={wet} />
+            </div>
+            <Falling t={t} at={56.2} n={10} x={180} y={-140} spread={260} up />
+          </div>
+          <div style={{position: 'absolute', right: 50, top: 140}}>
+            <div style={{position: 'relative'}}>
+              <Scale text={fmt(v)} size={230} />
+              {t >= 57.8 ? (
+                <div style={{position: 'absolute', right: -10, top: -18, scale: Math.min(1, popAt(t, 57.8))}}>
+                  <Tag bg={INK} size={24}>▲ 0.8</Tag>
                 </div>
               ) : null}
             </div>
-          ) : null,
-        )}
-      </div>
+          </div>
+        </Card>
+      </Pop>
     </AbsoluteFill>
   );
 };
+const FOODS = [
+  {n: 'Rice', icon: 'bowl-food'},
+  {n: 'Roti', icon: 'cooking-pot'},
+  {n: 'Fruit', icon: 'leaf'},
+];
+const Foods: React.FC = () => {
+  const t = useT();
+  const o = winVis(t, C.foods);
+  if (o <= 0) return null;
+  const strike = tween(t, 69.82, 0.45, EASE_OUT) * (1 - tween(t, 70.7, 0.45, EASE_IN_OUT));
+  const keep = t >= 71.0;
+  return (
+    <AbsoluteFill style={{opacity: o}}>
+      <Pop x={540} y={300} at={64.6}>
+        <Card w={900} h={400} pad={34}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <Kicker>YOUR FOOD LIST</Kicker>
+            {t >= 68.62 ? (
+              <div style={{display: 'flex', alignItems: 'center', gap: 10, scale: Math.min(1, popAt(t, 68.62))}}>
+                <Tag bg={INK} size={26}>
+                  <Ico name="scales" size={28} color={HL} /> One Weigh-In
+                </Tag>
+              </div>
+            ) : null}
+          </div>
+          <div style={{display: 'flex', flexDirection: 'column', gap: 12, marginTop: 18}}>
+            {FOODS.map((f, i) => {
+              const rice = i === 0;
+              return (
+                <div key={f.n} style={{position: 'relative', display: 'flex', alignItems: 'center', gap: 18, height: 78, padding: '0 22px', borderRadius: 18, background: rice && keep ? HL : PAPER, opacity: tween(t, 65.2 + i * 0.25, 0.3), translate: `${lerp(tween(t, 65.2 + i * 0.25, 0.3), -20, 0)}px 0`}}>
+                  <Ico name={f.icon} size={44} color={INK} />
+                  <span style={{flex: 1, fontFamily: SANS, fontWeight: 800, fontSize: 38}}>{f.n}</span>
+                  <Ico name="check-circle" size={44} color={GREEN} />
+                  {rice && strike > 0 ? <div style={{position: 'absolute', left: 16, top: 37, width: `${strike * 92}%`, height: 6, borderRadius: 3, background: RED}} /> : null}
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      </Pop>
+    </AbsoluteFill>
+  );
+};
+/** Ending: the scale spells GUIDE. */
 const Cta: React.FC = () => {
   const t = useT();
   if (t < C.cta.start) return null;
+  const word = 'GUIdE';
+  const n = Math.max(0, Math.min(5, Math.floor((t - 73.66) / 0.09) + 1));
+  const text = (word.slice(0, n) + '     ').slice(0, 5);
+  const sent = popAt(t, 74.8);
   return (
     <AbsoluteFill>
-      <At x={540} y={170} at={73.44}>
-        <Die size={70}>comment</Die>
-      </At>
-      <At x={540} y={320} at={73.66}>
-        <Die size={170} color={RED} stroke={22}>
-          GUIDE
-        </Die>
-      </At>
-      <At x={540} y={495} at={74.8}>
-        <Card pad={18} style={{display: 'flex', alignItems: 'center', gap: 18}}>
-          <div style={{width: 80, height: 80, borderRadius: 22, background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Ico name="file-pdf" size={52} color="#fff" />
-          </div>
-          <div style={{fontFamily: BRIC}}>
-            <div style={{fontSize: 40, fontWeight: 800, color: INK, whiteSpace: 'nowrap'}}>Free Fat Loss Guide</div>
-            <div style={{fontSize: 26, fontWeight: 600, color: '#7A7266'}}>sent to your DMs</div>
-          </div>
-        </Card>
-      </At>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 76, textAlign: 'center', opacity: tween(t, C.cta.start + 0.1, 0.3)}}>
+        <Kicker color={INK}>COMMENT</Kicker>
+      </div>
+      <Pop x={540} y={320} at={C.cta.start + 0.1}>
+        <Scale text={text} size={360} />
+      </Pop>
+      {t >= 74.8 ? (
+        <div style={{position: 'absolute', left: 540, top: 538, translate: '-50% -50%', scale: Math.min(1, sent)}}>
+          <Tag bg={INK} size={30}>
+            <Ico name="paper-plane-right" size={32} color={HL} /> Free Guide · Your DMs
+          </Tag>
+        </div>
+      ) : null}
     </AbsoluteFill>
   );
 };
 
 // ---------------------------------------------------------------------------
-// Captions: die-cut words, spoken word in the section colour
-// ---------------------------------------------------------------------------
-const Caps: React.FC = () => {
-  const t = useT();
-  if (inWin(t, [{start: C.cta.start + 0.2, end: 999}])) return null;
-  const chunk = chunkAt(cfg.captions, t);
-  if (!chunk) return null;
-  const k = tween(t, chunk[0].start - 0.04, 0.14);
-  const {ac} = colorsAt(t);
-  return (
-    <div style={{position: 'absolute', left: 30, right: 30, top: 1560, translate: `0 ${-50 + lerp(k, 12, 0)}%`, textAlign: 'center', opacity: k}}>
-      {chunk.map((w, i) => {
-        const nextStart = chunk[i + 1]?.start ?? w.end + 0.3;
-        const on = t >= w.start - 0.03 && t < nextStart;
-        return (
-          <span key={i} style={{display: 'inline-block', margin: '0 0.2em', fontFamily: BRIC, fontWeight: 800, fontSize: 76, lineHeight: 1.12, letterSpacing: -0.5, color: on ? ac : INK, WebkitTextStroke: '13px #fff', paintOrder: 'stroke fill', filter: 'drop-shadow(0 10px 12px rgba(40,25,10,0.3))', scale: on ? 1.06 : 1}}>
-            {w.text}
-          </span>
-        );
-      })}
-    </div>
-  );
-};
-
-// ---------------------------------------------------------------------------
-const Room: React.FC = () => {
-  const t = useT();
-  return revealAt(t) >= 1 ? null : <Footage cfg={cfg} />;
-};
+const WASH = [C.hook, C.rice, {start: C.glyco.start, end: C.water.end}, C.three, C.week, C.trend, C.regain, C.foods, C.cta];
 const Scene: React.FC = () => (
   <>
-    <Room />
-    <Backdrop />
+    <Footage cfg={cfg} />
+    <GradeOverlay cfg={cfg} />
+    <TopWash wins={WASH} reach={38} />
     <Hook />
     <Rice />
     <Glyco />
-    <Water />
     <Three />
     <Week />
     <Trend />
     <Regain />
     <Foods />
     <Cta />
-    <Outline />
     <Subject cfg={cfg} />
-    <Caps />
+    <PillCaps cfg={cfg} hide={[{start: C.cta.start + 0.3, end: 999}]} />
   </>
 );
 
 export const V11Reel: React.FC = () => (
-  <Base cfg={{...cfg, shakes: [0.98, 11.32, 48.8, 73.66]}}>
+  <Base cfg={{...cfg, shakes: [5.72, 15.3, 48.8]}}>
     <Scene />
   </Base>
 );
-

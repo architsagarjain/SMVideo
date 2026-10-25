@@ -42,6 +42,8 @@ export const chunkAt = (CH: Word[][], t: number) => {
 // ---------------------------------------------------------------------------
 const SEGS: Record<string, string> = {
   '0': 'abcdef', '1': 'bc', '2': 'abged', '3': 'abgcd', '4': 'fgbc', '5': 'afgcd', '6': 'afgedc', '7': 'abc', '8': 'abcdefg', '9': 'abcdfg', '-': 'g', ' ': '',
+  // letters for short words on a display
+  G: 'acdef', U: 'bcdef', I: 'ef', d: 'bcdeg', E: 'adefg', '?': 'abeg',
 };
 const hseg = (x1: number, x2: number, y: number, T: number) =>
   `${x1},${y} ${x1 + T / 2},${y - T / 2} ${x2 - T / 2},${y - T / 2} ${x2},${y} ${x2 - T / 2},${y + T / 2} ${x1 + T / 2},${y + T / 2}`;

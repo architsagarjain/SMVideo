@@ -4,11 +4,8 @@ import timemap from './timemap.json';
 import captions from './captions.json';
 
 /**
- * Rice / water-weight reel. Look: "studio cut-out". Her room is replaced by a clean pastel backdrop
- * (colour changes with each section); she is cut out with a white sticker outline and a soft shadow,
- * and every graphic is a die-cut sticker (white border, soft shadow) on the same backdrop, so text
- * never fights the clutter. The first second shows her real room before the backdrop floods in.
- * Times are source seconds.
+ * Rice / water-weight reel, in the batch look (her room, soft white wash, white cards, dark-pill
+ * captions). Signature: a bathroom scale and a glycogen "sponge". Times are source seconds.
  */
 export const TM11 = timemap as TimeMap;
 export const V11_FRAMES = TM11.frames;
