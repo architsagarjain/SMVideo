@@ -39,7 +39,6 @@ def cues(cue, rng):
     for j in range(7):
         cue(24.2 + j * 0.1, "pack:tick", -29)
     for at in (30.74, 32.16, 33.74, 35.16):
-        cue(at - 0.2, "pack:whoosh_soft", -29)
         cue(at, "pack:tick", -23)
     cue(36.3, "pack:hit", -19)  # FOUND
     # fixes

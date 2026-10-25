@@ -215,25 +215,13 @@ const Slide: React.FC<{t: number; a: number; b: number; wipe?: boolean; children
   if (wipe) return <div style={{position: 'absolute', inset: 0, opacity: 1 - out, clipPath: `inset(0 0 ${(1 - tween(t, a, 0.4, EASE_IN_OUT)) * 100}% 0)`}}>{children}</div>;
   return <div style={{position: 'absolute', inset: 0, opacity: inn * (1 - out), translate: `0 ${lerp(inn, 26, 0) - out * 14}px`}}>{children}</div>;
 };
-const Lens: React.FC<{x: number; y: number; s?: number}> = ({x, y, s = 1}) => (
-  <div style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', scale: s, pointerEvents: 'none'}}>
-    <div style={{width: 100, height: 100, borderRadius: '50%', border: `9px solid ${INK}`, background: 'rgba(255,255,255,0.12)', boxShadow: 'inset 0 0 0 4px rgba(255,255,255,0.7), 0 14px 26px -10px rgba(0,0,0,0.5)', boxSizing: 'border-box'}} />
-    <div style={{position: 'absolute', left: 82, top: 20, width: 50, height: 16, borderRadius: 8, background: INK, rotate: '-45deg', transformOrigin: 'left center'}} />
-  </div>
-);
 const CaseBoard: React.FC = () => {
   const t = useT();
   const o = winVis(t, C.funnel);
   if (o <= 0) return null;
   let k = -1;
   CLUES.forEach((s, i) => (t >= s.at - 0.05 ? (k = i) : null));
-  // lens: glides card to card as she names them, then settles on the culprit
   const cx = (i: number) => 120 + i * 226;
-  let lx = cx(0);
-  OBST.forEach((ob, i) => {
-    if (t >= ob.at - 0.2) lx = lerp(tween(t, ob.at - 0.2, 0.4, EASE_IN_OUT), i ? cx(i - 1) : cx(0), cx(i));
-  });
-  if (t >= FOUND - 0.4) lx = lerp(tween(t, FOUND - 0.4, 0.5, EASE_IN_OUT), cx(3), cx(0));
   const found = t >= FOUND;
   return (
     <AbsoluteFill style={{opacity: o}}>
@@ -311,24 +299,21 @@ const CaseBoard: React.FC = () => {
                     </Hi>
                   </H>
                 </div>
-                <svg width={960} height={364} style={{position: 'absolute', left: 0, top: 0}}>
-                  {OBST.map((ob, i) => (t >= ob.at ? <path key={i} d={`M ${cx(i)} 120 Q ${(cx(i) + 480) / 2} 60 820 40`} fill="none" stroke={HL} strokeWidth={4} pathLength={1} strokeDasharray={1} strokeDashoffset={1 - tween(t, ob.at, 0.4)} /> : null))}
-                  <circle cx={820} cy={40} r={12} fill={RED} />
-                </svg>
                 {OBST.map((ob, i) => {
                   const hit = found && i === 0;
                   const kk = popAt(t, ob.at);
+                  // the card she is naming lifts and gets a yellow outline
+                  const on = !found && t >= ob.at && (i === OBST.length - 1 || t < OBST[i + 1].at);
+                  const lift = on ? tween(t, ob.at, 0.25, EASE_OUT) : 0;
                   return (
-                    <div key={i} style={{position: 'absolute', left: cx(i) - 100, top: 120, width: 200, height: 210, borderRadius: 18, background: hit ? HL : '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, scale: Math.max(0, Math.min(1.05, kk)) * (hit ? lerp(Math.min(1, popAt(t, FOUND)), 1.12, 1.04) : 1), opacity: found && !hit ? 0.35 : 1}}>
-                      <div style={{position: 'absolute', top: -10, width: 22, height: 22, borderRadius: '50%', background: RED, boxShadow: '0 3px 6px rgba(0,0,0,0.4)'}} />
+                    <div key={i} style={{position: 'absolute', left: cx(i) - 100, top: 110, width: 200, height: 200, borderRadius: 18, background: hit ? HL : '#fff', outline: on ? `6px solid ${HL}` : 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, translate: `0 ${-lift * 10}px`, scale: Math.max(0, Math.min(1.05, kk)) * (hit ? lerp(Math.min(1, popAt(t, FOUND)), 1.12, 1.04) : 1), opacity: found && !hit ? 0.35 : 1}}>
                       <Ico name={ob.icon} size={70} color={INK} />
                       <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 28, textAlign: 'center', lineHeight: 1.05, padding: '0 10px'}}>{ob.t}</span>
                     </div>
                   );
                 })}
-                {t >= OBST[0].at - 0.2 && t < FOUND + 0.4 ? <Lens x={lx} y={172} s={Math.min(1, popAt(t, OBST[0].at - 0.2)) * (1 - tween(t, FOUND + 0.05, 0.3, EASE_IN))} /> : null}
                 {found ? (
-                  <div style={{position: 'absolute', left: cx(0), top: 336, translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, FOUND + 0.1)), 1.8, 1), opacity: tween(t, FOUND + 0.1, 0.1)}}>
+                  <div style={{position: 'absolute', left: cx(0), top: 342, translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, FOUND + 0.1)), 1.8, 1), opacity: tween(t, FOUND + 0.1, 0.1)}}>
                     <div style={{padding: '4px 16px', border: `5px solid ${RED}`, borderRadius: 10, background: '#fff', color: RED, fontFamily: SANS, fontWeight: 800, fontSize: 30, letterSpacing: 3}}>FOUND</div>
                   </div>
                 ) : null}
