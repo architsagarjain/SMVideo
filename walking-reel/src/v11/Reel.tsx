@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill, getInputProps} from 'remotion';
 import {Base, Footage, GradeOverlay, Subject} from '../series/core';
 import {useT} from '../explainer/kit';
 import {Ico, SevenSeg, popAt} from '../series/kit2';
@@ -427,40 +427,118 @@ const Foods: React.FC = () => {
     </AbsoluteFill>
   );
 };
-/** Ending: like the coin weighing machines, the scale prints a fortune card - "Comment GUIDE". */
-const Cta: React.FC = () => {
+// ---------------------------------------------------------------------------
+// Ending - three options (pick with --props '{"cta":"A"|"B"|"C"}')
+// ---------------------------------------------------------------------------
+const TYPE_AT = 73.66; // "GUIDE"
+const SEND_AT = 74.8; // "I'll send you"
+/** A: a comment bar types GUIDE and sends; her reply lands as a DM bubble. */
+const CtaA: React.FC = () => {
   const t = useT();
-  if (t < C.cta.start) return null;
-  const PRINT = 73.5;
-  const card = tween(t, PRINT, 0.9, EASE_OUT);
-  const shake = t >= PRINT && t < PRINT + 0.9 ? Math.sin((t - PRINT) * 70) * 3 * (1 - (t - PRINT) / 0.9) : 0;
-  const word = tween(t, 73.66, 0.35, EASE_OUT);
-  const dm = popAt(t, 74.8);
-  const SCALE_Y = 440;
+  const s0 = C.cta.start;
+  const word = 'GUIDE';
+  const typed = word.slice(0, Math.max(0, Math.min(word.length, Math.floor((t - TYPE_AT) / 0.08) + 1)));
+  const sentAt = TYPE_AT + word.length * 0.08 + 0.2;
+  const sent = tween(t, sentAt, 0.25, EASE_OUT);
+  const bar = tween(t, s0 + 0.05, 0.4, EASE_OUT);
+  const dm = tween(t, SEND_AT, 0.45, EASE_OUT);
   return (
-    <AbsoluteFill>
-      {/* the card slides up out of the slot at the top of the scale (drawn behind the scale) */}
-      <div style={{position: 'absolute', left: 540, top: lerp(card, SCALE_Y - 120, 36), translate: '-50% 0', width: 600, borderRadius: 22, background: '#fff', boxShadow: CARD_SHADOW, padding: '20px 30px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, opacity: tween(t, PRINT, 0.15)}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 10, fontFamily: SANS, fontWeight: 800, fontSize: 24, letterSpacing: 6, color: MUTED}}>
-          <span style={{color: HL}}>★</span> YOUR FORTUNE <span style={{color: HL}}>★</span>
+    <AbsoluteFill style={{fontFamily: SANS}}>
+      <div style={{position: 'absolute', left: 70, top: 90, width: 940, height: 150, borderRadius: 75, background: '#fff', boxShadow: CARD_SHADOW, display: 'flex', alignItems: 'center', gap: 24, padding: '0 22px 0 30px', boxSizing: 'border-box', opacity: bar, translate: `0 ${lerp(bar, 30, 0)}px`}}>
+        <Ico name="chat-circle-dots" size={58} color={INK} />
+        <div style={{flex: 1, fontSize: 76, fontWeight: 800, letterSpacing: typed ? 6 : 0, color: typed ? INK : '#A8A39A'}}>{typed ? <Hi p={sent}>{typed}</Hi> : <span style={{fontSize: 46}}>Add a comment…</span>}</div>
+        <div style={{width: 106, height: 106, borderRadius: '50%', background: sent > 0 ? INK : '#D8D4CC', display: 'flex', alignItems: 'center', justifyContent: 'center', scale: 1 + 0.15 * Math.sin(Math.PI * sent)}}>
+          <Ico name="paper-plane-right" size={56} color={sent > 0 ? HL : '#fff'} />
         </div>
-        <div style={{display: 'flex', alignItems: 'center', gap: 20}}>
-          <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 52, color: INK}}>Comment</span>
-          <span style={{padding: '2px 22px', borderRadius: 14, background: INK, color: HL, fontFamily: SANS, fontWeight: 800, fontSize: 76, letterSpacing: 4, lineHeight: 1.15, scale: lerp(word, 0.6, 1), opacity: word}}>GUIDE</span>
+      </div>
+      {dm > 0 ? (
+        <div style={{position: 'absolute', left: 70, top: 290, opacity: dm, translate: `0 ${lerp(dm, 30, 0)}px`, display: 'flex', alignItems: 'flex-end', gap: 16}}>
+          <div style={{width: 76, height: 76, borderRadius: '50%', background: HL, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 36, color: INK}}>B</div>
+          <div style={{padding: '22px 30px', borderRadius: '34px 34px 34px 10px', background: INK, color: '#fff', boxShadow: CARD_SHADOW, maxWidth: 740}}>
+            <div style={{fontSize: 40, fontWeight: 800, lineHeight: 1.15}}>Here's your free fat loss guide</div>
+            <div style={{display: 'flex', alignItems: 'center', gap: 14, marginTop: 14, padding: '12px 18px', borderRadius: 16, background: 'rgba(255,255,255,0.1)'}}>
+              <Ico name="file-pdf" size={44} color={HL} />
+              <span style={{fontSize: 30, fontWeight: 700}}>Fat-Loss-Guide.pdf</span>
+            </div>
+          </div>
         </div>
-        <div style={{height: 40, display: 'flex', alignItems: 'center'}}>
-          {t >= 74.8 ? (
-            <div style={{display: 'flex', alignItems: 'center', gap: 10, fontFamily: SANS, fontWeight: 800, fontSize: 30, color: INK, scale: Math.min(1, dm)}}>
-              <Ico name="paper-plane-right" size={32} color={INK} /> Free Guide · Your DMs
+      ) : null}
+    </AbsoluteFill>
+  );
+};
+/** B: big type - GUIDE drops in letter by letter. */
+const CtaB: React.FC = () => {
+  const t = useT();
+  const s0 = C.cta.start;
+  const card = popAt(t, s0 + 0.05);
+  const dm = popAt(t, SEND_AT);
+  return (
+    <AbsoluteFill style={{fontFamily: SANS}}>
+      <div style={{position: 'absolute', left: 540, top: 300, translate: '-50% -50%', scale: Math.min(1, Math.max(0, card)), width: 900, borderRadius: 40, background: '#fff', boxShadow: CARD_SHADOW, padding: '34px 40px 40px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 12, fontWeight: 800, fontSize: 36, letterSpacing: 8, color: MUTED}}>
+          <Ico name="chat-circle-dots" size={40} color={MUTED} /> COMMENT
+        </div>
+        <div style={{display: 'flex', gap: 6, marginTop: 6, height: 230, alignItems: 'center'}}>
+          {'GUIDE'.split('').map((ch, i) => {
+            const k = popAt(t, TYPE_AT + i * 0.09);
+            return (
+              <span key={i} style={{fontFamily: 'Anton', fontSize: 220, lineHeight: 1, color: INK, opacity: Math.min(1, k * 3), translate: `0 ${lerp(Math.min(1, Math.max(0, k)), -120, 0)}px`, display: 'inline-block'}}>
+                {ch}
+              </span>
+            );
+          })}
+        </div>
+        <div style={{width: lerp(tween(t, TYPE_AT + 0.5, 0.4, EASE_OUT), 0, 560), height: 18, borderRadius: 9, background: HL, marginTop: -10}} />
+        <div style={{height: 70, marginTop: 22, display: 'flex', alignItems: 'center'}}>
+          {t >= SEND_AT ? (
+            <div style={{scale: Math.min(1, dm)}}>
+              <Tag bg={INK} size={34}>
+                <Ico name="file-pdf" size={36} color={HL} /> Free Fat Loss Guide → Your DMs
+              </Tag>
             </div>
           ) : null}
         </div>
       </div>
-      <div style={{position: 'absolute', left: 540, top: SCALE_Y, translate: `calc(-50% + ${shake}px) -50%`, scale: Math.min(1, popAt(t, C.cta.start + 0.05))}}>
-        <Scale text="69.5" size={300} />
+    </AbsoluteFill>
+  );
+};
+/** C: a food-label card - the guide, labelled like a food. */
+const CtaC: React.FC = () => {
+  const t = useT();
+  const s0 = C.cta.start;
+  const k = tween(t, s0 + 0.05, 0.45, EASE_OUT);
+  const row = (at: number, l: string, r: React.ReactNode, big?: boolean) => (
+    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', minHeight: big ? 120 : 62, borderBottom: big ? 'none' : `3px solid ${INK}`, opacity: tween(t, at, 0.25), translate: `0 ${lerp(tween(t, at, 0.25), 14, 0)}px`}}>
+      <span style={{fontSize: big ? 40 : 32, fontWeight: 800}}>{l}</span>
+      <span style={{fontSize: 32, fontWeight: 800}}>{r}</span>
+    </div>
+  );
+  return (
+    <AbsoluteFill style={{fontFamily: SANS, color: INK}}>
+      <div style={{position: 'absolute', left: 540, top: 70, translate: `-50% ${lerp(k, 30, 0)}px`, opacity: k, width: 760, background: '#fff', border: `6px solid ${INK}`, boxShadow: CARD_SHADOW, padding: '18px 34px 22px', boxSizing: 'border-box'}}>
+        <div style={{fontWeight: 800, fontSize: 56, letterSpacing: -1.5, lineHeight: 1.05}}>Free Fat Loss Guide</div>
+        <div style={{height: 14, background: INK, margin: '10px 0 4px'}} />
+        {row(73.4, 'Serving', '1 PDF')}
+        {row(73.5, 'Price', '₹0')}
+        {row(
+          TYPE_AT,
+          'To get it, comment',
+          <span style={{display: 'inline-block', padding: '4px 22px', background: HL, border: `5px solid ${INK}`, borderRadius: 12, fontFamily: 'Anton', fontSize: 80, fontWeight: 400, letterSpacing: 4, lineHeight: 1.1, scale: lerp(Math.min(1, Math.max(0, popAt(t, TYPE_AT))), 1.4, 1)}}>GUIDE</span>,
+          true,
+        )}
+        <div style={{height: 6, background: INK, marginTop: 4}} />
+        <div style={{display: 'flex', alignItems: 'center', gap: 10, marginTop: 14, fontSize: 28, fontWeight: 800, opacity: tween(t, SEND_AT, 0.3)}}>
+          <Ico name="paper-plane-right" size={30} color={INK} /> Delivered to your DMs
+        </div>
       </div>
     </AbsoluteFill>
   );
+};
+const Cta: React.FC = () => {
+  const t = useT();
+  if (t < C.cta.start) return null;
+  const v = (getInputProps() as {cta?: string}).cta ?? 'B';
+  return v === 'A' ? <CtaA /> : v === 'C' ? <CtaC /> : <CtaB />;
 };
 
 // ---------------------------------------------------------------------------
