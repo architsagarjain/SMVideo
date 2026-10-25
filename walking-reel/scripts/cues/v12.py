@@ -51,8 +51,9 @@ def cues(cue, rng):
     cue(67.42, "pack:tick", -25)
     cue(68.68, "pack:tick", -25)
     cue(69.58, "pack:hit", -21)
-    cue(73.3, "pack:whoosh_soft", -25)
-    cue(73.32, "pack:whoosh_soft", -26)
+    cue(73.3, "pack:whoosh_soft", -25)  # the free pass flips in
     for j in range(5):
-        cue(73.9 + j * 0.13, "pack:tick", -22)  # tiles flip to G-U-I-D-E
-    cue(75.1, "pack:notif", -21)
+        cue(73.96 + j * 0.08, "pack:key", -25)  # GUIDE types in
+    cue(74.4, "pack:chime2", -26)
+    cue(75.1, "pack:whoosh_fast", -22)  # stub tears off
+    cue(75.45, "pack:notif", -20)

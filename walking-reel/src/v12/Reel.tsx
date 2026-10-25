@@ -3,7 +3,7 @@ import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
 import {Base, Footage, GradeOverlay, Subject} from '../series/core';
 import {outAt} from '../series/timemap';
 import {useT} from '../explainer/kit';
-import {Ico, popAt} from '../series/kit2';
+import {ANTON, Ico, popAt} from '../series/kit2';
 import {CARD_SHADOW, Card, H, HL, Hi, INK, Kicker, MUTED, PillCaps, Pop, Tag, TopWash, rise, winVis} from '../series/kit3';
 import {EASE_IN_OUT, EASE_OUT, FPS, SANS, lerp, tween} from '../theme';
 import {C, TM12, v12Config as cfg} from './config';
@@ -390,43 +390,66 @@ const Calendar: React.FC = () => {
 };
 
 const LETTERS = ['G', 'U', 'I', 'D', 'E'];
+/** Ending: a free pass. GUIDE types into it, then the stub tears off and the pass is sent. */
 const Cta: React.FC = () => {
   const t = useT();
   if (t < C.cta.start) return null;
-  const dm = tween(t, 75.1, 0.4, EASE_OUT);
+  const word = 'GUIDE';
+  const typeAt = 73.96;
+  const typed = word.slice(0, Math.max(0, Math.min(word.length, Math.floor((t - typeAt) / 0.08) + 1)));
+  const done = typed.length === word.length;
+  const TEAR = 75.1;
+  const tear = tween(t, TEAR, 0.55, EASE_IN_OUT);
+  const sent = popAt(t, TEAR + 0.35);
+  const W = 960;
+  const MAIN = 680;
+  const notch = (x: number, y: number) => <div style={{position: 'absolute', left: x - 22, top: y - 22, width: 44, height: 44, borderRadius: '50%', background: '#F2EFE8'}} />;
   return (
     <AbsoluteFill>
       <FlipIn x={540} y={300} at={C.cta.start}>
-        <Card w={960} pad={28}>
-          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18}}>
-            <H size={54}>
-              Comment <Shine t={t} at={74.5}>this word</Shine>
-            </H>
-            <Ico name="chat-circle-dots" size={56} color={INK} />
+        <div style={{position: 'relative', width: W, height: 320}}>
+          {/* main part */}
+          <div style={{position: 'absolute', left: 0, top: 0, width: MAIN, height: 320, borderRadius: '28px 0 0 28px', background: '#fff', boxShadow: CARD_SHADOW, padding: '30px 36px', boxSizing: 'border-box', fontFamily: SANS, color: INK}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+              <Ico name="barbell" size={34} color={INK} />
+              <span style={{fontWeight: 800, fontSize: 26, letterSpacing: 6, color: MUTED}}>FREE PASS</span>
+            </div>
+            <div style={{fontWeight: 800, fontSize: 64, letterSpacing: -2, marginTop: 10, lineHeight: 1.05}}>
+              Fat Loss <Shine t={t} at={73.7}>Guide</Shine>
+            </div>
+            <div style={{display: 'flex', alignItems: 'center', gap: 18, marginTop: 26}}>
+              <span style={{fontWeight: 700, fontSize: 34, color: MUTED}}>Comment</span>
+              <div style={{minWidth: 250, height: 84, borderRadius: 16, border: `4px solid ${INK}`, background: done ? HL : '#fff', display: 'flex', alignItems: 'center', padding: '0 20px', boxSizing: 'border-box', fontFamily: ANTON, fontSize: 60, letterSpacing: 6}}>
+                {typed}
+                {!done && Math.floor(t * 3) % 2 === 0 ? <span style={{color: MUTED, fontFamily: SANS, fontWeight: 400}}>|</span> : null}
+              </div>
+            </div>
           </div>
-          <div style={{display: 'flex', gap: 10}}>
-            {DAYS.map((d, i) => {
-              const L = LETTERS[i];
-              const ang = L ? tween(t, 73.9 + i * 0.13, 0.42, EASE_IN_OUT) * 180 : 0;
-              const back = ang >= 90;
-              return (
-                <div key={i} style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10}}>
-                  <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 24, letterSpacing: 2, color: MUTED}}>{d}</div>
-                  <div style={{width: '100%', height: 150, perspective: 900}}>
-                    <div style={{width: '100%', height: '100%', borderRadius: 18, background: back ? HL : '#F4F1EB', transform: `rotateX(${back ? ang - 180 : ang}deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 96, color: INK, boxShadow: back ? '0 14px 24px -12px rgba(0,0,0,0.35)' : undefined}}>
-                      {back ? L : ''}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          {/* "sent" note, revealed where the stub was */}
+          {t >= TEAR + 0.3 ? (
+            <div style={{position: 'absolute', left: MAIN + 20, top: 0, width: W - MAIN - 20, height: 320, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, scale: Math.min(1, Math.max(0, sent)), fontFamily: SANS}}>
+              <div style={{width: 96, height: 96, borderRadius: '50%', background: INK, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: CARD_SHADOW}}>
+                <Ico name="paper-plane-right" size={52} color={HL} />
+              </div>
+              <div style={{fontWeight: 800, fontSize: 32, color: INK, textAlign: 'center', lineHeight: 1.1}}>
+                Sent To
+                <br />
+                Your DMs
+              </div>
+            </div>
+          ) : null}
+          {/* tear-off stub */}
+          <div style={{position: 'absolute', left: MAIN, top: 0, width: W - MAIN, height: 320, borderRadius: '0 28px 28px 0', background: '#fff', boxShadow: CARD_SHADOW, borderLeft: `4px dashed #CFC8BA`, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, translate: `${tear * 90}px ${tear * 260}px`, opacity: 1 - tween(t, TEAR + 0.25, 0.3)}}>
+            <svg width={180} height={120}>
+              {Array.from({length: 26}, (_, i) => (
+                <rect key={i} x={i * 7} y={0} width={[3, 5, 2, 4][i % 4]} height={120} fill={INK} />
+              ))}
+            </svg>
+            <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 24, letterSpacing: 5, color: INK}}>ADMIT ONE</span>
           </div>
-          <div style={{display: 'flex', justifyContent: 'center', marginTop: 20, opacity: dm, translate: `0 ${lerp(dm, 16, 0)}px`}}>
-            <Tag bg={INK} size={30}>
-              <Ico name="file-pdf" size={34} color={HL} /> Free Fat Loss Guide → Your DMs
-            </Tag>
-          </div>
-        </Card>
+          {notch(MAIN, 0)}
+          {notch(MAIN, 320)}
+        </div>
       </FlipIn>
     </AbsoluteFill>
   );
