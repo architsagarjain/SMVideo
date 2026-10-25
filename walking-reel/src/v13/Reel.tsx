@@ -309,14 +309,12 @@ const CaseBoard: React.FC = () => {
                     <div key={i} style={{position: 'absolute', left: cx(i) - 100, top: 110, width: 200, height: 200, borderRadius: 18, background: hit ? HL : '#fff', outline: on ? `6px solid ${HL}` : 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, translate: `0 ${-lift * 10}px`, scale: Math.max(0, Math.min(1.05, kk)) * (hit ? lerp(Math.min(1, popAt(t, FOUND)), 1.12, 1.04) : 1), opacity: found && !hit ? 0.35 : 1}}>
                       <Ico name={ob.icon} size={70} color={INK} />
                       <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 28, textAlign: 'center', lineHeight: 1.05, padding: '0 10px'}}>{ob.t}</span>
+                      {hit ? (
+                        <span style={{padding: '3px 14px', borderRadius: 8, background: INK, color: '#fff', fontFamily: SANS, fontWeight: 800, fontSize: 20, letterSpacing: 3, scale: Math.min(1, popAt(t, FOUND + 0.1))}}>FOUND</span>
+                      ) : null}
                     </div>
                   );
                 })}
-                {found ? (
-                  <div style={{position: 'absolute', left: cx(0), top: 342, translate: '-50% -50%', scale: lerp(Math.min(1, popAt(t, FOUND + 0.1)), 1.8, 1), opacity: tween(t, FOUND + 0.1, 0.1)}}>
-                    <div style={{padding: '4px 16px', border: `5px solid ${RED}`, borderRadius: 10, background: '#fff', color: RED, fontFamily: SANS, fontWeight: 800, fontSize: 30, letterSpacing: 3}}>FOUND</div>
-                  </div>
-                ) : null}
               </div>
             </Slide>
           </div>
