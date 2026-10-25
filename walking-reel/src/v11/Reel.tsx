@@ -452,9 +452,9 @@ const CtaA: React.FC = () => {
         </div>
       </div>
       {dm > 0 ? (
-        <div style={{position: 'absolute', left: 70, top: 290, opacity: dm, translate: `0 ${lerp(dm, 30, 0)}px`, display: 'flex', alignItems: 'flex-end', gap: 16}}>
-          <div style={{width: 76, height: 76, borderRadius: '50%', background: HL, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 36, color: INK}}>B</div>
-          <div style={{padding: '22px 30px', borderRadius: '34px 34px 34px 10px', background: INK, color: '#fff', boxShadow: CARD_SHADOW, maxWidth: 740}}>
+        <div style={{position: 'absolute', left: 0, right: 0, top: 290, opacity: dm, translate: `0 ${lerp(dm, 30, 0)}px`, display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 16}}>
+          <div style={{position: 'relative', padding: '22px 30px', borderRadius: '34px 34px 34px 10px', background: INK, color: '#fff', boxShadow: CARD_SHADOW, maxWidth: 740}}>
+            <div style={{position: 'absolute', left: -92, bottom: 0, width: 76, height: 76, borderRadius: '50%', background: HL, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 36, color: INK}}>B</div>
             <div style={{fontSize: 40, fontWeight: 800, lineHeight: 1.15}}>Here's your free fat loss guide</div>
             <div style={{display: 'flex', alignItems: 'center', gap: 14, marginTop: 14, padding: '12px 18px', borderRadius: 16, background: 'rgba(255,255,255,0.1)'}}>
               <Ico name="file-pdf" size={44} color={HL} />
@@ -537,7 +537,7 @@ const CtaC: React.FC = () => {
 const Cta: React.FC = () => {
   const t = useT();
   if (t < C.cta.start) return null;
-  const v = (getInputProps() as {cta?: string}).cta ?? 'B';
+  const v = (getInputProps() as {cta?: string}).cta ?? 'A';
   return v === 'A' ? <CtaA /> : v === 'C' ? <CtaC /> : <CtaB />;
 };
 
