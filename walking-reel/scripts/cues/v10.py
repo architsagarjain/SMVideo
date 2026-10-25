@@ -1,6 +1,6 @@
 """Sound cues for the sugar-free mithai reel (source seconds, src/v10/config.ts). Only sounds from the
 user's SFX pack (sfx/pack): a hit on the SUGAR FREE badge, whooshes for every turn of the 3D box,
-chimes for the halo and the Diwali lights, the receipt's key clicks (kept), a notif for the guide."""
+a stamp on the permission slip, chimes for the Diwali lights, the receipt's key clicks (kept), a notif for the guide."""
 GFX = []
 BEHIND = []
 PANEL = None
@@ -21,9 +21,16 @@ def cues(cue, rng):
     # push-up clip
     cue(14.6, "pack:whoosh_fast2", -22)
     cue(18.5, "pack:whoosh_fast", -24)
-    # health halo
-    cue(19.0, "pack:chime", -22)
-    cue(19.1, "pack:whoosh_soft", -27)
+    # permission slip: slides in, rows type, stars fill, pieces count up, APPROVED stamp
+    cue(18.9, "pack:whoosh_fast2", -23)
+    for at in (19.3, 20.12, 21.76):
+        for j in range(4):
+            cue(at + j * 0.05, "pack:key", -29)
+    for j in range(5):
+        cue(20.2 + j * 0.16, "pack:tick", -29)
+    for j in range(3):
+        cue(22.3 + j * 0.42, "pack:tick", -23)
+    cue(24.24, "pack:hit", -17)
     # sugar free != low cal, cashew + ghee
     cue(24.92, "pack:whoosh_fast", -24)
     cue(25.1, "pack:hit", -21)

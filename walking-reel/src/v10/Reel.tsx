@@ -179,29 +179,6 @@ const HookBox: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// The health halo: a golden ring floats down over her head (back half behind it, front half in front)
-// ---------------------------------------------------------------------------
-const HEAD = {x: 495, y: 618};
-const haloK = (t: number) => tween(t, 19.0, 0.9, EASE_OUT) * (1 - tween(t, C.rep.end - 0.3, 0.3, EASE_IN));
-const Halo: React.FC<{half: 'back' | 'front'}> = ({half}) => {
-  const t = useT();
-  const k = haloK(t);
-  if (k <= 0) return null;
-  const y = lerp(k, HEAD.y - 260, HEAD.y) + Math.sin(t * 2.4) * 5;
-  const rx = 150;
-  const ry = 30;
-  const d = half === 'back' ? `M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0` : `M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`;
-  return (
-    <svg width={1080} height={1920} style={{position: 'absolute', left: 0, top: 0, opacity: Math.min(1, k * 1.5), overflow: 'visible'}}>
-      <g transform={`translate(${HEAD.x} ${y})`}>
-        <path d={d} fill="none" stroke="#FFE7A3" strokeWidth={16} strokeLinecap="round" style={{filter: 'drop-shadow(0 0 14px rgba(255,200,60,0.95)) drop-shadow(0 0 30px rgba(255,190,40,0.6))'}} />
-        <path d={d} fill="none" stroke="#FFFFFF" strokeWidth={5} strokeLinecap="round" opacity={0.9} />
-      </g>
-    </svg>
-  );
-};
-
-// ---------------------------------------------------------------------------
 // Giant type behind her head: one idea per beat, never the subtitle's words
 // ---------------------------------------------------------------------------
 const Giant: React.FC<{at: number; end: number; y?: number; size?: number; children: React.ReactNode}> = ({at, end, y = 300, size = 190, children}) => {
@@ -215,13 +192,64 @@ const Giant: React.FC<{at: number; end: number; y?: number; size?: number; child
     </div>
   );
 };
-const Rep: React.FC = () => (
-  <Giant at={19.1} end={C.rep.end}>
-    <span>
-      HEALTH <span style={{color: GOLD}}>HALO</span>
-    </span>
-  </Giant>
-);
+/** A food's reputation writes its own permission slip: item, reputation, pieces allowed, APPROVED. */
+const Rep: React.FC = () => {
+  const t = useT();
+  const w = C.rep;
+  const o = vis(t, w.start + 0.3, w.end - 0.2);
+  if (o <= 0) return null;
+  const drop = tween(t, 18.9, 0.55, EASE_OUT);
+  const stars = tween(t, 20.12, 0.8, (x) => x) * 5;
+  const pieces = t < 22.3 ? 1 : Math.min(4, 1 + Math.floor((t - 22.3) / 0.42) + 1);
+  const pk = popAt(t, 22.3 + (pieces - 2) * 0.42);
+  const stamp = popAt(t, 24.24);
+  const row = (at: number, label: string, value: React.ReactNode) => (
+    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 66, borderBottom: `3px dashed #CFC8BA`, ...rise(t, at)}}>
+      <span style={{fontFamily: MONO, fontSize: 28, color: '#666', letterSpacing: 1}}>{label}</span>
+      <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 34, color: INK}}>{value}</span>
+    </div>
+  );
+  return (
+    <AbsoluteFill style={{opacity: o}}>
+      <div style={{position: 'absolute', left: 190, top: lerp(drop, -460, 58), width: 700, background: PAPER, boxShadow: SHADOW, borderRadius: 8, padding: '0 40px 26px', boxSizing: 'border-box'}}>
+        {/* perforated tear-off edge */}
+        <div style={{display: 'flex', justifyContent: 'space-between', padding: '14px 0 0'}}>
+          {Array.from({length: 14}, (_, i) => (
+            <div key={i} style={{width: 16, height: 16, borderRadius: '50%', background: '#E9E3D7'}} />
+          ))}
+        </div>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 14, paddingBottom: 12, borderBottom: `5px solid ${INK}`}}>
+          <span style={{fontFamily: MONO, fontWeight: 700, fontSize: 34, letterSpacing: 3, color: INK}}>PERMISSION SLIP</span>
+          <span style={{fontFamily: MONO, fontSize: 22, color: '#666'}}>No. 0024</span>
+        </div>
+        {row(19.3, 'ITEM', 'Sugar-Free Mithai')}
+        {row(
+          20.12,
+          'REPUTATION',
+          <span style={{display: 'flex', alignItems: 'center', gap: 10}}>
+            <span style={{fontStyle: 'italic'}}>“Healthy”</span>
+            <span style={{display: 'flex', gap: 2}}>
+              {Array.from({length: 5}, (_, i) => (
+                <span key={i} style={{color: stars > i + 0.5 ? GOLD : '#DDD6C8', fontSize: 34}}>★</span>
+              ))}
+            </span>
+          </span>,
+        )}
+        {row(
+          21.76,
+          'PIECES ALLOWED',
+          <span style={{display: 'inline-block', minWidth: 74, textAlign: 'center', padding: '0 14px', borderRadius: 10, background: pieces > 1 ? HL : '#EFE9DD', fontFamily: ANTON, fontWeight: 400, fontSize: 52, lineHeight: 1.15, scale: pieces > 1 ? lerp(Math.min(1, pk), 1.35, 1) : 1}}>{pieces}</span>,
+        )}
+        <div style={{height: 104}} />
+        {t >= 24.24 ? (
+          <div style={{position: 'absolute', right: 40, bottom: 26, scale: lerp(Math.min(1, stamp), 1.9, 1), opacity: Math.min(1, stamp * 3)}}>
+            <div style={{padding: '4px 22px', border: `6px solid ${GREEN}`, borderRadius: 12, color: GREEN, fontFamily: SANS, fontWeight: 800, fontSize: 44, letterSpacing: 6, background: 'rgba(255,253,247,0.85)'}}>APPROVED</div>
+          </div>
+        ) : null}
+      </div>
+    </AbsoluteFill>
+  );
+};
 const Nuts: React.FC = () => {
   const t = useT();
   return (
@@ -520,7 +548,6 @@ const Scene: React.FC = () => (
     <GradeOverlay cfg={cfg} />
     <TopWash wins={WASH} reach={36} />
     <Lights />
-    <Halo half="back" />
     <Rep />
     <Nuts />
     <Nine />
@@ -530,7 +557,6 @@ const Scene: React.FC = () => (
     <Decide />
     <Cta />
     <Subject cfg={cfg} />
-    <Halo half="front" />
     <BrollCuts cfg={cfg} />
     <Choose />
     <PhotoOpen />
@@ -539,7 +565,7 @@ const Scene: React.FC = () => (
 );
 
 export const V10Reel: React.FC = () => (
-  <Base cfg={{...cfg, shakes: [2.54, 30.8, 49.72]}}>
+  <Base cfg={{...cfg, shakes: [2.54, 24.24, 30.8, 49.72]}}>
     <Scene />
   </Base>
 );
