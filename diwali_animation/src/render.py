@@ -89,8 +89,9 @@ class Scene:
         ta, tb = PL.CABLE_TILE
         n = tb - ta
         yend = int(round(PL.CABLE_TIP_Y + d)) + 2
-        for y in range(PL.CABLE_TIP_Y - 8, yend + 1):
-            out[y, cx0:cx1] = self._sky_row(y, cx0, cx1, y <= tb) + a["cable"][(y - ta) % n]
+        for y in range(PL.CABLE_TIP_Y, yend + 1):
+            wgt = 1.0 if y > PL.CABLE_TIP_Y + 2 else min(1.0, d / 1.5)
+            out[y, cx0:cx1] = (1 - wgt) * out[y, cx0:cx1] + wgt * (self._sky_row(y, cx0, cx1, y <= tb) + a["cable"][(y - ta) % n])
         # --- diya (+halo) as difference layer, with opaque core
         Rs = shifted(self.R, d, self.sz)
         cs = shifted(self.core, d, self.sz)[..., None]

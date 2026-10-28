@@ -110,25 +110,33 @@ def build_diya(P):
     H0[head > 0] = 0
     # clip the cable stub / tip noise above the true tip
     H0[:CABLE_TIP_Y - 2, :] = 0
-    V = cv2.dilate(H0, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15)))
-    V[:CABLE_TIP_Y - 8, :] = 0
+    # everything that is not the diya but is warm (slings, petals, ring) stays put
+    other = (P[..., 0] - P[..., 2] > 16).astype(np.uint8)
+    other = cv2.dilate(other, np.ones((11, 11), np.uint8))
+    V = cv2.dilate(H0, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (45, 45)))
+    V[:CABLE_TIP_Y - 24, :] = 0
     V[PLATE_BOTTOM + 8:, :] = 0
-    # clean sky inside V: row-wise interpolation between the sky on either side of the span
-    S = P.copy()
-    fill = np.zeros_like(P)
-    for y in range(y0, y1 + 20):
-        xs = np.flatnonzero(V[y])
-        if len(xs) == 0:
-            continue
-        xl, xr = xs[0], xs[-1]
-        a = P[y, max(xl - 6, 0):xl - 1].mean(0)
-        b = P[y, xr + 2:xr + 7].mean(0)
-        t = ((np.arange(xl, xr + 1) - xl) / max(xr - xl, 1))[:, None]
-        fill[y, xl:xr + 1] = a * (1 - t) + b * t
-    fill = cv2.GaussianBlur(fill, (0, 0), 2.5)  # tame row-to-row jitter
-    Vf = V[..., None] > 0
-    S = np.where(Vf, fill, P)
-    R = (P - S) * Vf
+    # protect slings: pixels warm but far from the diya silhouette are not part of the layer
+    near = cv2.dilate(H0, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9)))
+    V = V & (1 - (other & (1 - near)))
+    # sky model by normalised convolution over sky-like pixels only (multi-scale)
+    lum = P.mean(2)
+    K = ((P[..., 0] - P[..., 2] < 8) & (lum > 175)).astype(np.float32)
+    K *= (1 - cv2.dilate(H0, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (37, 37)))).astype(np.float32)
+    K *= (1 - other.astype(np.float32))
+    K[PLATE_BOTTOM - 4:700, 238:306] = 0          # keep workers out of the sky model
+    sky = np.zeros_like(P); done = np.zeros(P.shape[:2], bool)
+    for sg in (10, 22, 45, 90):
+        num = cv2.GaussianBlur(P * K[..., None], (0, 0), sg)
+        den = cv2.GaussianBlur(K, (0, 0), sg)
+        ok = (den > 0.06) & ~done
+        sky[ok] = num[ok] / den[ok][:, None]
+        done |= ok
+    Vs = cv2.GaussianBlur(V.astype(np.float32), (0, 0), 3)[..., None]
+    S = P * (1 - Vs) + sky * Vs
+    S[:CABLE_TIP_Y, CABLE_X[0]:CABLE_X[1]] = P[:CABLE_TIP_Y, CABLE_X[0]:CABLE_X[1]]
+    Vf = (Vs > 0.004)
+    R = (P - S)
     core = cv2.erode(H0, np.ones((3, 3), np.uint8)).astype(np.float32)
     core = cv2.GaussianBlur(core, (0, 0), 0.7)
     return dict(S=S, R=R.astype(np.float32), core=core, H0=H0, V=V)
