@@ -226,7 +226,7 @@ def render_frame(n):
     M=cv2.getRotationMatrix2D((600,640),0,z)
     f=cv2.warpAffine(f,M,(W,H),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_REPLICATE)
     # vignette & fades
-    fade=min(1,t/0.4)*min(1,(DUR-t)/0.6)
+    fade=min(1,t/0.4)
     f=f*fade
     out=cv2.resize(np.clip(f,0,1),(OUT,OUT),interpolation=cv2.INTER_AREA)
     return (out*255).astype(np.uint8)
@@ -240,7 +240,13 @@ if __name__=='__main__':
         cv2.imwrite(f'frame_{only}.png',cv2.cvtColor(fr,cv2.COLOR_RGB2BGR)); sys.exit()
     p=subprocess.Popen(['ffmpeg','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{OUT}x{OUT}','-r',str(FPS),'-i','-',
         '-c:v','libx264','-preset','medium','-crf','17','-pix_fmt','yuv420p','video_silent.mp4'],stdin=subprocess.PIPE)
+    fz=int(FREEZE*FPS); frozen=None
     for n in range(n_frames):
-        p.stdin.write(render_frame(n).tobytes())
+        if n<=fz:
+            frozen=render_frame(n); out=frozen
+        else:
+            fade=min(1,(DUR-n/FPS)/0.6)
+            out=(frozen.astype(np.float32)*fade).astype(np.uint8)
+        p.stdin.write(out.tobytes())
         if n%30==0: print(n,flush=True)
     p.stdin.close(); p.wait()

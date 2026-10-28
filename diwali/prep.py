@@ -47,3 +47,9 @@ soft = cv2.GaussianBlur(fw,(0,0),9).astype(np.float32)/255
 blur = cv2.GaussianBlur(bg2,(0,0),6)
 bg2 = (bg2*(1-soft[...,None]*0.6)+blur*soft[...,None]*0.6).astype(np.uint8)
 cv2.imwrite('bg_clean.png',bg2)
+
+# ---- text alpha (used by render.py) ----
+bgc = cv2.cvtColor(cv2.imread('bg_clean.png'),cv2.COLOR_BGR2RGB).astype(np.float32)
+d = np.abs(im-bgc).max(2)
+alpha = np.clip((d-8)/40,0,1)*(text_mask>0)
+np.save('alpha.npy',alpha.astype(np.float32))
