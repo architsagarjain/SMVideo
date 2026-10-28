@@ -9,6 +9,7 @@ ROOTDIR = os.path.join(HERE, '..')
 sys.path.insert(0, os.path.join(ROOTDIR, 'audio', 'scripts'))
 from synth import *  # noqa
 from scipy.signal import resample_poly
+SUF = os.environ.get('SUF', '')   # e.g. SUF=hi for the Hinglish Video 3
 FILM = os.path.join(ROOTDIR, 'film'); SFX = os.path.join(ROOTDIR, 'audio', 'sfx'); FPS = 30
 CH = {'Dm': ['D4', 'F4', 'A4', 'E5'], 'Bb': ['Bb3', 'D4', 'F4', 'C5'], 'F': ['F3', 'A3', 'C4', 'G4'], 'C': ['C4', 'E4', 'G4', 'D5'],
       'Gm': ['G3', 'Bb3', 'D4', 'A4'], 'D': ['D4', 'F#4', 'A4', 'E5'], 'A': ['A3', 'C#4', 'E4', 'B4'], 'Bm': ['B3', 'D4', 'F#4', 'C#5'],
@@ -23,7 +24,7 @@ def rec(name, gain=1.0, dur=None):
     return x * gain
 
 def run(n):
-    d = json.load(open(os.path.join(FILM, 'src', 'data', 'r8', f'v{n}.json')))
+    d = json.load(open(os.path.join(FILM, 'src', 'data', 'r8', f'v{n}{SUF}.json')))
     FIN = d['words'][-1]['e']                     # the shared finale starts as the last word ends (film/src/r8/common8.tsx)
     DUR = (FIN + 165) / FPS; Ls = [(l['s'] / FPS, l['e'] / FPS) for l in d['lines']]
     END = (FIN + 10) / FPS
@@ -127,7 +128,7 @@ def run(n):
 
     # ---------------------------------------------------------------- mix (as in the approved reels)
     N = int(DUR * SR)
-    vo, sr = sf.read(os.path.join(HERE, 'audio', 'vo', f'v{n}.wav')); assert sr == SR
+    vo, sr = sf.read(os.path.join(HERE, 'audio', 'vo', f'v{n}{SUF}.wav')); assert sr == SR
     voT = np.zeros(N); i0 = int(d['offset'] * SR); voT[i0:i0 + len(vo)] = vo[: N - i0]
     vo_p = fx(voT.astype(np.float32), Pedalboard([HighpassFilter(cutoff_frequency_hz=80), Compressor(threshold_db=-20, ratio=3, attack_ms=5, release_ms=80)]))
     mus = fx(music.buf[:, :N].astype(np.float32), Pedalboard([HighpassFilter(cutoff_frequency_hz=30), Chorus(rate_hz=0.3, depth=0.15, mix=0.2), Reverb(room_size=0.7, wet_level=0.22, dry_level=0.9, width=1.0)]))
@@ -149,10 +150,10 @@ def run(n):
     tp = 20 * np.log10(np.abs(resample_poly(full, 4, 1, axis=1)).max())
     if tp > -1.0: full *= 10 ** ((-1.0 - tp) / 20)
     os.makedirs(os.path.join(HERE, 'audio', 'mix'), exist_ok=True)
-    sf.write(os.path.join(HERE, 'audio', 'mix', f'v{n}_mix.wav'), full.T, SR, subtype='PCM_24')
+    sf.write(os.path.join(HERE, 'audio', 'mix', f'v{n}{SUF}_mix.wav'), full.T, SR, subtype='PCM_24')
     os.makedirs(os.path.join(FILM, 'public', 'audio'), exist_ok=True)
-    sf.write(os.path.join(FILM, 'public', 'audio', f'r8v{n}_mix.wav'), full.T, SR, subtype='PCM_24')
-    print(f'v{n}: {DUR:.2f}s  {LU(full):.2f} LUFS  TP {20 * np.log10(np.abs(resample_poly(full, 4, 1, axis=1)).max()):.2f} dBTP')
+    sf.write(os.path.join(FILM, 'public', 'audio', f'r8v{n}{SUF}_mix.wav'), full.T, SR, subtype='PCM_24')
+    print(f'v{n}{SUF}: {DUR:.2f}s  {LU(full):.2f} LUFS  TP {20 * np.log10(np.abs(resample_poly(full, 4, 1, axis=1)).max()):.2f} dBTP')
 
 if __name__ == '__main__':
     for n in (map(int, sys.argv[1:]) if len(sys.argv) > 1 else range(1, 9)): run(n)
