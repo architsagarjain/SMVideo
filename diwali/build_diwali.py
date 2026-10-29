@@ -7,8 +7,14 @@ SCR = sys.argv[1]
 W, H, FPS, TOTAL = 1080, 1920, 24, 15.0
 T_END = 9.375            # bar 6 downbeat: end card starts dissolving in on the crash
 DISS = 0.65
-MONT = os.path.join(HERE, "..", "fonts", "Montserrat_600SemiBold.ttf")
-DEVA = "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf"
+F = lambda n: os.path.join(HERE, "fonts", n)
+# (font file, named weight) - Playfair Display and Cinzel, SIL OFL (see fonts/)
+SERIF = (F("PlayfairDisplay[wght].ttf"), "SemiBold")
+SERIF_M = (F("PlayfairDisplay[wght].ttf"), "Medium")
+ITALIC = (F("PlayfairDisplay-Italic[wght].ttf"), "SemiBold Italic")
+CAPS = (F("Cinzel[wght].ttf"), "Bold")
+def load_font(spec, size):
+    f = ImageFont.truetype(spec[0], size); f.set_variation_by_name(spec[1]); return f
 GOLD_TOP, GOLD_BOT = (255, 226, 140), (236, 160, 52)
 
 def ease(x): x = np.clip(x, 0, 1); return x * x * (3 - 2 * x)
@@ -28,7 +34,7 @@ def text_layer(lines, right=False):
     """lines: list of (text, fontpath, size, track, color|'gold', gap_after). Returns RGBA (W x h) centred."""
     items = []; total = 0
     for s, fp, sz, tr, col, gap in lines:
-        f = ImageFont.truetype(fp, sz); w = twidth(s, f, tr)
+        f = load_font(fp, sz); w = twidth(s, f, tr)
         bb = f.getbbox("Hg|ा"); h = bb[3] + 10
         items.append((s, f, tr, col, w, h, gap)); total += h + gap
     pad = 80
@@ -51,8 +57,8 @@ def text_layer(lines, right=False):
     return np.asarray(sh).astype(np.float32)
 CREAM = (255, 244, 226)
 BEATS = [  # (t_in, t_out, y_top, layer) - right-aligned, in the clear sky beside the boom
- (1.0, 4.5, 130, text_layer([("Lifting", MONT, 76, 1, CREAM, 6), ("spirits", MONT, 76, 1, CREAM, 6), ("higher", MONT, 90, 1, "gold", 18), ("FESTIVAL OF LIGHTS", MONT, 24, 3, CREAM, 0)], True)),
- (5.0, 9.0, 130, text_layer([("May your", MONT, 54, 1, CREAM, 6), ("life glow with", MONT, 54, 1, CREAM, 14), ("joy &", MONT, 84, 1, "gold", 4), ("prosperity", MONT, 66, 1, "gold", 0)], True)),
+ (1.0, 4.5, 130, text_layer([("Lifting", SERIF, 80, 0, CREAM, 0), ("spirits", SERIF, 80, 0, CREAM, 0), ("higher", ITALIC, 104, 0, "gold", 12), ("FESTIVAL OF LIGHTS", CAPS, 26, 4, CREAM, 0)], True)),
+ (5.0, 9.0, 130, text_layer([("May your", SERIF_M, 58, 0, CREAM, 0), ("life glow with", SERIF_M, 58, 0, CREAM, 10), ("joy &", ITALIC, 92, 0, "gold", 0), ("prosperity", ITALIC, 80, 0, "gold", 0)], True)),
 ]
 yy = np.arange(H)[:, None]
 SHADE = (1 - 0.5 * np.clip((yy - 1000) / 700, 0, 1) ** 1.3).astype(np.float32)[:, :, None]
@@ -158,18 +164,19 @@ for i in range(nf):
 wr.stdin.close(); wr.wait(); rd.stdout.close()
 
 # ---------- audio mix + mux ----------
-# CC0 music (see audio/LICENSES.txt), started 2.25 s in so its big drum entry lands on the end-card dissolve,
-# plus a handful of cracker bangs ("pataka") timed to the fireworks and the end card.
+# Music: "Punjabi Bhangra Energy Short Burst" by Alex Morgan (CC BY 4.0), started 0.45 s in so its
+# 16-beat section hit lands as the end card finishes dissolving in. Firework SFX from Mixkit, each
+# placed so its bang lands on a burst visible in the clip. The clip's own audio is not used.
 A = lambda n: os.path.join(HERE, "audio", n)
-BANGS = [("bang_07.ogg", 6.10, 0.55), ("bang_03.ogg", 7.55, 0.5), ("bang_09.ogg", 8.20, 0.4), ("bang_01.ogg", T_END, 0.75), ("bang_09.ogg", 12.9, 0.4), ("bang_07.ogg", 13.05, 0.35)]
+SFX = [("fw_clear_explosions.mp3", 6.70, 0.55), ("fw_bang_in_sky.mp3", 7.19, 0.45),
+       ("fw_small_explosion.mp3", 8.10, 0.4), ("fw_rockets_exploding.mp3", 8.65, 0.3)]
 out = os.path.join(HERE, "diwali_reel.mp4")
-cmd = ["ffmpeg", "-v", "error", "-y", "-i", tmpv, "-ss", "2.25", "-t", "15", "-i", A("electronic_indian_tabla_tune.mp3"), "-i", os.path.join(HERE, "source.mp4")]
-for n, _, _ in BANGS: cmd += ["-i", A(n)]
-fc = "[1:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-2:LRA=7,afade=t=in:d=0.25,afade=t=out:st=13.4:d=1.6[m];"
-fc += "[2:a]aresample=48000,aformat=channel_layouts=stereo,volume=0.2,afade=t=out:st=8.6:d=0.9,apad[o];"
+cmd = ["ffmpeg", "-v", "error", "-y", "-i", tmpv, "-ss", "0.45", "-t", "15", "-i", A("punjabi_bhangra_energy_short_burst.mp3")]
+for n, _, _ in SFX: cmd += ["-i", A(n)]
+fc = "[1:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,afade=t=in:d=0.05,afade=t=out:st=13.5:d=1.5[m];"
 labs = ""
-for i, (n, t, g) in enumerate(BANGS):
-    fc += f"[{3+i}:a]aresample=48000,aformat=channel_layouts=stereo,volume={g},adelay={int(t*1000)}|{int(t*1000)}[b{i}];"; labs += f"[b{i}]"
-fc += f"[m][o]{labs}amix=inputs={2+len(BANGS)}:duration=first:normalize=0,alimiter=limit=0.9,atrim=0:15[a]"
+for i, (n, t, g) in enumerate(SFX):
+    fc += f"[{2+i}:a]aresample=48000,aformat=channel_layouts=stereo,volume={g},adelay={int(t*1000)}|{int(t*1000)}[s{i}];"; labs += f"[s{i}]"
+fc += f"[m]{labs}amix=inputs={1+len(SFX)}:duration=first:normalize=0,alimiter=limit=0.89,atrim=0:15[a]"
 subprocess.run(cmd + ["-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-t", "15", out], check=True)
 print("done", out)
