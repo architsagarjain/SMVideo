@@ -8,14 +8,13 @@ W, H, FPS, TOTAL = 1080, 1920, 24, 15.0
 T_END = 9.375            # bar 6 downbeat: end card starts dissolving in on the crash
 DISS = 0.65
 F = lambda n: os.path.join(HERE, "fonts", n)
-# (font file, named weight) - Playfair Display and Cinzel, SIL OFL (see fonts/)
-SERIF = (F("PlayfairDisplay[wght].ttf"), "SemiBold")
-SERIF_M = (F("PlayfairDisplay[wght].ttf"), "Medium")
-ITALIC = (F("PlayfairDisplay-Italic[wght].ttf"), "SemiBold Italic")
-CAPS = (F("Cinzel[wght].ttf"), "Bold")
+# (font file, named weight) - Montserrat, SIL OFL (see fonts/): light caps + extra-bold gold caps
+LIGHT = (F("Montserrat[wght].ttf"), "Light")
+BOLD = (F("Montserrat[wght].ttf"), "ExtraBold")
+SMALL = (F("Montserrat[wght].ttf"), "SemiBold")
 def load_font(spec, size):
     f = ImageFont.truetype(spec[0], size); f.set_variation_by_name(spec[1]); return f
-GOLD_TOP, GOLD_BOT = (255, 226, 140), (236, 160, 52)
+GOLD_TOP, GOLD_BOT = (242, 188, 60), (214, 150, 22)  # mustard gold, as in the reference
 
 def ease(x): x = np.clip(x, 0, 1); return x * x * (3 - 2 * x)
 def eout(x): x = np.clip(x, 0, 1); return 1 - (1 - x) ** 3
@@ -57,8 +56,8 @@ def text_layer(lines, right=False):
     return np.asarray(sh).astype(np.float32)
 CREAM = (255, 244, 226)
 BEATS = [  # (t_in, t_out, y_top, layer) - right-aligned, in the clear sky beside the boom
- (1.0, 4.5, 130, text_layer([("Lifting", SERIF, 80, 0, CREAM, 0), ("spirits", SERIF, 80, 0, CREAM, 0), ("higher", ITALIC, 104, 0, "gold", 12), ("FESTIVAL OF LIGHTS", CAPS, 26, 4, CREAM, 0)], True)),
- (5.0, 9.0, 130, text_layer([("May your", SERIF_M, 58, 0, CREAM, 0), ("life glow with", SERIF_M, 58, 0, CREAM, 10), ("joy &", ITALIC, 92, 0, "gold", 0), ("prosperity", ITALIC, 80, 0, "gold", 0)], True)),
+ (1.0, 4.5, 130, text_layer([("LIFTING", LIGHT, 72, 0, CREAM, -8), ("SPIRITS", LIGHT, 72, 0, CREAM, -8), ("HIGHER", BOLD, 88, 0, "gold", 4), ("FESTIVAL OF LIGHTS", SMALL, 22, 5, CREAM, 0)], True)),
+ (5.0, 9.0, 130, text_layer([("MAY YOUR LIFE", LIGHT, 46, 0, CREAM, -6), ("GLOW WITH", LIGHT, 46, 0, CREAM, 2), ("JOY &", BOLD, 54, 0, "gold", -6), ("PROSPERITY", BOLD, 54, 0, "gold", 0)], True)),
 ]
 yy = np.arange(H)[:, None]
 SHADE = (1 - 0.5 * np.clip((yy - 1000) / 700, 0, 1) ** 1.3).astype(np.float32)[:, :, None]
@@ -70,6 +69,37 @@ def blend_layer(fr, layer, yc, a, rise):
     if ye <= ys: return
     L = layer[ys - y0: ye - y0]; al = (L[:, :, 3:4] / 255.0) * a
     fr[ys:ye] = fr[ys:ye] * (1 - al) + L[:, :, :3] * al
+
+# ---------- watermark removal ----------
+# The clip carries a static semi-transparent white sparkle at bottom right. Its alpha is estimated from
+# the time-averaged crop (the scene moves under it, the mark does not), then divided back out of every
+# frame; the anti-aliased rim is filled from its neighbours.
+WX0, WY0, WX1, WY1 = 840, 1680, 960, 1800
+def _dil(m, n):
+    for _ in range(n):
+        p = np.pad(m, 1); m = p[:-2, 1:-1] | p[2:, 1:-1] | p[1:-1, :-2] | p[1:-1, 2:] | m
+    return m
+def _diffuse(img, mask, it):
+    out = img.copy()
+    for _ in range(it):
+        p = np.pad(out, [(1, 1), (1, 1)] + [(0, 0)] * (img.ndim - 2), mode="edge")
+        out[mask] = ((p[:-2, 1:-1] + p[2:, 1:-1] + p[1:-1, :-2] + p[1:-1, 2:]) / 4)[mask]
+    return out
+def watermark_model():
+    r = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "source.mp4"), "-vf", f"crop={WX1-WX0}:{WY1-WY0}:{WX0}:{WY0}",
+                        "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+    mean = np.frombuffer(r, np.uint8).reshape(-1, WY1 - WY0, WX1 - WX0, 3).astype(np.float32).mean((0, 3))
+    box = np.zeros_like(mean, bool); box[15:105, 15:105] = True
+    start = mean.copy(); start[box] = mean[~box].mean()
+    bg = _diffuse(start, box, 400)
+    a = np.clip((mean - bg) / (255 - bg) * 1.05, 0, 0.95); a[a < 0.04] = 0
+    core = a > 0.3
+    rim = _dil(a > 0.02, 2) & ~(~_dil(~core, 3))
+    return a[:, :, None], rim
+WM_A, WM_RIM = watermark_model()
+def remove_watermark(fr):
+    reg = (fr[WY0:WY1, WX0:WX1] - 250 * WM_A) / (1 - WM_A)
+    fr[WY0:WY1, WX0:WX1] = np.clip(_diffuse(reg, WM_RIM, 40), 0, 255)
 
 # ---------- end card ----------
 card = np.asarray(Image.open(os.path.join(HERE, "end_card.png")).convert("RGB").resize((W, H), Image.LANCZOS)).astype(np.float32)
@@ -149,6 +179,7 @@ for i in range(nf):
     if len(raw) == W * H * 3: last = np.frombuffer(raw, np.uint8).reshape(H, W, 3).astype(np.float32)
     if t < T_END + DISS:
         fr = last.copy()
+        remove_watermark(fr)
         for ti, to, yc, lay in BEATS:
             a = ease((t - ti) / 0.4) * (1 - ease((t - (to - 0.35)) / 0.35))
             blend_layer(fr, lay, yc, a, 1 - eout((t - ti) / 0.5))
@@ -164,16 +195,16 @@ for i in range(nf):
 wr.stdin.close(); wr.wait(); rd.stdout.close()
 
 # ---------- audio mix + mux ----------
-# Music: "Punjabi Bhangra Energy Short Burst" by Alex Morgan (CC BY 4.0), started 0.45 s in so its
-# 16-beat section hit lands as the end card finishes dissolving in. Firework SFX from Mixkit, each
+# Music: "Krishna Flute Music" by Alex Morgan (CC BY 4.0) - soft bansuri over a drone, started 17.08 s in
+# so its gentle percussion enters at 9.5 s, as the end card dissolves in. Firework SFX from Mixkit, each
 # placed so its bang lands on a burst visible in the clip. The clip's own audio is not used.
 A = lambda n: os.path.join(HERE, "audio", n)
-SFX = [("fw_clear_explosions.mp3", 6.70, 0.55), ("fw_bang_in_sky.mp3", 7.19, 0.45),
-       ("fw_small_explosion.mp3", 8.10, 0.4), ("fw_rockets_exploding.mp3", 8.65, 0.3)]
+SFX = [("fw_clear_explosions.mp3", 6.70, 0.42), ("fw_bang_in_sky.mp3", 7.19, 0.35),
+       ("fw_small_explosion.mp3", 8.10, 0.3), ("fw_rockets_exploding.mp3", 8.65, 0.22)]
 out = os.path.join(HERE, "diwali_reel.mp4")
-cmd = ["ffmpeg", "-v", "error", "-y", "-i", tmpv, "-ss", "0.45", "-t", "15", "-i", A("punjabi_bhangra_energy_short_burst.mp3")]
+cmd = ["ffmpeg", "-v", "error", "-y", "-i", tmpv, "-ss", "17.08", "-t", "15", "-i", A("krishna_flute_music.mp3")]
 for n, _, _ in SFX: cmd += ["-i", A(n)]
-fc = "[1:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,afade=t=in:d=0.05,afade=t=out:st=13.5:d=1.5[m];"
+fc = "[1:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,afade=t=in:d=0.6,afade=t=out:st=13.5:d=1.5[m];"
 labs = ""
 for i, (n, t, g) in enumerate(SFX):
     fc += f"[{2+i}:a]aresample=48000,aformat=channel_layouts=stereo,volume={g},adelay={int(t*1000)}|{int(t*1000)}[s{i}];"; labs += f"[s{i}]"

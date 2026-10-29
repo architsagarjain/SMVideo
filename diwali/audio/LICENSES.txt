@@ -1,9 +1,9 @@
 Music
-- punjabi_bhangra_energy_short_burst.mp3
-  "Punjabi Bhangra Energy Short Burst" by Alex Morgan, CC BY 4.0
-  https://freemusicarchive.org/music/alex-morgan/kids-comedy-holiday/punjabi-bhangra-energy-short-burst/
+- krishna_flute_music.mp3
+  "Krishna Flute Music" by Alex Morgan, CC BY 4.0
+  https://freemusicarchive.org/music/alex-morgan/world-devotional-music/krishna-flute-music/
   Attribution required - put this in the post caption:
-  Music: "Punjabi Bhangra Energy Short Burst" by Alex Morgan (CC BY 4.0)
+  Music: "Krishna Flute Music" by Alex Morgan (CC BY 4.0)
 
 Sound effects - Mixkit Sound Effects Free License (free for commercial use, no attribution): https://mixkit.co/license/#sfxFree
 - fw_clear_explosions.mp3    "Clear firework explosions"            https://mixkit.co/free-sound-effects/fireworks/
