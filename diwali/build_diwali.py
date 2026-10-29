@@ -24,7 +24,7 @@ def twidth(s, font, track):
     d = ImageDraw.Draw(Image.new("L", (1, 1)))
     if track == 0: return d.textlength(s, font=font)
     return sum(d.textlength(c, font=font) + track for c in s) - track
-def text_layer(lines):
+def text_layer(lines, right=False):
     """lines: list of (text, fontpath, size, track, color|'gold', gap_after). Returns RGBA (W x h) centred."""
     items = []; total = 0
     for s, fp, sz, tr, col, gap in lines:
@@ -36,7 +36,7 @@ def text_layer(lines):
     sh = Image.new("RGBA", lay.size, (0, 0, 0, 0))
     y = pad
     for s, f, tr, col, w, h, gap in items:
-        x = (W - w) / 2
+        x = (W - 46 - w) if right else (W - w) / 2
         m = Image.new("L", lay.size, 0); tracked(ImageDraw.Draw(m), (x, y), s, f, 255, tr)
         shadow = Image.new("RGBA", lay.size, (40, 12, 0, 0)); shadow.putalpha(m.filter(ImageFilter.GaussianBlur(10)).point(lambda v: min(255, int(v * 1.1))))
         sh = Image.alpha_composite(sh, shadow)
@@ -50,17 +50,16 @@ def text_layer(lines):
         y += h + gap
     return np.asarray(sh).astype(np.float32)
 CREAM = (255, 244, 226)
-BEATS = [  # (t_in, t_out, y_center, layer)
- (0.35, 3.45, 1320, text_layer([("शुभ दीपावली", DEVA, 168, 0, "gold", 14), ("HAPPY DIWALI", MONT, 50, 14, CREAM, 0)])),
- (3.65, 6.55, 1330, text_layer([("Lifting spirits higher", MONT, 74, 1, CREAM, 14), ("THIS FESTIVAL OF LIGHTS", MONT, 40, 8, "gold", 0)])),
- (6.75, 9.25, 1330, text_layer([("May your life glow with", MONT, 66, 1, CREAM, 14), ("joy & prosperity", MONT, 84, 1, "gold", 0)])),
+BEATS = [  # (t_in, t_out, y_top, layer) - right-aligned, in the clear sky beside the boom
+ (1.0, 4.5, 130, text_layer([("Lifting", MONT, 76, 1, CREAM, 6), ("spirits", MONT, 76, 1, CREAM, 6), ("higher", MONT, 90, 1, "gold", 18), ("FESTIVAL OF LIGHTS", MONT, 24, 3, CREAM, 0)], True)),
+ (5.0, 9.0, 130, text_layer([("May your", MONT, 54, 1, CREAM, 6), ("life glow with", MONT, 54, 1, CREAM, 14), ("joy &", MONT, 84, 1, "gold", 4), ("prosperity", MONT, 66, 1, "gold", 0)], True)),
 ]
 yy = np.arange(H)[:, None]
 SHADE = (1 - 0.5 * np.clip((yy - 1000) / 700, 0, 1) ** 1.3).astype(np.float32)[:, :, None]
 
 def blend_layer(fr, layer, yc, a, rise):
     if a <= 0.003: return
-    h = layer.shape[0]; y0 = int(yc - h / 2 + rise * 34)
+    h = layer.shape[0]; y0 = int(yc + rise * 30)
     ys, ye = max(0, y0), min(H, y0 + h)
     if ye <= ys: return
     L = layer[ys - y0: ye - y0]; al = (L[:, :, 3:4] / 255.0) * a
@@ -144,7 +143,6 @@ for i in range(nf):
     if len(raw) == W * H * 3: last = np.frombuffer(raw, np.uint8).reshape(H, W, 3).astype(np.float32)
     if t < T_END + DISS:
         fr = last.copy()
-        fr *= (1 - (1 - SHADE) * ease(t / 0.6))
         for ti, to, yc, lay in BEATS:
             a = ease((t - ti) / 0.4) * (1 - ease((t - (to - 0.35)) / 0.35))
             blend_layer(fr, lay, yc, a, 1 - eout((t - ti) / 0.5))
@@ -160,12 +158,18 @@ for i in range(nf):
 wr.stdin.close(); wr.wait(); rd.stdout.close()
 
 # ---------- audio mix + mux ----------
-music = os.path.join(SCR, "music.wav")
-subprocess.run([sys.executable, "-I", os.path.join(HERE, "synth_music.py"), music], check=True)
+# CC0 music (see audio/LICENSES.txt), started 2.25 s in so its big drum entry lands on the end-card dissolve,
+# plus a handful of cracker bangs ("pataka") timed to the fireworks and the end card.
+A = lambda n: os.path.join(HERE, "audio", n)
+BANGS = [("bang_07.ogg", 6.10, 0.55), ("bang_03.ogg", 7.55, 0.5), ("bang_09.ogg", 8.20, 0.4), ("bang_01.ogg", T_END, 0.75), ("bang_09.ogg", 12.9, 0.4), ("bang_07.ogg", 13.05, 0.35)]
 out = os.path.join(HERE, "diwali_reel.mp4")
-fc = ("[2:a]aresample=48000,volume=0.22,afade=t=out:st=8.6:d=0.9,apad[o];"
-      "[1:a]aresample=48000,volume=0.9[m];[m][o]amix=inputs=2:duration=first:normalize=0,"
-      "loudnorm=I=-14:TP=-1.5:LRA=7,atrim=0:15,afade=t=out:st=14.2:d=0.8[a]")
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", tmpv, "-i", music, "-i", os.path.join(HERE, "source.mp4"), "-filter_complex", fc,
-                "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-shortest", out], check=True)
+cmd = ["ffmpeg", "-v", "error", "-y", "-i", tmpv, "-ss", "2.25", "-t", "15", "-i", A("electronic_indian_tabla_tune.mp3"), "-i", os.path.join(HERE, "source.mp4")]
+for n, _, _ in BANGS: cmd += ["-i", A(n)]
+fc = "[1:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-2:LRA=7,afade=t=in:d=0.25,afade=t=out:st=13.4:d=1.6[m];"
+fc += "[2:a]aresample=48000,aformat=channel_layouts=stereo,volume=0.2,afade=t=out:st=8.6:d=0.9,apad[o];"
+labs = ""
+for i, (n, t, g) in enumerate(BANGS):
+    fc += f"[{3+i}:a]aresample=48000,aformat=channel_layouts=stereo,volume={g},adelay={int(t*1000)}|{int(t*1000)}[b{i}];"; labs += f"[b{i}]"
+fc += f"[m][o]{labs}amix=inputs={2+len(BANGS)}:duration=first:normalize=0,alimiter=limit=0.9,atrim=0:15[a]"
+subprocess.run(cmd + ["-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-t", "15", out], check=True)
 print("done", out)
