@@ -1,9 +1,22 @@
-"""Composes diwali_reel.mp4: source clip + festive text + animated end card + synthesised music.
-usage: python3 build_diwali.py <scratch_dir>   (needs ffmpeg, numpy, Pillow)"""
+"""Composes a Diwali reel: source clip + festive text + animated end card + music and firework SFX.
+usage: python3 build_diwali.py <scratch_dir> [diya|lantern]   (needs ffmpeg, numpy, Pillow)
+  diya    (default): source.mp4         -> diwali_reel.mp4
+  lantern          : source_lantern.mp4 -> diwali_reel_lantern.mp4"""
 import numpy as np, subprocess, sys, os, math
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCR = sys.argv[1]
+VARIANT = sys.argv[2] if len(sys.argv) > 2 else "diya"
+# per clip: source, output, and firework SFX (file, start time, gain) placed so each bang lands on a burst in that clip
+VARIANTS = {
+    "diya": ("source.mp4", "diwali_reel.mp4",
+             [("fw_clear_explosions.mp3", 6.70, 0.42), ("fw_bang_in_sky.mp3", 7.19, 0.35),
+              ("fw_small_explosion.mp3", 8.10, 0.3), ("fw_rockets_exploding.mp3", 8.65, 0.22)]),
+    "lantern": ("source_lantern.mp4", "diwali_reel_lantern.mp4",
+                [("fw_clear_explosions.mp3", 7.20, 0.42), ("fw_bang_in_sky.mp3", 7.39, 0.35),
+                 ("fw_small_explosion.mp3", 7.80, 0.3), ("fw_rockets_exploding.mp3", 8.64, 0.22)]),
+}
+SRC, OUT_NAME, SFX = VARIANTS[VARIANT]
 W, H, FPS, TOTAL = 1080, 1920, 24, 15.0
 T_END = 9.375            # bar 6 downbeat: end card starts dissolving in on the crash
 DISS = 0.65
@@ -86,7 +99,7 @@ def _diffuse(img, mask, it):
         out[mask] = ((p[:-2, 1:-1] + p[2:, 1:-1] + p[1:-1, :-2] + p[1:-1, 2:]) / 4)[mask]
     return out
 def watermark_model():
-    r = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "source.mp4"), "-vf", f"crop={WX1-WX0}:{WY1-WY0}:{WX0}:{WY0}",
+    r = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(HERE, SRC), "-vf", f"crop={WX1-WX0}:{WY1-WY0}:{WX0}:{WY0}",
                         "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
     mean = np.frombuffer(r, np.uint8).reshape(-1, WY1 - WY0, WX1 - WX0, 3).astype(np.float32).mean((0, 3))
     box = np.zeros_like(mean, bool); box[15:105, 15:105] = True
@@ -167,9 +180,9 @@ def end_frame(u):
     return f
 
 # ---------- main loop ----------
-src_cmd = ["ffmpeg", "-v", "error", "-i", os.path.join(HERE, "source.mp4"), "-f", "rawvideo", "-pix_fmt", "rgb24", "-r", str(FPS), "-"]
+src_cmd = ["ffmpeg", "-v", "error", "-i", os.path.join(HERE, SRC), "-f", "rawvideo", "-pix_fmt", "rgb24", "-r", str(FPS), "-"]
 rd = subprocess.Popen(src_cmd, stdout=subprocess.PIPE)
-tmpv = os.path.join(SCR, "video_only.mp4")
+tmpv = os.path.join(SCR, f"video_only_{VARIANT}.mp4")
 wr = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
                        "-c:v", "libx264", "-crf", "15", "-preset", "slow", "-pix_fmt", "yuv420p", "-movflags", "+faststart", tmpv], stdin=subprocess.PIPE)
 last = None; nf = int(TOTAL * FPS)
@@ -199,9 +212,7 @@ wr.stdin.close(); wr.wait(); rd.stdout.close()
 # so its gentle percussion enters at 9.5 s, as the end card dissolves in. Firework SFX from Mixkit, each
 # placed so its bang lands on a burst visible in the clip. The clip's own audio is not used.
 A = lambda n: os.path.join(HERE, "audio", n)
-SFX = [("fw_clear_explosions.mp3", 6.70, 0.42), ("fw_bang_in_sky.mp3", 7.19, 0.35),
-       ("fw_small_explosion.mp3", 8.10, 0.3), ("fw_rockets_exploding.mp3", 8.65, 0.22)]
-out = os.path.join(HERE, "diwali_reel.mp4")
+out = os.path.join(HERE, OUT_NAME)
 cmd = ["ffmpeg", "-v", "error", "-y", "-i", tmpv, "-ss", "17.08", "-t", "15", "-i", A("krishna_flute_music.mp3")]
 for n, _, _ in SFX: cmd += ["-i", A(n)]
 fc = "[1:a]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,afade=t=in:d=0.6,afade=t=out:st=13.5:d=1.5[m];"
