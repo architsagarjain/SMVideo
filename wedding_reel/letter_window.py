@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 from text_styles import W, H, IVORY, GOLD, clamp, smooth, ease_out, fnt, line_mask, cap_center, paste
 from text_styles2 import big_font, tracked_mask, VEIL
 
-KEY_Y, LEAD_Y = 1640, 1470      # outlined words live in the lower zone, below everyone's faces
+KEY_Y, LEAD_Y = 320, 165        # outlined words live in the top zone, above everyone's faces
 INK = np.array([20, 16, 14], np.float32)
 def dark_amount(img, box):
     """0 = background is dark (use white ink), 1 = background is bright (use black ink)."""
@@ -27,7 +27,7 @@ class LetterWindowSeq:
         for c in caps:
             lm, ladv = tracked_mask(c["lead"], self.fl, 12); it = dict(c, lm=lm, ladv=ladv)
             if c["kind"] == "outline":
-                f, adv = big_font("DMSerifDisplay-Italic.ttf", c["key"], 960, 380); im = Image.new("L", (int(adv) + 80, int(f.size * 1.6)), 0)
+                f, adv = big_font("DMSerifDisplay-Italic.ttf", c["key"], 760, 260); im = Image.new("L", (int(adv) + 80, int(f.size * 1.6)), 0)
                 ImageDraw.Draw(im).text((40, 20), c["key"], font=f, fill=48, stroke_width=4, stroke_fill=255); it["mask"] = np.asarray(im, np.float32) / 255   # outline plus a faint inner tint
             else:
                 lines = c["key"].split("\n"); f, _ = big_font("DMSerifDisplay-Regular.ttf", max(lines, key=len), 1000, 420 if len(lines) == 1 else 320)
