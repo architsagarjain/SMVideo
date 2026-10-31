@@ -37,14 +37,17 @@ class LetterWindowSeq:
                 py, px = np.unravel_index(np.argmax(dt), dt.shape); it.update(M=M, P=(float(px), float(py)), s_end=max(60.0, 1700.0 / float(dt.max())))
                 sm, sadv = line_mask(c["small"], self.fs, 3); it.update(sm=sm, sadv=sadv)
             self.items.append(it)
-    def apply(self, img, t):
+    def apply(self, img, t, matte_fn=None):
         for it in self.items:
             t0, t1 = it["t0"], it["t1"]
             if not (t0 - .01 <= t < t1 + .01): continue
             q = clamp((t - (t1 - .5)) / .5)
             if it["kind"] == "outline":
                 a = ease_out((t - t0) / .8) * (1 - q); mk = it["mask"]; x = 540 - mk.shape[1] / 2 + (t - t0) * 22 - 12; y = 820 - mk.shape[0] / 2
+                base = img.copy() if matte_fn else None
                 ink_paste(img, mk, x, y, a, dark_amount(img, (x, y, x + mk.shape[1], y + mk.shape[0])))
+                if matte_fn:                                           # the people stay in front of the word, so it can never cover a face
+                    m = matte_fn(base)[..., None]; img[:] = img * (1 - m) + base * m
                 lx, ly = 540 - it["ladv"] / 2 - 12, 380 - cap_center(self.fl) - 12; lm = it["lm"]
                 ink_paste(img, lm, lx, ly, ease_out((t - t0 - .3) / .6) * (1 - q), dark_amount(img, (lx, ly, lx + lm.shape[1], ly + lm.shape[0])))
             else:

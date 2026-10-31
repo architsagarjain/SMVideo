@@ -193,6 +193,17 @@ def grade4(img, n):
 
 # ------------------------------------------------------------------ captions ("Letter Window" style, see letter_window.py)
 from letter_window import LetterWindowSeq
+_sess = None
+def person_matte(frame):
+    """Soft person cut-out (MODNet portrait matting) for a float RGB frame, returned at 1080x1920."""
+    global _sess
+    if _sess is None:
+        import onnxruntime as ort
+        _sess = ort.InferenceSession(os.environ.get("MODNET", "/tmp/claude-0/seg/modnet.onnx"), providers=["CPUExecutionProvider"])
+    x = (cv2.resize(np.clip(frame, 0, 255).astype(np.uint8), (448, 800), interpolation=cv2.INTER_AREA).astype(np.float32) / 255 - .5) / .5
+    m = _sess.run(None, {"input": x.transpose(2, 0, 1)[None]})[0][0, 0]
+    m = cv2.GaussianBlur(cv2.resize(m, (W, H), interpolation=cv2.INTER_LINEAR), (0, 0), 2.0)
+    return np.clip((m - .08) / .84, 0, 1)
 class Title:
     """Four captions: outlined 'quietly', the 'colour' window, outlined 'home', and the brand-name window that zooms through a letter."""
     def __init__(self):
@@ -201,7 +212,8 @@ class Title:
             dict(lead="...then comes the", key="colour", t0=tb(8), t1=tb(14), kind="window", small="...then comes the colour."),
             dict(lead="Find the one who feels like", key="home", t0=tb(14), t1=tb(19), kind="outline"),
             dict(lead="Find yours on", key="Shaadi\nMangalam", t0=tb(19), t1=tb(END_BEAT) - .3, kind="window", small="Find yours on Shaadi Mangalam.")])
-    def apply(self, img, t): return self.seq.apply(img, t)
+    def apply(self, img, t):
+        return self.seq.apply(img, t, matte_fn=person_matte)
 
 
 # ------------------------------------------------------------------ the reel
