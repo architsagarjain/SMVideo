@@ -188,35 +188,15 @@ def grade4(img, n):
 
 
 # ------------------------------------------------------------------ captions
+from text_styles import LineDraw
 CAPTIONS = [("Where Beautiful Stories Begin.", 0, 16), ("Meet someone who feels right.", 16, 36),
             ("Celebrate with the people you love.", 36, 52), ("Find your forever on Shaadi Mangalam.", 52, 62)]   # (text, from beat, to beat)
-BOX = (110, 250, 970, 350)                                      # fixed maroon caption box, like the POV reference
-MAROON = np.array([91, 10, 31], np.float32)
 class Title:
-    """Four small Poppins captions in one fixed maroon box at the top. The box stays; only the words change."""
+    """Four small captions in the 'Line Draw' style: a hairline frame draws itself around the words, the letters tighten into place, then the frame erases."""
     def __init__(self):
-        f = font(F_POP, 36); self.caps = []
-        for txt, b0, b1 in CAPTIONS:
-            l, t, r, b = f.getbbox(txt); im = Image.new("L", (r - l + 20, b - t + 20), 0); ImageDraw.Draw(im).text((10 - l, 10 - t), txt, font=f, fill=255)
-            m = np.asarray(im, np.float32) / 255; cy = (BOX[1] + BOX[3]) / 2
-            ht, hb = f.getbbox("H")[1], f.getbbox("H")[3]                  # cap-height band: top of capitals .. baseline (descenders ignored)
-            cap_row = (10 - t) + (ht + hb) / 2                              # row of the cap-band centre inside the mask
-            self.caps.append((m, int(round((BOX[0] + BOX[2]) / 2 - m.shape[1] / 2)), int(round(cy - cap_row)), tb(b0), tb(b1)))
-    def apply(self, img, t):
-        tE = tb(END_BEAT) - .4
-        if t >= tE + .3: return img
-        box = smooth((t - .1) / .4) * (1 - smooth((t - tE) / .3)); x0, y0, x1, y1 = BOX
-        reg = img[y0 - 14:y1 + 14, x0 - 14:x1 + 14]; sh = np.zeros(reg.shape[:2], np.float32); sh[14 + 6:-14 + 6, 14:-14] = 1
-        reg *= 1 - .22 * cv2.GaussianBlur(sh, (0, 0), 9)[..., None] * box                               # faint lift off the footage
-        img[y0:y1, x0:x1] = img[y0:y1, x0:x1] * (1 - box) + MAROON * box
-        for i, (m, x, y, ta, tn) in enumerate(self.caps):
-            last = i == len(self.caps) - 1
-            a = smooth((t - ta) / .3) * (1.0 if last else 1 - smooth((t - (tn - .2)) / .2)) * box
-            if i == 0: a = min(1.0, smooth((t - .25) / .4)) * (1 - smooth((t - (tn - .2)) / .2)) * box
-            if a <= 0: continue
-            yy_ = y + int((1 - smooth((t - ta) / .3)) * 10) if i else y; h, w = m.shape
-            img[yy_:yy_ + h, x:x + w] = img[yy_:yy_ + h, x:x + w] * (1 - m[..., None] * a) + IVORY * (m[..., None] * a)
-        return img
+        caps = [(txt, .3 if i == 0 else tb(b0), tb(END_BEAT) - .3 if i == len(CAPTIONS) - 1 else tb(b1)) for i, (txt, b0, b1) in enumerate(CAPTIONS)]
+        self.style = LineDraw(caps)
+    def apply(self, img, t): return self.style.apply(img, t)
 
 
 # ------------------------------------------------------------------ the reel
