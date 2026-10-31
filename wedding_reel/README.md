@@ -16,3 +16,16 @@ Footage is not stored in the repo. Download the Drive folder, rename the clips t
 The song is a commercial track. Check licensing before you publish; Instagram's own audio library covers it when you pick the sound in the app.
 
 Fonts: Poppins (SIL OFL).
+
+---
+
+# Reel 2: "quiet to colour"
+
+`output/shaadi_mangalam_reel2_quiet_to_colour.mp4`: 1080x1920 (9:16), 60 fps, 22.1 s, H.264 (about 14 Mbps) + AAC, -14 LUFS.
+
+- **Idea:** the intro plays muted and slow. When the percussion enters (6.0 s) a haldi-yellow flash lands and the colour floods in.
+- **Footage:** only the five clips added to the Drive folder later (haldi, dance dip, garland exchange, palace portraits, pastel twirl); none of the first reel's clips are reused.
+- **Music:** "Din Shagna Da" (80 BPM), trimmed from its soft intro into its percussion entry. Music only, no sound effects. Every cut lands on a 0.75 s beat, with 1.5 s shots mostly.
+- **Captions:** the same fixed maroon box and Poppins as reel 1, with new words: "Every love story starts quietly..." / "...then comes the colour." / "Find the one who feels like home." / "Find yours on Shaadi Mangalam."
+- **End:** the supplied end cut (`assets/end_cut.mp4`), untouched.
+- Plan: `plan6.py`; renderer: `render6.py`; audio: `make_audio6.py`; rebuild: `./build_reel2.sh CLIP_DIR SONG.mp3`. `check_plan.py SHOTS_JSON plan6` checks that no shot straddles a source scene cut.
