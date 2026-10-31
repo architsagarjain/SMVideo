@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw
 from text_styles import W, H, IVORY, GOLD, clamp, smooth, ease_out, fnt, line_mask, cap_center, paste
 from text_styles2 import big_font, tracked_mask, VEIL
 
+KEY_Y, LEAD_Y = 1640, 1470      # outlined words live in the lower zone, below everyone's faces
 INK = np.array([20, 16, 14], np.float32)
 def dark_amount(img, box):
     """0 = background is dark (use white ink), 1 = background is bright (use black ink)."""
@@ -43,13 +44,12 @@ class LetterWindowSeq:
             if not (t0 - .01 <= t < t1 + .01): continue
             q = clamp((t - (t1 - .5)) / .5)
             if it["kind"] == "outline":
-                a = ease_out((t - t0) / .8) * (1 - q); mk = it["mask"]; x = 540 - mk.shape[1] / 2 + (t - t0) * 22 - 12; y = 820 - mk.shape[0] / 2
-                base = img.copy() if matte_fn else None
-                ink_paste(img, mk, x, y, a, dark_amount(img, (x, y, x + mk.shape[1], y + mk.shape[0])))
-                if matte_fn:                                           # the people stay in front of the word, so it can never cover a face
-                    m = matte_fn(base)[..., None]; img[:] = img * (1 - m) + base * m
-                lx, ly = 540 - it["ladv"] / 2 - 12, 380 - cap_center(self.fl) - 12; lm = it["lm"]
-                ink_paste(img, lm, lx, ly, ease_out((t - t0 - .3) / .6) * (1 - q), dark_amount(img, (lx, ly, lx + lm.shape[1], ly + lm.shape[0])))
+                mk = it["mask"]; a = 1 - q; x = 540 - mk.shape[1] / 2 - 12; y = KEY_Y - mk.shape[0] / 2
+                w = mk.shape[1]; soft = 140.0; edge = ease_out((t - t0 - .15) / 1.0) * (w + soft) - soft                # left-to-right draw-on
+                reveal = np.clip((edge - np.arange(w, dtype=np.float32)) / soft, 0, 1)[None, :]
+                ink_paste(img, mk * reveal, x, y, a, dark_amount(img, (x, y, x + w, y + mk.shape[0])))
+                lx, ly = 540 - it["ladv"] / 2 - 12, LEAD_Y - cap_center(self.fl) - 12; lm = it["lm"]
+                ink_paste(img, lm, lx, ly, ease_out((t - t0 - .1) / .6) * (1 - q), dark_amount(img, (lx, ly, lx + lm.shape[1], ly + lm.shape[0])))
             else:
                 tz = t0 + 1.25; u = clamp((t - tz) / .85); v = smooth((t - t0) / .35) * (1 - smooth((u - .82) / .18))
                 if v > 0:
