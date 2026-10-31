@@ -1,4 +1,4 @@
-"""Cuts the chosen song to the reel window (music only, no sound effects), with a pre-drop dip and a reverb-tail ending. Usage: python3 make_audio6.py SONG.wav OUT.wav"""
+"""Cuts the chosen song to the reel window (music only, no sound effects) with a beat-aligned jump into the sung line and a reverb-tail ending. Usage: python3 make_audio6.py SONG.wav OUT.wav"""
 import sys, wave
 import numpy as np
 from scipy import signal
@@ -9,7 +9,14 @@ from sfx import SR
 w = wave.open(sys.argv[1]); song = np.frombuffer(w.readframes(w.getnframes()), '<i2').reshape(-1, 2).astype(np.float64) / 32768
 assert w.getframerate() == SR
 N = int(DUR * SR)
-a = int(SONG_START * SR); music = song[a:a + N].copy()
+a = int(SONG_START * SR)
+# beat-aligned splice: instrumental up to AUDIO_SPLICE, then the song continues AUDIO_JUMP seconds later (the sung line)
+music = song[a:a + N].copy()
+b0 = int((SONG_START + AUDIO_JUMP) * SR); later = song[b0:b0 + N]
+si = int(AUDIO_SPLICE * SR); xf = int(AUDIO_XFADE * SR)
+fo = np.cos(np.linspace(0, np.pi / 2, xf))[:, None]; fi = np.sin(np.linspace(0, np.pi / 2, xf))[:, None]          # equal-power crossfade
+music[si - xf:si] = music[si - xf:si] * fo + later[si - xf:si] * fi
+music[si:] = later[si:N]
 t = np.arange(N) / SR
 # gentle fade-in, pre-drop dip (duck the pad for the last beat, then the drop lands at full level)
 music *= np.minimum(t / .12, 1)[:, None]

@@ -41,3 +41,11 @@ for i, s in enumerate(SHOTS):
     s["t0"] = tb(s["b"]); s["t1"] = tb(SHOTS[i + 1]["b"]) if i + 1 < len(SHOTS) else DUR
 TRANS = [(s["t0"], s["trans"][0], s["trans"][1]) for s in SHOTS if s["trans"]]
 LEAKS = []
+
+# audio edit: after the drop the instrumental plays for a few beats, then the music jumps forward by a whole number of beats
+# so the sung line ("Din shagna da chadheya...", first word at 23.6 s in the song) starts as the garland shot begins and
+# finishes just as the end cut starts. The jump is a multiple of the beat, so the groove stays in phase.
+AUDIO_JUMP_BEATS = 12
+AUDIO_JUMP = AUDIO_JUMP_BEATS * BEAT          # 9.0 s
+AUDIO_SPLICE = tb(14) - 0.35                  # reel time of the splice (a short crossfade ends here)
+AUDIO_XFADE = 0.10

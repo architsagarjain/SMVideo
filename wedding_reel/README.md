@@ -25,7 +25,7 @@ Fonts: Poppins (SIL OFL).
 
 - **Idea:** the intro plays muted and slow. When the percussion enters (6.0 s) a haldi-yellow flash lands and the colour floods in.
 - **Footage:** only the five clips added to the Drive folder later (haldi, dance dip, garland exchange, palace portraits, pastel twirl); none of the first reel's clips are reused.
-- **Music:** "Din Shagna Da" (80 BPM), trimmed from its soft intro into its percussion entry. Music only, no sound effects. Every cut lands on a 0.75 s beat, with 1.5 s shots mostly.
+- **Music:** "Din Shagna Da" (80 BPM), music only, no sound effects. The soft intro and the percussion entry (6.0 s) play as in the song, then the instrumental runs for a few beats and the track jumps forward exactly 12 beats (a short crossfade, groove stays in phase) so the sung line "Din shagna da chadheya..." starts at 10.4 s, as the garland shot begins, and finishes at 18.5 s, just before the end cut. The instrumental breath after the line carries the ending, so the song never fades out on a lyric. The jump is set by `AUDIO_JUMP_BEATS` and `AUDIO_SPLICE` in `plan6.py`. Every cut lands on a 0.75 s beat.
 - **Captions:** the same fixed maroon box and Poppins as reel 1, with new words: "Every love story starts quietly..." / "...then comes the colour." / "Find the one who feels like home." / "Find yours on Shaadi Mangalam."
 - **End:** the supplied end cut (`assets/end_cut.mp4`), untouched.
 - Plan: `plan6.py`; renderer: `render6.py`; audio: `make_audio6.py`; rebuild: `./build_reel2.sh CLIP_DIR SONG.mp3`. `check_plan.py SHOTS_JSON plan6` checks that no shot straddles a source scene cut.
