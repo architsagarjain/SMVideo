@@ -191,36 +191,17 @@ def grade4(img, n):
     return img
 
 
-# ------------------------------------------------------------------ captions
-CAPTIONS = [("Every love story starts quietly...", 0, 8), ("...then comes the colour.", 8, 14),
-            ("Find the one who feels like home.", 14, 19), ("Find yours on Shaadi Mangalam.", 19, 25)]   # (text, from beat, to beat)
-BOX = (110, 250, 970, 350)                                      # fixed maroon caption box, like the POV reference
-MAROON = np.array([91, 10, 31], np.float32)
+# ------------------------------------------------------------------ captions ("Letter Window" style, see letter_window.py)
+from letter_window import LetterWindowSeq
 class Title:
-    """Four small Poppins captions in one fixed maroon box at the top. The box stays; only the words change."""
+    """Four captions: outlined 'quietly', the 'colour' window, outlined 'home', and the brand-name window that zooms through a letter."""
     def __init__(self):
-        f = font(F_POP, 36); self.caps = []
-        for txt, b0, b1 in CAPTIONS:
-            l, t, r, b = f.getbbox(txt); im = Image.new("L", (r - l + 20, b - t + 20), 0); ImageDraw.Draw(im).text((10 - l, 10 - t), txt, font=f, fill=255)
-            m = np.asarray(im, np.float32) / 255; cy = (BOX[1] + BOX[3]) / 2
-            ht, hb = f.getbbox("H")[1], f.getbbox("H")[3]                  # cap-height band: top of capitals .. baseline (descenders ignored)
-            cap_row = (10 - t) + (ht + hb) / 2                              # row of the cap-band centre inside the mask
-            self.caps.append((m, int(round((BOX[0] + BOX[2]) / 2 - m.shape[1] / 2)), int(round(cy - cap_row)), tb(b0), tb(b1)))
-    def apply(self, img, t):
-        tE = tb(END_BEAT) - .4
-        if t >= tE + .3: return img
-        box = smooth((t - .1) / .4) * (1 - smooth((t - tE) / .3)); x0, y0, x1, y1 = BOX
-        reg = img[y0 - 14:y1 + 14, x0 - 14:x1 + 14]; sh = np.zeros(reg.shape[:2], np.float32); sh[14 + 6:-14 + 6, 14:-14] = 1
-        reg *= 1 - .22 * cv2.GaussianBlur(sh, (0, 0), 9)[..., None] * box                               # faint lift off the footage
-        img[y0:y1, x0:x1] = img[y0:y1, x0:x1] * (1 - box) + MAROON * box
-        for i, (m, x, y, ta, tn) in enumerate(self.caps):
-            last = i == len(self.caps) - 1
-            a = smooth((t - ta) / .3) * (1.0 if last else 1 - smooth((t - (tn - .2)) / .2)) * box
-            if i == 0: a = min(1.0, smooth((t - .25) / .4)) * (1 - smooth((t - (tn - .2)) / .2)) * box
-            if a <= 0: continue
-            yy_ = y + int((1 - smooth((t - ta) / .3)) * 10) if i else y; h, w = m.shape
-            img[yy_:yy_ + h, x:x + w] = img[yy_:yy_ + h, x:x + w] * (1 - m[..., None] * a) + IVORY * (m[..., None] * a)
-        return img
+        self.seq = LetterWindowSeq([
+            dict(lead="Every love story starts", key="quietly", t0=.4, t1=tb(8) + .05, kind="outline"),
+            dict(lead="...then comes the", key="colour", t0=tb(8), t1=tb(14), kind="window", small="...then comes the colour."),
+            dict(lead="Find the one who feels like", key="home", t0=tb(14), t1=tb(19), kind="outline"),
+            dict(lead="Find yours on", key="Shaadi\nMangalam", t0=tb(19), t1=tb(END_BEAT) - .3, kind="window", small="Find yours on Shaadi Mangalam.")])
+    def apply(self, img, t): return self.seq.apply(img, t)
 
 
 # ------------------------------------------------------------------ the reel
