@@ -1,0 +1,8 @@
+ये है paddy straw की एक bale. एक महीने पहले ये Punjab के एक खेत में खड़ी थी। अब देखिए, ये आगे कहाँ जाती है।
+Harvest के बाद, एक baler खुली पराली को दबाकर tight bales बना देता है, ताकि इसे जलाने की बजाय उठाकर ले जाया जा सके।
+एक aggregator दर्जनों खेतों से bales इकट्ठा करता है, और उन्हें depot पर सूखा और ढककर रखता है।
+वहाँ से एक truck उन्हें pellet plant ले जाता है। Straw को shred किया जाता है, सुखाया जाता है, और छोटे, dense pellets में press किया जाता है।
+फिर pellets की testing होती है। Heat value. Moisture. Ash. उसके बाद उन्हें एक power plant के लिए load किया जाता है, जिसे coal के साथ bio-mass भी जलाना ज़रूरी है।
+एक bale. पाँच businesses. Farmer, baler, aggregator, pellet maker, buyer.
+हर कड़ी को अगली कड़ी ढूँढनी पड़ती है।
+यही वो chain है, जिसे जोड़ने के लिए IndiaBiomass बनाया जा रहा है।
