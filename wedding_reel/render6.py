@@ -101,13 +101,17 @@ class Split:
         return out
     def free(self): [s.release() for s in self.subs]
 class EndClip:
-    """The supplied end cut, played back untouched (100 frames at 30 fps)."""
+    """The supplied end cut, played back untouched (100 frames at 30 fps), then its last frame held with a slow push-in."""
     def __init__(self, path, t0): self.path, self.t0, self.frames = path, t0, None
     def frame(self, t, zmul=1.0):
         if self.frames is None:
             raw = subprocess.run(["ffmpeg", "-v", "error", "-i", self.path, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True).stdout
             self.frames = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)
-        return self.frames[int(clamp(math.floor((t - self.t0) * 30 + 1e-6), 0, len(self.frames) - 1))].astype(np.float32)
+        u = t - self.t0; img = self.frames[int(clamp(math.floor(u * 30 + 1e-6), 0, len(self.frames) - 1))].astype(np.float32)
+        h = u - len(self.frames) / 30                                       # after the cut ends: hold its last frame with a slow push-in
+        if h > 0:
+            z = 1 + .05 * smooth(h / END_HOLD_S); img = cv2.warpAffine(img, np.float32([[z, 0, 540 - 540 * z], [0, z, 900 - 900 * z]]), (W, H), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REFLECT)
+        return img
     def free(self): pass
 
 

@@ -8,9 +8,10 @@ DROP_SONG_T = 10.20               # riser peak / percussion entry in the song
 DROP_BEAT = 8
 END_BEAT = 25
 END_CLIP_S = 100 / 30
+END_HOLD_S = 4.2                  # the end cut's last frame is held this long (slow push-in), for a ~7.5 s end screen
 SONG_START = DROP_SONG_T - DROP_BEAT * BEAT
 def tb(beat): return round(beat * BEAT * FPS) / FPS
-DUR = round((tb(END_BEAT) + END_CLIP_S) * FPS) / FPS
+DUR = round((tb(END_BEAT) + END_CLIP_S + END_HOLD_S) * FPS) / FPS
 NFRAMES = int(round(DUR * FPS))
 
 def S(b, n, clip, src, speed=1.0, zoom=(1.0, 1.14), focus=(.5, .5), trans=None, **kw):
@@ -49,3 +50,8 @@ AUDIO_JUMP_BEATS = 12
 AUDIO_JUMP = AUDIO_JUMP_BEATS * BEAT          # 9.0 s
 AUDIO_SPLICE = tb(14) - 0.35                  # reel time of the splice (a short crossfade ends here)
 AUDIO_XFADE = 0.10
+
+# under the end screen the song's instrumental bar after the sung line (song 31.99-34.99 s, exactly 4 beats) loops,
+# so no new lyric starts before the fade-out
+AUDIO_LOOP_SONG = (31.99, 34.99)
+AUDIO_LOOP_FROM = AUDIO_LOOP_SONG[0] - SONG_START - AUDIO_JUMP     # reel time where the loop takes over (18.79 s)

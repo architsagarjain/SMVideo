@@ -17,6 +17,14 @@ si = int(AUDIO_SPLICE * SR); xf = int(AUDIO_XFADE * SR)
 fo = np.cos(np.linspace(0, np.pi / 2, xf))[:, None]; fi = np.sin(np.linspace(0, np.pi / 2, xf))[:, None]          # equal-power crossfade
 music[si - xf:si] = music[si - xf:si] * fo + later[si - xf:si] * fi
 music[si:] = later[si:N]
+# loop the instrumental bar under the end screen (equal-power crossfade at every seam)
+L0, L1 = (int(v * SR) for v in AUDIO_LOOP_SONG); bar = song[L0 - xf:L1]; lf = int(AUDIO_LOOP_FROM * SR); n_bar = L1 - L0
+pos = lf
+while pos < N:
+    seg = bar[xf:xf + n_bar][:N - pos].copy(); music[pos:pos + len(seg)] = seg
+    if pos > lf:                                                  # crossfade the previous bar's tail into this one
+        k = min(xf, len(seg)); tail = song[L1:L1 + k]; music[pos:pos + k] = tail * fo[:k] + seg[:k] * fi[:k]
+    pos += n_bar
 t = np.arange(N) / SR
 # gentle fade-in, pre-drop dip (duck the pad for the last beat, then the drop lands at full level)
 music *= np.minimum(t / .12, 1)[:, None]
