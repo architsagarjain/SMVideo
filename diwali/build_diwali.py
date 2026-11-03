@@ -1,22 +1,28 @@
 """Composes a Diwali reel: source clip + festive text + animated end card + music and firework SFX.
-usage: python3 build_diwali.py <scratch_dir> [diya|lantern]   (needs ffmpeg, numpy, Pillow)
-  diya    (default): source.mp4         -> diwali_reel.mp4
-  lantern          : source_lantern.mp4 -> diwali_reel_lantern.mp4"""
+usage: python3 build_diwali.py <scratch_dir> [variant]   (needs ffmpeg, numpy, Pillow)
+  diya (default)    : source.mp4              -> diwali_reel.mp4
+  lantern           : source_lantern.mp4      -> diwali_reel_lantern.mp4
+  construction      : source_construction.mp4 -> diwali_reel_construction.mp4
+  construction_logo : same, with the Pandit Crane Service logo at the top of the clip"""
 import numpy as np, subprocess, sys, os, math
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCR = sys.argv[1]
 VARIANT = sys.argv[2] if len(sys.argv) > 2 else "diya"
-# per clip: source, output, and firework SFX (file, start time, gain) placed so each bang lands on a burst in that clip
+# per clip: source, output, firework SFX, show logo on the clip; SFX (file, start time, gain) placed so each bang lands on a burst in that clip
 VARIANTS = {
     "diya": ("source.mp4", "diwali_reel.mp4",
              [("fw_clear_explosions.mp3", 6.70, 0.42), ("fw_bang_in_sky.mp3", 7.19, 0.35),
-              ("fw_small_explosion.mp3", 8.10, 0.3), ("fw_rockets_exploding.mp3", 8.65, 0.22)]),
+              ("fw_small_explosion.mp3", 8.10, 0.3), ("fw_rockets_exploding.mp3", 8.65, 0.22)], False),
     "lantern": ("source_lantern.mp4", "diwali_reel_lantern.mp4",
                 [("fw_clear_explosions.mp3", 7.20, 0.42), ("fw_bang_in_sky.mp3", 7.39, 0.35),
-                 ("fw_small_explosion.mp3", 7.80, 0.3), ("fw_rockets_exploding.mp3", 8.64, 0.22)]),
+                 ("fw_small_explosion.mp3", 7.80, 0.3), ("fw_rockets_exploding.mp3", 8.64, 0.22)], False),
 }
-SRC, OUT_NAME, SFX = VARIANTS[VARIANT]
+_CONSTR_SFX = [("fw_clear_explosions.mp3", 3.10, 0.42), ("fw_bang_in_sky.mp3", 3.24, 0.35),
+               ("fw_small_explosion.mp3", 5.85, 0.3), ("fw_rockets_exploding.mp3", 6.34, 0.22)]
+VARIANTS["construction"] = ("source_construction.mp4", "diwali_reel_construction.mp4", _CONSTR_SFX, False)
+VARIANTS["construction_logo"] = ("source_construction.mp4", "diwali_reel_construction_logo.mp4", _CONSTR_SFX, True)
+SRC, OUT_NAME, SFX, SHOW_LOGO = VARIANTS[VARIANT]
 W, H, FPS, TOTAL = 1080, 1920, 24, 15.0
 T_END = 9.375            # bar 6 downbeat: end card starts dissolving in on the crash
 DISS = 0.65
@@ -114,6 +120,35 @@ def remove_watermark(fr):
     reg = (fr[WY0:WY1, WX0:WX1] - 250 * WM_A) / (1 - WM_A)
     fr[WY0:WY1, WX0:WX1] = np.clip(_diffuse(reg, WM_RIM, 40), 0, 255)
 
+# ---------- logo header (optional) ----------
+# The logo artwork sits on its own light-grey background, so it goes on a rounded plate of that same
+# colour (navy tagline would vanish on the night sky), top-left so it never meets the right-aligned text. Fades in at the start; dissolves out with the clip.
+def logo_layer(width=400, pad=(22, 14), radius=20):
+    lg = Image.open(os.path.join(HERE, "pandit_logo.png")).convert("RGB")
+    lg = lg.resize((width, round(lg.height * width / lg.width)), Image.LANCZOS)
+    a = np.asarray(lg).astype(np.float32)
+    plate_rgb = tuple(int(v) for v in np.median(np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]]), 0))
+    pw, ph = width + 2 * pad[0], lg.height + 2 * pad[1]
+    m = 30  # room for the shadow
+    lay = Image.new("RGBA", (pw + 2 * m, ph + 2 * m), (0, 0, 0, 0))
+    sh = Image.new("L", lay.size, 0); ImageDraw.Draw(sh).rounded_rectangle((m, m + 6, m + pw, m + ph + 6), radius, fill=120)
+    shadow = Image.new("RGBA", lay.size, (0, 0, 0, 0)); shadow.putalpha(sh.filter(ImageFilter.GaussianBlur(14)))
+    lay = Image.alpha_composite(lay, shadow)
+    plate = Image.new("L", lay.size, 0); ImageDraw.Draw(plate).rounded_rectangle((m, m, m + pw, m + ph), radius, fill=255)
+    pl = Image.new("RGBA", lay.size, plate_rgb + (0,)); pl.putalpha(plate)
+    lay = Image.alpha_composite(lay, pl)
+    lay.paste(lg, (m + pad[0], m + pad[1]))
+    return np.asarray(lay).astype(np.float32)
+if SHOW_LOGO:
+    LOGO_LAY = logo_layer()
+    LOGO_X = 46 - 30; LOGO_Y = 44 - 30  # plate at top-left (46, 44), clear of the right-aligned text
+def blend_logo(fr, a):
+    if a <= 0.003: return
+    h, w = LOGO_LAY.shape[:2]
+    al = LOGO_LAY[:, :, 3:4] / 255.0 * a
+    reg = fr[LOGO_Y:LOGO_Y + h, LOGO_X:LOGO_X + w]
+    fr[LOGO_Y:LOGO_Y + h, LOGO_X:LOGO_X + w] = reg * (1 - al) + LOGO_LAY[:, :, :3] * al
+
 # ---------- end card ----------
 card = np.asarray(Image.open(os.path.join(HERE, "end_card.png")).convert("RGB").resize((W, H), Image.LANCZOS)).astype(np.float32)
 clean = card.copy()
@@ -193,6 +228,7 @@ for i in range(nf):
     if t < T_END + DISS:
         fr = last.copy()
         remove_watermark(fr)
+        if SHOW_LOGO: blend_logo(fr, ease((t - 0.2) / 0.6))
         for ti, to, yc, lay in BEATS:
             a = ease((t - ti) / 0.4) * (1 - ease((t - (to - 0.35)) / 0.35))
             blend_layer(fr, lay, yc, a, 1 - eout((t - ti) / 0.5))
