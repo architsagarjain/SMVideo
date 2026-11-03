@@ -3,6 +3,7 @@ import { Film } from './Film';
 import { Reel1, REEL1_FRAMES } from './reels/Reel1';
 import { Reel2, REEL2_FRAMES } from './reels/Reel2';
 import { V1, V1_FRAMES } from './r8/V1';
+import { V1hi, V1hi_FRAMES } from './r8/V1hi';
 import { V2, V2_FRAMES } from './r8/V2';
 import { V3, V3_FRAMES } from './r8/V3';
 import { V3hi, V3hi_FRAMES } from './r8/V3hi';
@@ -26,6 +27,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Reel1-CoFiring" component={Reel1} durationInFrames={REEL1_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Reel2-TenderWords" component={Reel2} durationInFrames={REEL2_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video1" component={V1} durationInFrames={V1_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="Video1Hinglish" component={V1hi} durationInFrames={V1hi_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video2" component={V2} durationInFrames={V2_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video3" component={V3} durationInFrames={V3_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video3Hinglish" component={V3hi} durationInFrames={V3hi_FRAMES} fps={30} width={1080} height={1920} />
