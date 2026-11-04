@@ -78,8 +78,16 @@ BEATS = [  # (t_in, t_out, y_top, layer) - right-aligned, in the clear sky besid
  (1.0, 4.5, 130, text_layer([("LIFTING", LIGHT, 72, 0, CREAM, -8), ("SPIRITS", LIGHT, 72, 0, CREAM, -8), ("HIGHER", BOLD, 88, 0, "gold", 4), ("FESTIVAL OF LIGHTS", SMALL, 22, 5, CREAM, 0)], True)),
  (5.0, 9.0, 130, text_layer([("MAY YOUR LIFE", LIGHT, 46, 0, CREAM, -6), ("GLOW WITH", LIGHT, 46, 0, CREAM, 2), ("JOY &", BOLD, 54, 0, "gold", -6), ("PROSPERITY", BOLD, 54, 0, "gold", 0)], True)),
 ]
+# construction clip: fireworks fill the sky above the building, so the text goes centred on the empty
+# wet ground below the crane, over a soft darkening band for legibility
+if SRC == "source_construction.mp4":
+    BEATS = [
+     (1.0, 4.5, 1450, text_layer([("LIFTING SPIRITS", LIGHT, 60, 0, CREAM, -10), ("HIGHER", BOLD, 96, 0, "gold", 2), ("FESTIVAL OF LIGHTS", SMALL, 22, 6, CREAM, 0)])),
+     (5.0, 9.0, 1470, text_layer([("MAY YOUR LIFE GLOW WITH", LIGHT, 42, 0, CREAM, -2), ("JOY & PROSPERITY", BOLD, 68, 0, "gold", 0)])),
+    ]
 yy = np.arange(H)[:, None]
-SHADE = (1 - 0.5 * np.clip((yy - 1000) / 700, 0, 1) ** 1.3).astype(np.float32)[:, :, None]
+SHADE = (1 - 0.42 * np.clip((yy - 1420) / 260, 0, 1) ** 1.2).astype(np.float32)[:, :, None]
+USE_SHADE = SRC == "source_construction.mp4"
 
 def blend_layer(fr, layer, yc, a, rise):
     if a <= 0.003: return
@@ -229,6 +237,7 @@ for i in range(nf):
         fr = last.copy()
         remove_watermark(fr)
         if SHOW_LOGO: blend_logo(fr, ease((t - 0.2) / 0.6))
+        if USE_SHADE: fr *= 1 - (1 - SHADE) * ease((t - 0.6) / 0.6) * (1 - ease((t - 8.8) / 0.5))
         for ti, to, yc, lay in BEATS:
             a = ease((t - ti) / 0.4) * (1 - ease((t - (to - 0.35)) / 0.35))
             blend_layer(fr, lay, yc, a, 1 - eout((t - ti) / 0.5))
