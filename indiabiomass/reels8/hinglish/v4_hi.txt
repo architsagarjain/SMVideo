@@ -1,0 +1,10 @@
+India में bio-mass एक तरह का नहीं है। लगभग हर region में अलग है।
+Punjab और Haryana में paddy straw है, जो धान की harvest के बाद बचती है।
+Rajasthan में, mustard husk.
+Gujarat और Maharashtra में, cotton stalks और groundnut shells.
+Uttar Pradesh और Maharashtra में, sugar mills से निकलने वाला bagasse.
+South में, coconut shells. और rice husk, जहाँ भी चावल की milling होती है।
+इनमें से हर एक fuel है, अगर ये सही buyer तक पहुँच जाए।
+Problem है distance. Straw एक state में है, जिस factory को उसकी ज़रूरत है वो दूसरी state में, और दोनों को एक-दूसरे के बारे में पता ही नहीं।
+IndiaBiomass map कर रहा है कि किसके पास क्या है, और कहाँ, ताकि supply और demand आख़िरकार एक-दूसरे को ढूँढ सकें।
+आपके आस-पास कौन-सा उगता है?

@@ -8,6 +8,7 @@ import { V2, V2_FRAMES } from './r8/V2';
 import { V3, V3_FRAMES } from './r8/V3';
 import { V3hi, V3hi_FRAMES } from './r8/V3hi';
 import { V4, V4_FRAMES } from './r8/V4';
+import { V4hi, V4hi_FRAMES } from './r8/V4hi';
 import { V5, V5_FRAMES } from './r8/V5';
 import { V6, V6_FRAMES } from './r8/V6';
 import { V7, V7_FRAMES } from './r8/V7';
@@ -33,6 +34,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Video3" component={V3} durationInFrames={V3_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video3Hinglish" component={V3hi} durationInFrames={V3hi_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video4" component={V4} durationInFrames={V4_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="Video4Hinglish" component={V4hi} durationInFrames={V4hi_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video5" component={V5} durationInFrames={V5_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video6" component={V6} durationInFrames={V6_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video7" component={V7} durationInFrames={V7_FRAMES} fps={30} width={1080} height={1920} />
