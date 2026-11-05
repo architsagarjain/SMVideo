@@ -4,7 +4,7 @@ set -e
 n=$1; SLUG=$2
 cd /home/user/SMVideo/indiabiomass/film
 W=/tmp/claude-0/-home-user-SMVideo/dea5613d-59d0-569e-9e5f-fab7f2a5b5e9/scratchpad/v${n}hi_final; mkdir -p "$W"
-npx remotion render src/index.ts Video${n}Hinglish "$W/pic.mp4" --muted --log=error --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=4 2>&1 | grep -v -i memory || true
+npx remotion render src/index.ts Video${n}Hinglish "$W/pic.mp4" --muted --log=info --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=4 2>&1 | grep -v -i memory || true
 cd ..
 NAME=IndiaBiomass_Video${n}_${SLUG}_Hinglish; O=reels8/output/$NAME.mp4; S=reels8/output/share/$NAME.mp4; P="$W/x264"
 ffmpeg -y -loglevel error -i "$W/pic.mp4" -c:v libx264 -preset slow -profile:v high -pix_fmt yuv420p -b:v 8M -maxrate 12M -bufsize 16M -pass 1 -passlogfile "$P" -an -f mp4 /dev/null
