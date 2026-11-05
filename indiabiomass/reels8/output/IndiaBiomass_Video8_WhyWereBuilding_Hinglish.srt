@@ -1,0 +1,123 @@
+1
+00:00:00,267 --> 00:00:01,967
+Ask anyone in the biomass
+
+2
+00:00:01,967 --> 00:00:04,200
+trade how they find a buyer.
+
+3
+00:00:04,500 --> 00:00:05,533
+A phone call.
+
+4
+00:00:05,533 --> 00:00:07,133
+A friend of a friend.
+
+5
+00:00:07,133 --> 00:00:08,333
+A WhatsApp group
+
+6
+00:00:08,333 --> 00:00:10,967
+with a thousand unread messages.
+
+7
+00:00:11,200 --> 00:00:12,667
+Ask them how they know
+
+8
+00:00:12,667 --> 00:00:14,033
+the right price.
+
+9
+00:00:14,300 --> 00:00:16,467
+Most will tell you they don't.
+
+10
+00:00:16,467 --> 00:00:18,900
+They find out after the deal.
+
+11
+00:00:19,133 --> 00:00:19,867
+Meanwhile,
+
+12
+00:00:19,867 --> 00:00:22,267
+power plants need fuel every day.
+
+13
+00:00:22,267 --> 00:00:24,900
+Factories are switching their boilers.
+
+14
+00:00:24,900 --> 00:00:26,233
+Farmers have straw
+
+15
+00:00:26,233 --> 00:00:28,000
+with nowhere to go.
+
+16
+00:00:28,200 --> 00:00:29,400
+The demand is real.
+
+17
+00:00:29,400 --> 00:00:30,600
+The supply is real.
+
+18
+00:00:30,600 --> 00:00:31,567
+What is missing
+
+19
+00:00:31,567 --> 00:00:33,467
+is the link between them.
+
+20
+00:00:33,633 --> 00:00:35,467
+So we are building it.
+
+21
+00:00:35,533 --> 00:00:37,600
+Verified suppliers and buyers,
+
+22
+00:00:37,600 --> 00:00:38,933
+in one place.
+
+23
+00:00:39,000 --> 00:00:39,433
+Tenders,
+
+24
+00:00:39,433 --> 00:00:40,967
+as they are published.
+
+25
+00:00:41,100 --> 00:00:41,700
+Prices,
+
+26
+00:00:41,700 --> 00:00:43,400
+region by region.
+
+27
+00:00:43,467 --> 00:00:45,500
+Supply and policy updates,
+
+28
+00:00:45,500 --> 00:00:47,133
+tracked for you.
+
+29
+00:00:47,233 --> 00:00:48,133
+IndiaBiomass.
+
+30
+00:00:48,133 --> 00:00:49,967
+The information and trust
+
+31
+00:00:49,967 --> 00:00:52,633
+layer for India's biomass industry.
