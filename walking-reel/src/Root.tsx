@@ -1,4 +1,8 @@
 import {Composition} from 'remotion';
+import {M1Reel} from './m1/Reel';
+import {M1_FRAMES} from './m1/config';
+import {M2Reel} from './m2/Reel';
+import {M2_FRAMES} from './m2/config';
 import {WalkingReel} from './WalkingReel';
 import {ExplainerReel} from './explainer/ExplainerReel';
 import {Reel2} from './reel2/Reel2';
@@ -44,6 +48,8 @@ export const Root: React.FC = () => {
     <>
     <Composition id="SleepHour" component={V15Reel} durationInFrames={V15_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="DeskDay" component={V14Reel} durationInFrames={V14_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="BloodTests" component={M1Reel} durationInFrames={M1_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="BreakfastSwaps" component={M2Reel} durationInFrames={M2_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="OneChange" component={V13Reel} durationInFrames={V13_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="SplitWeek" component={V12Reel} durationInFrames={V12_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="RiceWater" component={V11Reel} durationInFrames={V11_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
