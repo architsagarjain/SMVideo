@@ -39,3 +39,9 @@ public/v14/
 footage/v14/
 public/v15/
 footage/v15/
+
+# minimal-style reels: raw footage + Drive downloads (kept on Drive) and generated media
+footage/new/
+footage/drive2/
+public/m1/
+public/m2/
