@@ -27,7 +27,9 @@ def cues(cue, rng):
         cue(start, "pack:whoosh_soft", -29)
         cue(swap, "pack:click", -26)
         cue(now, "pack:chime2", -26)
-    # ending
+    # ending: the breakfast menu fills in, then Comment BREAKFAST
     cue(116.7, "pack:whoosh_soft", -24)
-    cue(117.2, "pack:hit", -27)
+    for j in range(6):
+        cue(116.87 + j * 0.1, "pack:click", -28)
+    cue(117.2, "pack:hit", -26)
     cue(118.32, "pack:notif", -22)

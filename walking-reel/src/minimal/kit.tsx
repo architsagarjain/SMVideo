@@ -14,6 +14,13 @@ import {EASE_IN, EASE_OUT, FPS, SANS, SERIF, lerp, tween} from '../theme';
 export const WHITE = '#FFFFFF';
 export const ACCENT = '#F5C451';
 export const SHADOW_TXT = '0 2px 14px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.5)';
+/** Thin dark outline under the fill plus a soft shadow: text stays readable on light ceilings and
+ *  dark cabinets alike, without a box behind it. */
+export const outline = (size: number, a = 0.6): React.CSSProperties => ({
+  WebkitTextStroke: `${Math.max(2, Math.round(size * 0.07))}px rgba(12,12,12,${a})`,
+  paintOrder: 'stroke fill',
+  textShadow: '0 3px 16px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.6)',
+});
 /** Captions sit on her light sweater: a wider, darker glow keeps the thin serif readable. */
 export const SHADOW_CAP = '0 0 26px rgba(0,0,0,0.85), 0 0 10px rgba(0,0,0,0.7), 0 2px 4px rgba(0,0,0,0.8)';
 
@@ -46,7 +53,7 @@ export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string}> = ({cut
                   <OffthreadVideo src={staticFile(`${dir}/${c.src}`)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
                 </Sequence>
               </AbsoluteFill>
-              {c.line ? <AbsoluteFill style={{background: 'radial-gradient(90% 45% at 50% 50%, rgba(0,0,0,0.32), rgba(0,0,0,0) 75%)'}} /> : null}
+              {c.line ? <AbsoluteFill style={{background: `radial-gradient(85% 18% at 50% ${((c.y ?? 900) / 1920) * 100}%, rgba(0,0,0,0.34), rgba(0,0,0,0) 80%)`}} /> : null}
             </AbsoluteFill>
             {c.line && on ? <KeyLine text={c.line} at={c.lineAt ?? c.start + 0.15} times={c.times} y={c.y ?? 900} out={c.end - 0.18} /> : null}
           </React.Fragment>
@@ -70,7 +77,7 @@ export const KeyLine: React.FC<{text: string; at: number; times?: number[]; y?: 
             const idx = k++;
             const p = tween(t, times?.[idx] ?? at + idx * 0.11, 0.32, EASE_OUT); // per-word times when given (synced to speech)
             return (
-              <span key={wi} style={{fontFamily: SANS, fontWeight: 700, fontSize: size, lineHeight: 1.05, letterSpacing: -size * 0.02, color, textShadow: SHADOW_TXT, opacity: p, filter: `blur(${(1 - p) * 8}px)`, translate: `0 ${lerp(p, 14, 0)}px`, display: 'inline-block'}}>
+              <span key={wi} style={{fontFamily: SANS, fontWeight: 700, fontSize: size, lineHeight: 1.05, letterSpacing: -size * 0.02, color, ...outline(size), opacity: p, filter: `blur(${(1 - p) * 8}px)`, translate: `0 ${lerp(p, 14, 0)}px`, display: 'inline-block'}}>
                 {w}
               </span>
             );
@@ -101,7 +108,7 @@ export const TopShade: React.FC<{wins: Win[]; reach?: number}> = ({wins, reach =
   let o = 0;
   for (const w of wins) if (t >= w.start && t < w.end + 0.3) o = Math.max(o, tween(t, w.start, 0.3) * (1 - tween(t, w.end - 0.1, 0.3)));
   if (o <= 0) return null;
-  return <AbsoluteFill style={{opacity: o, background: `linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) ${reach * 0.6}%, rgba(0,0,0,0) ${reach}%)`}} />;
+  return <AbsoluteFill style={{opacity: o, background: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) ${reach * 0.6}%, rgba(0,0,0,0) ${reach}%)`}} />;
 };
 
 /** Ending: a clean comment line - "Comment WORD" - in the middle of the frame. */

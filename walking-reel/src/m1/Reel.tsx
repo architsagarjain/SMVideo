@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {Base, Footage, GradeOverlay} from '../series/core';
 import {useT} from '../explainer/kit';
-import {ACCENT, CommentEnd, Cutaways, SHADOW_TXT, SerifCaps, TopShade, WHITE} from '../minimal/kit';
+import {ACCENT, Cutaways, SHADOW_TXT, SerifCaps, TopShade, WHITE, outline} from '../minimal/kit';
 import {EASE_IN, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {C, CUTS, TM_M1, m1Config as cfg} from './config';
 
@@ -11,8 +11,8 @@ const rise = (t: number, at: number): React.CSSProperties => {
   const p = tween(t, at, 0.4, EASE_OUT);
   return {opacity: p, translate: `0 ${lerp(p, 18, 0)}px`, filter: `blur(${(1 - p) * 6}px)`};
 };
-const Small: React.FC<{children: React.ReactNode; color?: string}> = ({children, color = 'rgba(255,255,255,0.8)'}) => (
-  <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, letterSpacing: 6, color, textShadow: SHADOW_TXT, textTransform: 'uppercase'}}>{children}</div>
+const Small: React.FC<{children: React.ReactNode; color?: string}> = ({children, color = WHITE}) => (
+  <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 34, letterSpacing: 6, color, ...outline(34), textTransform: 'uppercase'}}>{children}</div>
 );
 
 /** Hook insert: the report that says everything is normal. */
@@ -54,16 +54,16 @@ const VitD: React.FC = () => {
       <div style={{position: 'absolute', left: 0, right: 0, top: 120, textAlign: 'center', ...rise(t, C.vitd.start)}}>
         <Small>Vitamin D · ng/mL</Small>
       </div>
-      <div style={{position: 'absolute', left: x(0), top: 300, width: W * line, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.85)', boxShadow: SHADOW_TXT}} />
+      <div style={{position: 'absolute', left: x(0), top: 298, width: W * line, height: 6, borderRadius: 3, background: '#FFFFFF', boxShadow: '0 0 0 2px rgba(12,12,12,0.5), 0 3px 12px rgba(0,0,0,0.5)'}} />
       {[0, 25, 50, 75, 100].map((v) => (
-        <div key={v} style={{position: 'absolute', left: x(v) - 1, top: 292, width: 2, height: 20, background: 'rgba(255,255,255,0.7)', opacity: line}} />
+        <div key={v} style={{position: 'absolute', left: x(v) - 1, top: 292, width: 3, height: 22, background: '#FFFFFF', boxShadow: '0 0 0 1.5px rgba(12,12,12,0.5)', opacity: line}} />
       ))}
       {[{v: 30, p: m30, label: 'Lab normal', c: WHITE}, {v: 60, p: m60, label: 'Aim here', c: ACCENT}].map((m) =>
         m.p > 0 ? (
           <div key={m.v} style={{position: 'absolute', left: x(m.v), top: 302, translate: '-50% 0', display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: m.p}}>
             <div style={{width: 26, height: 26, borderRadius: '50%', background: m.c, translate: '0 -13px', scale: lerp(m.p, 0.4, 1), boxShadow: SHADOW_TXT}} />
-            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 96, lineHeight: 1, color: m.c, textShadow: SHADOW_TXT, marginTop: 8}}>{m.v}</div>
-            <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 40, color: m.c, textShadow: SHADOW_TXT}}>{m.label}</div>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 96, lineHeight: 1, color: m.c, ...outline(96), marginTop: 8}}>{m.v}</div>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 38, color: m.c, ...outline(38)}}>{m.label}</div>
           </div>
         ) : null,
       )}
@@ -84,8 +84,8 @@ const Targets: React.FC<{w: {start: number; end: number}; title: string; items: 
       <div style={{position: 'absolute', left: 60, right: 60, top: 200, display: 'flex', justifyContent: 'center', gap: 90}}>
         {items.map((it) => (
           <div key={it.label} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', ...rise(t, it.at)}}>
-            <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 46, color: WHITE, textShadow: SHADOW_TXT}}>{it.label}</div>
-            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 120, lineHeight: 1.05, color: ACCENT, textShadow: SHADOW_TXT}}>{it.value}</div>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 42, color: WHITE, ...outline(42)}}>{it.label}</div>
+            <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 120, lineHeight: 1.05, color: ACCENT, ...outline(120)}}>{it.value}</div>
           </div>
         ))}
       </div>
@@ -110,11 +110,44 @@ const Thyroid: React.FC = () => {
       </div>
       <div style={{position: 'absolute', left: 60, right: 60, top: 180, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16}}>
         {signs.map((g) => (
-          <div key={g.s} style={{padding: '12px 30px', borderRadius: 999, border: '2px solid rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.18)', fontFamily: SANS, fontWeight: 700, fontSize: 40, color: WHITE, textShadow: SHADOW_TXT, ...rise(t, g.at)}}>
+          <div key={g.s} style={{padding: '12px 30px', borderRadius: 999, border: '2px solid rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.38)', fontFamily: SANS, fontWeight: 700, fontSize: 40, color: WHITE, ...outline(40), ...rise(t, g.at)}}>
             {g.s}
           </div>
         ))}
         <div style={{marginTop: 8, padding: '12px 30px', borderRadius: 999, background: ACCENT, fontFamily: SANS, fontWeight: 800, fontSize: 40, color: '#141414', ...rise(t, 58.54)}}>+ Ask for antibodies</div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+/** Ending: her test list ticks off, then "Comment TEST" - a card above her head. */
+const TESTS = ['Vitamin D', 'HbA1c + Fasting Insulin', 'SGOT · SGPT', 'Full Thyroid + Antibodies'];
+const TestList: React.FC = () => {
+  const t = useT();
+  const s0 = C.cta.start;
+  if (t < s0) return null;
+  const k = tween(t, s0, 0.4, EASE_OUT);
+  const word = tween(t, 68.82, 0.35, EASE_OUT);
+  return (
+    <AbsoluteFill>
+      <div style={{position: 'absolute', left: 120, right: 120, top: 70, background: '#FFFFFF', borderRadius: 28, padding: '28px 40px 30px', boxShadow: '0 30px 60px -24px rgba(0,0,0,0.5)', opacity: k, translate: `0 ${lerp(k, -30, 0)}px`, color: '#141414'}}>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 26, letterSpacing: 6, color: '#8A857C'}}>YOUR TEST LIST</div>
+        <div style={{marginTop: 10}}>
+          {TESTS.map((x, i) => {
+            const tick = tween(t, s0 + 0.15 + i * 0.14, 0.25, EASE_OUT);
+            return (
+              <div key={x} style={{display: 'flex', alignItems: 'center', gap: 18, height: 58, borderBottom: '1px solid #ECE8E1'}}>
+                <div style={{width: 36, height: 36, borderRadius: 10, border: '3px solid #141414', boxSizing: 'border-box', background: tick > 0.5 ? '#141414' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ACCENT, fontFamily: SANS, fontWeight: 800, fontSize: 24}}>{tick > 0.5 ? '✓' : ''}</div>
+                <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 34}}>{x}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 22}}>
+          <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 54}}>Comment</span>
+          <span style={{padding: '2px 26px', borderRadius: 14, background: ACCENT, fontFamily: SANS, fontWeight: 800, fontSize: 72, letterSpacing: 4, opacity: word, scale: lerp(word, 0.7, 1)}}>TEST</span>
+        </div>
+        <div style={{textAlign: 'center', marginTop: 10, fontFamily: SANS, fontWeight: 700, fontSize: 28, color: '#8A857C', opacity: tween(t, 69.6, 0.35)}}>The full panel comes to your DMs</div>
       </div>
     </AbsoluteFill>
   );
@@ -132,7 +165,7 @@ const Scene: React.FC = () => (
     <Thyroid />
     <Cutaways cuts={CUTS} tm={TM_M1} dir="m1" />
     <Report />
-    <CommentEnd start={C.cta.start} word="TEST" wordAt={68.82} note="Full test panel → your DMs" noteAt={69.6} />
+    <TestList />
     <SerifCaps cfg={cfg} hide={[...LINED, C.report, {start: C.cta.start + 0.1, end: 999}]} />
   </>
 );

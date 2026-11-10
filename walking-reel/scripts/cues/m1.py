@@ -30,7 +30,9 @@ def cues(cue, rng):
     for at in (54.86, 55.6, 57.08):
         cue(at, "pack:click", -26)
     cue(58.54, "pack:chime2", -26)
-    # ending
-    cue(68.25, "pack:whoosh_soft", -24)
-    cue(68.82, "pack:hit", -27)
+    # ending: the test list ticks off, then Comment TEST
+    cue(68.2, "pack:whoosh_soft", -24)
+    for j in range(4):
+        cue(68.35 + j * 0.14, "pack:click", -26)
+    cue(68.82, "pack:hit", -26)
     cue(69.6, "pack:notif", -22)
