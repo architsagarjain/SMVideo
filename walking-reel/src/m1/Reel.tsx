@@ -38,6 +38,37 @@ const Report: React.FC = () => {
   );
 };
 
+/** 4 · Thyroid: the full panel, not just TSH (same look as the report insert). */
+const Panel: React.FC = () => {
+  const t = useT();
+  const w = C.panel;
+  if (t < w.start - 0.05 || t > w.end + 0.05) return null;
+  const k = tween(t, w.start, 0.25, EASE_OUT);
+  const rows = [
+    {n: 'TSH', at: 50.4},
+    {n: 'Free T3', at: 50.6},
+    {n: 'Free T4', at: 50.8},
+    {n: 'Thyroid antibodies', at: 51.0},
+  ];
+  const not = tween(t, 52.72, 0.3, EASE_OUT);
+  return (
+    <AbsoluteFill style={{background: '#EEEBE4', opacity: Math.min(1, k * 2) * (1 - tween(t, w.end - 0.12, 0.12))}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 380, textAlign: 'center', ...rise(t, w.start + 0.05)}}>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 32, letterSpacing: 8, color: '#8A857C'}}>4 · THYROID</div>
+        <div style={{fontFamily: SERIF, fontSize: 96, lineHeight: 1.05, color: '#141414', marginTop: 10}}>The full panel</div>
+      </div>
+      <div style={{position: 'absolute', left: 170, right: 170, top: 640, display: 'flex', flexDirection: 'column', gap: 18}}>
+        {rows.map((r, i) => (
+          <div key={r.n} style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 34px', borderRadius: 20, background: '#FFFFFF', boxShadow: '0 16px 30px -20px rgba(0,0,0,0.35)', fontFamily: SANS, fontSize: 44, fontWeight: 800, color: '#141414', ...rise(t, r.at)}}>
+            <span>{r.n}</span>
+            {i === 0 ? <span style={{fontSize: 28, fontWeight: 700, color: '#8A857C', opacity: not}}>not just this</span> : <span style={{fontSize: 34, color: '#1F8A4C'}}>✓</span>}
+          </div>
+        ))}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 /** Vitamin D: lab normal starts at 30, aim closer to 60. */
 const VitD: React.FC = () => {
   const t = useT();
@@ -120,34 +151,68 @@ const Thyroid: React.FC = () => {
   );
 };
 
-/** Ending: her test list ticks off, then "Comment TEST" - a card above her head. */
-const TESTS = ['Vitamin D', 'HbA1c + Fasting Insulin', 'SGOT · SGPT', 'Full Thyroid + Antibodies'];
-const TestList: React.FC = () => {
+/** Ending: a blood-sample tube fills, its lab sticker lands, and "Comment TEST" types in beside it. */
+const SampleEnd: React.FC = () => {
   const t = useT();
   const s0 = C.cta.start;
   if (t < s0) return null;
-  const k = tween(t, s0, 0.4, EASE_OUT);
-  const word = tween(t, 68.82, 0.35, EASE_OUT);
+  const k = tween(t, s0, 0.35, EASE_OUT);
+  const fill = tween(t, s0 + 0.15, 0.7, EASE_OUT);
+  const sticker = tween(t, 68.7, 0.3, EASE_OUT);
+  const word = 'TEST';
+  const note = tween(t, 69.6, 0.4, EASE_OUT);
+  const TW = 150;
+  const TH = 430;
+  const liquidH = (TH - 80) * 0.78 * fill;
   return (
-    <AbsoluteFill>
-      <div style={{position: 'absolute', left: 120, right: 120, top: 70, background: '#FFFFFF', borderRadius: 28, padding: '28px 40px 30px', boxShadow: '0 30px 60px -24px rgba(0,0,0,0.5)', opacity: k, translate: `0 ${lerp(k, -30, 0)}px`, color: '#141414'}}>
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 26, letterSpacing: 6, color: '#8A857C'}}>YOUR TEST LIST</div>
-        <div style={{marginTop: 10}}>
-          {TESTS.map((x, i) => {
-            const tick = tween(t, s0 + 0.15 + i * 0.14, 0.25, EASE_OUT);
+    <AbsoluteFill style={{opacity: k}}>
+      {/* the tube */}
+      <div style={{position: 'absolute', left: 120, top: 70, width: TW, height: TH, translate: `0 ${lerp(k, -30, 0)}px`}}>
+        <svg width={TW} height={TH} viewBox={`0 0 ${TW} ${TH}`} style={{position: 'absolute', inset: 0, overflow: 'visible', filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))'}}>
+          <defs>
+            <clipPath id="tube">
+              <path d={`M 22 70 L 22 ${TH - 75} A 53 53 0 0 0 128 ${TH - 75} L 128 70 Z`} />
+            </clipPath>
+          </defs>
+          <path d={`M 22 70 L 22 ${TH - 75} A 53 53 0 0 0 128 ${TH - 75} L 128 70 Z`} fill="rgba(255,255,255,0.22)" />
+          <g clipPath="url(#tube)">
+            <rect x={0} y={TH - 22 - liquidH} width={TW} height={liquidH + 30} fill="#C9302C" />
+            <rect x={0} y={TH - 22 - liquidH} width={TW} height={8} fill="#E14B45" />
+          </g>
+          <path d={`M 22 70 L 22 ${TH - 75} A 53 53 0 0 0 128 ${TH - 75} L 128 70`} fill="none" stroke="#FFFFFF" strokeWidth={6} />
+          <rect x={30} y={90} width={10} height={TH - 200} rx={5} fill="rgba(255,255,255,0.55)" />
+          {/* cap */}
+          <rect x={12} y={18} width={126} height={60} rx={14} fill="#7A1E1E" />
+          <rect x={12} y={18} width={126} height={14} rx={7} fill="#9C2B2B" />
+        </svg>
+        {/* lab sticker */}
+        <div style={{position: 'absolute', left: -14, top: 150, width: TW + 28, padding: '10px 10px 8px', background: '#FFFFFF', borderRadius: 6, boxShadow: '0 8px 16px -8px rgba(0,0,0,0.5)', opacity: sticker, scale: lerp(sticker, 1.3, 1), boxSizing: 'border-box'}}>
+          <svg width={TW + 8} height={34}>
+            {Array.from({length: 30}, (_, i) => (
+              <rect key={i} x={i * 5.2} y={0} width={[2, 3, 1.5, 2.5][i % 4]} height={34} fill="#141414" />
+            ))}
+          </svg>
+          <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 26, letterSpacing: 4, color: '#141414', textAlign: 'center', marginTop: 4}}>TEST</div>
+        </div>
+      </div>
+      {/* the words */}
+      <div style={{position: 'absolute', left: 340, right: 50, top: 110, display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
+        <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 70, color: WHITE, ...outline(70), ...rise(t, s0 + 0.1)}}>Comment</div>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 200, lineHeight: 1, letterSpacing: 8, color: ACCENT, ...outline(200), minHeight: 200}}>
+          {word.split('').map((ch, i) => {
+            const p = tween(t, 68.82 + i * 0.08, 0.22, EASE_OUT);
             return (
-              <div key={x} style={{display: 'flex', alignItems: 'center', gap: 18, height: 58, borderBottom: '1px solid #ECE8E1'}}>
-                <div style={{width: 36, height: 36, borderRadius: 10, border: '3px solid #141414', boxSizing: 'border-box', background: tick > 0.5 ? '#141414' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ACCENT, fontFamily: SANS, fontWeight: 800, fontSize: 24}}>{tick > 0.5 ? '✓' : ''}</div>
-                <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 34}}>{x}</span>
-              </div>
+              <span key={i} style={{display: 'inline-block', opacity: p, translate: `0 ${lerp(p, 30, 0)}px`}}>
+                {ch}
+              </span>
             );
           })}
         </div>
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 22}}>
-          <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 54}}>Comment</span>
-          <span style={{padding: '2px 26px', borderRadius: 14, background: ACCENT, fontFamily: SANS, fontWeight: 800, fontSize: 72, letterSpacing: 4, opacity: word, scale: lerp(word, 0.7, 1)}}>TEST</span>
+        <div style={{marginTop: 18, fontFamily: SANS, fontWeight: 800, fontSize: 38, lineHeight: 1.2, color: WHITE, ...outline(38), opacity: note, translate: `0 ${lerp(note, 14, 0)}px`}}>
+          for the full test panel
+          <br />
+          in your DMs
         </div>
-        <div style={{textAlign: 'center', marginTop: 10, fontFamily: SANS, fontWeight: 700, fontSize: 28, color: '#8A857C', opacity: tween(t, 69.6, 0.35)}}>The full panel comes to your DMs</div>
       </div>
     </AbsoluteFill>
   );
@@ -165,8 +230,10 @@ const Scene: React.FC = () => (
     <Thyroid />
     <Cutaways cuts={CUTS} tm={TM_M1} dir="m1" />
     <Report />
-    <TestList />
-    <SerifCaps cfg={cfg} hide={[...LINED, C.report, {start: C.cta.start + 0.1, end: 999}]} />
+    <Panel />
+    <TopShade wins={[C.cta]} reach={36} />
+    <SampleEnd />
+    <SerifCaps cfg={cfg} hide={[...LINED, C.report, C.panel, {start: C.cta.start + 0.1, end: 999}]} />
   </>
 );
 

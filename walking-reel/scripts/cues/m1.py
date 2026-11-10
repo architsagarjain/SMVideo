@@ -12,7 +12,7 @@ def cues(cue, rng):
     for j in range(5):
         cue(1.82 + j * 0.12, "pack:click", -31)
     # B-roll cutaways
-    for at in (3.0, 8.4, 12.66, 21.3, 43.3, 49.96, 60.86):
+    for at in (3.0, 8.4, 12.66, 21.3, 43.3, 49.96, 60.86):  # 49.96 = thyroid panel insert
         cue(at - 0.05, "pack:whoosh_soft", -24)
     # punch-ins
     for at in (7.22, 10.9, 30.46, 34.92, 48.56, 65.24):
@@ -30,9 +30,13 @@ def cues(cue, rng):
     for at in (54.86, 55.6, 57.08):
         cue(at, "pack:click", -26)
     cue(58.54, "pack:chime2", -26)
-    # ending: the test list ticks off, then Comment TEST
-    cue(68.2, "pack:whoosh_soft", -24)
+    # thyroid panel rows
     for j in range(4):
-        cue(68.35 + j * 0.14, "pack:click", -26)
-    cue(68.82, "pack:hit", -26)
+        cue(50.4 + j * 0.2, "pack:click", -28)
+    # ending: the sample tube fills, its sticker lands, TEST pops in
+    cue(68.2, "pack:whoosh_soft", -24)
+    cue(68.35, "pack:whoosh_deep", -30)
+    cue(68.7, "pack:hit", -25)
+    for j in range(4):
+        cue(68.82 + j * 0.08, "pack:key", -25)
     cue(69.6, "pack:notif", -22)

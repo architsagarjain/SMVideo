@@ -10,6 +10,7 @@ export const M1_FRAMES = TM_M1.frames;
 
 export const C = {
   report: {start: 1.62, end: 3.0}, // "says everything's normal" - lab report insert
+  panel: {start: 49.96, end: 53.38}, // 4 · thyroid: the full panel, not just TSH
   vitd: {start: 14.44, end: 21.2}, // range: lab normal 30 -> aim for 60
   sugar: {start: 25.2, end: 29.6}, // HbA1c < 5.4, insulin < 7
   liver: {start: 36.52, end: 42.2}, // SGOT, SGPT < 25
@@ -22,7 +23,6 @@ export const CUTS: Cut[] = [
   {start: 12.66, end: 14.42, src: 'b_sun.mp4', line: '1 · VITAMIN D', lineAt: 12.75, y: 330},
   {start: 21.3, end: 24.9, src: 'b_food.mp4', line: '2 · HbA1c | + FASTING INSULIN', lineAt: 21.4, y: 280},
   {start: 43.3, end: 45.84, src: 'b_fit.mp4', line: 'NOT ONLY FOR PEOPLE | WHO ARE OVERWEIGHT', lineAt: 43.35, y: 1480},
-  {start: 49.96, end: 53.38, src: 'b_desk.mp4', line: '4 · THYROID | THE FULL PANEL', lineAt: 50.05, y: 1660},
   {start: 60.86, end: 64.9, src: 'b_supp.mp4', line: '₹1,500 ON TESTS | COULD SAVE YOU LAKHS', lineAt: 60.95, y: 960},
 ];
 const wins = {...C};
