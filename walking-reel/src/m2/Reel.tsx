@@ -1,8 +1,9 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
-import {Base, Footage, GradeOverlay} from '../series/core';
+import {Base, Footage, GradeOverlay, Subject} from '../series/core';
+import {CommentSheet, Dolly, InkWipe, Orbit, OrbitItem} from '../minimal/fx';
 import {useT} from '../explainer/kit';
-import {ACCENT, Cutaways, SHADOW_TXT, SerifCaps, TopShade, WHITE, outline} from '../minimal/kit';
+import {ACCENT, Cutaways, DiveWord, SHADOW_TXT, SerifCaps, TopShade, WHITE, outline} from '../minimal/kit';
 import {EASE_IN, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {C, CUTS, DISHES, Dish, TM_M2, m2Config as cfg} from './config';
 
@@ -71,61 +72,64 @@ const DishCard: React.FC<{d: Dish}> = ({d}) => {
   );
 };
 
-/** Ending: the breakfast menu - every dish with its old ratio struck out and the new one - then "Comment BREAKFAST". */
-const MENU = [
-  {d: 'Dosa', old: '6 : 1', now: '1 : 1'},
-  {d: 'Poha', old: '6 : 1', now: '1.5 : 1'},
-  {d: 'Idli', old: '4.5 : 1', now: '1.1 : 1'},
-  {d: 'Upma', old: '6 : 1', now: '1.1 : 1'},
-  {d: 'Sandwich', old: '4 : 1', now: 'More protein'},
-  {d: 'Aloo Paratha', old: '7 : 1', now: '1.5 : 1'},
-];
-const Menu: React.FC = () => {
+/** Ink floods the screen, a cream card says the line, then the ink recedes back to her. */
+const PlateCard: React.FC = () => {
   const t = useT();
-  const s0 = C.cta.start;
-  if (t < s0) return null;
-  const k = tween(t, s0, 0.4, EASE_OUT);
-  const word = tween(t, 117.2, 0.35, EASE_OUT);
+  const w = C.card;
+  if (t < 30.05 || t > 31.95) return null;
+  const words: [string, number][] = [["JUST", 30.16], ["CHANGE", 30.2], ["WHAT'S", 30.62], ['ON', 31.1], ['YOUR', 31.36], ['PLATE', 31.52]];
   return (
-    <AbsoluteFill>
-      <div style={{position: 'absolute', left: 110, right: 110, top: 40, background: '#FBF8F2', borderRadius: 26, padding: '18px 40px 20px', boxShadow: '0 30px 60px -24px rgba(0,0,0,0.5)', opacity: k, translate: `0 ${lerp(k, -30, 0)}px`, color: '#141414'}}>
-        <div style={{textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 44, lineHeight: 1.1}}>The breakfast menu</div>
-        <div style={{height: 2, background: '#141414', margin: '12px 0 4px'}} />
-        {MENU.map((m, i) => {
-          const p = tween(t, s0 + 0.12 + i * 0.1, 0.25, EASE_OUT);
-          return (
-            <div key={m.d} style={{display: 'flex', alignItems: 'center', height: 44, borderBottom: '1px dashed #D6D0C4', opacity: p, translate: `${lerp(p, -14, 0)}px 0`, fontFamily: SANS}}>
-              <span style={{flex: 1, fontWeight: 800, fontSize: 32}}>{m.d}</span>
-              <span style={{width: 130, textAlign: 'right', fontWeight: 700, fontSize: 28, color: '#A39D92', textDecoration: 'line-through', textDecorationThickness: 3}}>{m.old}</span>
-              <span style={{width: 210, textAlign: 'right', fontWeight: 800, fontSize: m.now.length > 8 ? 26 : 32, color: '#141414'}}>
-                <span style={{padding: '2px 12px', borderRadius: 8, background: ACCENT}}>{m.now}</span>
-              </span>
-            </div>
-          );
-        })}
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginTop: 12}}>
-          <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 50}}>Comment</span>
-          <span style={{padding: '4px 24px', borderRadius: 14, background: '#141414', color: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 58, letterSpacing: 3, opacity: word, scale: lerp(word, 0.7, 1)}}>BREAKFAST</span>
-        </div>
-        <div style={{textAlign: 'center', marginTop: 8, fontFamily: SANS, fontWeight: 700, fontSize: 26, color: '#8A857C', opacity: tween(t, 118.32, 0.35)}}>The full list of swaps comes to your DMs</div>
+    <AbsoluteFill style={{background: '#EEEBE4', opacity: tween(t, 30.05, 0.08)}}>
+      <div style={{position: 'absolute', left: 60, right: 60, top: 960, translate: '0 -50%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', columnGap: 26, rowGap: 6}}>
+        {words.map(([wd, at], i) => (
+          <React.Fragment key={wd}>
+            <DiveWord word={wd} at={at} size={wd === 'PLATE' ? 124 : 88} color="#141414" />
+            {i === 2 ? <div style={{flexBasis: '100%', height: 0}} /> : null}
+          </React.Fragment>
+        ))}
       </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 640, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 32, letterSpacing: 8, color: '#8A857C', opacity: tween(t, 30.1, 0.3)}}>{w.start > 0 ? 'THE FIX' : ''}</div>
     </AbsoluteFill>
   );
 };
 
 const LINED = CUTS.filter((c) => c.line);
+const RING = {cx: 540, cy: 1270, rx: 430, ry: 92};
+const DISHES_NAMED: OrbitItem[] = [
+  {label: 'Poha', at: 3.66},
+  {label: 'Upma', at: 4.34},
+  {label: 'Idli', at: 5.06},
+  {label: 'Dosa', at: 5.7},
+  {label: 'Sandwich', at: 6.38},
+];
 const Scene: React.FC = () => (
   <>
-    <Footage cfg={cfg} />
+    <Dolly win={C.dolly}>
+      <Footage cfg={cfg} />
+    </Dolly>
     <GradeOverlay cfg={cfg} />
     <TopShade wins={[C.ratio, ...DISHES]} reach={42} />
     <Ratio />
     {DISHES.map((d) => (
       <DishCard key={d.n} d={d} />
     ))}
+    <Orbit win={C.orbit} items={DISHES_NAMED} front={false} ring={RING} />
+    <Subject cfg={cfg} />
+    <Orbit win={C.orbit} items={DISHES_NAMED} front ring={RING} />
     <Cutaways cuts={CUTS} tm={TM_M2} dir="m2" />
-    <Menu />
-    <SerifCaps cfg={cfg} hide={[...LINED, {start: C.cta.start + 0.1, end: 999}]} />
+    <InkWipe at={29.55} tm={TM_M2} src="m2/ink_wipe.webm" />
+    <PlateCard />
+    <InkWipe at={31.88} tm={TM_M2} src="m2/ink_out.webm" />
+    <CommentSheet
+      start={C.cta.start}
+      word="BREAKFAST"
+      typeAt={117.2}
+      replyAt={118.4}
+      pinned={<>Comment <b>BREAKFAST</b> and I'll send you the complete list of swaps</>}
+      reply="Sent! The full list is in your DMs ✓"
+      top={1200}
+    />
+    <SerifCaps cfg={cfg} hide={[...LINED, C.orbit, {start: 29.9, end: 32.4}, {start: C.cta.start + 0.1, end: 999}]} />
   </>
 );
 
