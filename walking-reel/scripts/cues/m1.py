@@ -1,5 +1,7 @@
-"""Sound cues for the blood-tests reel (source seconds, src/m1/config.ts). Minimal: a soft whoosh into each
-B-roll, a light click on punch-ins and reveals, a notification on the ending. Sounds from the user's pack."""
+"""Sound cues for the blood-tests reel v2 (source seconds, src/m1/config.ts). All from the user's SFX pack:
+whip whooshes + a soft click-hit for each B-roll (letter dive lands), a deep whoosh for the ink wipes,
+a riser + low boom for the dolly zoom, a cinematic whoosh for the orbit ring, a blip for each comment drop
+landing and a notification for her reply."""
 GFX = []
 BEHIND = []
 PANEL = None
@@ -7,16 +9,24 @@ BROLL = []
 
 
 def cues(cue, rng):
-    # report insert
-    cue(1.62, "pack:whoosh_soft", -24)
+    # hook: ink floods into the report
+    cue(1.12, "pack:x_deep", -24)
     for j in range(5):
         cue(1.82 + j * 0.12, "pack:click", -31)
-    # B-roll cutaways
-    for at in (3.0, 8.4, 12.66, 21.3, 43.3, 49.96, 60.86):  # 49.96 = thyroid panel insert
-        cue(at - 0.05, "pack:whoosh_soft", -24)
+    # B-roll cutaways: whip into the clip, letters dive and land
+    for at, line_at in ((3.0, 3.05), (8.4, 8.45), (12.66, 12.75), (21.3, 21.4), (43.3, 43.35), (60.86, 60.95)):
+        cue(at - 0.08, "pack:x_whip", -22)
+        cue(line_at + 0.3, "pack:x_clickhit", -24)
+    # dolly zoom on "That's not normal."
+    cue(7.07, "pack:x_riser", -25)
+    cue(8.3, "pack:x_boom", -27)
+    # orbit ring: the four tests circle her
+    cue(10.25, "pack:x_cine", -25)
+    for j in range(4):
+        cue(10.35 + j * 0.12, "pack:x_blip", -30)
     # punch-ins
-    for at in (7.22, 10.9, 30.46, 34.92, 48.56, 65.24):
-        cue(at, "pack:click", -27)
+    for at in (30.46, 34.92, 48.56, 65.24):
+        cue(at, "pack:x_fast", -26)
     # vitamin D range
     cue(14.5, "pack:whoosh_soft", -29)
     cue(16.28, "pack:tick", -24)
@@ -26,17 +36,18 @@ def cues(cue, rng):
     cue(29.02, "pack:tick", -24)
     cue(36.6, "pack:whoosh_soft", -29)
     cue(39.86, "pack:tick", -24)
+    # ink into the thyroid panel, rows tick in
+    cue(49.45, "pack:x_deep", -24)
+    for j in range(4):
+        cue(50.4 + j * 0.2, "pack:click", -28)
     # thyroid signs
     for at in (54.86, 55.6, 57.08):
         cue(at, "pack:click", -26)
     cue(58.54, "pack:chime2", -26)
-    # thyroid panel rows
-    for j in range(4):
-        cue(50.4 + j * 0.2, "pack:click", -28)
-    # ending: the sample tube fills, its sticker lands, TEST pops in
-    cue(68.2, "pack:whoosh_soft", -24)
-    cue(68.35, "pack:whoosh_deep", -30)
-    cue(68.7, "pack:hit", -25)
-    for j in range(4):
-        cue(68.82 + j * 0.08, "pack:key", -25)
-    cue(69.6, "pack:notif", -22)
+    # ending: comment drop
+    cue(68.2, "pack:whoosh_soft", -25)
+    cue(68.5, "pack:x_fast", -24)
+    cue(68.72, "pack:x_blip", -21)
+    cue(69.2, "pack:click", -26)
+    cue(69.5, "pack:x_fast", -26)
+    cue(69.68, "pack:x_notify", -22)

@@ -1,9 +1,11 @@
 import React from 'react';
-import {AbsoluteFill} from 'remotion';
-import {Base, Footage, GradeOverlay} from '../series/core';
+import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
+import {Base, Footage, GradeOverlay, Subject} from '../series/core';
+import {outAt} from '../series/timemap';
+import {popAt} from '../series/kit2';
 import {useT} from '../explainer/kit';
 import {ACCENT, Cutaways, SHADOW_TXT, SerifCaps, TopShade, WHITE, outline} from '../minimal/kit';
-import {EASE_IN, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
+import {EASE_IN, EASE_IN_OUT, EASE_OUT, FPS, SANS, SERIF, lerp, tween} from '../theme';
 import {C, CUTS, TM_M1, m1Config as cfg} from './config';
 
 const vis = (t: number, w: {start: number; end: number}) => (t < w.start || t > w.end + 0.25 ? 0 : tween(t, w.start, 0.3, EASE_OUT) * (1 - tween(t, w.end - 0.05, 0.25, EASE_IN)));
@@ -151,69 +153,128 @@ const Thyroid: React.FC = () => {
   );
 };
 
-/** Ending: a blood-sample tube fills, its lab sticker lands, and "Comment TEST" types in beside it. */
-const SampleEnd: React.FC = () => {
+// ---------------------------------------------------------------------------
+// Dolly zoom: her cut-out holds still while the room pushes in and falls out of focus
+// ---------------------------------------------------------------------------
+const Dolly: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const t = useT();
+  const w = C.dolly;
+  if (t < w.start || t > w.end) return <>{children}</>;
+  const p = tween(t, w.start, w.end - w.start, EASE_IN_OUT);
+  return (
+    <AbsoluteFill style={{transformOrigin: '540px 820px', scale: lerp(p, 1, 1.38), filter: `blur(${p * 14}px) brightness(${lerp(p, 1, 0.72)})`}}>
+      {children}
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Orbit ring: the four tests circle her - behind her body, then in front of it
+// ---------------------------------------------------------------------------
+const RING = {cx: 540, cy: 1150, rx: 440, ry: 96};
+const ORBIT = ['Vitamin D', 'HbA1c', 'Liver', 'Thyroid'];
+const orbitAt = (t: number) => {
+  const w = C.orbit;
+  const o = t < w.start || t > w.end + 0.2 ? 0 : tween(t, w.start, 0.3, EASE_OUT) * (1 - tween(t, w.end - 0.15, 0.3, EASE_IN));
+  const spin = -Math.PI / 2 + (t - w.start) * 1.15;
+  return {o, spin};
+};
+const arc = (from: number, to: number) => {
+  let d = '';
+  for (let i = 0; i <= 48; i++) {
+    const a = from + ((to - from) * i) / 48;
+    d += `${i ? 'L' : 'M'}${(RING.cx + RING.rx * Math.cos(a)).toFixed(1)} ${(RING.cy + RING.ry * Math.sin(a)).toFixed(1)} `;
+  }
+  return d;
+};
+const Orbit: React.FC<{front: boolean}> = ({front}) => {
+  const t = useT();
+  const {o, spin} = orbitAt(t);
+  if (o <= 0) return null;
+  const draw = tween(t, C.orbit.start, 0.6, EASE_OUT);
+  return (
+    <AbsoluteFill style={{opacity: o}}>
+      <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+        <path d={front ? arc(0, Math.PI) : arc(Math.PI, 2 * Math.PI)} fill="none" stroke="#FFFFFF" strokeWidth={5} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - draw} opacity={front ? 0.95 : 0.55} style={{filter: 'drop-shadow(0 0 8px rgba(245,196,81,0.9))'}} />
+      </svg>
+      {ORBIT.map((name, i) => {
+        const a = spin + (i * Math.PI) / 2;
+        const depth = Math.sin(a); // +1 front, -1 back
+        if (front !== depth >= 0) return null;
+        const k = tween(t, C.orbit.start + 0.1 + i * 0.12, 0.3, EASE_OUT);
+        const x = RING.cx + RING.rx * Math.cos(a);
+        const y = RING.cy + RING.ry * depth;
+        return (
+          <div key={name} style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', scale: lerp((depth + 1) / 2, 0.78, 1.12) * k, opacity: lerp((depth + 1) / 2, 0.75, 1) * k, display: 'flex', alignItems: 'center', gap: 12, padding: '12px 26px', borderRadius: 999, background: 'rgba(18,18,20,0.82)', boxShadow: '0 12px 26px -10px rgba(0,0,0,0.6)', whiteSpace: 'nowrap'}}>
+            <span style={{width: 16, height: 16, borderRadius: '50%', background: ACCENT}} />
+            <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 48, color: WHITE}}>{name}</span>
+          </div>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+/** Ink wipe (free Mixkit ink clip, recoloured cream) that floods into the cream inserts. */
+const InkWipe: React.FC<{at: number}> = ({at}) => (
+  <Sequence from={Math.round(outAt(TM_M1, at) * FPS)} durationInFrames={32} layout="none">
+    <AbsoluteFill>
+      <OffthreadVideo src={staticFile('m1/ink_wipe.webm')} transparent muted style={{width: '100%', height: '100%'}} />
+    </AbsoluteFill>
+  </Sequence>
+);
+
+// ---------------------------------------------------------------------------
+// Ending: comment drop - her viewer's "TEST" comment drops in and bounces, then her reply drops under it
+// ---------------------------------------------------------------------------
+const Bubble: React.FC<{at: number; y: number; avatar: React.ReactNode; name: string; children: React.ReactNode; indent?: number; heart?: boolean}> = ({at, y, avatar, name, children, indent = 0, heart}) => {
+  const t = useT();
+  if (t < at) return null;
+  const k = popAt(t, at); // spring: overshoots, then settles
+  const like = heart ? popAt(t, at + 0.55) : 0;
+  return (
+    <div style={{position: 'absolute', left: 90 + indent, right: 90, top: y, translate: `0 ${lerp(Math.min(1.08, k), -560, 0)}px`, rotate: `${(1 - Math.min(1, k)) * -4}deg`, display: 'flex', alignItems: 'center', gap: 22, padding: '22px 28px', borderRadius: 30, background: '#FFFFFF', boxShadow: '0 26px 50px -20px rgba(0,0,0,0.55)', fontFamily: SANS, color: '#141414'}}>
+      {avatar}
+      <div style={{flex: 1}}>
+        <div style={{display: 'flex', gap: 12, alignItems: 'baseline'}}>
+          <span style={{fontWeight: 800, fontSize: 36}}>{name}</span>
+          <span style={{fontWeight: 600, fontSize: 30, color: '#9A958C'}}>now</span>
+        </div>
+        {children}
+      </div>
+      {heart ? (
+        <svg width={52} height={48} viewBox="0 0 24 22" style={{scale: Math.max(0.001, like) * 1, flexShrink: 0}}>
+          <path d="M12 21 C 4 15, 0 11, 0 6.5 A 5.5 5.5 0 0 1 12 4 A 5.5 5.5 0 0 1 24 6.5 C 24 11, 20 15, 12 21 Z" fill="#E5484D" />
+        </svg>
+      ) : null}
+    </div>
+  );
+};
+const CommentDrop: React.FC = () => {
   const t = useT();
   const s0 = C.cta.start;
   if (t < s0) return null;
-  const k = tween(t, s0, 0.35, EASE_OUT);
-  const fill = tween(t, s0 + 0.15, 0.7, EASE_OUT);
-  const sticker = tween(t, 68.7, 0.3, EASE_OUT);
-  const word = 'TEST';
-  const note = tween(t, 69.6, 0.4, EASE_OUT);
-  const TW = 150;
-  const TH = 430;
-  const liquidH = (TH - 80) * 0.78 * fill;
   return (
-    <AbsoluteFill style={{opacity: k}}>
-      {/* the tube */}
-      <div style={{position: 'absolute', left: 120, top: 70, width: TW, height: TH, translate: `0 ${lerp(k, -30, 0)}px`}}>
-        <svg width={TW} height={TH} viewBox={`0 0 ${TW} ${TH}`} style={{position: 'absolute', inset: 0, overflow: 'visible', filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))'}}>
-          <defs>
-            <clipPath id="tube">
-              <path d={`M 22 70 L 22 ${TH - 75} A 53 53 0 0 0 128 ${TH - 75} L 128 70 Z`} />
-            </clipPath>
-          </defs>
-          <path d={`M 22 70 L 22 ${TH - 75} A 53 53 0 0 0 128 ${TH - 75} L 128 70 Z`} fill="rgba(255,255,255,0.22)" />
-          <g clipPath="url(#tube)">
-            <rect x={0} y={TH - 22 - liquidH} width={TW} height={liquidH + 30} fill="#C9302C" />
-            <rect x={0} y={TH - 22 - liquidH} width={TW} height={8} fill="#E14B45" />
-          </g>
-          <path d={`M 22 70 L 22 ${TH - 75} A 53 53 0 0 0 128 ${TH - 75} L 128 70`} fill="none" stroke="#FFFFFF" strokeWidth={6} />
-          <rect x={30} y={90} width={10} height={TH - 200} rx={5} fill="rgba(255,255,255,0.55)" />
-          {/* cap */}
-          <rect x={12} y={18} width={126} height={60} rx={14} fill="#7A1E1E" />
-          <rect x={12} y={18} width={126} height={14} rx={7} fill="#9C2B2B" />
-        </svg>
-        {/* lab sticker */}
-        <div style={{position: 'absolute', left: -14, top: 150, width: TW + 28, padding: '10px 10px 8px', background: '#FFFFFF', borderRadius: 6, boxShadow: '0 8px 16px -8px rgba(0,0,0,0.5)', opacity: sticker, scale: lerp(sticker, 1.3, 1), boxSizing: 'border-box'}}>
-          <svg width={TW + 8} height={34}>
-            {Array.from({length: 30}, (_, i) => (
-              <rect key={i} x={i * 5.2} y={0} width={[2, 3, 1.5, 2.5][i % 4]} height={34} fill="#141414" />
-            ))}
-          </svg>
-          <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 26, letterSpacing: 4, color: '#141414', textAlign: 'center', marginTop: 4}}>TEST</div>
-        </div>
-      </div>
-      {/* the words */}
-      <div style={{position: 'absolute', left: 340, right: 50, top: 110, display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
-        <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 70, color: WHITE, ...outline(70), ...rise(t, s0 + 0.1)}}>Comment</div>
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 200, lineHeight: 1, letterSpacing: 8, color: ACCENT, ...outline(200), minHeight: 200}}>
-          {word.split('').map((ch, i) => {
-            const p = tween(t, 68.82 + i * 0.08, 0.22, EASE_OUT);
-            return (
-              <span key={i} style={{display: 'inline-block', opacity: p, translate: `0 ${lerp(p, 30, 0)}px`}}>
-                {ch}
-              </span>
-            );
-          })}
-        </div>
-        <div style={{marginTop: 18, fontFamily: SANS, fontWeight: 800, fontSize: 38, lineHeight: 1.2, color: WHITE, ...outline(38), opacity: note, translate: `0 ${lerp(note, 14, 0)}px`}}>
-          for the full test panel
-          <br />
-          in your DMs
-        </div>
-      </div>
+    <AbsoluteFill>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 70, textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 64, color: WHITE, ...outline(64), ...rise(t, s0)}}>Comment below</div>
+      <Bubble
+        at={68.62}
+        y={170}
+        heart
+        name="you"
+        avatar={<div style={{width: 92, height: 92, borderRadius: '50%', background: 'linear-gradient(135deg, #F5C451, #E5484D)', flexShrink: 0}} />}
+      >
+        <div style={{fontWeight: 800, fontSize: 92, lineHeight: 1, letterSpacing: 4, marginTop: 4}}>TEST</div>
+      </Bubble>
+      <Bubble
+        at={69.6}
+        y={400}
+        indent={90}
+        name="bhavika"
+        avatar={<div style={{width: 76, height: 76, borderRadius: '50%', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 36, flexShrink: 0}}>B</div>}
+      >
+        <div style={{fontWeight: 700, fontSize: 40, lineHeight: 1.2, marginTop: 4}}>Sent you the full test panel ✓</div>
+      </Bubble>
     </AbsoluteFill>
   );
 };
@@ -221,19 +282,26 @@ const SampleEnd: React.FC = () => {
 const LINED = CUTS.filter((c) => c.line);
 const Scene: React.FC = () => (
   <>
-    <Footage cfg={cfg} />
+    <Dolly>
+      <Footage cfg={cfg} />
+    </Dolly>
     <GradeOverlay cfg={cfg} />
     <TopShade wins={[C.vitd, C.sugar, C.liver, C.thyroid]} reach={40} />
     <VitD />
     <Targets w={C.sugar} title="Your targets" items={[{label: 'HbA1c', value: '< 5.4', at: 25.72}, {label: 'Fasting insulin', value: '< 7', at: 29.02}]} />
     <Targets w={C.liver} title="3 · Liver" items={[{label: 'SGOT · SGPT', value: '< 25', at: 39.86}]} />
     <Thyroid />
+    <Orbit front={false} />
+    <Subject cfg={cfg} />
+    <Orbit front />
     <Cutaways cuts={CUTS} tm={TM_M1} dir="m1" />
     <Report />
+    <InkWipe at={C.inkA.start} />
     <Panel />
+    <InkWipe at={C.inkB.start} />
     <TopShade wins={[C.cta]} reach={36} />
-    <SampleEnd />
-    <SerifCaps cfg={cfg} hide={[...LINED, C.report, C.panel, {start: C.cta.start + 0.1, end: 999}]} />
+    <CommentDrop />
+    <SerifCaps cfg={cfg} hide={[...LINED, {start: 1.38, end: 2.2}, C.report, {start: 49.75, end: 50.6}, C.panel, {start: C.cta.start + 0.1, end: 999}]} />
   </>
 );
 

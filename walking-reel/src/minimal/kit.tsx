@@ -27,7 +27,7 @@ export const SHADOW_CAP = '0 0 26px rgba(0,0,0,0.85), 0 0 10px rgba(0,0,0,0.7), 
 /** A quick punch-in: snaps in over 0.14 s, holds, snaps back on the next cut. */
 export const punch = (at: number, end: number, scale = 1.12): Move => ({origin: FACE_ORIGIN, inStart: at, inDur: 0.14, scale, outStart: end - 0.12, outDur: 0.12});
 
-export type Cut = {start: number; end: number; src: string; line?: string; lineAt?: number; y?: number; times?: number[]};
+export type Cut = {start: number; end: number; src: string; line?: string; lineAt?: number; y?: number; times?: number[]; dive?: boolean; flash?: string};
 
 const TRANS = 0.22;
 /** Blur-bloom amount at a window edge (1 = fully blurred / bright, 0 = clean). */
@@ -55,7 +55,8 @@ export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string}> = ({cut
               </AbsoluteFill>
               {c.line ? <AbsoluteFill style={{background: `radial-gradient(85% 18% at 50% ${((c.y ?? 900) / 1920) * 100}%, rgba(0,0,0,0.34), rgba(0,0,0,0) 80%)`}} /> : null}
             </AbsoluteFill>
-            {c.line && on ? <KeyLine text={c.line} at={c.lineAt ?? c.start + 0.15} times={c.times} y={c.y ?? 900} out={c.end - 0.18} /> : null}
+            {c.line && on ? <KeyLine text={c.line} at={c.lineAt ?? c.start + 0.15} times={c.times} y={c.y ?? 900} out={c.end - 0.18} dive={c.dive} /> : null}
+            {c.flash ? <Flash src={`${dir}/${c.flash}`} at={c.start} tm={tm} /> : null}
           </React.Fragment>
         );
       })}
@@ -64,7 +65,7 @@ export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string}> = ({cut
 };
 
 /** White uppercase key line, words fading in one by one with a little blur. Breaks on "|". */
-export const KeyLine: React.FC<{text: string; at: number; times?: number[]; y?: number; out?: number; size?: number; color?: string}> = ({text, at, times, y = 900, out = 1e9, size = 74, color = WHITE}) => {
+export const KeyLine: React.FC<{text: string; at: number; times?: number[]; y?: number; out?: number; size?: number; color?: string; dive?: boolean}> = ({text, at, times, y = 900, out = 1e9, size = 74, color = WHITE, dive}) => {
   const t = useT();
   const lines = text.split('|').map((l) => l.trim().split(/\s+/));
   let k = 0;
@@ -75,7 +76,9 @@ export const KeyLine: React.FC<{text: string; at: number; times?: number[]; y?: 
         <div key={li} style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', columnGap: size * 0.26}}>
           {ws.map((w, wi) => {
             const idx = k++;
-            const p = tween(t, times?.[idx] ?? at + idx * 0.11, 0.32, EASE_OUT); // per-word times when given (synced to speech)
+            const t0 = times?.[idx] ?? at + idx * 0.11; // per-word times when given (synced to speech)
+            if (dive) return <DiveWord key={wi} word={w} at={t0} size={size} color={color} />;
+            const p = tween(t, t0, 0.32, EASE_OUT);
             return (
               <span key={wi} style={{fontFamily: SANS, fontWeight: 700, fontSize: size, lineHeight: 1.05, letterSpacing: -size * 0.02, color, ...outline(size), opacity: p, filter: `blur(${(1 - p) * 8}px)`, translate: `0 ${lerp(p, 14, 0)}px`, display: 'inline-block'}}>
                 {w}
@@ -85,6 +88,37 @@ export const KeyLine: React.FC<{text: string; at: number; times?: number[]; y?: 
         </div>
       ))}
     </div>
+  );
+};
+
+/** Letter dive: each letter falls out of the screen towards its place - big, blurred and tilted, then lands. */
+export const DiveWord: React.FC<{word: string; at: number; size: number; color: string}> = ({word, at, size, color}) => {
+  const t = useT();
+  return (
+    <span style={{display: 'inline-flex', perspective: 900}}>
+      {word.split('').map((ch, i) => {
+        const p = tween(t, at + i * 0.035, 0.42, EASE_OUT);
+        return (
+          <span key={i} style={{fontFamily: SANS, fontWeight: 800, fontSize: size, lineHeight: 1.05, letterSpacing: -size * 0.01, color, ...outline(size), display: 'inline-block', whiteSpace: 'pre', opacity: Math.min(1, p * 2.2), transform: `translateY(${lerp(p, -size * 0.6, 0)}px) scale(${lerp(p, 3.2, 1)}) rotateX(${lerp(p, 70, 0)}deg)`, filter: `blur(${(1 - p) * 12}px)`}}>
+            {ch}
+          </span>
+        );
+      })}
+    </span>
+  );
+};
+
+/** Light flash over a cut: a free light-leak clip blended with "screen", peaking on the cut. */
+export const Flash: React.FC<{src: string; at: number; tm: TimeMap; len?: number}> = ({src, at, tm, len = 0.75}) => {
+  const t = useT();
+  const from = Math.round((outAt(tm, at) - 0.2) * FPS);
+  const o = t < at - 0.12 || t > at + len ? 0 : Math.min(tween(t, at - 0.12, 0.12, EASE_OUT), 1 - tween(t, at + 0.05, len - 0.05, EASE_IN));
+  return (
+    <AbsoluteFill style={{mixBlendMode: 'screen', opacity: o * 0.55}}>
+      <Sequence from={from} durationInFrames={Math.round((len + 0.2) * FPS)} layout="none">
+        <OffthreadVideo src={staticFile(src)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+      </Sequence>
+    </AbsoluteFill>
   );
 };
 
