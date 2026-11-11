@@ -44,10 +44,10 @@ def cues(cue, rng):
     for at in (54.86, 55.6, 57.08):
         cue(at, "pack:click", -26)
     cue(58.54, "pack:chime2", -26)
-    # ending: comment drop
-    cue(68.2, "pack:whoosh_soft", -25)
-    cue(68.5, "pack:x_fast", -24)
-    cue(68.72, "pack:x_blip", -21)
-    cue(69.2, "pack:click", -26)
-    cue(69.5, "pack:x_fast", -26)
-    cue(69.68, "pack:x_notify", -22)
+    # ending: the comment sheet slides up, TEST is typed and posted, her reply arrives
+    cue(68.2, "pack:x_whip", -24)
+    for j in range(4):
+        cue(68.82 + j * 0.09, "pack:key", -24)
+    cue(69.43, "pack:x_blip", -22)
+    cue(69.9, "pack:click", -27)
+    cue(69.6, "pack:x_notify", -23)

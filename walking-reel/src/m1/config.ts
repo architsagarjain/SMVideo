@@ -27,7 +27,7 @@ export const CUTS: Cut[] = [
   {start: 12.66, end: 14.42, src: 'b_sun.mp4', line: '1 · VITAMIN D', lineAt: 12.75, y: 330, dive: true, flash: 'abstract-orange-glow.mp4'},
   {start: 21.3, end: 24.9, src: 'b_food.mp4', line: '2 · HbA1c | + FASTING INSULIN', lineAt: 21.4, y: 280, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
   {start: 43.3, end: 45.84, src: 'b_fit.mp4', line: 'NOT ONLY FOR PEOPLE | WHO ARE OVERWEIGHT', lineAt: 43.35, y: 1480, dive: true, flash: 'abstract-orange-glow.mp4'},
-  {start: 60.86, end: 64.9, src: 'b_supp.mp4', line: '₹1,500 ON TESTS | COULD SAVE YOU LAKHS', lineAt: 60.95, y: 960, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
+  {start: 60.86, end: 64.9, src: 'b_notes.mp4', line: '₹1,500 ON TESTS | COULD SAVE YOU LAKHS', lineAt: 60.95, y: 1560, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
 ];
 const wins = {...C};
 retime(TM_M1, wins, []);
