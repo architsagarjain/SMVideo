@@ -4,7 +4,11 @@ import { renderStill, selectComposition } from '@remotion/renderer';
 import path from 'node:path';
 
 const [outDir, ...frames] = process.argv.slice(2);
-const browserExecutable = '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell';
+import fs from 'node:fs';
+// Playwright's headless shell; the folder name changes with its version, so look it up.
+const shellDir = fs.readdirSync('/opt/pw-browsers').filter((d) => d.startsWith('chromium_headless_shell-')).sort().pop();
+const browserExecutable = ['chrome-linux/headless_shell', 'chrome-headless-shell-linux64/chrome-headless-shell']
+  .map((p) => `/opt/pw-browsers/${shellDir}/${p}`).find((p) => fs.existsSync(p)) ?? null;
 const serveUrl = await bundle({ entryPoint: path.resolve('src/index.ts') });
 const composition = await selectComposition({ serveUrl, id: process.env.COMP || 'BrandFilm', browserExecutable });
 for (const fr of frames) {

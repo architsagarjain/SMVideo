@@ -19,8 +19,11 @@ const ITEMS = [
   { k: 'CONSISTENCY', note: 'Every truck matches the spec', at: L(5), src: 'V5_5.mp4', grade: 'warm' as const },
 ];
 const BOX = { x: 90, y: 560, w: 900, h: 770 };
+// summary viewfinder: hugs the checklist card (y 470-~1010) and the SCREENSHOT THIS button just below it
+const SHOT_BTN = 1078;
+const SHOT = { x: 110, y: 430, w: 860, h: SHOT_BTN + 92 + 40 - 430 };
 
-const Brackets: React.FC<{ at: number; tight?: number }> = ({ at, tight = 0 }) => {
+const Brackets: React.FC<{ at: number; tight?: number; box?: typeof BOX }> = ({ at, tight = 0, box: B = BOX }) => {
   const f = useCurrentFrame();
   const t = lerp(f, [at, at + 12], [0, 1], E.out);
   const inset = (1 - t) * 60 + tight * 70;
@@ -30,7 +33,7 @@ const Brackets: React.FC<{ at: number; tight?: number }> = ({ at, tight = 0 }) =
       borderTop: sy > 0 ? `${W}px solid ${col}` : undefined, borderBottom: sy < 0 ? `${W}px solid ${col}` : undefined, transform: `translate(${-sx * 0}px, 0)`, filter: 'drop-shadow(0 0 8px rgba(232,176,75,0.6))' }} />
   );
   return (
-    <div style={{ position: 'absolute', left: BOX.x + inset, top: BOX.y + inset, width: BOX.w - 2 * inset, height: BOX.h - 2 * inset, opacity: t }}>
+    <div style={{ position: 'absolute', left: B.x + inset, top: B.y + inset, width: B.w - 2 * inset, height: B.h - 2 * inset, opacity: t }}>
       {corner(0, 0, 1, 1)}
       <div style={{ position: 'absolute', right: 0, top: 0 }}>{corner(-L_, 0, -1, 1)}</div>
       <div style={{ position: 'absolute', left: 0, bottom: 0 }}>{corner(0, -L_, 1, -1)}</div>
@@ -109,9 +112,9 @@ const Summary: React.FC = () => {
           );
         })}
       </div>
-      <Brackets at={L(7)} tight={0} />
+      <Brackets at={L(7)} tight={0} box={SHOT} />
       {f >= L(7) && (
-        <div style={{ position: 'absolute', left: 0, right: 0, top: 1230, display: 'flex', justifyContent: 'center' }}>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: SHOT_BTN, display: 'flex', justifyContent: 'center' }}>
           <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 52, color: C.ink, background: C.harvest, borderRadius: 999, padding: '14px 40px', transform: `scale(${lerp(f, [L(7), L(7) + 10], [1.3, 1], E.back)})` }}>SCREENSHOT THIS</div>
         </div>
       )}
