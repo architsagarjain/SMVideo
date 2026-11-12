@@ -18,8 +18,12 @@ def cues(cue, rng):
     for at in (3.66, 4.34, 5.06, 5.7, 6.38):
         cue(at, "pack:x_blip", -28)
     # punch-ins
-    for at in (7.2, 12.9, 16.12, 106.34, 114.9):
+    for at in (7.2, 12.9, 106.34, 114.9):
         cue(at, "pack:x_fast", -26)
+    # the whole frame flips on "flip", then FLIP THE RATIO dives in
+    cue(16.22, "pack:x_whip", -21)
+    cue(16.55, "pack:x_camwhoosh", -25)
+    cue(16.95, "pack:x_clickhit", -24)
     # 6 : 1 blocks
     for j in range(7):
         cue(10.4 + j * 0.12, "pack:tick", -31)
@@ -28,19 +32,22 @@ def cues(cue, rng):
     for at, first in ((21.5, 21.56), (24.9, 24.92), (108.0, 109.18), (112.2, 112.22)):
         cue(at - 0.08, "pack:x_whip", -22)
         cue(first + 0.3, "pack:x_clickhit", -24)
-    # ink floods in, the card, ink recedes
-    cue(29.55, "pack:x_deep", -24)
-    cue(30.46, "pack:x_clickhit", -25)
-    cue(31.82, "pack:x_clickhit", -24)
-    cue(31.9, "pack:x_reverse", -27)
+    # plate rebalances on "just change what's on your plate"
+    cue(30.1, "pack:x_whip", -25)
+    cue(31.1, "pack:x_camwhoosh", -26)
+    cue(31.9, "pack:x_clickhit", -25)
     # each swap: dish in, swap in, new ratio
     for start, swap, now in DISH:
         cue(start, "pack:whoosh_soft", -29)
-        cue(swap, "pack:click", -26)
-        cue(now, "pack:chime2", -26)
-    # ending: comment sheet slides up, BREAKFAST typed and posted, her reply
-    cue(116.75, "pack:x_whip", -24)
-    for j in range(9):
-        cue(117.2 + j * 0.07, "pack:key", -25)
-    cue(118.08, "pack:x_blip", -22)
-    cue(118.4, "pack:x_notify", -23)
+        cue(swap, "pack:x_whip", -28)
+        cue(swap + 0.05, "pack:click", -27)
+        cue(now, "pack:x_clickhit", -25)
+        cue(now + 0.1, "pack:chime2", -27)
+    # ending: BREAK / FAST rise from behind her head
+    cue(116.75, "pack:x_whip", -25)
+    for j in range(5):
+        cue(117.2 + j * 0.06, "pack:x_fast", -27)
+    cue(117.5, "pack:x_clickhit", -24)
+    for j in range(4):
+        cue(117.5 + j * 0.06, "pack:x_fast", -27)
+    cue(118.32, "pack:x_notify", -24)

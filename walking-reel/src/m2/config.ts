@@ -38,7 +38,6 @@ const moves = [
   punch(0.5, 1.9, 1.08),
   punch(7.2, 8.42, 1.14), // "all dessert."
   punch(12.9, 15.5, 1.1), // "a dessert with a tadka on it"
-  punch(16.12, 18.7, 1.12), // "flip that ratio"
   punch(19.38, 21.45, 1.08),
   punch(27.44, 30.1, 1.08),
   // swap moments in each dish
@@ -62,5 +61,5 @@ export const m2Config: ReelConfig = {
   captions: captions as ReelConfig['captions'],
   tm: TM_M2,
   grade: {filter: 'brightness(1.02) contrast(1.05) saturate(1.04)'},
-  cut: [{start: 1.92, end: 3.5}, {start: 3.55, end: 7.18}], // her cut-out for the dolly zoom and orbit ring
+  cut: [{start: 1.92, end: 3.5}, {start: 3.55, end: 7.18}, {start: 116.75, end: 999}], // her cut-out for the dolly zoom and orbit ring
 };
