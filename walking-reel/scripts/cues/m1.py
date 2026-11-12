@@ -14,7 +14,7 @@ def cues(cue, rng):
     for j in range(5):
         cue(1.82 + j * 0.12, "pack:click", -31)
     # B-roll cutaways: whip into the clip, letters dive and land
-    for at, line_at in ((3.0, 3.05), (8.4, 8.45), (12.66, 12.75), (21.3, 21.4), (43.3, 43.35), (60.86, 60.95)):
+    for at, line_at in ((3.0, 3.05), (8.4, 8.45), (12.66, 12.75), (21.3, 21.4), (43.3, 43.35)):
         cue(at - 0.08, "pack:x_whip", -22)
         cue(line_at + 0.3, "pack:x_clickhit", -24)
     # dolly zoom on "That's not normal."
@@ -44,10 +44,17 @@ def cues(cue, rng):
     for at in (54.86, 55.6, 57.08):
         cue(at, "pack:click", -26)
     cue(58.54, "pack:chime2", -26)
-    # ending: the comment sheet slides up, TEST is typed and posted, her reply arrives
-    cue(68.2, "pack:x_whip", -24)
+    # receipts: lab tests print, then the supplements receipt keeps printing
+    cue(60.8, "pack:x_whip", -24)
+    for at in (61.0, 61.22, 61.5, 61.86):
+        cue(at, "pack:key", -27)
+    cue(62.46, "pack:x_clickhit", -25)
+    for j in range(9):
+        cue(62.88 + j * 0.167, "pack:key", -28)
+    cue(63.66, "pack:x_boom", -27)
+    # ending: TEST rises from behind her head
+    cue(68.25, "pack:x_whip", -25)
     for j in range(4):
-        cue(68.82 + j * 0.09, "pack:key", -24)
-    cue(69.43, "pack:x_blip", -22)
-    cue(69.9, "pack:click", -27)
-    cue(69.6, "pack:x_notify", -23)
+        cue(68.72 + j * 0.09, "pack:x_fast", -26)
+    cue(69.1, "pack:x_clickhit", -23)
+    cue(69.6, "pack:x_notify", -24)

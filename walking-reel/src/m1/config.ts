@@ -19,6 +19,7 @@ export const C = {
   sugar: {start: 25.2, end: 29.6}, // HbA1c < 5.4, insulin < 7
   liver: {start: 36.52, end: 42.2}, // SGOT, SGPT < 25
   thyroid: {start: 54.8, end: 60.4}, // symptoms + antibodies
+  save: {start: 60.86, end: 64.9}, // receipts: ₹1,500 of tests vs lakhs of supplements
   cta: {start: 68.2, end: 999},
 };
 export const CUTS: Cut[] = [
@@ -27,7 +28,6 @@ export const CUTS: Cut[] = [
   {start: 12.66, end: 14.42, src: 'b_sun.mp4', line: '1 · VITAMIN D', lineAt: 12.75, y: 330, dive: true, flash: 'abstract-orange-glow.mp4'},
   {start: 21.3, end: 24.9, src: 'b_food.mp4', line: '2 · HbA1c | + FASTING INSULIN', lineAt: 21.4, y: 280, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
   {start: 43.3, end: 45.84, src: 'b_fit.mp4', line: 'NOT ONLY FOR PEOPLE | WHO ARE OVERWEIGHT', lineAt: 43.35, y: 1480, dive: true, flash: 'abstract-orange-glow.mp4'},
-  {start: 60.86, end: 64.9, src: 'b_notes.mp4', line: '₹1,500 ON TESTS | COULD SAVE YOU LAKHS', lineAt: 60.95, y: 1560, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
 ];
 const wins = {...C};
 retime(TM_M1, wins, []);
@@ -51,5 +51,5 @@ export const m1Config: ReelConfig = {
   captions: captions as ReelConfig['captions'],
   tm: TM_M1,
   grade: {filter: 'brightness(1.02) contrast(1.05) saturate(1.04)'},
-  cut: [{start: 7.07, end: 8.38}, {start: 10.25, end: 12.6}], // her cut-out only where the dolly zoom / orbit need it
+  cut: [{start: 7.07, end: 8.38}, {start: 10.25, end: 12.6}, {start: 68.2, end: 999}], // her cut-out only where the dolly zoom / orbit need it
 };

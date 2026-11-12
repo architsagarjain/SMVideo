@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
 import {Base, Footage, GradeOverlay, Subject} from '../series/core';
 import {outAt} from '../series/timemap';
-import {popAt} from '../series/kit2';
+import {ANTON, popAt} from '../series/kit2';
 import {useT} from '../explainer/kit';
 import {ACCENT, Cutaways, SHADOW_TXT, SerifCaps, TopShade, WHITE, outline} from '../minimal/kit';
 import {EASE_IN, EASE_IN_OUT, EASE_OUT, FPS, SANS, SERIF, lerp, tween} from '../theme';
@@ -225,62 +225,99 @@ const InkWipe: React.FC<{at: number}> = ({at}) => (
 );
 
 // ---------------------------------------------------------------------------
-// Ending: an Instagram-style comment sheet slides up below her chin - "TEST" is typed, posted, and she replies
+// ₹1,500 of tests vs lakhs of supplements: two receipts (the receipt look from the no-sugar reel)
 // ---------------------------------------------------------------------------
-const IG_BLUE = '#0095F6';
-const Avatar: React.FC<{d: number; fill: string; letter?: string}> = ({d, fill, letter}) => (
-  <div style={{width: d, height: d, borderRadius: '50%', background: fill, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: d * 0.45, color: '#141414'}}>{letter}</div>
-);
-const Row: React.FC<{at: number; indent?: number; avatar: React.ReactNode; name: string; tag?: string; text: React.ReactNode; heart?: boolean}> = ({at, indent = 0, avatar, name, tag, text, heart}) => {
-  const t = useT();
-  const k = tween(t, at, 0.35, EASE_OUT);
-  const h = heart ? popAt(t, at + 0.45) : 0;
+const MONO = "'DejaVu Sans Mono', 'Liberation Mono', monospace";
+const zig = (n = 20) => `polygon(0 0, 100% 0, 100% calc(100% - 14px), ${Array.from({length: n + 1}, (_, i) => `${100 - (i * 100) / n}% ${i % 2 ? 'calc(100% - 14px)' : '100%'}`).join(', ')})`;
+const Receipt: React.FC<{x: number; w: number; title: string; rows: {l: string; at: number}[]; total: string; totalAt: number; hl: string; t: number; tail?: number}> = ({x, w, title, rows, total, totalAt, hl, t, tail = 0}) => {
+  const shown = rows.filter((r) => t >= r.at);
+  const h = 170 + shown.length * 72 + (t >= totalAt ? 140 : 0) + tail;
   return (
-    <div style={{display: 'flex', alignItems: 'flex-start', gap: 20, padding: `14px 34px 14px ${34 + indent}px`, opacity: k, translate: `0 ${lerp(k, 24, 0)}px`, background: at > 0 && t < at + 0.9 && !indent ? `rgba(0,149,246,${0.08 * (1 - tween(t, at + 0.3, 0.6))})` : 'transparent'}}>
-      {avatar}
-      <div style={{flex: 1}}>
-        <div style={{display: 'flex', gap: 12, alignItems: 'baseline', fontFamily: SANS}}>
-          <span style={{fontWeight: 800, fontSize: 36, color: '#141414'}}>{name}</span>
-          {tag ? <span style={{fontWeight: 600, fontSize: 30, color: '#8E8E8E'}}>{tag}</span> : null}
+    <div style={{position: 'absolute', left: x, top: 380, width: w, height: h, background: '#FFFDF7', boxShadow: '0 26px 50px -18px rgba(0,0,0,0.35)', clipPath: zig(), fontFamily: MONO, color: '#141414', padding: '30px 30px 0', boxSizing: 'border-box', overflow: 'hidden'}}>
+      <div style={{textAlign: 'center', fontWeight: 700, fontSize: 38, letterSpacing: 2}}>{title}</div>
+      <div style={{borderBottom: '3px dashed #141414', margin: '14px 0 8px'}} />
+      {shown.map((r) => (
+        <div key={r.l} style={{display: 'flex', justifyContent: 'space-between', fontSize: 37, lineHeight: '72px', ...rise(t, r.at)}}>
+          <span>{r.l}</span>
+          <span>✓</span>
         </div>
-        <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 40, lineHeight: 1.22, color: '#141414', marginTop: 2}}>{text}</div>
-      </div>
-      <svg width={36} height={34} viewBox="0 0 24 22" style={{marginTop: 18, flexShrink: 0}}>
-        <path d="M12 21 C 4 15, 0 11, 0 6.5 A 5.5 5.5 0 0 1 12 4 A 5.5 5.5 0 0 1 24 6.5 C 24 11, 20 15, 12 21 Z" fill={h > 0.3 ? '#FF3040' : 'none'} stroke={h > 0.3 ? '#FF3040' : '#8E8E8E'} strokeWidth={2} style={{scale: h > 0 ? lerp(Math.min(1, h), 1.6, 1) : 1, transformOrigin: 'center'}} />
-      </svg>
+      ))}
+      {t >= totalAt ? (
+        <>
+          <div style={{borderBottom: '3px dashed #141414', margin: '8px 0 10px'}} />
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 700, fontSize: 42, ...rise(t, totalAt)}}>
+            <span>TOTAL</span>
+            <span style={{padding: '2px 12px', background: hl, borderRadius: 6}}>{total}</span>
+          </div>
+        </>
+      ) : null}
     </div>
   );
 };
-const CommentSheet: React.FC = () => {
+const Save: React.FC = () => {
+  const t = useT();
+  const w = C.save;
+  if (t < w.start - 0.05 || t > w.end + 0.05) return null;
+  const k = tween(t, w.start, 0.2, EASE_OUT);
+  const SUPP = ['Biotin', 'Fat burner', 'Collagen', 'Multivitamin', 'Detox tea', 'Omega-3', 'Iron', 'B12 drops', 'Ashwagandha'];
+  const printed = tween(t, 62.88, 1.5, (x) => x); // keeps printing while she says "could save you lakhs"
+  const vs = tween(t, 62.6, 0.3, EASE_OUT);
+  return (
+    <AbsoluteFill style={{background: '#EEEBE4', opacity: Math.min(1, k * 2) * (1 - tween(t, w.end - 0.12, 0.12))}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 190, textAlign: 'center', fontFamily: SERIF, fontSize: 110, color: '#141414', ...rise(t, w.start + 0.05)}}>Test first</div>
+      <Receipt x={40} w={470} title="LAB TESTS" t={t} hl="#9BE3B4" total="₹1,500" totalAt={62.46} rows={[{l: 'Vitamin D', at: 61.0}, {l: 'HbA1c', at: 61.22}, {l: 'Liver', at: 61.5}, {l: 'Thyroid', at: 61.86}]} />
+      <div style={{position: 'absolute', left: 510, top: 640, width: 60, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 40, color: '#8A857C', opacity: vs}}>vs</div>
+      <Receipt
+        x={570}
+        w={470}
+        title="SUPPLEMENTS"
+        t={t}
+        hl="#FFB4AE"
+        total="₹1 lakh+"
+        totalAt={63.66}
+        rows={SUPP.map((l, i) => ({l, at: 62.88 + (i / SUPP.length) * 1.5}))}
+        tail={printed * 40}
+      />
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: 150, textAlign: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 26, color: '#8A857C', opacity: tween(t, 63.66, 0.3)}}>illustrative yearly spend</div>
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Ending: a giant TEST rises from behind her head (her cut-out covers its lower half)
+// ---------------------------------------------------------------------------
+const BEHIND_LINE = 960; // letters are clipped here, so they rise out from behind her
+const TestBehind: React.FC = () => {
   const t = useT();
   const s0 = C.cta.start;
   if (t < s0) return null;
-  const up = tween(t, s0, 0.45, EASE_OUT);
-  const word = 'TEST';
-  const TYPE = 68.82;
-  const POST = TYPE + word.length * 0.09 + 0.25;
-  const n = t < POST ? Math.max(0, Math.min(word.length, Math.floor((t - TYPE) / 0.09) + 1)) : 0;
-  const posted = t >= POST;
-  const TOP = 1190;
+  return (
+    <AbsoluteFill style={{clipPath: `inset(0 0 ${1920 - BEHIND_LINE}px 0)`}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: BEHIND_LINE - 520, display: 'flex', justifyContent: 'center', gap: 6}}>
+        {'TEST'.split('').map((ch, i) => {
+          const p = popAt(t, 68.72 + i * 0.09);
+          return (
+            <span key={i} style={{fontFamily: ANTON, fontSize: 470, lineHeight: 1, color: WHITE, textShadow: '0 20px 50px rgba(0,0,0,0.45)', display: 'inline-block', translate: `0 ${lerp(Math.min(1.06, p), 480, 0)}px`}}>
+              {ch}
+            </span>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
+const CtaFront: React.FC = () => {
+  const t = useT();
+  const s0 = C.cta.start;
+  if (t < s0) return null;
+  const note = tween(t, 69.6, 0.4, EASE_OUT);
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{background: `linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,${0.35 * up}) 62%)`}} />
-      <div style={{position: 'absolute', left: 0, right: 0, top: TOP, bottom: -40, translate: `0 ${lerp(up, 760, 0)}px`, background: '#FFFFFF', borderRadius: '40px 40px 0 0', boxShadow: '0 -20px 50px -20px rgba(0,0,0,0.45)', display: 'flex', flexDirection: 'column'}}>
-        <div style={{alignSelf: 'center', width: 90, height: 8, borderRadius: 4, background: '#D9D9D9', marginTop: 16}} />
-        <div style={{textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 36, color: '#141414', padding: '14px 0 12px', borderBottom: '1px solid #EFEFEF'}}>Comments</div>
-        <div style={{flex: 1, overflow: 'hidden'}}>
-          {posted ? <Row at={POST} avatar={<Avatar d={64} fill="linear-gradient(135deg, #F5C451, #E5484D)" />} name="you" tag="now" text={<span style={{fontWeight: 800, fontSize: 64, letterSpacing: 3}}>TEST</span>} heart /> : null}
-          {t >= 69.6 ? <Row at={69.6} indent={84} avatar={<Avatar d={52} fill={ACCENT} letter="B" />} name="bhavika" tag="Author" text="Sent! Your full test panel is in your DMs ✓" /> : null}
-          <Row at={-1} avatar={<Avatar d={64} fill={ACCENT} letter="B" />} name="bhavika" tag="Pinned" text={<>Comment <b>TEST</b> and I'll send you my full test panel</>} />
-        </div>
-        {/* comment bar */}
-        <div style={{display: 'flex', alignItems: 'center', gap: 18, padding: '18px 30px 70px', borderTop: '1px solid #EFEFEF'}}>
-          <Avatar d={64} fill="linear-gradient(135deg, #F5C451, #E5484D)" />
-          <div style={{flex: 1, height: 74, borderRadius: 37, border: '2px solid #DBDBDB', display: 'flex', alignItems: 'center', padding: '0 26px', fontFamily: SANS, fontWeight: 800, fontSize: 40, color: n ? '#141414' : '#8E8E8E'}}>
-            {n ? word.slice(0, n) : 'Add a comment…'}
-            {n && !posted && Math.floor(t * 4) % 2 === 0 ? <span style={{color: IG_BLUE}}>|</span> : null}
-          </div>
-          <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 38, color: IG_BLUE, opacity: n ? 1 : 0.35, scale: t >= POST - 0.15 && t < POST + 0.1 ? 0.9 : 1}}>Post</span>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 290, textAlign: 'center', fontFamily: SERIF, fontStyle: 'italic', fontSize: 72, color: WHITE, ...outline(72), ...rise(t, s0 + 0.05)}}>Comment</div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 1440, display: 'flex', justifyContent: 'center', opacity: note, translate: `0 ${lerp(note, 20, 0)}px`}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 16, padding: '16px 34px', borderRadius: 999, background: 'rgba(18,18,20,0.82)', fontFamily: SANS, fontWeight: 700, fontSize: 40, color: WHITE}}>
+          <span style={{width: 14, height: 14, borderRadius: '50%', background: ACCENT}} />
+          Full test panel → your DMs
         </div>
       </div>
     </AbsoluteFill>
@@ -300,6 +337,8 @@ const Scene: React.FC = () => (
     <Targets w={C.liver} title="3 · Liver" items={[{label: 'SGOT · SGPT', value: '< 25', at: 39.86}]} />
     <Thyroid />
     <Orbit front={false} />
+    <TopShade wins={[C.cta]} reach={40} />
+    <TestBehind />
     <Subject cfg={cfg} />
     <Orbit front />
     <Cutaways cuts={CUTS} tm={TM_M1} dir="m1" />
@@ -307,8 +346,9 @@ const Scene: React.FC = () => (
     <InkWipe at={C.inkA.start} />
     <Panel />
     <InkWipe at={C.inkB.start} />
-    <CommentSheet />
-    <SerifCaps cfg={cfg} hide={[...LINED, {start: 1.38, end: 2.2}, C.report, {start: 49.75, end: 50.6}, C.panel, {start: C.cta.start + 0.1, end: 999}]} />
+    <Save />
+    <CtaFront />
+    <SerifCaps cfg={cfg} hide={[...LINED, {start: 1.38, end: 2.2}, C.report, {start: 49.75, end: 50.6}, C.panel, C.save, {start: C.cta.start + 0.1, end: 999}]} />
   </>
 );
 
