@@ -8,7 +8,7 @@ import {BREAD, DISHES, FoodShot, IDLI, Pill, SHOTS} from './config';
 
 const RED = '#E5484D';
 const GREEN = '#17A34A';
-const HD = new Set(['dosa', 'sandwich', 'eggbhurji']);
+const HD = new Set(['dosa', 'sandwich', 'eggbhurji', 'upma', 'eggtoast']);
 const photo = (img: string) => staticFile(HD.has(img) ? `m2/photos_hd/${img}.jpg` : `m2/photos/${img}.jpg`);
 
 /** Full-screen food photo with its name and ratio. Back-to-back photos slide in over each other;
@@ -20,14 +20,17 @@ const Shot: React.FC<{s: FoodShot; chainIn: boolean; chainOut: boolean}> = ({s, 
   const outP = chainOut ? 0 : tween(t, s.end - 0.2, 0.22, EASE_IN);
   const bloom = chainIn ? outP : Math.max(1 - inP, outP);
   const slide = chainIn ? lerp(inP, 1080, 0) : 0;
-  const zoom = lerp(tween(t, s.start, s.end - s.start, (x) => x), 1.05, 1.13);
+  const zoom = lerp(tween(t, s.start, s.end - s.start, (x) => x), 1.0, 1.08);
   const name = tween(t, s.nameAt, 0.35, EASE_OUT);
   const k = popAt(t, s.at);
   const long = s.ratio.length > 8;
   return (
     <AbsoluteFill style={{translate: `${slide}px 0`, opacity: 1 - bloom * 0.85, filter: `blur(${bloom * 18 + (chainIn ? (1 - inP) * 14 : 0)}px) brightness(${1 + bloom * 0.35})`}}>
-      <AbsoluteFill style={{scale: zoom, backgroundColor: '#111'}}>
-        <Img src={photo(s.img)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+      <AbsoluteFill style={{backgroundColor: '#111', overflow: 'hidden'}}>
+        <Img src={photo(s.img)} style={{width: '100%', height: '100%', objectFit: 'cover', scale: 1.25, filter: 'blur(40px) brightness(0.6) saturate(1.1)'}} />
+      </AbsoluteFill>
+      <AbsoluteFill style={{scale: zoom, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <Img src={photo(s.img)} style={{width: '100%', height: 'auto', maxHeight: '100%', objectFit: 'contain', boxShadow: '0 30px 80px rgba(0,0,0,0.5)'}} />
       </AbsoluteFill>
       <AbsoluteFill style={{background: 'radial-gradient(90% 26% at 50% 44%, rgba(0,0,0,0.42), rgba(0,0,0,0) 85%)'}} />
       <div style={{position: 'absolute', left: 50, right: 50, top: 840, translate: '0 -50%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 26}}>
