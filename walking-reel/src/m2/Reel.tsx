@@ -81,7 +81,7 @@ const Ratio: React.FC = () => {
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, opacity: tween(t, 13.6, 0.3), translate: `${lerp(tween(t, 13.6, 0.4, EASE_OUT), 40, 0)}px 0`}}>
               <Photo src="jamun" w={360} h={290} />
               <span style={{fontWeight: 800, fontSize: 38}}>
-                Dessert <span style={{color: '#E5484D'}}>+ tadka</span>
+                Dessert <span style={{color: '#E5484D'}}>+ Tadka</span>
               </span>
             </div>
           </div>

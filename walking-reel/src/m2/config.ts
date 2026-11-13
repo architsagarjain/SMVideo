@@ -15,17 +15,17 @@ export type Pill = [text: string, at: number];
 export type Dish = {img0: string; img1: string; n: number; before: string; ratio: string; after: string; result: string; b0: number; b1: number; bAt: number; nameAt?: number; a0: number; a1: number; aAt: number; pills: Pill[]; pillsEnd: number};
 export const DISHES: Dish[] = [
   {n: 1, img0: 'dosa', img1: 'chilla', before: 'Dosa + Sambar', ratio: '6 : 1', after: 'Moong Dal Chilla + Curd', result: '1 : 1', b0: 32.48, b1: 35.15, bAt: 33.98, a0: 40.35, a1: 42.4, aAt: 41.06,
-    pills: [['Moong dal chilla', 36.06], ['or pesarattu', 37.4], ['+ a katori of curd', 38.74]], pillsEnd: 40.35},
+    pills: [['Moong Dal Chilla', 36.06], ['Or Pesarattu', 37.4], ['+ A Katori of Curd', 38.74]], pillsEnd: 40.35},
   {n: 2, img0: 'poha', img1: 'paneer', before: 'Poha', ratio: '6 : 1', after: 'Poha + Paneer + Peanuts', result: '1.5 : 1', b0: 42.4, b1: 44.25, bAt: 43.22, a0: 52.4, a1: 55.5, aAt: 53.08,
-    pills: [['+ 50 g paneer', 45.64], ['+ 2 tbsp peanuts', 48.26], ['+ curd on the side', 50.62]], pillsEnd: 52.4},
+    pills: [['+ 50 g Paneer', 45.64], ['+ 2 tbsp Peanuts', 48.26], ['+ Curd on the Side', 50.62]], pillsEnd: 52.4},
   {n: 3, img0: 'idli', img1: 'eggbhurji', before: 'Idli + Sambar', ratio: '4.5 : 1', after: '2 Idlis + Egg Bhurji', result: '1.1 : 1', b0: 55.5, b1: 58.45, bAt: 56.64, a0: 66.75, a1: 69.44, aAt: 67.32,
-    pills: [['+ 2 ladles of thick sambar', 60.82], ['+ egg or paneer bhurji', 64.16]], pillsEnd: 66.75},
+    pills: [['+ 2 Ladles of Thick Sambar', 60.82], ['+ Egg or Paneer Bhurji', 64.16]], pillsEnd: 66.75},
   {n: 4, img0: 'upma', img1: 'eggs', before: 'Upma', ratio: '6 : 1', after: 'Half Rava + 2 Eggs', result: '1.1 : 1', b0: 69.44, b1: 71.4, bAt: 69.98, a0: 78.3, a1: 81.22, aAt: 79.36,
-    pills: [['Half the rava', 71.94], ['+ green peas', 73.94], ['+ 2 eggs + paneer', 75.52]], pillsEnd: 78.3},
+    pills: [['Half the Rava', 71.94], ['+ Green Peas', 73.94], ['+ 2 Eggs + Paneer', 75.52]], pillsEnd: 78.3},
   {n: 5, img0: 'sandwich', img1: 'eggtoast', before: 'Cheese Sandwich', ratio: '4 : 1', after: '1 Slice + Egg', result: 'Protein > Carbs', b0: 81.22, b1: 84.15, bAt: 82.82, a0: 89.55, a1: 92.64, aAt: 90.44,
     pills: [], pillsEnd: 89.55},
   {n: 6, img0: 'paratha', img1: 'paneerparatha', before: 'Aloo Paratha', ratio: '7 : 1', after: 'Paneer Paratha + Curd', result: '1.5 : 1', b0: 92.64, b1: 96.5, bAt: 95.14, nameAt: 93.76, a0: 103.8, a1: 106.3, aAt: 104.38,
-    pills: [['1 paratha, not 2', 96.86], ['Stuffed with paneer, not aloo', 99.02], ['+ yogurt, not just pickle', 101.4]], pillsEnd: 103.8},
+    pills: [['1 Paratha, Not 2', 96.86], ['Stuffed with Paneer, Not Aloo', 99.02], ['+ Yogurt, Not Just Pickle', 101.4]], pillsEnd: 103.8},
 ];
 /** The full-screen food photos, in order (before / after of each dish). */
 export type FoodShot = {start: number; end: number; img: string; name: string; ratio: string; at: number; nameAt: number; good: boolean};

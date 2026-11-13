@@ -133,7 +133,7 @@ export const Idlis: React.FC = () => {
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 330, display: 'flex', justifyContent: 'center', opacity: lab, translate: `0 ${lerp(lab, 14, 0)}px`}}>
         <div style={{padding: '10px 30px', borderRadius: 999, background: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)'}}>
-          <span style={{color: GREEN}}>2 idlis</span>, not 4
+          <span style={{color: GREEN}}>2 Idlis</span>, Not 4
         </div>
       </div>
     </AbsoluteFill>
@@ -184,7 +184,7 @@ export const Bread: React.FC = () => {
       </div>
       <div style={{position: 'absolute', left: 540 + 30, top: 130, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20}}>
         <div style={{opacity: lab, translate: `${lerp(lab, 30, 0)}px 0`, padding: '10px 28px', borderRadius: 999, background: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)'}}>
-          <span style={{color: GREEN}}>1 slice</span>, not 2
+          <span style={{color: GREEN}}>1 Slice</span>, Not 2
         </div>
         {t >= BREAD.eggAt ? (
           <div style={{opacity: egg, translate: `${lerp(egg, 30, 0)}px 0`, padding: '10px 28px', borderRadius: 999, background: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)'}}>
@@ -192,7 +192,7 @@ export const Bread: React.FC = () => {
           </div>
         ) : null}
         {t >= BREAD.moreAt ? (
-          <div style={{opacity: more, translate: `${lerp(more, 30, 0)}px 0`, fontFamily: SANS, fontWeight: 800, fontSize: 44, color: WHITE, ...outline(44)}}>or bhurji / chicken</div>
+          <div style={{opacity: more, translate: `${lerp(more, 30, 0)}px 0`, fontFamily: SANS, fontWeight: 800, fontSize: 44, color: WHITE, ...outline(44)}}>Or Bhurji / Chicken</div>
         ) : null}
       </div>
     </AbsoluteFill>
