@@ -6,7 +6,8 @@ import {useT} from '../explainer/kit';
 import {ACCENT, Cutaways, DiveWord, SHADOW_TXT, SerifCaps, TopShade, WHITE, outline} from '../minimal/kit';
 import {EASE_IN, EASE_IN_OUT, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {ANTON, popAt} from '../series/kit2';
-import {C, CUTS, DISHES, Dish, TM_M2, m2Config as cfg} from './config';
+import {C, CUTS, SHOTS, TM_M2, m2Config as cfg} from './config';
+import {Bread, DishPills, FoodShots, Idlis} from './swaps';
 
 const vis = (t: number, w: {start: number; end: number}) => (t < w.start || t > w.end + 0.25 ? 0 : tween(t, w.start, 0.3, EASE_OUT) * (1 - tween(t, w.end - 0.05, 0.25, EASE_IN)));
 const rise = (t: number, at: number): React.CSSProperties => {
@@ -116,43 +117,6 @@ const Foods: React.FC = () => {
           );
         })}
       </div>
-    </AbsoluteFill>
-  );
-};
-
-/** Per dish: before photo -> after photo, name and ratio centred under each. */
-const DishCard: React.FC<{d: Dish}> = ({d}) => {
-  const t = useT();
-  const o = vis(t, d);
-  if (o <= 0) return null;
-  const swap = tween(t, d.swapAt, 0.45, EASE_OUT);
-  const strike = tween(t, d.swapAt, 0.35, EASE_OUT);
-  const now = popAt(t, d.nowAt);
-  const col: React.CSSProperties = {width: 390, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, textAlign: 'center'};
-  const name: React.CSSProperties = {width: 390, fontWeight: 800, fontSize: 30, lineHeight: '36px', whiteSpace: 'nowrap', marginTop: 4};
-  return (
-    <AbsoluteFill style={{opacity: o}}>
-      <WCard t={t} at={d.start} h={450}>
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <span style={{fontWeight: 800, fontSize: 26, letterSpacing: 6, color: '#8A857C'}}>{`SWAP ${d.n} / 6`}</span>
-          <span style={{fontWeight: 800, fontSize: 26, letterSpacing: 4, color: '#8A857C'}}>CARBS : PROTEIN</span>
-        </div>
-        <div style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: 14}}>
-          <div style={col}>
-            <Photo src={d.img0} w={390} h={220} style={{filter: `grayscale(${strike * 0.85}) brightness(${lerp(strike, 1, 0.85)})`}}>
-              {strike > 0 ? <div style={{position: 'absolute', left: 0, right: 0, top: '50%', height: 10, background: '#E5484D', scale: `${strike} 1`, transformOrigin: 'left center'}} /> : null}
-            </Photo>
-            <span style={{...name, color: swap > 0.5 ? '#A39D92' : '#141414'}}>{d.before}</span>
-            <span style={{fontWeight: 800, fontSize: 50, lineHeight: '54px', color: '#E5484D', whiteSpace: 'nowrap'}}>{d.ratio}</span>
-          </div>
-          <div style={{marginTop: 80, fontWeight: 800, fontSize: 64, color: '#141414', opacity: swap}}>→</div>
-          <div style={{...col, opacity: swap, translate: `${lerp(swap, 60, 0)}px 0`}}>
-            <Photo src={d.img1} w={390} h={220} />
-            <span style={{...name, color: '#17A34A', fontSize: d.after.length > 21 ? 28 : 30}}>{d.after}</span>
-            <span style={{height: 54, fontWeight: 800, fontSize: d.result.length > 8 ? 40 : 50, lineHeight: '54px', color: '#17A34A', whiteSpace: 'nowrap', scale: t >= d.nowAt ? lerp(Math.min(1, now), 1.5, 1) : 0}}>{d.result}</span>
-          </div>
-        </div>
-      </WCard>
     </AbsoluteFill>
   );
 };
@@ -269,20 +233,21 @@ const Scene: React.FC = () => (
       <Footage cfg={cfg} />
     </Dolly>
     <GradeOverlay cfg={cfg} />
-    <TopShade wins={[C.ratio, ...DISHES]} reach={42} />
+    <TopShade wins={[C.ratio]} reach={42} />
     <Ratio />
     <Foods />
-    {DISHES.map((d) => (
-      <DishCard key={d.n} d={d} />
-    ))}
+    <DishPills />
+    <Idlis />
+    <Bread />
     <TopShade wins={[C.cta]} reach={40} />
     <WordBehind />
     <Subject cfg={cfg} />
     <Cutaways cuts={CUTS} tm={TM_M2} dir="m2" />
+    <FoodShots />
     <Plate />
     <FlipLine />
     <CtaFront />
-    <SerifCaps cfg={cfg} hide={[...LINED, {start: C.cta.start + 0.1, end: 999}]} />
+    <SerifCaps cfg={cfg} hide={[...LINED, ...SHOTS, {start: C.cta.start + 0.1, end: 999}]} />
   </>
 );
 
