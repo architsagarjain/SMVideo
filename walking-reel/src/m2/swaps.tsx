@@ -53,8 +53,7 @@ export const FoodShots: React.FC = () => (
   </>
 );
 
-/** Quantity pills above her head while she explains, one per key amount, stacked left / right / centre. */
-const ROW_ALIGN = ['flex-start', 'flex-end', 'center'] as const;
+/** Quantity pills above her head while she explains, one per key amount, stacked and centred. */
 const Pills: React.FC<{pills: Pill[]; end: number}> = ({pills, end}) => {
   const t = useT();
   if (!pills.length || t < pills[0][1] - 0.05 || t > end + 0.05) return null;
@@ -66,8 +65,8 @@ const Pills: React.FC<{pills: Pill[]; end: number}> = ({pills, end}) => {
         const k = popAt(t, at);
         const plus = text.startsWith('+ ');
         return (
-          <div key={i} style={{position: 'absolute', left: 60, right: 60, top: 100 + i * 128, display: 'flex', justifyContent: ROW_ALIGN[i % 3]}}>
-            <div style={{display: 'flex', alignItems: 'center', gap: 18, padding: '14px 36px 14px 18px', borderRadius: 999, background: '#FFFFFF', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', scale: lerp(Math.min(1.05, k), 0.5, 1), opacity: Math.min(1, k * 3), transformOrigin: ROW_ALIGN[i % 3] === 'flex-end' ? 'right center' : ROW_ALIGN[i % 3] === 'center' ? 'center' : 'left center'}}>
+          <div key={i} style={{position: 'absolute', left: 60, right: 60, top: 100 + i * 128, display: 'flex', justifyContent: 'center'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: 18, padding: '14px 36px 14px 18px', borderRadius: 999, background: '#FFFFFF', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', scale: lerp(Math.min(1.05, k), 0.5, 1), opacity: Math.min(1, k * 3)}}>
               <span style={{width: 60, height: 60, borderRadius: '50%', background: plus ? GREEN : '#E4A11B', color: WHITE, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 46, lineHeight: 1}}>{plus ? '+' : '✓'}</span>
               {plus ? text.slice(2) : text}
             </div>
@@ -183,17 +182,17 @@ export const Bread: React.FC = () => {
           </div>
         ) : null}
       </div>
-      <div style={{position: 'absolute', left: 540 + 30, top: 130, display: 'flex', flexDirection: 'column', gap: 20}}>
-        <div style={{opacity: lab, translate: `${lerp(lab, 30, 0)}px 0`, padding: '10px 28px', borderRadius: 999, background: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)', alignSelf: 'flex-start'}}>
+      <div style={{position: 'absolute', left: 540 + 30, top: 130, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20}}>
+        <div style={{opacity: lab, translate: `${lerp(lab, 30, 0)}px 0`, padding: '10px 28px', borderRadius: 999, background: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)'}}>
           <span style={{color: GREEN}}>1 slice</span>, not 2
         </div>
         {t >= BREAD.eggAt ? (
-          <div style={{opacity: egg, translate: `${lerp(egg, 30, 0)}px 0`, padding: '10px 28px', borderRadius: 999, background: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)', alignSelf: 'flex-start'}}>
+          <div style={{opacity: egg, translate: `${lerp(egg, 30, 0)}px 0`, padding: '10px 28px', borderRadius: 999, background: '#FFFFFF', fontFamily: SANS, fontWeight: 800, fontSize: 52, color: '#141414', whiteSpace: 'nowrap', boxShadow: '0 16px 34px -14px rgba(0,0,0,0.6)'}}>
             <span style={{color: GREEN}}>+</span> Egg
           </div>
         ) : null}
         {t >= BREAD.moreAt ? (
-          <div style={{opacity: more, translate: `${lerp(more, 30, 0)}px 0`, fontFamily: SANS, fontWeight: 800, fontSize: 44, color: WHITE, ...outline(44), paddingLeft: 14}}>or bhurji / chicken</div>
+          <div style={{opacity: more, translate: `${lerp(more, 30, 0)}px 0`, fontFamily: SANS, fontWeight: 800, fontSize: 44, color: WHITE, ...outline(44)}}>or bhurji / chicken</div>
         ) : null}
       </div>
     </AbsoluteFill>
