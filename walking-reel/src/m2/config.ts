@@ -18,9 +18,9 @@ export const DISHES: Dish[] = [
   {img0: 'paratha', img1: 'paneerparatha', n: 6, start: 92.64, end: 106.2, before: 'Aloo Paratha', ratio: '7 : 1', swapAt: 96.56, after: 'Paneer Paratha + Curd', nowAt: 103.86, result: '1.5 : 1'},
 ];
 export const C = {
-  ratio: {start: 8.46, end: 15.3}, // carb : protein about 6 : 1
+  ratio: {start: 9.8, end: 15.3}, // carb : protein about 6 : 1
   dolly: {start: 1.92, end: 3.5}, // "desserts for breakfast." - dolly zoom
-  foods: {start: 3.55, end: 8.42}, // the dishes pop in as photos, then get stamped DESSERT
+  foods: {start: 3.55, end: 7.3}, // the dishes pop in as photos as she names them
   card: {start: 29.55, end: 32.85}, // ink floods in -> cream card "Just change what's on your plate" -> ink recedes
   cta: {start: 116.75, end: 999},
 };

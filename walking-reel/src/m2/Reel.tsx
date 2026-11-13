@@ -23,44 +23,63 @@ const Photo: React.FC<{src: string; w: number; h: number; style?: React.CSSPrope
     {children}
   </div>
 );
-const WCard: React.FC<{t: number; at: number; children: React.ReactNode; h?: number}> = ({t, at, children, h = 500}) => (
-  <div style={{position: 'absolute', left: 50, right: 50, top: 50, height: h, borderRadius: 36, background: '#FFFFFF', boxShadow: '0 30px 60px -26px rgba(0,0,0,0.55)', padding: '26px 30px', boxSizing: 'border-box', translate: `0 ${lerp(tween(t, at, 0.4, EASE_OUT), -40, 0)}px`, fontFamily: SANS, color: '#141414'}}>{children}</div>
+const WCard: React.FC<{t: number; at: number; children: React.ReactNode; h?: number}> = ({t, at, children, h = 430}) => (
+  <div style={{position: 'absolute', left: 50, right: 50, top: 40, height: h, borderRadius: 36, background: '#FFFFFF', boxShadow: '0 30px 60px -26px rgba(0,0,0,0.55)', padding: '26px 30px', boxSizing: 'border-box', translate: `0 ${lerp(tween(t, at, 0.4, EASE_OUT), -40, 0)}px`, fontFamily: SANS, color: '#141414'}}>{children}</div>
 );
-/** "carb to protein ratio of about 6 to 1" -> "a dessert with a tadka on it". */
+/** "carb to protein ratio of about 6 to 1": seven portions fill in (six carbs, one protein), then 6 : 1 lands
+ *  on her words; then "a dessert with a tadka on it": poha = gulab jamun. */
+const GOLD = '#E4A11B';
 const Ratio: React.FC = () => {
   const t = useT();
   const o = vis(t, C.ratio);
   if (o <= 0) return null;
-  const bar = tween(t, 10.4, 0.9, EASE_OUT);
   const dessert = t >= 12.9;
   const d = tween(t, 12.9, 0.35, EASE_OUT);
+  const num = (txt: string, at: number, color: string) => {
+    const k = popAt(t, at);
+    return <span style={{fontWeight: 800, fontSize: 168, lineHeight: 1, letterSpacing: -4, color, opacity: Math.min(1, k * 3), scale: lerp(Math.min(1, k), 1.5, 1)}}>{txt}</span>;
+  };
+  const grow = tween(t, 11.5, 0.35, EASE_OUT);
+  const DOT = 88;
+  const GAP = 14;
+  const carbsW = DOT * 6 + GAP * 5;
+  const label: React.CSSProperties = {textAlign: 'center', fontWeight: 800, fontSize: 28, letterSpacing: 6, color: '#8A857C'};
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <WCard t={t} at={C.ratio.start}>
+      <WCard t={t} at={C.ratio.start} h={dessert ? 440 : lerp(grow, 250, 440)}>
         {!dessert ? (
-          <div style={{display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', gap: 26}}>
-            <span style={{fontWeight: 800, fontSize: 30, letterSpacing: 6, color: '#8A857C'}}>CARBS : PROTEIN</span>
-            <div style={{fontWeight: 800, fontSize: 150, lineHeight: 1, letterSpacing: -4, ...rise(t, 11.66)}}>6 : 1</div>
-            <div style={{display: 'flex', height: 86, borderRadius: 20, overflow: 'hidden', background: '#F1EDE6'}}>
-              <div style={{width: `${85.7 * bar}%`, background: '#D8D2C6', display: 'flex', alignItems: 'center', paddingLeft: 24, fontWeight: 800, fontSize: 34, whiteSpace: 'nowrap'}}>CARBS</div>
-              <div style={{width: `${14.3 * bar}%`, background: ACCENT}} />
+          <div style={{position: 'relative', height: '100%'}}>
+            <div style={{position: 'absolute', left: 0, right: 0, top: 4, display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 34, opacity: grow}}>
+              {num('6', 11.66, '#141414')}
+              <span style={{fontWeight: 800, fontSize: 130, lineHeight: 1, color: '#CFC8BB', opacity: tween(t, 12.1, 0.2)}}>:</span>
+              {num('1', 12.26, GOLD)}
             </div>
-            <div style={{display: 'flex', justifyContent: 'flex-end', fontWeight: 800, fontSize: 26, color: '#8A857C'}}>
-              <span style={{display: 'flex', alignItems: 'center', gap: 10}}>
-                <span style={{width: 18, height: 18, borderRadius: 5, background: ACCENT}} /> PROTEIN
-              </span>
+            <div style={{position: 'absolute', left: 0, right: 0, bottom: 6, display: 'flex', justifyContent: 'center', gap: 40}}>
+              <div style={{width: carbsW, display: 'flex', flexDirection: 'column', gap: 14}}>
+                <div style={{display: 'flex', gap: GAP}}>
+                  {Array.from({length: 6}, (_, i) => {
+                    const k = popAt(t, 9.98 + i * 0.07);
+                    return <div key={i} style={{width: DOT, height: DOT, borderRadius: '50%', background: '#DDD6CA', scale: lerp(Math.min(1.08, k), 0.3, 1), opacity: Math.min(1, k * 3)}} />;
+                  })}
+                </div>
+                <span style={{...label, ...rise(t, 9.98)}}>CARBS</span>
+              </div>
+              <div style={{width: DOT, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14}}>
+                <div style={{width: DOT, height: DOT, borderRadius: '50%', background: GOLD, scale: lerp(Math.min(1.08, popAt(t, 10.42)), 0.3, 1), opacity: Math.min(1, popAt(t, 10.42) * 3)}} />
+                <span style={{...label, ...rise(t, 10.42)}}>PROTEIN</span>
+              </div>
             </div>
           </div>
         ) : (
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 22, height: '100%', opacity: d}}>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14}}>
-              <Photo src="poha" w={380} h={330} />
-              <span style={{fontWeight: 800, fontSize: 40}}>Poha</span>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 26, height: '100%', opacity: d}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12}}>
+              <Photo src="poha" w={360} h={290} />
+              <span style={{fontWeight: 800, fontSize: 38}}>Poha</span>
             </div>
-            <span style={{fontWeight: 800, fontSize: 110, color: '#E5484D', scale: lerp(Math.min(1, popAt(t, 13.6)), 1.6, 1), opacity: t >= 13.6 ? 1 : 0}}>=</span>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, opacity: tween(t, 13.6, 0.3), translate: `${lerp(tween(t, 13.6, 0.4, EASE_OUT), 40, 0)}px 0`}}>
-              <Photo src="jamun" w={380} h={330} />
-              <span style={{fontWeight: 800, fontSize: 40}}>
+            <span style={{marginTop: -50, fontWeight: 800, fontSize: 110, color: '#E5484D', scale: lerp(Math.min(1, popAt(t, 13.6)), 1.6, 1), opacity: t >= 13.6 ? 1 : 0}}>=</span>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, opacity: tween(t, 13.6, 0.3), translate: `${lerp(tween(t, 13.6, 0.4, EASE_OUT), 40, 0)}px 0`}}>
+              <Photo src="jamun" w={360} h={290} />
+              <span style={{fontWeight: 800, fontSize: 38}}>
                 Dessert <span style={{color: '#E5484D'}}>+ tadka</span>
               </span>
             </div>
@@ -71,7 +90,7 @@ const Ratio: React.FC = () => {
   );
 };
 
-/** "Your poha, upma, idli, dosa, sandwich - all dessert": the dishes pop in as photos, then DESSERT stamps them. */
+/** "Your poha, upma, idli, dosa, sandwich": the dishes pop in as photos as she names them. */
 const FOODS = [
   {img: 'poha', n: 'Poha', at: 3.66},
   {img: 'upma', n: 'Upma', at: 4.34},
@@ -83,31 +102,25 @@ const Foods: React.FC = () => {
   const t = useT();
   const o = vis(t, C.foods);
   if (o <= 0) return null;
-  const st = popAt(t, 7.52);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 30, right: 30, top: 70, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16}}>
+      <div style={{position: 'absolute', left: 40, right: 40, top: 40, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14}}>
         {FOODS.map((f, i) => {
           const k = popAt(t, f.at);
           const big = i >= 3;
           return (
-            <div key={f.n} style={{width: big ? 400 : 320, background: '#FFFFFF', borderRadius: 22, padding: 10, boxSizing: 'border-box', boxShadow: '0 18px 36px -16px rgba(0,0,0,0.55)', opacity: Math.min(1, k * 3), scale: lerp(Math.min(1.05, k), 0.6, 1)}}>
-              <Photo src={f.img} w={big ? 380 : 300} h={big ? 150 : 170} style={{borderRadius: 14, boxShadow: 'none', filter: t >= 7.52 ? `saturate(${lerp(Math.min(1, st), 1, 0.5)})` : undefined}} />
-              <div style={{textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 34, color: '#141414', marginTop: 6}}>{f.n}</div>
+            <div key={f.n} style={{width: big ? 360 : 310, background: '#FFFFFF', borderRadius: 22, padding: 9, boxSizing: 'border-box', boxShadow: '0 18px 36px -16px rgba(0,0,0,0.55)', opacity: Math.min(1, k * 3), scale: lerp(Math.min(1.05, k), 0.6, 1)}}>
+              <Photo src={f.img} w={big ? 342 : 292} h={140} style={{borderRadius: 14, boxShadow: 'none'}} />
+              <div style={{textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 32, lineHeight: '42px', color: '#141414'}}>{f.n}</div>
             </div>
           );
         })}
       </div>
-      {t >= 7.52 ? (
-        <div style={{position: 'absolute', left: 0, right: 0, top: 290, display: 'flex', justifyContent: 'center'}}>
-          <div style={{padding: '10px 40px', border: '9px solid #E5484D', borderRadius: 20, background: 'rgba(255,255,255,0.94)', color: '#E5484D', fontFamily: SANS, fontWeight: 800, fontSize: 110, letterSpacing: 8, scale: lerp(Math.min(1, st), 2, 1), opacity: Math.min(1, st * 3), boxShadow: '0 20px 40px -16px rgba(0,0,0,0.5)'}}>DESSERT</div>
-        </div>
-      ) : null}
     </AbsoluteFill>
   );
 };
 
-/** Per dish: before photo -> after photo, ratios under each. */
+/** Per dish: before photo -> after photo, name and ratio centred under each. */
 const DishCard: React.FC<{d: Dish}> = ({d}) => {
   const t = useT();
   const o = vis(t, d);
@@ -115,27 +128,28 @@ const DishCard: React.FC<{d: Dish}> = ({d}) => {
   const swap = tween(t, d.swapAt, 0.45, EASE_OUT);
   const strike = tween(t, d.swapAt, 0.35, EASE_OUT);
   const now = popAt(t, d.nowAt);
-  const one = (txt: string) => txt.replace(/\n/g, ' ');
+  const col: React.CSSProperties = {width: 390, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, textAlign: 'center'};
+  const name: React.CSSProperties = {width: 390, fontWeight: 800, fontSize: 30, lineHeight: '36px', whiteSpace: 'nowrap', marginTop: 4};
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <WCard t={t} at={d.start} h={510}>
+      <WCard t={t} at={d.start} h={450}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <span style={{fontWeight: 800, fontSize: 28, letterSpacing: 6, color: '#8A857C'}}>{`SWAP ${d.n} / 6`}</span>
-          <span style={{fontWeight: 800, fontSize: 28, letterSpacing: 4, color: '#8A857C'}}>CARBS : PROTEIN</span>
+          <span style={{fontWeight: 800, fontSize: 26, letterSpacing: 6, color: '#8A857C'}}>{`SWAP ${d.n} / 6`}</span>
+          <span style={{fontWeight: 800, fontSize: 26, letterSpacing: 4, color: '#8A857C'}}>CARBS : PROTEIN</span>
         </div>
-        <div style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: 16}}>
-          <div style={{width: 400, display: 'flex', flexDirection: 'column', gap: 10}}>
-            <Photo src={d.img0} w={400} h={280} style={{filter: `grayscale(${strike * 0.85}) brightness(${lerp(strike, 1, 0.85)})`}}>
+        <div style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: 14}}>
+          <div style={col}>
+            <Photo src={d.img0} w={390} h={220} style={{filter: `grayscale(${strike * 0.85}) brightness(${lerp(strike, 1, 0.85)})`}}>
               {strike > 0 ? <div style={{position: 'absolute', left: 0, right: 0, top: '50%', height: 10, background: '#E5484D', scale: `${strike} 1`, transformOrigin: 'left center'}} /> : null}
             </Photo>
-            <span style={{fontWeight: 800, fontSize: 32, lineHeight: 1.1, color: swap > 0.5 ? '#A39D92' : '#141414', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{one(d.before)}</span>
-            <span style={{fontWeight: 800, fontSize: 50, lineHeight: 1, color: '#E5484D', whiteSpace: 'nowrap'}}>{d.ratio}</span>
+            <span style={{...name, color: swap > 0.5 ? '#A39D92' : '#141414'}}>{d.before}</span>
+            <span style={{fontWeight: 800, fontSize: 50, lineHeight: '54px', color: '#E5484D', whiteSpace: 'nowrap'}}>{d.ratio}</span>
           </div>
-          <div style={{alignSelf: 'center', marginTop: -40, fontWeight: 800, fontSize: 70, color: '#141414', opacity: swap}}>→</div>
-          <div style={{width: 400, display: 'flex', flexDirection: 'column', gap: 10, opacity: swap, translate: `${lerp(swap, 60, 0)}px 0`}}>
-            <Photo src={d.img1} w={400} h={280} />
-            <span style={{fontWeight: 800, fontSize: 30, lineHeight: 1.1, color: '#17A34A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{one(d.after)}</span>
-            <span style={{height: 50, fontWeight: 800, fontSize: d.result.length > 8 ? 38 : 50, lineHeight: '50px', color: '#17A34A', whiteSpace: 'nowrap', transformOrigin: 'left center', scale: t >= d.nowAt ? lerp(Math.min(1, now), 1.5, 1) : 0}}>{d.result}</span>
+          <div style={{marginTop: 80, fontWeight: 800, fontSize: 64, color: '#141414', opacity: swap}}>→</div>
+          <div style={{...col, opacity: swap, translate: `${lerp(swap, 60, 0)}px 0`}}>
+            <Photo src={d.img1} w={390} h={220} />
+            <span style={{...name, color: '#17A34A', fontSize: d.after.length > 21 ? 28 : 30}}>{d.after}</span>
+            <span style={{height: 54, fontWeight: 800, fontSize: d.result.length > 8 ? 40 : 50, lineHeight: '54px', color: '#17A34A', whiteSpace: 'nowrap', scale: t >= d.nowAt ? lerp(Math.min(1, now), 1.5, 1) : 0}}>{d.result}</span>
           </div>
         </div>
       </WCard>
@@ -158,7 +172,7 @@ const Plate: React.FC = () => {
   const pop = tween(t, w.start, 0.45, EASE_OUT);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 540 - 260, top: 50, width: 520, height: 520, scale: lerp(pop, 0.6, 1), rotate: `${lerp(pop, -40, 0)}deg`}}>
+      <div style={{position: 'absolute', left: 540 - 260, top: -20, width: 520, height: 520, scale: lerp(pop, 0.6, 0.82), rotate: `${lerp(pop, -40, 0)}deg`}}>
         <svg width={520} height={520} style={{position: 'absolute', inset: 0, filter: 'drop-shadow(0 24px 40px rgba(0,0,0,0.45))'}}>
           <circle cx={260} cy={260} r={250} fill="#FFFFFF" />
           <circle cx={260} cy={260} r={212} fill="#F4F1EB" />
@@ -167,7 +181,7 @@ const Plate: React.FC = () => {
         </svg>
         <div style={{position: 'absolute', left: 0, right: 0, top: 230, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 56, color: '#141414'}}>{k < 0.5 ? '6 : 1' : '1 : 1'}</div>
       </div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 30, display: 'flex', justifyContent: 'space-between', padding: '0 60px', fontFamily: SANS, fontWeight: 800, fontSize: 30, letterSpacing: 4, color: WHITE, ...outline(30), opacity: pop}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 200, display: 'flex', justifyContent: 'space-between', padding: '0 70px', fontFamily: SANS, fontWeight: 800, fontSize: 30, letterSpacing: 4, color: WHITE, ...outline(30), opacity: pop}}>
         <span>CARBS</span>
         <span>PROTEIN</span>
       </div>
