@@ -8,10 +8,8 @@ import {BREAD, DISHES, FoodShot, IDLI, Pill, SHOTS} from './config';
 
 const RED = '#E5484D';
 const GREEN = '#17A34A';
-const HD = new Set(['dosa', 'sandwich', 'eggbhurji', 'upma', 'eggtoast']);
-/** Where to centre the 9:16 crop of each photo (the food, not the table). */
-const FOCUS: Record<string, string> = {};
-const photo = (img: string) => staticFile(HD.has(img) ? `m2/photos_hd/${img}.jpg` : `m2/photos/${img}.jpg`);
+/** Each photo is pre-cropped to 9:16 around the food (public/m2/photos_916), so it fills the frame. */
+const photo = (img: string) => staticFile(`m2/photos_916/${img}.jpg`);
 
 /** Full-screen food photo with its name and ratio. Back-to-back photos slide in over each other;
  *  otherwise the photo blooms in and out of her talking head like the B-roll cutaways. */
@@ -29,7 +27,7 @@ const Shot: React.FC<{s: FoodShot; chainIn: boolean; chainOut: boolean}> = ({s, 
   return (
     <AbsoluteFill style={{translate: `${slide}px 0`, opacity: 1 - bloom * 0.85, filter: `blur(${bloom * 18 + (chainIn ? (1 - inP) * 14 : 0)}px) brightness(${1 + bloom * 0.35})`}}>
       <AbsoluteFill style={{scale: zoom, backgroundColor: '#111'}}>
-        <Img src={photo(s.img)} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: FOCUS[s.img] ?? '50% 50%'}} />
+        <Img src={photo(s.img)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
       </AbsoluteFill>
       <AbsoluteFill style={{background: 'radial-gradient(90% 26% at 50% 44%, rgba(0,0,0,0.42), rgba(0,0,0,0) 85%)'}} />
       <div style={{position: 'absolute', left: 50, right: 50, top: 840, translate: '0 -50%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 26}}>
