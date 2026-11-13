@@ -13,10 +13,11 @@ def cues(cue, rng):
     # dolly zoom on "desserts for breakfast."
     cue(1.92, "pack:x_riser", -25)
     cue(3.35, "pack:x_boom", -27)
-    # the dishes orbit her
-    cue(3.55, "pack:x_cine", -25)
+    # the dish photos pop in, then the DESSERT stamp
     for at in (3.66, 4.34, 5.06, 5.7, 6.38):
-        cue(at, "pack:x_blip", -28)
+        cue(at, "pack:x_blip", -26)
+    cue(7.52, "pack:x_clickhit", -21)
+    cue(7.54, "pack:x_boom", -29)
     # punch-ins
     for at in (7.2, 12.9, 106.34, 114.9):
         cue(at, "pack:x_fast", -26)
@@ -24,12 +25,15 @@ def cues(cue, rng):
     cue(16.22, "pack:x_whip", -21)
     cue(16.55, "pack:x_camwhoosh", -25)
     cue(16.95, "pack:x_clickhit", -24)
-    # 6 : 1 blocks
-    for j in range(7):
-        cue(10.4 + j * 0.12, "pack:tick", -31)
+    # 6 : 1 card, then poha = dessert
+    cue(8.46, "pack:x_whip", -26)
+    cue(10.4, "pack:whoosh_soft", -28)
     cue(11.66, "pack:x_clickhit", -24)
+    cue(12.9, "pack:x_whip", -26)
+    cue(13.6, "pack:x_clickhit", -23)
+    cue(112.3, "pack:x_clickhit", -26)  # second line lands on the same bowl shot
     # B-roll cutaways: whip in, letters dive and land
-    for at, first in ((21.5, 21.56), (24.9, 24.92), (108.0, 109.18), (112.2, 112.22)):
+    for at, first in ((21.5, 21.56), (24.9, 24.92), (108.0, 109.18)):
         cue(at - 0.08, "pack:x_whip", -22)
         cue(first + 0.3, "pack:x_clickhit", -24)
     # plate rebalances on "just change what's on your plate"

@@ -27,7 +27,7 @@ export const SHADOW_CAP = '0 0 26px rgba(0,0,0,0.85), 0 0 10px rgba(0,0,0,0.7), 
 /** A quick punch-in: snaps in over 0.14 s, holds, snaps back on the next cut. */
 export const punch = (at: number, end: number, scale = 1.12): Move => ({origin: FACE_ORIGIN, inStart: at, inDur: 0.14, scale, outStart: end - 0.12, outDur: 0.12});
 
-export type Cut = {start: number; end: number; src: string; line?: string; lineAt?: number; y?: number; times?: number[]; dive?: boolean; flash?: string};
+export type Cut = {start: number; end: number; src: string; line?: string; lineAt?: number; y?: number; times?: number[]; dive?: boolean; flash?: string; lineEnd?: number; line2?: string; times2?: number[]};
 
 const TRANS = 0.22;
 /** Blur-bloom amount at a window edge (1 = fully blurred / bright, 0 = clean). */
@@ -55,7 +55,8 @@ export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string}> = ({cut
               </AbsoluteFill>
               {c.line ? <AbsoluteFill style={{background: `radial-gradient(85% 18% at 50% ${((c.y ?? 900) / 1920) * 100}%, rgba(0,0,0,0.34), rgba(0,0,0,0) 80%)`}} /> : null}
             </AbsoluteFill>
-            {c.line && on ? <KeyLine text={c.line} at={c.lineAt ?? c.start + 0.15} times={c.times} y={c.y ?? 900} out={c.end - 0.18} dive={c.dive} /> : null}
+            {c.line && on && t < (c.lineEnd ?? 1e9) + 0.2 ? <KeyLine text={c.line} at={c.lineAt ?? c.start + 0.15} times={c.times} y={c.y ?? 900} out={(c.lineEnd ?? c.end) - 0.18} dive={c.dive} /> : null}
+            {c.line2 && on && t >= (c.lineEnd ?? c.end) - 0.05 ? <KeyLine text={c.line2} at={c.lineEnd ?? c.end} times={c.times2} y={c.y ?? 900} out={c.end - 0.18} dive={c.dive} /> : null}
             {c.flash ? <Flash src={`${dir}/${c.flash}`} at={c.start} tm={tm} /> : null}
           </React.Fragment>
         );
