@@ -23,18 +23,22 @@ const Report: React.FC = () => {
   const w = C.report;
   if (t < w.start - 0.05 || t > w.end + 0.05) return null;
   const k = tween(t, w.start, 0.25, EASE_OUT);
-  const rows = ['Haemoglobin', 'Blood Sugar', 'Thyroid', 'Vitamin D', 'Liver'];
+  const rows = ['Haemoglobin', 'Blood Sugar', 'Thyroid', 'Vitamin D'];
+  const stamp = popAt(t, 2.54); // on "normal"
   return (
     <AbsoluteFill style={{background: '#EEEBE4', opacity: Math.min(1, k * 2) * (1 - tween(t, w.end - 0.12, 0.12))}}>
-      <div style={{position: 'absolute', left: 140, right: 140, top: 520, background: '#fff', borderRadius: 18, padding: '44px 50px', boxShadow: '0 30px 60px -30px rgba(0,0,0,0.35)', translate: `0 ${lerp(k, 40, 0)}px`}}>
-        <div style={{fontFamily: SERIF, fontSize: 64, color: '#141414'}}>Blood Report</div>
+      <div style={{position: 'absolute', left: 140, right: 140, top: 470, background: '#fff', borderRadius: 22, padding: '48px 54px', boxShadow: '0 30px 60px -30px rgba(0,0,0,0.35)', translate: `0 ${lerp(k, 40, 0)}px`}}>
+        <div style={{fontFamily: SERIF, fontSize: 82, color: '#141414'}}>Blood Report</div>
         <div style={{height: 2, background: '#141414', margin: '18px 0 10px'}} />
         {rows.map((r, i) => (
-          <div key={r} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 84, borderBottom: i < rows.length - 1 ? '1px solid #E3DFD7' : undefined, fontFamily: SANS, fontSize: 34, color: '#141414'}}>
+          <div key={r} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 104, borderBottom: i < rows.length - 1 ? '1px solid #E3DFD7' : undefined, fontFamily: SANS, fontSize: 44, color: '#141414'}}>
             <span style={{fontWeight: 600}}>{r}</span>
-            <span style={{fontWeight: 700, color: '#1F8A4C', opacity: tween(t, w.start + 0.2 + i * 0.12, 0.2)}}>Normal ✓</span>
+            <span style={{fontWeight: 700, color: '#1F8A4C', opacity: tween(t, 1.66 + i * 0.18, 0.2)}}>Normal ✓</span>
           </div>
         ))}
+        {t >= 2.54 ? (
+          <div style={{position: 'absolute', right: -10, bottom: -56, scale: lerp(Math.min(1, stamp), 1.8, 1), opacity: Math.min(1, stamp * 3), padding: '8px 26px', border: '7px solid #1F8A4C', borderRadius: 14, background: 'rgba(255,255,255,0.92)', fontFamily: SANS, fontWeight: 800, fontSize: 56, letterSpacing: 4, color: '#1F8A4C'}}>ALL NORMAL</div>
+        ) : null}
       </div>
     </AbsoluteFill>
   );
@@ -342,13 +346,13 @@ const Scene: React.FC = () => (
     <Subject cfg={cfg} />
     <Orbit front />
     <Cutaways cuts={CUTS} tm={TM_M1} dir="m1" />
-    <Report />
     <InkWipe at={C.inkA.start} />
+    <Report />
     <Panel />
     <InkWipe at={C.inkB.start} />
     <Save />
     <CtaFront />
-    <SerifCaps cfg={cfg} hide={[...LINED, {start: 1.38, end: 2.2}, C.report, {start: 49.75, end: 50.6}, C.panel, C.save, {start: C.cta.start + 0.1, end: 999}]} />
+    <SerifCaps cfg={cfg} hide={[...LINED, {start: 1.0, end: 1.3}, C.report, {start: 49.75, end: 50.6}, C.panel, C.save, {start: C.cta.start + 0.1, end: 999}]} />
   </>
 );
 

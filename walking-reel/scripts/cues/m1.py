@@ -9,12 +9,17 @@ BROLL = []
 
 
 def cues(cue, rng):
-    # hook: ink floods into the report
-    cue(1.12, "pack:x_deep", -24)
-    for j in range(5):
-        cue(1.82 + j * 0.12, "pack:click", -31)
+    # hook: ink floods into the report, rows tick, ALL NORMAL stamp
+    cue(0.72, "pack:x_deep", -24)
+    for j in range(4):
+        cue(1.66 + j * 0.18, "pack:click", -29)
+    cue(2.54, "pack:x_clickhit", -23)
+    # exhausted B-roll: three lines land as she says them
+    cue(3.0 - 0.08, "pack:x_whip", -22)
+    for at in (3.46, 4.32, 5.52):
+        cue(at + 0.2, "pack:x_clickhit", -25)
     # B-roll cutaways: whip into the clip, letters dive and land
-    for at, line_at in ((3.0, 3.05), (8.4, 8.45), (12.66, 12.75), (21.3, 21.4), (43.3, 43.35)):
+    for at, line_at in ((8.4, 8.45), (12.66, 12.75), (21.3, 21.4), (43.3, 43.35)):
         cue(at - 0.08, "pack:x_whip", -22)
         cue(line_at + 0.3, "pack:x_clickhit", -24)
     # dolly zoom on "That's not normal."

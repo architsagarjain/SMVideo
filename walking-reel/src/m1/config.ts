@@ -9,8 +9,8 @@ export const TM_M1 = timemap as TimeMap;
 export const M1_FRAMES = TM_M1.frames;
 
 export const C = {
-  report: {start: 1.62, end: 3.0}, // "says everything's normal" - lab report insert
-  inkA: {start: 1.12, end: 2.2}, // ink wipe into the report
+  report: {start: 1.25, end: 3.3}, // "says everything's normal" - lab report insert
+  inkA: {start: 0.72, end: 1.8}, // ink wipe into the report
   dolly: {start: 7.07, end: 8.38}, // "That's not normal." - dolly zoom (her cut-out holds, the room pulls away)
   orbit: {start: 10.25, end: 12.6}, // "get these four things checked" - the four tests orbit her
   inkB: {start: 49.45, end: 50.55}, // ink wipe into the thyroid panel
@@ -23,7 +23,7 @@ export const C = {
   cta: {start: 68.2, end: 999},
 };
 export const CUTS: Cut[] = [
-  {start: 3.0, end: 4.2, src: 'b_tired.mp4', line: "BUT YOU'RE EXHAUSTED", lineAt: 3.05, y: 560, dive: true, flash: 'abstract-orange-glow.mp4'},
+  {start: 3.0, end: 6.95, src: 'b_tired.mp4', line: "EXHAUSTED | HAIR FALLING | BELLY FAT WON'T MOVE", times: [3.46, 4.32, 4.7, 5.52, 5.74, 5.98, 6.44], y: 470, dive: true, flash: 'abstract-orange-glow.mp4'},
   {start: 8.4, end: 10.28, src: 'b_supp.mp4', line: 'BEFORE YOU BUY | ANOTHER SUPPLEMENT', lineAt: 8.45, y: 960, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
   {start: 12.66, end: 14.42, src: 'b_sun.mp4', line: '1 · VITAMIN D', lineAt: 12.75, y: 330, dive: true, flash: 'abstract-orange-glow.mp4'},
   {start: 21.3, end: 24.9, src: 'b_food.mp4', line: '2 · HbA1c | + FASTING INSULIN', lineAt: 21.4, y: 280, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
