@@ -25,13 +25,11 @@ def cues(cue, rng):
     # dolly zoom on "That's not normal."
     cue(7.07, "pack:x_riser", -25)
     cue(8.3, "pack:x_boom", -27)
-    # "four": the four tests burst out from behind her head; "first": Vitamin D lights up
+    # "four": the four tests burst out from behind her head
     cue(10.56, "pack:x_camwhoosh", -25)
     cue(10.62, "pack:x_boom", -31)
     for j in range(4):
         cue(10.66 + j * 0.09, "pack:x_blip", -28)
-    cue(11.48, "pack:x_clickhit", -25)
-    cue(11.52, "pack:chime2", -28)
     # punch-ins
     for at in (30.46, 34.92, 48.56, 65.24):
         cue(at, "pack:x_fast", -26)

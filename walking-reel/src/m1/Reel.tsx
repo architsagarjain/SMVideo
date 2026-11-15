@@ -175,17 +175,16 @@ const Dolly: React.FC<{children: React.ReactNode}> = ({children}) => {
 // ---------------------------------------------------------------------------
 // "get these four things checked first": four test pills burst out from behind her head on "four"
 // (her cut-out sits in front, so they emerge from behind her), a gold light pulse behind her;
-// on "first" Vitamin D lights up and the rest dim - straight into the vitamin D section.
 // ---------------------------------------------------------------------------
+// a centred 2 x 2 grid above her head, equal-width pills
 const FOUR = [
-  {name: 'Vitamin D', x: 290, y: 470},
-  {name: 'HbA1c', x: 790, y: 470},
-  {name: 'Liver', x: 190, y: 800},
-  {name: 'Thyroid', x: 890, y: 800},
+  {name: 'Vitamin D', x: 330, y: 330},
+  {name: 'HbA1c', x: 750, y: 330},
+  {name: 'Liver', x: 330, y: 460},
+  {name: 'Thyroid', x: 750, y: 460},
 ];
 const FOUR_AT = 10.62;
-const FIRST_AT = 11.48;
-const FROM = {x: 540, y: 860};
+const FROM = {x: 540, y: 820};
 const Burst: React.FC = () => {
   const t = useT();
   const w = C.orbit;
@@ -193,7 +192,6 @@ const Burst: React.FC = () => {
   const out = tween(t, w.end - 0.22, 0.22, EASE_IN);
   const ring = tween(t, FOUR_AT - 0.04, 0.9, EASE_OUT);
   const glow = t < FOUR_AT - 0.1 ? 0 : Math.min(tween(t, FOUR_AT - 0.1, 0.15), 1 - tween(t, FOUR_AT + 0.1, 0.9, EASE_IN));
-  const hl = tween(t, FIRST_AT, 0.3, EASE_OUT);
   return (
     <AbsoluteFill style={{opacity: 1 - out}}>
       <AbsoluteFill style={{opacity: glow * 0.85, background: `radial-gradient(circle at ${FROM.x}px ${FROM.y - 80}px, rgba(245,196,81,0.75) 0px, rgba(245,196,81,0.25) 260px, rgba(245,196,81,0) 620px)`, mixBlendMode: 'screen'}} />
@@ -207,11 +205,10 @@ const Burst: React.FC = () => {
         if (t < at) return null;
         const k = popAt(t, at);
         const fly = tween(t, at, 0.42, EASE_OUT);
-        const first = i === 0;
         const x = lerp(fly, FROM.x, f.x);
         const y = lerp(fly, FROM.y, f.y);
         return (
-          <div key={f.name} style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', scale: lerp(Math.min(1.06, k), 0.3, 1) * (first ? lerp(hl, 1, 1.12) : lerp(hl, 1, 0.92)), opacity: Math.min(1, fly * 2.5) * (first ? 1 : lerp(hl, 1, 0.6)), filter: `blur(${(1 - fly) * 10}px)`, display: 'flex', alignItems: 'center', gap: 14, padding: '14px 32px 14px 16px', borderRadius: 999, background: first && hl > 0 ? `rgba(245,196,81,${lerp(hl, 0.96, 1)})` : 'rgba(255,255,255,0.96)', boxShadow: first && hl > 0 ? `0 0 ${40 * hl}px rgba(245,196,81,${0.8 * hl}), 0 16px 30px -12px rgba(0,0,0,0.55)` : '0 16px 30px -12px rgba(0,0,0,0.55)', whiteSpace: 'nowrap'}}>
+          <div key={f.name} style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', scale: lerp(Math.min(1.06, k), 0.3, 1), opacity: Math.min(1, fly * 2.5), filter: `blur(${(1 - fly) * 10}px)`, width: 390, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, padding: '14px 24px', borderRadius: 999, background: 'rgba(255,255,255,0.96)', boxShadow: '0 16px 30px -12px rgba(0,0,0,0.55)', whiteSpace: 'nowrap'}}>
             <span style={{width: 50, height: 50, borderRadius: '50%', background: '#141414', color: WHITE, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 30}}>{i + 1}</span>
             <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 50, color: '#141414'}}>{f.name}</span>
           </div>
