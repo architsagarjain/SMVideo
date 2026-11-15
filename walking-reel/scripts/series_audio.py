@@ -68,6 +68,12 @@ if TM is not None:
         seg[-fade:] *= ramp[::-1]
         parts.append(seg)
     joined = np.concatenate(parts).astype(np.float32)
+if TM is not None and TM["speed"] == 1.0:
+    # real-time: keep her voice exactly as recorded (no time-stretch pass)
+    voice = joined.astype(np.float64)
+    n_out = int(round(TM["frames"] / TM["fps"] * SR))
+    voice = np.pad(voice, ((0, max(0, n_out - len(voice))), (0, 0)))[:n_out]
+elif TM is not None:
     sped = subprocess.run(["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
                            "-af", f"rubberband=tempo={TM['speed']}:pitchq=quality:transients=mixed:window=standard",
                            "-f", "f32le", "-ar", str(SR), "-ac", "2", "-"], input=joined.tobytes(), capture_output=True, check=True).stdout
