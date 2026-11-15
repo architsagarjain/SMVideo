@@ -173,45 +173,47 @@ const Dolly: React.FC<{children: React.ReactNode}> = ({children}) => {
 };
 
 // ---------------------------------------------------------------------------
-// Orbit ring: the four tests circle her - behind her body, then in front of it
+// "get these four things checked first": four test pills burst out from behind her head on "four"
+// (her cut-out sits in front, so they emerge from behind her), a gold light pulse behind her;
+// on "first" Vitamin D lights up and the rest dim - straight into the vitamin D section.
 // ---------------------------------------------------------------------------
-const RING = {cx: 540, cy: 1150, rx: 440, ry: 96};
-const ORBIT = ['Vitamin D', 'HbA1c', 'Liver', 'Thyroid'];
-const orbitAt = (t: number) => {
-  const w = C.orbit;
-  const o = t < w.start || t > w.end + 0.2 ? 0 : tween(t, w.start, 0.3, EASE_OUT) * (1 - tween(t, w.end - 0.15, 0.3, EASE_IN));
-  const spin = -Math.PI / 2 + (t - w.start) * 1.15;
-  return {o, spin};
-};
-const arc = (from: number, to: number) => {
-  let d = '';
-  for (let i = 0; i <= 48; i++) {
-    const a = from + ((to - from) * i) / 48;
-    d += `${i ? 'L' : 'M'}${(RING.cx + RING.rx * Math.cos(a)).toFixed(1)} ${(RING.cy + RING.ry * Math.sin(a)).toFixed(1)} `;
-  }
-  return d;
-};
-const Orbit: React.FC<{front: boolean}> = ({front}) => {
+const FOUR = [
+  {name: 'Vitamin D', x: 290, y: 470},
+  {name: 'HbA1c', x: 790, y: 470},
+  {name: 'Liver', x: 190, y: 800},
+  {name: 'Thyroid', x: 890, y: 800},
+];
+const FOUR_AT = 10.62;
+const FIRST_AT = 11.48;
+const FROM = {x: 540, y: 860};
+const Burst: React.FC = () => {
   const t = useT();
-  const {o, spin} = orbitAt(t);
-  if (o <= 0) return null;
-  const draw = tween(t, C.orbit.start, 0.6, EASE_OUT);
+  const w = C.orbit;
+  if (t < w.start || t > w.end + 0.1) return null;
+  const out = tween(t, w.end - 0.22, 0.22, EASE_IN);
+  const ring = tween(t, FOUR_AT - 0.04, 0.9, EASE_OUT);
+  const glow = t < FOUR_AT - 0.1 ? 0 : Math.min(tween(t, FOUR_AT - 0.1, 0.15), 1 - tween(t, FOUR_AT + 0.1, 0.9, EASE_IN));
+  const hl = tween(t, FIRST_AT, 0.3, EASE_OUT);
   return (
-    <AbsoluteFill style={{opacity: o}}>
-      <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
-        <path d={front ? arc(0, Math.PI) : arc(Math.PI, 2 * Math.PI)} fill="none" stroke="#FFFFFF" strokeWidth={5} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - draw} opacity={front ? 0.95 : 0.55} style={{filter: 'drop-shadow(0 0 8px rgba(245,196,81,0.9))'}} />
-      </svg>
-      {ORBIT.map((name, i) => {
-        const a = spin + (i * Math.PI) / 2;
-        const depth = Math.sin(a); // +1 front, -1 back
-        if (front !== depth >= 0) return null;
-        const k = tween(t, C.orbit.start + 0.1 + i * 0.12, 0.3, EASE_OUT);
-        const x = RING.cx + RING.rx * Math.cos(a);
-        const y = RING.cy + RING.ry * depth;
+    <AbsoluteFill style={{opacity: 1 - out}}>
+      <AbsoluteFill style={{opacity: glow * 0.85, background: `radial-gradient(circle at ${FROM.x}px ${FROM.y - 80}px, rgba(245,196,81,0.75) 0px, rgba(245,196,81,0.25) 260px, rgba(245,196,81,0) 620px)`, mixBlendMode: 'screen'}} />
+      {ring > 0 && ring < 1 ? (
+        <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+          <circle cx={FROM.x} cy={FROM.y - 80} r={lerp(ring, 120, 900)} fill="none" stroke={ACCENT} strokeWidth={lerp(ring, 10, 2)} opacity={(1 - ring) * 0.9} />
+        </svg>
+      ) : null}
+      {FOUR.map((f, i) => {
+        const at = FOUR_AT + i * 0.09;
+        if (t < at) return null;
+        const k = popAt(t, at);
+        const fly = tween(t, at, 0.42, EASE_OUT);
+        const first = i === 0;
+        const x = lerp(fly, FROM.x, f.x);
+        const y = lerp(fly, FROM.y, f.y);
         return (
-          <div key={name} style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', scale: lerp((depth + 1) / 2, 0.78, 1.12) * k, opacity: lerp((depth + 1) / 2, 0.75, 1) * k, display: 'flex', alignItems: 'center', gap: 12, padding: '12px 26px', borderRadius: 999, background: 'rgba(18,18,20,0.82)', boxShadow: '0 12px 26px -10px rgba(0,0,0,0.6)', whiteSpace: 'nowrap'}}>
-            <span style={{width: 16, height: 16, borderRadius: '50%', background: ACCENT}} />
-            <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 48, color: WHITE}}>{name}</span>
+          <div key={f.name} style={{position: 'absolute', left: x, top: y, translate: '-50% -50%', scale: lerp(Math.min(1.06, k), 0.3, 1) * (first ? lerp(hl, 1, 1.12) : lerp(hl, 1, 0.92)), opacity: Math.min(1, fly * 2.5) * (first ? 1 : lerp(hl, 1, 0.6)), filter: `blur(${(1 - fly) * 10}px)`, display: 'flex', alignItems: 'center', gap: 14, padding: '14px 32px 14px 16px', borderRadius: 999, background: first && hl > 0 ? `rgba(245,196,81,${lerp(hl, 0.96, 1)})` : 'rgba(255,255,255,0.96)', boxShadow: first && hl > 0 ? `0 0 ${40 * hl}px rgba(245,196,81,${0.8 * hl}), 0 16px 30px -12px rgba(0,0,0,0.55)` : '0 16px 30px -12px rgba(0,0,0,0.55)', whiteSpace: 'nowrap'}}>
+            <span style={{width: 50, height: 50, borderRadius: '50%', background: '#141414', color: WHITE, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 30}}>{i + 1}</span>
+            <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 50, color: '#141414'}}>{f.name}</span>
           </div>
         );
       })}
@@ -340,11 +342,10 @@ const Scene: React.FC = () => (
     <Targets w={C.sugar} title="Your targets" items={[{label: 'HbA1c', value: '< 5.4', at: 25.72}, {label: 'Fasting insulin', value: '< 7', at: 29.02}]} />
     <Targets w={C.liver} title="3 · Liver" items={[{label: 'SGOT · SGPT', value: '< 25', at: 39.86}]} />
     <Thyroid />
-    <Orbit front={false} />
+    <Burst />
     <TopShade wins={[C.cta]} reach={40} />
     <TestBehind />
     <Subject cfg={cfg} />
-    <Orbit front />
     <Cutaways cuts={CUTS} tm={TM_M1} dir="m1" />
     <InkWipe at={C.inkA.start} />
     <Report />
