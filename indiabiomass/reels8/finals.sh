@@ -1,12 +1,14 @@
 #!/bin/bash
 # Final renders: 1080x1920 picture (muted, CRF 16) -> two-pass x264 High 8 Mbps + the video's mix (AAC 320k),
 # plus an .srt sidecar and a <30 MB share copy for chat. usage: ./finals.sh [n ...]
+# Playwright's headless shell (its folder name changes with the version)
+B=$(ls -d /opt/pw-browsers/chromium_headless_shell-*/*/chrome-headless-shell /opt/pw-browsers/chromium_headless_shell-*/chrome-linux/headless_shell 2>/dev/null | head -1); BX=${B:+--browser-executable=$B}
 cd "$(dirname "$0")/../film"
 declare -A SLUG=([1]=OneBalesJourney [2]=FourMyths [3]=PelletOrBriquette [4]=BiomassMapOfIndia [5]=WhatBuyersCheck [6]=TheHarvestWindow [7]=GuessTheBiomass [8]=WhyWereBuilding)
 OUT=../reels8/output; SHARE=../reels8/output/share; mkdir -p $OUT $SHARE
 for n in ${@:-1 2 3 4 5 6 7 8}; do
   T=$(mktemp -d); NAME=IndiaBiomass_Video${n}_${SLUG[$n]}
-  npx remotion render src/index.ts Video$n $T/pic.mp4 --muted --log=error --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=4 > $T/log 2>&1 || { echo "FAIL Video$n"; grep -iv memory $T/log | tail -5; rm -rf "${T:?}"; continue; }
+  npx remotion render src/index.ts Video$n $T/pic.mp4 --muted --log=error --codec=h264 --crf=16 --pixel-format=yuv420p --concurrency=4 $BX > $T/log 2>&1 || { echo "FAIL Video$n"; grep -iv memory $T/log | tail -5; rm -rf "${T:?}"; continue; }
   P=$T/x264
   ffmpeg -y -loglevel error -i $T/pic.mp4 -c:v libx264 -preset slow -profile:v high -pix_fmt yuv420p -b:v 8M -maxrate 12M -bufsize 16M -pass 1 -passlogfile $P -an -f mp4 /dev/null
   ffmpeg -y -loglevel error -i $T/pic.mp4 -i ../reels8/audio/mix/v${n}_mix.wav -map 0:v -map 1:a -c:v libx264 -preset slow -profile:v high -pix_fmt yuv420p -b:v 8M -maxrate 12M -bufsize 16M -pass 2 -passlogfile $P \

@@ -23,7 +23,8 @@ const REG: Reg[] = [
   { name: 'RICE HUSK', sub: 'Wherever rice is milled', at: W('rice', 0, 5), cities: ['Vijayawada', 'Bhubaneswar', 'Raipur', 'Patna', 'Kolkata', 'Ludhiana'], color: 'rgba(227,194,122,1)', photo: 'V4_5.jpg', zoom: 1.15 },
 ];
 const centroid = (cs: string[]) => cs.reduce((a, c) => [a[0] + cities[c][0] / cs.length, a[1] + cities[c][1] / cs.length], [0, 0]);
-const FULL: Cam = { cx: 500, cy: 560, zoom: 0.9, tilt: 0, rot: 0, oy: -110 };
+// whole-India view: centred between the two-line headline (ends ~y 390) and the captions (y 1430)
+const FULL: Cam = { cx: 500, cy: 560, zoom: 0.84, tilt: 0, rot: 0, oy: -20 };
 const KEYS: [number, Cam][] = [[0, FULL], ...REG.map((r): [number, Cam] => { const [x, y] = centroid(r.cities); return [r.at - 6, { cx: x, cy: y, zoom: r.zoom, tilt: 0, rot: 0, oy: -260 }]; }), [L(6) - 6, FULL]];
 const camAt = (f: number): Cam => {
   let k = 0;
