@@ -1,4 +1,5 @@
-import { Composition } from 'remotion';
+import { Composition, Still } from 'remotion';
+import { Cover4 } from './r8/Cover4';
 import { Film } from './Film';
 import { Reel1, REEL1_FRAMES } from './reels/Reel1';
 import { Reel2, REEL2_FRAMES } from './reels/Reel2';
@@ -36,6 +37,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Video3" component={V3} durationInFrames={V3_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video3Hinglish" component={V3hi} durationInFrames={V3hi_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video4" component={V4} durationInFrames={V4_FRAMES} fps={30} width={1080} height={1920} />
+    <Still id="Cover4" component={Cover4} width={1080} height={1920} />
     <Composition id="Video4Hinglish" component={V4hi} durationInFrames={V4hi_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video5" component={V5} durationInFrames={V5_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video5Hinglish" component={V5hi} durationInFrames={V5hi_FRAMES} fps={30} width={1080} height={1920} />
