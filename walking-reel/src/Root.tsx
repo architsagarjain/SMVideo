@@ -2,6 +2,12 @@ import {Composition} from 'remotion';
 import {M1Reel} from './m1/Reel';
 import {M1_FRAMES} from './m1/config';
 import {M2Reel} from './m2/Reel';
+import {Ad6Reel} from './ad6/Reel';
+import {AD6_FRAMES} from './ad6/config';
+import {Ad7Reel} from './ad7/Reel';
+import {AD7_FRAMES} from './ad7/config';
+import {Ad8Reel} from './ad8/Reel';
+import {AD8_FRAMES} from './ad8/config';
 import {M2_FRAMES} from './m2/config';
 import {WalkingReel} from './WalkingReel';
 import {ExplainerReel} from './explainer/ExplainerReel';
@@ -50,6 +56,9 @@ export const Root: React.FC = () => {
     <Composition id="DeskDay" component={V14Reel} durationInFrames={V14_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BloodTests" component={M1Reel} durationInFrames={M1_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BreakfastSwaps" component={M2Reel} durationInFrames={M2_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="AdCoachA" component={Ad6Reel} durationInFrames={AD6_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="AdCoachB" component={Ad7Reel} durationInFrames={AD7_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="AdTransformation" component={Ad8Reel} durationInFrames={AD8_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="OneChange" component={V13Reel} durationInFrames={V13_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="SplitWeek" component={V12Reel} durationInFrames={V12_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="RiceWater" component={V11Reel} durationInFrames={V11_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
