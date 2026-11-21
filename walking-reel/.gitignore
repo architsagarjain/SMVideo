@@ -47,3 +47,9 @@ public/m1/
 public/m2/
 footage/transitions/
 footage/luts/
+
+# Meta ad reels: raw footage and prepared media (large; regenerated from the Drive folder)
+footage/ads/
+public/ad6/
+public/ad7/
+public/ad8/
