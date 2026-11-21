@@ -16,7 +16,7 @@ FIX = {
            (96.86, 'prantha,'): 'paratha,', (100.26, '2'): 'aloo', (117.20, 'breakfast'): 'BREAKFAST', (120.24, 'swaps'): 'swaps.'},
     'ad6': {(9.50, '500'): '500+', (9.92, 'plus'): None, (41.96, 'Rs.'): '₹99', (42.50, '99'): None, (36.68, 'choliaboty.'): 'chole bhature.'},
     'ad7': {(9.08, '500'): '500+', (9.58, 'plus'): None, (44.24, 'Rs.'): '₹99', (44.80, '99'): None, (38.06, 'bhatoori.'): 'bhature.'},
-    'ad8': {(8.76, '500'): '500+', (9.38, 'plus'): None, (53.20, 'rupees'): '₹99', (27.42, 'favorite'): 'favourite', (53.66, '99'): None,
+    'ad8': {(8.76, '500'): '500+', (9.38, 'plus'): None, (53.20, 'rupees'): '₹99', (27.42, 'favorite'): 'favourite', (24.12, 'Piquettes.'): 'PeakX.', (53.66, '99'): None,
             (50.92, 'one'): 'one-on-one', (51.08, 'on'): None, (51.24, 'one'): None},
 }
 END = {'m2': 120.6}  # the recording stops mid-sentence; end on "swaps."
