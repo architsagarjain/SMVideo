@@ -75,6 +75,17 @@ for c in out:
     else:
         merged.append(c)
 out = merged
+# ads: never leave one word on its own ("another.") - it joins the chunk before it, or takes its last word
+if NAME.startswith('ad'):
+    fixed = []
+    for c in out:
+        if fixed and len(c) == 1 and c[0]["start"] - fixed[-1][-1]["end"] < 0.6:
+            if len(fixed[-1]) <= 3:
+                fixed[-1] = fixed[-1] + c
+                continue
+            c = [fixed[-1].pop()] + c
+        fixed.append(c)
+    out = fixed
 os.makedirs(f"{ROOT}/src/{NAME}", exist_ok=True)
 json.dump(out, open(f"{ROOT}/src/{NAME}/captions.json", "w"), indent=1)
 print(len(out), 'chunks')

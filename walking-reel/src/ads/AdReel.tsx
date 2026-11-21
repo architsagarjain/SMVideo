@@ -19,7 +19,7 @@ export type PillGroup = {start: number; end: number; items: {text: string; at: n
 export type Counter = {start: number; end: number; at: number; value: number; suffix: string; label: string};
 export type Badge = {start: number; end: number; at: number};
 export type BehindWord = {start: number; end: number; lines: {text: string; at: number; size: number}[]};
-export type Cta = {start: number; bookAt: number; priceAt: number; tapAt: number; price: string};
+export type Cta = {start: number; bookAt: number; priceAt: number; tapAt: number; price: string; closing: string};
 export type BeforeAfter = {start: number; end: number; beforeAt: number; afterAt: number; statsAt: number; before: string; after: string; stats: string[]};
 export type AdConfig = {
   cfg: ReelConfig;
@@ -140,7 +140,7 @@ const BehindView: React.FC<{b: BehindWord}> = ({b}) => {
   );
 };
 
-/** End card: "Book a 1:1 call", then ₹99 rises from behind her head, then "Tap below to book". */
+/** End card: "Book a 1:1 call", then ₹99 rises from behind her head, then the pill turns gold with her closing line. */
 const CtaBehind: React.FC<{c: Cta}> = ({c}) => {
   const t = useT();
   if (t < c.priceAt) return null;
@@ -171,7 +171,14 @@ const CtaFront: React.FC<{c: Cta}> = ({c}) => {
     <AbsoluteFill>
       <div style={{position: 'absolute', left: 0, right: 0, top: 290, display: 'flex', justifyContent: 'center'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 16, padding: '16px 38px', borderRadius: 999, background: tap ? ACCENT : '#FFFFFF', boxShadow: shadow, fontFamily: SANS, fontWeight: 800, fontSize: 50, color: INK, whiteSpace: 'nowrap', scale: tap ? lerp(Math.min(1.05, kt), 0.8, 1) : lerp(Math.min(1.05, k), 0.5, 1), opacity: Math.min(1, k * 3)}}>
-          {tap ? 'Tap below to book ↓' : 'Book a 1:1 call with me'}
+          {tap ? (
+            <>
+              {c.closing}
+              <span style={{width: 50, height: 50, borderRadius: '50%', background: INK, color: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 34}}>→</span>
+            </>
+          ) : (
+            'Book a 1:1 call with me'
+          )}
         </div>
       </div>
     </AbsoluteFill>
@@ -219,10 +226,21 @@ const BeforeAfterView: React.FC<{b: BeforeAfter}> = ({b}) => {
  *  safe zone just above her head; they step aside while a graphic is up. */
 const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]}> = ({cfg, hide}) => {
   const t = useT();
-  if (inWin(t, hide)) return null;
-  const chunk = chunkAt(cfg.captions, t);
+  // a graphic fades out for ~0.3 s after its window: captions wait for that
+  const wins = hide.map((w) => ({start: w.start - 0.05, end: w.end + 0.35}));
+  if (inWin(t, wins)) return null;
+  const CH = cfg.captions as {text: string; start: number; end: number}[][];
+  const chunk = chunkAt(CH, t);
   if (!chunk) return null;
-  const k = tween(t, chunk[0].start - 0.04, 0.12);
+  // the stretch this chunk is actually on screen (after any graphic it starts under, until the next one or
+  // the next chunk); a chunk that would only flash for a moment is not shown at all
+  let vs = chunk[0].start - 0.04;
+  for (const w of wins) if (vs >= w.start && vs < w.end) vs = w.end;
+  const ci = CH.indexOf(chunk);
+  let ve = Math.min(chunk[chunk.length - 1].end + 0.6, CH[ci + 1] ? CH[ci + 1][0].start - 0.04 : 1e9);
+  for (const w of wins) if (w.start > vs && w.start < ve) ve = w.start;
+  if (ve - vs < 0.55) return null;
+  const k = tween(t, vs, 0.12);
   return (
     <div style={{position: 'absolute', left: 50, right: 50, top: 640, textAlign: 'center', opacity: k, translate: `0 ${lerp(k, 8, 0)}px`}}>
       <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 74, lineHeight: 1.1, color: WHITE, WebkitTextStroke: '7px rgba(10,10,10,0.9)', paintOrder: 'stroke fill', textShadow: '0 4px 20px rgba(0,0,0,0.75), 0 1px 4px rgba(0,0,0,0.8)', whiteSpace: 'nowrap'}}>{chunk.map((w) => w.text).join(' ')}</span>
@@ -260,9 +278,9 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
         <Pills key={i} g={g} />
       ))}
       {a.counter ? <CounterView c={a.counter} /> : null}
-      {a.badge ? <BadgeView b={a.badge} /> : null}
       {a.beforeAfter ? <BeforeAfterView b={a.beforeAfter} /> : null}
       <Cutaways cuts={a.cuts} tm={a.tm} dir={cfg.dir} />
+      {a.badge ? <BadgeView b={a.badge} /> : null}
       <CtaFront c={a.cta} />
       <AdCaps cfg={cfg} hide={graphicWins(a)} />
     </>

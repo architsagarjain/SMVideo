@@ -22,6 +22,7 @@ export const ad6: AdConfig = {
   counter: {start: 8.66, end: 11.0, at: 9.5, value: 500, suffix: '+', label: 'women coached'},
   badge: {start: 11.05, end: 13.9, at: 11.66},
   cuts: [
+    {start: 11.05, end: 13.9, src: 'b_timessquare.mp4', flash: 'soothing-yellow-light-shapes.mp4'}, // real Times Square footage under the badge
     {start: 4.98, end: 6.4, src: 'b_typing.mp4', line: 'ALL OVER | THE INTERNET', lineAt: 5.0, y: 420, dive: true, flash: 'abstract-orange-glow.mp4'},
     {start: 15.3, end: 20.3, src: 'b_notes.mp4', line: 'HAVING A PLAN', times: [15.4, 15.8, 16.04], lineEnd: 17.3, line2: 'MAKING IT WORK | FOR YOUR LIFE', times2: [17.38, 17.86, 18.2, 18.58, 18.86, 19.12], y: 1150, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
     {start: 21.44, end: 22.22, src: 'b_airport.mp4', line: 'BUSY?', lineAt: 21.46, y: 380, dive: true},
@@ -29,5 +30,5 @@ export const ad6: AdConfig = {
     {start: 23.48, end: 26.4, src: 'b_bed.mp4', line: "CAN'T STICK | TO THE ROUTINE?", lineAt: 23.52, y: 700, dive: true},
     {start: 28.2, end: 32.3, src: 'b_call.mp4', line: 'A WORKOUT + DIET | THAT FITS YOUR ROUTINE', times: [29.34, 29.5, 29.66, 30.42, 30.6, 30.84, 31.16, 31.5], y: 1120, dive: true, flash: 'abstract-orange-glow.mp4'},
   ],
-  cta: {start: 37.62, bookAt: 39.54, priceAt: 41.96, tapAt: 44.5, price: '₹99'},
+  cta: {start: 37.62, bookAt: 39.54, priceAt: 41.96, tapAt: 44.5, price: '₹99', closing: "Let's talk"},
 };
