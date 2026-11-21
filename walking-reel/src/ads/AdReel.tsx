@@ -5,8 +5,9 @@ import {TimeMap} from '../series/timemap';
 import {Dolly} from '../minimal/fx';
 import {useT} from '../explainer/kit';
 import {ACCENT, Cut, Cutaways, WHITE, outline} from '../minimal/kit';
-import {EASE_IN, EASE_OUT, SANS, lerp, tween} from '../theme';
+import {EASE_IN, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {ANTON, chunkAt, popAt} from '../series/kit2';
+import {BRAND, Cards, FoodCards, FreePile, FreeStack, GROT, Logo, LogoReveal, MixLine, MixWord, Neon, NeonSign, Search, SearchBar, Women, WomenWall, ZoomBlur} from './extras';
 
 /**
  * Meta-ad reels (talking head against a plain wall, minimal style like the blood-tests / breakfast reels).
@@ -18,8 +19,8 @@ export type PillKind = 'check' | 'cross' | 'q' | 'dot';
 export type PillGroup = {start: number; end: number; items: {text: string; at: number; kind: PillKind}[]};
 export type Counter = {start: number; end: number; at: number; value: number; suffix: string; label: string};
 export type Badge = {start: number; end: number; at: number};
-export type BehindWord = {start: number; end: number; lines: {text: string; at: number; size: number}[]};
-export type Cta = {start: number; bookAt: number; priceAt: number; tapAt: number; price: string; closing: string};
+export type BehindWord = {start: number; end: number; lines: {text: string; at: number; size: number; serif?: boolean}[]};
+export type Cta = {start: number; bookAt: number; priceAt: number; tapAt: number; price: string; closing: string; color?: string; grot?: boolean};
 export type BeforeAfter = {start: number; end: number; beforeAt: number; afterAt: number; statsAt: number; before: string; after: string; stats: string[]};
 export type AdConfig = {
   cfg: ReelConfig;
@@ -32,6 +33,15 @@ export type AdConfig = {
   behind?: BehindWord;
   cta: Cta;
   beforeAfter?: BeforeAfter;
+  /** Ad C: reference-style type (italic serif + heavy grotesque) and its richer graphics */
+  mix?: boolean;
+  women?: Women;
+  logo?: Logo;
+  cards?: FoodCards;
+  neon?: Neon;
+  free?: FreeStack;
+  search?: Search;
+  zoom?: Win;
 };
 
 const GREEN = '#17A34A';
@@ -42,9 +52,36 @@ const vis = (t: number, w: {start: number; end: number}) => (t < w.start || t > 
 const shadow = '0 16px 34px -14px rgba(0,0,0,0.55)';
 
 /** Stacked, centred pills above her head: ✓ / ✗ (struck through) / ? / dot. */
-const Pills: React.FC<{g: PillGroup}> = ({g}) => {
+const MixPills: React.FC<{g: PillGroup}> = ({g}) => {
   const t = useT();
   const o = vis(t, g);
+  if (o <= 0) return null;
+  return (
+    <AbsoluteFill style={{opacity: o}}>
+      {g.items.map((it, i) => {
+        if (t < it.at) return null;
+        const k = popAt(t, it.at);
+        const col = {check: BRAND, cross: RED, q: GOLD, dot: GOLD}[it.kind];
+        const icon = {check: '✓', cross: '✕', q: '?', dot: '•'}[it.kind];
+        const words = it.text.split(' ');
+        return (
+          <div key={i} style={{position: 'absolute', left: 40, right: 40, top: 300 + i * 120, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 18, scale: lerp(Math.min(1.05, k), 0.6, 1), opacity: Math.min(1, k * 3)}}>
+            <span style={{width: 62, height: 62, flexShrink: 0, borderRadius: '50%', background: col, color: WHITE, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: GROT, fontWeight: 800, fontSize: 38, boxShadow: '0 10px 22px -10px rgba(0,0,0,0.6)'}}>{icon}</span>
+            <div style={{display: 'flex', alignItems: 'baseline', columnGap: 18}}>
+              {words.map((w, j) => (
+                <MixWord key={j} w={w} size={66} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+const Pills: React.FC<{g: PillGroup; mix?: boolean}> = ({g, mix}) => {
+  const t = useT();
+  const o = vis(t, g);
+  if (mix) return <MixPills g={g} />;
   if (o <= 0) return null;
   return (
     <AbsoluteFill style={{opacity: o}}>
@@ -129,7 +166,7 @@ const BehindView: React.FC<{b: BehindWord}> = ({b}) => {
           {l.text.split('').map((ch, i) => {
             const p = popAt(t, l.at + i * 0.035);
             return (
-              <span key={i} style={{fontFamily: ANTON, fontSize: l.size, lineHeight: 1, color: WHITE, textShadow: '0 18px 44px rgba(0,0,0,0.35)', display: 'inline-block', whiteSpace: 'pre', translate: `0 ${lerp(Math.min(1.05, p), BEHIND_LINE - l.top + 20, 0)}px`}}>
+              <span key={i} style={{fontFamily: l.serif ? SERIF : ANTON, fontStyle: l.serif ? 'italic' : 'normal', fontSize: l.size, lineHeight: 1, color: WHITE, textShadow: '0 18px 44px rgba(0,0,0,0.35)', display: 'inline-block', whiteSpace: 'pre', translate: `0 ${lerp(Math.min(1.05, p), BEHIND_LINE - l.top + 20, 0)}px`}}>
                 {ch}
               </span>
             );
@@ -152,7 +189,7 @@ const CtaBehind: React.FC<{c: Cta}> = ({c}) => {
           const p = popAt(t, c.priceAt + i * 0.07);
           const rupee = ch === '₹';
           return (
-            <span key={i} style={{fontFamily: rupee ? SANS : ANTON, fontWeight: rupee ? 800 : 400, fontSize: rupee ? size * 0.62 : size, lineHeight: 1, color: WHITE, textShadow: '0 20px 50px rgba(0,0,0,0.35)', display: 'inline-block', marginRight: rupee ? 10 : 0, marginBottom: rupee ? size * 0.12 : 0, translate: `0 ${lerp(Math.min(1.06, p), size + 60, 0)}px`}}>
+            <span key={i} style={{fontFamily: rupee ? SANS : c.grot ? GROT : ANTON, fontWeight: rupee || c.grot ? 800 : 400, letterSpacing: c.grot ? -12 : 0, fontSize: rupee ? size * 0.62 : size, lineHeight: 1, color: WHITE, textShadow: '0 20px 50px rgba(0,0,0,0.35)', display: 'inline-block', marginRight: rupee ? 10 : 0, marginBottom: rupee ? size * 0.12 : 0, translate: `0 ${lerp(Math.min(1.06, p), size + 60, 0)}px`}}>
               {ch}
             </span>
           );
@@ -170,7 +207,7 @@ const CtaFront: React.FC<{c: Cta}> = ({c}) => {
   return (
     <AbsoluteFill>
       <div style={{position: 'absolute', left: 0, right: 0, top: 290, display: 'flex', justifyContent: 'center'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 16, padding: '16px 38px', borderRadius: 999, background: tap ? ACCENT : '#FFFFFF', boxShadow: shadow, fontFamily: SANS, fontWeight: 800, fontSize: 50, color: INK, whiteSpace: 'nowrap', scale: tap ? lerp(Math.min(1.05, kt), 0.8, 1) : lerp(Math.min(1.05, k), 0.5, 1), opacity: Math.min(1, k * 3)}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 16, padding: '16px 38px', borderRadius: 999, background: tap ? c.color ?? ACCENT : '#FFFFFF', boxShadow: shadow, fontFamily: SANS, fontWeight: 800, fontSize: 50, color: INK, whiteSpace: 'nowrap', scale: tap ? lerp(Math.min(1.05, kt), 0.8, 1) : lerp(Math.min(1.05, k), 0.5, 1), opacity: Math.min(1, k * 3)}}>
           {tap ? (
             <>
               {c.closing}
@@ -224,7 +261,7 @@ const BeforeAfterView: React.FC<{b: BeforeAfter}> = ({b}) => {
 
 /** Captions for ads: bold sans with a dark outline (read with the sound off, over a light wall), in the
  *  safe zone just above her head; they step aside while a graphic is up. */
-const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]}> = ({cfg, hide}) => {
+const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]; mix?: boolean}> = ({cfg, hide, mix}) => {
   const t = useT();
   // a graphic fades out for ~0.3 s after its window: captions wait for that
   const wins = hide.map((w) => ({start: w.start - 0.05, end: w.end + 0.35}));
@@ -243,7 +280,11 @@ const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]}> = ({cfg, hide}) => {
   const k = tween(t, vs, 0.12);
   return (
     <div style={{position: 'absolute', left: 50, right: 50, top: 640, textAlign: 'center', opacity: k, translate: `0 ${lerp(k, 8, 0)}px`}}>
-      <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 74, lineHeight: 1.1, color: WHITE, WebkitTextStroke: '7px rgba(10,10,10,0.9)', paintOrder: 'stroke fill', textShadow: '0 4px 20px rgba(0,0,0,0.75), 0 1px 4px rgba(0,0,0,0.8)', whiteSpace: 'nowrap'}}>{chunk.map((w) => w.text).join(' ')}</span>
+      {mix ? (
+        <MixLine words={chunk} size={70} t={t} />
+      ) : (
+        <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 74, lineHeight: 1.1, color: WHITE, WebkitTextStroke: '7px rgba(10,10,10,0.9)', paintOrder: 'stroke fill', textShadow: '0 4px 20px rgba(0,0,0,0.75), 0 1px 4px rgba(0,0,0,0.8)', whiteSpace: 'nowrap'}}>{chunk.map((w) => w.text).join(' ')}</span>
+      )}
     </div>
   );
 };
@@ -255,6 +296,12 @@ export const graphicWins = (a: AdConfig): Win[] => [
   ...(a.badge ? [a.badge] : []),
   ...(a.behind ? [a.behind] : []),
   ...(a.beforeAfter ? [a.beforeAfter] : []),
+  ...(a.women ? [a.women] : []),
+  ...(a.logo ? [a.logo] : []),
+  ...(a.cards ? [a.cards] : []),
+  ...(a.neon ? [a.neon] : []),
+  ...(a.free ? [a.free] : []),
+  ...(a.search ? [a.search] : []),
   ...a.cuts.filter((c) => c.line),
   {start: a.cta.bookAt - 0.05, end: 9999},
 ];
@@ -263,26 +310,34 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
   const {cfg} = a;
   const scene = (
     <>
-      {a.dolly ? (
-        <Dolly win={a.dolly}>
+      <ZoomBlur w={a.zoom}>
+        {a.dolly ? (
+          <Dolly win={a.dolly}>
+            <Footage cfg={cfg} />
+          </Dolly>
+        ) : (
           <Footage cfg={cfg} />
-        </Dolly>
-      ) : (
-        <Footage cfg={cfg} />
-      )}
-      <GradeOverlay cfg={cfg} />
-      {a.behind ? <BehindView b={a.behind} /> : null}
-      <CtaBehind c={a.cta} />
-      <Subject cfg={cfg} />
+        )}
+        <GradeOverlay cfg={cfg} />
+        {a.behind ? <BehindView b={a.behind} /> : null}
+        <CtaBehind c={a.cta} />
+        <Subject cfg={cfg} />
+      </ZoomBlur>
       {a.pills.map((g, i) => (
-        <Pills key={i} g={g} />
+        <Pills key={i} g={g} mix={a.mix} />
       ))}
       {a.counter ? <CounterView c={a.counter} /> : null}
       {a.beforeAfter ? <BeforeAfterView b={a.beforeAfter} /> : null}
+      {a.free ? <FreePile f={a.free} /> : null}
+      {a.women ? <WomenWall w={a.women} /> : null}
+      {a.logo ? <LogoReveal l={a.logo} /> : null}
+      {a.cards ? <Cards c={a.cards} /> : null}
       <Cutaways cuts={a.cuts} tm={a.tm} dir={cfg.dir} chain />
+      {a.search ? <SearchBar s={a.search} /> : null}
+      {a.neon ? <NeonSign n={a.neon} /> : null}
       {a.badge ? <BadgeView b={a.badge} /> : null}
       <CtaFront c={a.cta} />
-      <AdCaps cfg={cfg} hide={graphicWins(a)} />
+      <AdCaps cfg={cfg} hide={graphicWins(a)} mix={a.mix} />
     </>
   );
   return <Base cfg={cfg}>{scene}</Base>;

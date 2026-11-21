@@ -17,7 +17,12 @@ def cues(cue, rng):
     for j in range(4):
         cue(6.56 + j * 0.05, "pack:x_fast", -29)
     cue(7.18, "pack:x_boom", -28)
+    for j in range(11):  # the wall of women pops in
+        cue(8.1 + j * 0.06, "pack:click", -31)
     cue(8.76, "pack:x_camwhoosh", -27)
+    # PeakX logo slides out of its card
+    cue(24.05, "pack:x_whip", -24)
+    cue(24.2, "pack:x_boom", -29)
     cue(9.66, "pack:x_clickhit", -24)
     # quick B-roll run: stronger / confident / routine; lifestyle / life not on hold; feel their best
     for at in (15.62, 16.82, 18.22, 30.14, 33.6, 41.82):
@@ -26,9 +31,11 @@ def cues(cue, rng):
         cue(at, "pack:x_clickhit", -26)
     # ✕ roti / favourite foods / hours in the gym
     for at in (25.52, 26.56, 28.48):
-        cue(at, "pack:x_blip", -26)
-        cue(at + 0.3, "pack:click", -26)
+        cue(at, "pack:x_whip", -27)
+        cue(at + 0.35, "pack:x_clickhit", -25)
     cue(40.5, "pack:x_cine", -26)
+    for j in range(6):  # neon flickers on
+        cue(40.58 + j * 0.05, "pack:click", -32)
     cue(47.28, "pack:x_fast", -26)
     cue(50.42, "pack:x_whip", -25)
     for j in range(3):

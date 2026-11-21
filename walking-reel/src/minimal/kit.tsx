@@ -4,6 +4,7 @@ import {FACE_ORIGIN, Move, ReelConfig, Win, inWin} from '../series/core';
 import {TimeMap, outAt} from '../series/timemap';
 import {useT} from '../explainer/kit';
 import {chunkAt} from '../series/kit2';
+import {MixWord} from '../ads/extras';
 import {EASE_IN, EASE_OUT, FPS, SANS, SERIF, lerp, tween} from '../theme';
 
 /**
@@ -27,7 +28,7 @@ export const SHADOW_CAP = '0 0 26px rgba(0,0,0,0.85), 0 0 10px rgba(0,0,0,0.7), 
 /** A quick punch-in: snaps in over 0.14 s, holds, snaps back on the next cut. */
 export const punch = (at: number, end: number, scale = 1.12): Move => ({origin: FACE_ORIGIN, inStart: at, inDur: 0.14, scale, outStart: end - 0.12, outDur: 0.12});
 
-export type Cut = {start: number; end: number; src: string; line?: string; lineAt?: number; y?: number; times?: number[]; dive?: boolean; flash?: string; lineEnd?: number; line2?: string; times2?: number[]};
+export type Cut = {start: number; end: number; src: string; line?: string; lineAt?: number; y?: number; times?: number[]; dive?: boolean; flash?: string; lineEnd?: number; line2?: string; times2?: number[]; mix?: boolean};
 
 const TRANS = 0.22;
 /** Blur-bloom amount at a window edge (1 = fully blurred / bright, 0 = clean). */
@@ -36,7 +37,8 @@ const edge = (t: number, w: Win) => Math.max(1 - tween(t, w.start, TRANS, EASE_O
 /** Full-screen B-roll cutaways (her own clips), each with an optional key line. */
 /** chain: back-to-back cutaways (one ends where the next starts) go straight from B-roll to B-roll -
  *  the outgoing clip holds until the next one has snapped in, so her talking head never flashes between. */
-export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string; chain?: boolean}> = ({cuts, tm, dir, chain}) => {
+export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string; chain?: boolean}> = ({cuts: given, tm, dir, chain}) => {
+  const cuts = chain ? [...given].sort((a, b) => a.start - b.start) : given;
   const t = useT();
   return (
     <>
@@ -64,8 +66,8 @@ export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string; chain?: 
               </AbsoluteFill>
               {c.line ? <AbsoluteFill style={{background: `radial-gradient(85% 18% at 50% ${((c.y ?? 900) / 1920) * 100}%, rgba(0,0,0,0.34), rgba(0,0,0,0) 80%)`}} /> : null}
             </AbsoluteFill>
-            {c.line && on && t < (c.lineEnd ?? 1e9) + 0.2 ? <KeyLine text={c.line} at={c.lineAt ?? c.start + 0.15} times={c.times} y={c.y ?? 900} out={(c.lineEnd ?? c.end) - 0.18} dive={c.dive} /> : null}
-            {c.line2 && on && t >= (c.lineEnd ?? c.end) - 0.05 ? <KeyLine text={c.line2} at={c.lineEnd ?? c.end} times={c.times2} y={c.y ?? 900} out={c.end - 0.18} dive={c.dive} /> : null}
+            {c.line && on && t < (c.lineEnd ?? 1e9) + 0.2 ? <KeyLine text={c.line} at={c.lineAt ?? c.start + 0.15} times={c.times} y={c.y ?? 900} out={(c.lineEnd ?? c.end) - 0.18} dive={c.dive} mix={c.mix} /> : null}
+            {c.line2 && on && t >= (c.lineEnd ?? c.end) - 0.05 ? <KeyLine text={c.line2} at={c.lineEnd ?? c.end} times={c.times2} y={c.y ?? 900} out={c.end - 0.18} dive={c.dive} mix={c.mix} /> : null}
             {c.flash ? <Flash src={`${dir}/${c.flash}`} at={c.start} tm={tm} /> : null}
           </React.Fragment>
         );
@@ -75,18 +77,22 @@ export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string; chain?: 
 };
 
 /** White uppercase key line, words fading in one by one with a little blur. Breaks on "|". */
-export const KeyLine: React.FC<{text: string; at: number; times?: number[]; y?: number; out?: number; size?: number; color?: string; dive?: boolean}> = ({text, at, times, y = 900, out = 1e9, size = 74, color = WHITE, dive}) => {
+export const KeyLine: React.FC<{text: string; at: number; times?: number[]; y?: number; out?: number; size?: number; color?: string; dive?: boolean; mix?: boolean}> = ({text, at, times, y = 900, out = 1e9, size = 74, color = WHITE, dive, mix}) => {
   const t = useT();
   const lines = text.split('|').map((l) => l.trim().split(/\s+/));
   let k = 0;
   const o = 1 - tween(t, out, 0.18, EASE_IN);
   return (
-    <div style={{position: 'absolute', left: 60, right: 60, top: y, translate: '0 -50%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: size * 0.12, opacity: o}}>
+    <div style={{position: 'absolute', left: 60, right: 60, top: y, translate: '0 -50%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: mix ? -size * 0.05 : size * 0.12, opacity: o}}>
       {lines.map((ws, li) => (
-        <div key={li} style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', columnGap: size * 0.26}}>
+        <div key={li} style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'baseline', columnGap: size * 0.26}}>
           {ws.map((w, wi) => {
             const idx = k++;
             const t0 = times?.[idx] ?? at + idx * 0.11; // per-word times when given (synced to speech)
+            if (mix) {
+              const p = tween(t, t0, 0.3, EASE_OUT);
+              return <MixWord key={wi} w={w} size={size * 1.25} style={{opacity: p, translate: `0 ${lerp(p, 18, 0)}px`, filter: `blur(${(1 - p) * 6}px)`}} />;
+            }
             if (dive) return <DiveWord key={wi} word={w} at={t0} size={size} color={color} />;
             const p = tween(t, t0, 0.32, EASE_OUT);
             return (

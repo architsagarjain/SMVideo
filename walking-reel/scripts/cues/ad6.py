@@ -7,8 +7,12 @@ BROLL = []
 
 def cues(cue, rng):
     cue(0.95, "pack:x_fast", -27)
-    for at in (1.2, 3.7):  # free diet plans / free workouts
+    for at in (1.15, 2.16, 2.68, 3.7):  # free plan PDFs pile up
         cue(at, "pack:x_blip", -26)
+    for j in range(11):  # the wall of women pops in
+        cue(8.7 + j * 0.06, "pack:click", -31)
+    for j in range(6):  # neon flickers on
+        cue(11.62 + j * 0.05, "pack:click", -32)
     # B-roll cutaways: whip in, letters land
     for at in (4.98, 15.3, 21.44, 22.22, 23.48, 28.2):
         cue(at - 0.06, "pack:x_whip", -23)
@@ -24,8 +28,9 @@ def cues(cue, rng):
     cue(10.4, "pack:x_clickhit", -24)
     cue(11.6, "pack:x_cine", -26)
     cue(26.58, "pack:x_fast", -26)
-    for at in (35.16, 36.44):  # pizza nights / chole bhature
-        cue(at, "pack:x_blip", -26)
+    for at in (35.16, 36.44):  # pizza nights / chole bhature photo cards, YES stamps
+        cue(at, "pack:x_whip", -27)
+        cue(at + 0.35, "pack:x_clickhit", -25)
     # end card: book pill, ₹99 rises, tap below
     cue(39.54, "pack:x_whip", -25)
     for j in range(3):
