@@ -24,7 +24,7 @@ export const ad7: AdConfig = {
   counter: {start: 8.22, end: 10.6, at: 9.08, value: 500, suffix: '+', label: 'women coached'},
   cuts: [
     {start: 0.85, end: 3.68, src: 'b_typing.mp4', line: 'FREE DIET PLANS. | FREE WORKOUTS.', times: [0.9, 1.0, 1.1, 3.28, 3.38], y: 1120, dive: true},
-    {start: 3.7, end: 5.9, src: 'b_ipad.mp4', line: 'EVERYWHERE | ONLINE.', times: [4.48, 5.22], y: 1150, dive: true, flash: 'abstract-orange-glow.mp4'},
+    {start: 3.7, end: 5.9, src: 'b_ipad.mp4', line: 'EVERYWHERE | ONLINE.', times: [4.48, 5.22], y: 1185, dive: true, flash: 'abstract-orange-glow.mp4'},
     {start: 10.62, end: 13.5, src: 'b_timessquare.mp4', line: 'FEATURED IN | TIMES SQUARE, NYC', times: [11.1, 11.3, 11.88, 12.16, 12.5], y: 560, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
     {start: 28.28, end: 32.5, src: 'b_home.mp4', line: 'A WORKOUT + DIET | THAT FITS YOUR ROUTINE', times: [29.1, 29.3, 29.46, 30.52, 30.74, 31.0, 31.28, 31.56], y: 1180, dive: true, flash: 'abstract-orange-glow.mp4'},
   ],

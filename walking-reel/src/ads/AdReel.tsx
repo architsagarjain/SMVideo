@@ -279,7 +279,7 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
       ))}
       {a.counter ? <CounterView c={a.counter} /> : null}
       {a.beforeAfter ? <BeforeAfterView b={a.beforeAfter} /> : null}
-      <Cutaways cuts={a.cuts} tm={a.tm} dir={cfg.dir} />
+      <Cutaways cuts={a.cuts} tm={a.tm} dir={cfg.dir} chain />
       {a.badge ? <BadgeView b={a.badge} /> : null}
       <CtaFront c={a.cta} />
       <AdCaps cfg={cfg} hide={graphicWins(a)} />

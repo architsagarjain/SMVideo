@@ -34,20 +34,29 @@ const TRANS = 0.22;
 const edge = (t: number, w: Win) => Math.max(1 - tween(t, w.start, TRANS, EASE_OUT), tween(t, w.end - TRANS, TRANS, EASE_IN));
 
 /** Full-screen B-roll cutaways (her own clips), each with an optional key line. */
-export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string}> = ({cuts, tm, dir}) => {
+/** chain: back-to-back cutaways (one ends where the next starts) go straight from B-roll to B-roll -
+ *  the outgoing clip holds until the next one has snapped in, so her talking head never flashes between. */
+export const Cutaways: React.FC<{cuts: Cut[]; tm: TimeMap; dir: string; chain?: boolean}> = ({cuts, tm, dir, chain}) => {
   const t = useT();
   return (
     <>
       {cuts.map((c, i) => {
+        const prev = cuts[i - 1];
+        const next = cuts[i + 1];
+        const chainIn = !!chain && !!prev && c.start - prev.end < 0.1;
+        const chainOut = !!chain && !!next && next.start - c.end < 0.1;
+        const until = chainOut ? next.start + 0.12 : c.end;
         const from = Math.round(outAt(tm, c.start) * FPS);
-        const dur = Math.max(1, Math.round(outAt(tm, c.end) * FPS) - from);
-        const on = t >= c.start && t < c.end;
-        const e = on ? edge(t, c) : 1;
+        const dur = Math.max(1, Math.round(outAt(tm, until) * FPS) - from);
+        const on = t >= c.start && t < until;
+        const snap = chainIn ? 1 - tween(t, c.start, 0.14, EASE_OUT) : 0;
+        const e = !on ? 1 : chainIn && chainOut ? snap : chainIn ? Math.max(snap, tween(t, c.end - TRANS, TRANS, EASE_IN)) : chainOut ? 1 - tween(t, c.start, TRANS, EASE_OUT) : edge(t, c);
+        const fade = chainIn ? 0 : 0.85;
         const push = lerp(tween(t, c.start, c.end - c.start, (x) => x), 1.04, 1.12);
         // timed overlays stay outside the Sequence (its clock restarts at zero); only the video is inside
         return (
           <React.Fragment key={i}>
-            <AbsoluteFill style={{opacity: on ? 1 - e * 0.85 : 0, filter: `blur(${e * 18}px) brightness(${1 + e * 0.35})`}}>
+            <AbsoluteFill style={{opacity: on ? 1 - e * fade : 0, filter: `blur(${e * 18}px) brightness(${1 + e * 0.35})`}}>
               <AbsoluteFill style={{scale: push}}>
                 <Sequence from={from} durationInFrames={dur} layout="none">
                   <OffthreadVideo src={staticFile(`${dir}/${c.src}`)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />

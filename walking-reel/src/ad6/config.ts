@@ -24,7 +24,7 @@ export const ad6: AdConfig = {
   cuts: [
     {start: 11.05, end: 13.9, src: 'b_timessquare.mp4', flash: 'soothing-yellow-light-shapes.mp4'}, // real Times Square footage under the badge
     {start: 4.98, end: 6.4, src: 'b_typing.mp4', line: 'ALL OVER | THE INTERNET', lineAt: 5.0, y: 420, dive: true, flash: 'abstract-orange-glow.mp4'},
-    {start: 15.3, end: 20.3, src: 'b_notes.mp4', line: 'HAVING A PLAN', times: [15.4, 15.8, 16.04], lineEnd: 17.3, line2: 'MAKING IT WORK | FOR YOUR LIFE', times2: [17.38, 17.86, 18.2, 18.58, 18.86, 19.12], y: 1150, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
+    {start: 15.3, end: 20.3, src: 'b_notes.mp4', line: 'HAVING A PLAN', times: [15.4, 15.8, 16.04], lineEnd: 17.3, line2: 'MAKING IT WORK | FOR YOUR LIFE', times2: [17.38, 17.86, 18.2, 18.58, 18.86, 19.12], y: 420, dive: true, flash: 'soothing-yellow-light-shapes.mp4'},
     {start: 21.44, end: 22.22, src: 'b_airport.mp4', line: 'BUSY?', lineAt: 21.46, y: 380, dive: true},
     {start: 22.22, end: 23.48, src: 'b_eatout.mp4', line: 'EATING OUT?', lineAt: 22.26, y: 380, dive: true},
     {start: 23.48, end: 26.4, src: 'b_bed.mp4', line: "CAN'T STICK | TO THE ROUTINE?", lineAt: 23.52, y: 700, dive: true},
