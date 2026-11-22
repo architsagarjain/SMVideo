@@ -1,5 +1,6 @@
 import React from 'react';
-import {AbsoluteFill, Img, OffthreadVideo, Sequence, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Img, OffthreadVideo, Sequence, Solid, staticFile, useCurrentFrame} from 'remotion';
+import {lightLeak} from '@remotion/effects/light-leak';
 import {TimeMap, outAt} from '../series/timemap';
 import {loadFont} from '@remotion/fonts';
 import {useT} from '../explainer/kit';
@@ -363,4 +364,51 @@ export const FreeTypeView: React.FC<{f: FreeType}> = ({f}) => {
       ) : null}
     </AbsoluteFill>
   );
+};
+
+// ---------------------------------------------------------------------------
+// Polish: a soft light leak (Remotion effects) blooming over each cut, and a name tag at the start.
+// ---------------------------------------------------------------------------
+export const LeakFlash: React.FC<{tm: TimeMap; at: number; seed: number; outOffset?: number}> = ({tm, at, seed, outOffset = 0}) => {
+  const from = Math.round((outAt(tm, at) + outOffset - 0.35) * FPS);
+  return (
+    <Sequence from={from} durationInFrames={Math.round(1.1 * FPS)} layout="none">
+      <LeakBody seed={seed} />
+    </Sequence>
+  );
+};
+const LeakBody: React.FC<{seed: number}> = ({seed}) => {
+  const lt = useCurrentFrame() / FPS;
+  const o = Math.min(tween(lt, 0, 0.25, EASE_OUT), 1 - tween(lt, 0.6, 0.5, EASE_IN));
+  return (
+    <AbsoluteFill style={{mixBlendMode: 'screen', opacity: o * 0.42}}>
+      <OffthreadVideo src={staticFile(`ads/leak_${seed % 4}.mp4`)} muted style={{width: '100%', height: '100%'}} />
+    </AbsoluteFill>
+  );
+};
+
+export type NameTag = {start: number; end: number; at: number};
+export const NameTagView: React.FC<{n: NameTag}> = ({n}) => {
+  const t = useT();
+  const o = vis(t, n);
+  if (o <= 0) return null;
+  const k = tween(t, n.at, 0.45, EASE_OUT);
+  const bar = tween(t, n.at, 0.35, EASE_OUT);
+  return (
+    <AbsoluteFill style={{opacity: o}}>
+      <div style={{position: 'absolute', left: 60, top: 1130, display: 'flex', alignItems: 'stretch', gap: 16, opacity: k, translate: `${lerp(k, -30, 0)}px 0`}}>
+        <div style={{width: 8, borderRadius: 4, background: BRAND, scale: `1 ${bar}`, transformOrigin: 'top'}} />
+        <div style={{display: 'flex', flexDirection: 'column', gap: 2}}>
+          <MixWord w="Bhavika Agarwal" size={50} serif={false} />
+          <MixWord w="_Fitness Coach · PeakX" size={36} />
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+/** One light leak, rendered on its own (software GL) and baked to public/ads/leak_<seed>.mp4. */
+export const LeakClip: React.FC<{seed: number}> = ({seed}) => {
+  const f = useCurrentFrame();
+  return <Solid color="#000000" width={1080} height={1920} effects={[lightLeak({progress: Math.min(1, f / 33), seed, hueShift: 15})]} />;
 };

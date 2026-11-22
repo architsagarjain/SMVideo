@@ -4,7 +4,7 @@ BEHIND = []
 PANEL = None
 BROLL = []
 MUSIC = ("footage/ads/music/m801.mp3", 4.5, -14)  # Mixkit "Dreaming Big" (Mixkit Stock Music Free License), ducked under speech
-INSERTS = [(37.45, "footage/ads/testimonials/Client T 2.mp4", 16.43, 25.70, 0.25)]  # (source time of the gap, clip, from, to, lead-in)
+INSERTS = [(8.06, "footage/ads/testimonials/Client T 2.mp4", 16.43, 25.70, 0.25)]  # (source time of the gap, clip, from, to, lead-in)
 GAP = 9.77
 
 
@@ -45,9 +45,9 @@ def cues(cue, rng):
         cue(at, "pack:x_whip", -27)
         cue(at + 0.35, "pack:y_success", -27)
     # client testimonial: whoosh into the call, success chime on the stars, whoosh back to her
-    cue(37.45, "pack:x_camwhoosh", -25)
-    cue(37.45, "pack:y_success", -26, 0.3)
-    cue(37.45, "pack:x_whip", -27, GAP - 0.3)
+    cue(8.06, "pack:x_camwhoosh", -25)
+    cue(8.06, "pack:y_success", -26, 0.3)
+    cue(8.06, "pack:x_whip", -27, GAP - 0.3)
     # end card: book pill, riser into ₹99, cash register, closing pill
     cue(39.54, "pack:x_whip", -25)
     cue(40.6, "pack:y_riser", -29)

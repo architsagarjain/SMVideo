@@ -3,6 +3,7 @@ import {M1Reel} from './m1/Reel';
 import {M1_FRAMES} from './m1/config';
 import {M2Reel} from './m2/Reel';
 import {Ad6Reel} from './ad6/Reel';
+import {LeakClip} from './ads/extras';
 import {AD6_FRAMES} from './ad6/config';
 import {Ad7Reel} from './ad7/Reel';
 import {AD7_FRAMES} from './ad7/config';
@@ -56,6 +57,7 @@ export const Root: React.FC = () => {
     <Composition id="DeskDay" component={V14Reel} durationInFrames={V14_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BloodTests" component={M1Reel} durationInFrames={M1_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BreakfastSwaps" component={M2Reel} durationInFrames={M2_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="LeakClip" component={LeakClip} durationInFrames={34} fps={FPS} width={WIDTH} height={HEIGHT} defaultProps={{seed: 0}} />
     <Composition id="AdCoachA" component={Ad6Reel} durationInFrames={AD6_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="AdCoachB" component={Ad7Reel} durationInFrames={AD7_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="AdTransformation" component={Ad8Reel} durationInFrames={AD8_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />

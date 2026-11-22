@@ -7,7 +7,7 @@ import {useT} from '../explainer/kit';
 import {ACCENT, Cut, Cutaways, WHITE, outline} from '../minimal/kit';
 import {EASE_IN, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {ANTON, chunkAt, popAt} from '../series/kit2';
-import {BRAND, Cards, FoodCards, FreePile, FreeStack, FreeType, FreeTypeView, Testimonial, TestimonialInsert, GROT, Logo, LogoReveal, MixLine, MixWord, Neon, NeonSign, Search, SearchBar, Women, WomenWall, ZoomBlur} from './extras';
+import {BRAND, LeakFlash, NameTag, NameTagView, Cards, FoodCards, FreePile, FreeStack, FreeType, FreeTypeView, Testimonial, TestimonialInsert, GROT, Logo, LogoReveal, MixLine, MixWord, Neon, NeonSign, Search, SearchBar, Women, WomenWall, ZoomBlur} from './extras';
 
 /**
  * Meta-ad reels (talking head against a plain wall, minimal style like the blood-tests / breakfast reels).
@@ -44,6 +44,8 @@ export type AdConfig = {
   zoom?: Win;
   freeType?: FreeType;
   testimonial?: Testimonial;
+  nameTag?: NameTag;
+  leaks?: number[];
 };
 
 const GREEN = '#17A34A';
@@ -227,7 +229,7 @@ const CtaFront: React.FC<{c: Cta}> = ({c}) => {
 /** "My client went from this to this": two photo slots (PLACEHOLDERS until the client photos come in)
  *  with hypothetical figures. */
 const Slot: React.FC<{label: string; k: number; good?: boolean; img?: string; children?: React.ReactNode}> = ({label, k, good, img, children}) => (
-  <div style={{position: 'relative', width: img ? 300 : 400, height: 470, borderRadius: 28, overflow: 'hidden', background: 'linear-gradient(180deg, #D9D6D0, #C5C1BA)', boxShadow: '0 22px 44px -18px rgba(0,0,0,0.55)', border: '6px solid #FFFFFF', boxSizing: 'border-box', scale: lerp(Math.min(1.05, k), 0.6, 1), opacity: Math.min(1, k * 3)}}>
+  <div style={{position: 'relative', width: img ? 254 : 400, height: 470, borderRadius: 28, overflow: 'hidden', background: 'linear-gradient(180deg, #D9D6D0, #C5C1BA)', boxShadow: '0 22px 44px -18px rgba(0,0,0,0.55)', border: '6px solid #FFFFFF', boxSizing: 'border-box', scale: lerp(Math.min(1.05, k), 0.6, 1), opacity: Math.min(1, k * 3)}}>
     {img ? (
       <Img src={staticFile(img)} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover'}} />
     ) : (
@@ -239,7 +241,7 @@ const Slot: React.FC<{label: string; k: number; good?: boolean; img?: string; ch
         <span style={{position: 'absolute', left: 0, right: 0, top: 26, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 22, letterSpacing: 4, color: '#6F6A62'}}>CLIENT PHOTO</span>
       </>
     )}
-    <div style={{position: 'absolute', left: 18, top: 62, padding: '6px 18px', borderRadius: 999, background: good ? GREEN : INK, color: WHITE, fontFamily: SANS, fontWeight: 800, fontSize: 30}}>{label}</div>
+    {label ? <div style={{position: 'absolute', left: 18, top: 62, padding: '6px 18px', borderRadius: 999, background: good ? GREEN : INK, color: WHITE, fontFamily: SANS, fontWeight: 800, fontSize: 30}}>{label}</div> : null}
     {children}
   </div>
 );
@@ -253,11 +255,11 @@ const BeforeAfterView: React.FC<{b: BeforeAfter}> = ({b}) => {
         <Slot label={b.before} k={popAt(t, b.beforeAt)} img={b.img0} />
         <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 70, color: WHITE, ...outline(70), opacity: tween(t, b.afterAt, 0.2)}}>→</span>
         <Slot label={b.after} k={popAt(t, b.afterAt)} good img={b.img1}>
-          <div style={{position: 'absolute', left: 8, right: 8, bottom: 12, display: 'flex', flexDirection: b.img1 ? 'row' : 'column', gap: b.img1 ? 6 : 10, justifyContent: 'center', alignItems: 'center'}}>
+          <div style={{position: 'absolute', left: 8, right: 8, bottom: 12, display: 'flex', flexDirection: 'column', gap: b.img1 ? 6 : 10, justifyContent: 'center', alignItems: 'center'}}>
             {b.stats.map((s, i) => {
               const k = popAt(t, b.statsAt + i * 0.12);
               return t >= b.statsAt + i * 0.12 ? (
-                <div key={s} style={{padding: b.img1 ? '5px 14px' : '8px 22px', borderRadius: 999, background: GREEN, color: WHITE, fontFamily: SANS, fontWeight: 800, fontSize: b.img1 ? 26 : 40, whiteSpace: 'nowrap', scale: lerp(Math.min(1.05, k), 0.5, 1)}}>{s}</div>
+                <div key={s} style={{padding: b.img1 ? '5px 14px' : '8px 22px', borderRadius: 999, background: GREEN, color: WHITE, fontFamily: SANS, fontWeight: 800, fontSize: b.img1 ? 24 : 40, whiteSpace: 'nowrap', scale: lerp(Math.min(1.05, k), 0.5, 1)}}>{s}</div>
               ) : null;
             })}
           </div>
@@ -347,8 +349,14 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
       {a.neon ? <NeonSign n={a.neon} /> : null}
       {a.badge ? <BadgeView b={a.badge} /> : null}
       <CtaFront c={a.cta} />
+      {a.nameTag ? <NameTagView n={a.nameTag} /> : null}
       <AdCaps cfg={cfg} hide={graphicWins(a)} mix={a.mix} />
       {a.testimonial ? <TestimonialInsert tm={a.tm} c={a.testimonial} /> : null}
+      {(a.leaks ?? []).map((at, i) => (
+        <LeakFlash key={i} tm={a.tm} at={at} seed={i * 7 + 3} />
+      ))}
+      {a.testimonial ? <LeakFlash tm={a.tm} at={a.testimonial.at} seed={41} /> : null}
+      {a.testimonial ? <LeakFlash tm={a.tm} at={a.testimonial.at} seed={53} outOffset={a.testimonial.gap} /> : null}
     </>
   );
   return <Base cfg={cfg}>{scene}</Base>;

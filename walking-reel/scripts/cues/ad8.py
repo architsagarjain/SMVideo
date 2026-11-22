@@ -4,7 +4,7 @@ BEHIND = []
 PANEL = None
 BROLL = []
 MUSIC = ("footage/ads/music/m801.mp3", 4.5, -14)  # Mixkit "Dreaming Big" (Mixkit Stock Music Free License), ducked under speech
-INSERTS = [(46.95, "footage/ads/testimonials/Client T 2.mp4", 16.43, 25.70, 0.25)]  # (source time of the gap, clip, from, to, lead-in)
+INSERTS = [(24.62, "footage/ads/testimonials/Client T 2.mp4", 16.43, 25.70, 0.25)]  # (source time of the gap, clip, from, to, lead-in)
 
 
 def cues(cue, rng):
@@ -45,6 +45,6 @@ def cues(cue, rng):
     cue(53.54, "pack:x_clickhit", -23)
     cue(56.0, "pack:x_notify", -24)
     # client testimonial: whoosh into the call, soft hit on the stars, whoosh back to her
-    cue(46.95, "pack:x_camwhoosh", -25)
-    cue(46.95, "pack:y_success", -26, 0.3)
-    cue(46.95, "pack:x_whip", -27, 9.77 - 0.3)
+    cue(24.62, "pack:x_camwhoosh", -25)
+    cue(24.62, "pack:y_success", -26, 0.3)
+    cue(24.62, "pack:x_whip", -27, 9.77 - 0.3)
