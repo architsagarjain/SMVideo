@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill, Img, staticFile} from 'remotion';
 import {Base, Footage, GradeOverlay, ReelConfig, Subject, Win, inWin} from '../series/core';
 import {TimeMap} from '../series/timemap';
 import {Dolly} from '../minimal/fx';
@@ -21,7 +21,7 @@ export type Counter = {start: number; end: number; at: number; value: number; su
 export type Badge = {start: number; end: number; at: number};
 export type BehindWord = {start: number; end: number; lines: {text: string; at: number; size: number; serif?: boolean}[]};
 export type Cta = {start: number; bookAt: number; priceAt: number; tapAt: number; price: string; closing: string; color?: string; grot?: boolean};
-export type BeforeAfter = {start: number; end: number; beforeAt: number; afterAt: number; statsAt: number; before: string; after: string; stats: string[]};
+export type BeforeAfter = {start: number; end: number; beforeAt: number; afterAt: number; statsAt: number; before: string; after: string; stats: string[]; img0?: string; img1?: string};
 export type AdConfig = {
   cfg: ReelConfig;
   tm: TimeMap;
@@ -226,13 +226,19 @@ const CtaFront: React.FC<{c: Cta}> = ({c}) => {
 
 /** "My client went from this to this": two photo slots (PLACEHOLDERS until the client photos come in)
  *  with hypothetical figures. */
-const Slot: React.FC<{label: string; k: number; good?: boolean; children?: React.ReactNode}> = ({label, k, good, children}) => (
-  <div style={{position: 'relative', width: 400, height: 470, borderRadius: 28, overflow: 'hidden', background: 'linear-gradient(180deg, #D9D6D0, #C5C1BA)', boxShadow: '0 22px 44px -18px rgba(0,0,0,0.55)', border: '6px solid #FFFFFF', boxSizing: 'border-box', scale: lerp(Math.min(1.05, k), 0.6, 1), opacity: Math.min(1, k * 3)}}>
-    <svg width={388} height={458} viewBox="0 0 388 458" style={{position: 'absolute', inset: 0}}>
-      <circle cx={194} cy={170} r={70} fill="#ABA69E" />
-      <path d="M64 458 C64 330 120 270 194 270 C268 270 324 330 324 458 Z" fill="#ABA69E" />
-    </svg>
-    <span style={{position: 'absolute', left: 0, right: 0, top: 26, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 22, letterSpacing: 4, color: '#6F6A62'}}>CLIENT PHOTO</span>
+const Slot: React.FC<{label: string; k: number; good?: boolean; img?: string; children?: React.ReactNode}> = ({label, k, good, img, children}) => (
+  <div style={{position: 'relative', width: img ? 300 : 400, height: 470, borderRadius: 28, overflow: 'hidden', background: 'linear-gradient(180deg, #D9D6D0, #C5C1BA)', boxShadow: '0 22px 44px -18px rgba(0,0,0,0.55)', border: '6px solid #FFFFFF', boxSizing: 'border-box', scale: lerp(Math.min(1.05, k), 0.6, 1), opacity: Math.min(1, k * 3)}}>
+    {img ? (
+      <Img src={staticFile(img)} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover'}} />
+    ) : (
+      <>
+        <svg width={388} height={458} viewBox="0 0 388 458" style={{position: 'absolute', inset: 0}}>
+          <circle cx={194} cy={170} r={70} fill="#ABA69E" />
+          <path d="M64 458 C64 330 120 270 194 270 C268 270 324 330 324 458 Z" fill="#ABA69E" />
+        </svg>
+        <span style={{position: 'absolute', left: 0, right: 0, top: 26, textAlign: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 22, letterSpacing: 4, color: '#6F6A62'}}>CLIENT PHOTO</span>
+      </>
+    )}
     <div style={{position: 'absolute', left: 18, top: 62, padding: '6px 18px', borderRadius: 999, background: good ? GREEN : INK, color: WHITE, fontFamily: SANS, fontWeight: 800, fontSize: 30}}>{label}</div>
     {children}
   </div>
@@ -244,14 +250,14 @@ const BeforeAfterView: React.FC<{b: BeforeAfter}> = ({b}) => {
   return (
     <AbsoluteFill style={{opacity: o}}>
       <div style={{position: 'absolute', left: 0, right: 0, top: 285, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 22}}>
-        <Slot label={b.before} k={popAt(t, b.beforeAt)} />
+        <Slot label={b.before} k={popAt(t, b.beforeAt)} img={b.img0} />
         <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 70, color: WHITE, ...outline(70), opacity: tween(t, b.afterAt, 0.2)}}>→</span>
-        <Slot label={b.after} k={popAt(t, b.afterAt)} good>
-          <div style={{position: 'absolute', left: 16, right: 16, bottom: 18, display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center'}}>
+        <Slot label={b.after} k={popAt(t, b.afterAt)} good img={b.img1}>
+          <div style={{position: 'absolute', left: 8, right: 8, bottom: 12, display: 'flex', flexDirection: b.img1 ? 'row' : 'column', gap: b.img1 ? 6 : 10, justifyContent: 'center', alignItems: 'center'}}>
             {b.stats.map((s, i) => {
               const k = popAt(t, b.statsAt + i * 0.12);
               return t >= b.statsAt + i * 0.12 ? (
-                <div key={s} style={{padding: '8px 22px', borderRadius: 999, background: GREEN, color: WHITE, fontFamily: SANS, fontWeight: 800, fontSize: 40, whiteSpace: 'nowrap', scale: lerp(Math.min(1.05, k), 0.5, 1)}}>{s}</div>
+                <div key={s} style={{padding: b.img1 ? '5px 14px' : '8px 22px', borderRadius: 999, background: GREEN, color: WHITE, fontFamily: SANS, fontWeight: 800, fontSize: b.img1 ? 26 : 40, whiteSpace: 'nowrap', scale: lerp(Math.min(1.05, k), 0.5, 1)}}>{s}</div>
               ) : null;
             })}
           </div>

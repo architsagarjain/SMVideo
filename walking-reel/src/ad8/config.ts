@@ -15,7 +15,7 @@ const moves = [punch(4.7, 6.1, 1.08), punch(11.56, 15.0, 1.08), punch(20.96, 24.
 export const ad8: AdConfig = {
   tm: TM_AD8,
   cfg: adConfig('ad8', TM_AD8, captions, moves, [{start: 6.0, end: 8.0}, {start: 50.2, end: 999}]),
-  beforeAfter: {start: 0.72, end: 4.65, beforeAt: 0.8, afterAt: 2.86, statsAt: 4.0, before: 'DAY 1', after: 'DAY 7', stats: ['−1.2 kg', '−3 cm waist']},
+  beforeAfter: {start: 0.72, end: 4.65, beforeAt: 0.8, afterAt: 2.86, statsAt: 4.0, before: 'BEFORE', after: 'AFTER', stats: ['−1.2 kg', '−3 cm waist'], img0: 'ad8/before.jpg', img1: 'ad8/after.jpg'},
   mix: true,
   behind: {start: 6.18, end: 7.95, lines: [{text: 'not just', at: 6.56, size: 150, serif: true}, {text: 'PHYSICAL', at: 7.18, size: 230}]},
   women: {start: 8.0, end: 11.0, popFrom: 8.1, at: 8.76, value: 500, label: 'women helped'},
