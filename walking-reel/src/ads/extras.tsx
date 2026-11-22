@@ -316,7 +316,7 @@ const TestimonialBody: React.FC<{c: Testimonial}> = ({c}) => {
       <AbsoluteFill style={{background: 'radial-gradient(120% 70% at 50% 40%, #1F2A22 0%, #0D110E 70%)'}} />
       <div style={{position: 'absolute', left: 0, right: 0, top: 380, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, scale: lerp(Math.min(1.05, stars), 0.7, 1), opacity: Math.min(1, stars * 3)}}>
         <span style={{fontSize: 56, letterSpacing: 10, color: '#F5C451', textShadow: '0 4px 18px rgba(0,0,0,0.5)'}}>★★★★★</span>
-        <MixWord w="_real client, real call" size={64} />
+        <MixWord w="_Real Client, Real Call" size={64} />
       </div>
       <div style={{position: 'absolute', left: (1080 - W) / 2, top: 680, width: W, height: H, borderRadius: 34, overflow: 'hidden', boxShadow: `0 0 0 6px rgba(255,255,255,0.95), 0 30px 70px -20px rgba(0,0,0,0.8)`, scale: lerp(inP, 0.94, 1)}}>
         <OffthreadVideo src={staticFile(c.file)} muted startFrom={Math.max(0, Math.round(src * FPS))} style={{position: 'absolute', left: -cx * sc, top: -cy * sc, width: c.native * sc, height: c.native * sc, maxWidth: 'none'}} />
