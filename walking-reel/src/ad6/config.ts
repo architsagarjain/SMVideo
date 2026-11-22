@@ -31,12 +31,14 @@ export const ad6: AdConfig = {
     {start: 23.48, end: 26.4, src: 'b_bed.mp4', line: "Can't Stick | _to _the Routine?", lineAt: 23.52, y: 700, mix: true},
     {start: 28.2, end: 32.3, src: 'b_call.mp4', line: '_A Workout + Diet | _that Fits _your Routine', times: [29.34, 29.5, 29.66, 30.42, 30.6, 30.84, 31.16, 31.5], y: 1120, mix: true, flash: 'abstract-orange-glow.mp4'},
   ],
-  testimonial: {at: 37.45, gap: 7.9, file: 'ad6/testimonial.mp4', t0: 0.3, native: 480, crop: [7, 112, 456, 260], lines: [
-    [{text: "I'm", s: 0.35}, {text: 'more', s: 0.53}, {text: 'positive', s: 0.63}, {text: 'about', s: 0.97}, {text: '2026,', s: 1.29}],
-    [{text: 'with', s: 1.95}, {text: 'the', s: 2.17}, {text: 'fact', s: 2.29}, {text: 'that', s: 2.63}, {text: 'I', s: 3.09}, {text: 'know', s: 3.27}],
-    [{text: "I'm", s: 3.55}, {text: 'already', s: 4.11}, {text: 'doing', s: 4.41}, {text: 'the', s: 4.67}, {text: 'things', s: 4.87}],
-    [{text: 'that', s: 5.19}, {text: 'people', s: 5.67}, {text: 'who', s: 5.91}, {text: 'started', s: 6.11}],
-    [{text: 'on', s: 6.45}, {text: '1st', s: 6.79}, {text: 'of', s: 7.11}, {text: 'January.', s: 7.21}],
+  testimonial: {at: 37.45, gap: 9.77, file: 'ad6/testimonial.mp4', t0: 0.3, native: 576, crop: [12, 138, 540, 309], lines: [
+    [{text: "My", s: 0.31}, {text: "skin,", s: 0.49}, {text: "I've", s: 0.97}, {text: "seen", s: 1.13}, {text: "changes,", s: 1.27}],
+    [{text: "like", s: 1.91}, {text: "I", s: 1.99}, {text: "don't", s: 2.29}, {text: "break", s: 2.51}, {text: "out", s: 2.71}],
+    [{text: "that", s: 3.07}, {text: "often.", s: 3.35}],
+    [{text: "Maybe", s: 4.45}, {text: "like", s: 4.71}, {text: "once", s: 4.95}, {text: "or", s: 5.19}, {text: "twice", s: 5.37}],
+    [{text: "when", s: 5.61}, {text: "my", s: 5.87}, {text: "periods", s: 6.11}, {text: "are", s: 6.33}, {text: "around,", s: 6.55}],
+    [{text: "my", s: 6.93}, {text: "skin", s: 7.09}, {text: "has", s: 7.29}, {text: "been", s: 7.49}, {text: "really", s: 7.63}, {text: "good,", s: 7.89}],
+    [{text: "even", s: 8.09}, {text: "if", s: 8.31}, {text: "I", s: 8.43}, {text: "skip", s: 8.63}, {text: "the", s: 8.81}, {text: "skin", s: 9.05}, {text: "care.", s: 9.21}],
   ]},
   cta: {start: 37.62, bookAt: 39.54, priceAt: 41.96, tapAt: 44.5, price: '₹99', closing: "Let's talk", color: BRAND, grot: true},
 };

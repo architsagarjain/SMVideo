@@ -326,7 +326,7 @@ const TestimonialBody: React.FC<{c: Testimonial}> = ({c}) => {
         </div>
       </div>
       <div style={{position: 'absolute', left: 40, right: 40, top: 560, display: 'flex', justifyContent: 'center'}}>
-        {lt >= words[0].start - 0.05 ? <MixLine words={lines[li]} size={74} t={lt} /> : null}
+        {lt >= words[0].start - 0.05 ? <MixLine words={lines[li]} size={lines[li].length > 5 ? 60 : 74} t={lt} /> : null}
       </div>
     </AbsoluteFill>
   );

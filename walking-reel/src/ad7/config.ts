@@ -34,16 +34,13 @@ export const ad7: AdConfig = {
     {start: 23.7, end: 26.1, src: 'b_bed.mp4', line: "Can't Stick | _to _the Routine?", lineAt: 23.8, y: 700, mix: true},
     {start: 28.28, end: 32.5, src: 'b_home.mp4', line: '_A Workout + Diet | _that Fits _your Routine', times: [29.1, 29.3, 29.46, 30.52, 30.74, 31.0, 31.28, 31.56], y: 1180, mix: true, flash: 'abstract-orange-glow.mp4'},
   ],
-  testimonial: {at: 38.7, gap: 11.63, file: 'ad7/testimonial.mp4', t0: 0.3, native: 480, crop: [7, 112, 456, 260], lines: [
-    [{text: 'People', s: 0.34}, {text: 'are', s: 1.58}, {text: 'able', s: 1.72}, {text: 'to', s: 1.86}, {text: 'respect', s: 1.98}, {text: 'me', s: 2.26}],
-    [{text: 'more', s: 2.5}, {text: 'in', s: 2.7}, {text: 'my', s: 2.84}, {text: 'lab,', s: 3.06}],
-    [{text: 'because', s: 3.28}, {text: "I'm", s: 3.66}, {text: 'following', s: 3.9}, {text: 'something,', s: 4.2}],
-    [{text: 'and', s: 4.64}, {text: 'now', s: 4.82}, {text: "they've", s: 5.0}, {text: 'stopped', s: 5.24}],
-    [{text: 'offering', s: 5.4}, {text: 'me', s: 5.74}, {text: 'stuff.', s: 5.94}],
-    [{text: 'They', s: 6.34}, {text: 'say,', s: 6.48}, {text: '"Okay,', s: 6.64}, {text: 'you', s: 6.94}, {text: 'are', s: 7.1}],
-    [{text: 'doing', s: 7.18}, {text: 'this,', s: 7.38}, {text: "it's", s: 7.66}, {text: 'great,', s: 8.14}],
-    [{text: 'we', s: 8.4}, {text: "won't", s: 8.76}, {text: 'offer', s: 9.18}, {text: 'you', s: 9.44}, {text: 'anymore."', s: 9.58}],
-    [{text: "It's", s: 10.28}, {text: 'a', s: 10.5}, {text: 'good', s: 10.58}, {text: 'thing', s: 10.7}, {text: 'for', s: 10.94}, {text: 'me.', s: 11.12}],
+  testimonial: {at: 38.7, gap: 10.41, file: 'ad7/testimonial.mp4', t0: 0.3, native: 576, crop: [12, 138, 540, 309], lines: [
+    [{text: "Every", s: 0.32}, {text: "time", s: 0.76}, {text: "I", s: 1.04}, {text: "would", s: 1.18}, {text: "take", s: 1.34}, {text: "a", s: 1.5}, {text: "picture,", s: 1.68}],
+    [{text: "I", s: 1.94}, {text: "would", s: 2.02}, {text: "inhale", s: 2.32}, {text: "my", s: 2.9}, {text: "tummy,", s: 3.22}],
+    [{text: "just", s: 3.8}, {text: "to", s: 3.92}, {text: "get", s: 4.14}, {text: "that", s: 4.56}, {text: "picture,", s: 4.82}],
+    [{text: "but", s: 5.14}, {text: "now", s: 5.26}, {text: "I", s: 5.44}, {text: "don't", s: 5.6}, {text: "do", s: 5.94}, {text: "that", s: 6.16}, {text: "anymore.", s: 6.38}],
+    [{text: "It's", s: 7.06}, {text: "much", s: 7.5}, {text: "flatter", s: 7.74}],
+    [{text: "and", s: 8.2}, {text: "I", s: 8.54}, {text: "don't", s: 8.66}, {text: "feel", s: 9.0}, {text: "that", s: 9.36}, {text: "much", s: 9.62}, {text: "bloated.", s: 9.76}],
   ]},
   cta: {start: 38.94, bookAt: 40.84, priceAt: 44.24, tapAt: 46.74, price: '₹99', closing: "Let's talk", color: BRAND, grot: true},
 };

@@ -4,8 +4,8 @@ BEHIND = []
 PANEL = None
 BROLL = []
 MUSIC = ("footage/ads/music/m801.mp3", 4.5, -14)  # Mixkit "Dreaming Big" (Mixkit Stock Music Free License), ducked under speech
-INSERTS = [(38.7, "footage/ads/testimonials/Client T 1.mp4", 29.12, 40.25, 0.25)]  # (source time of the gap, clip, from, to, lead-in)
-GAP = 11.63
+INSERTS = [(38.7, "footage/ads/testimonials/Client T 2.mp4", 30.54, 40.45, 0.25)]  # (source time of the gap, clip, from, to, lead-in)
+GAP = 10.41
 
 
 def cues(cue, rng):

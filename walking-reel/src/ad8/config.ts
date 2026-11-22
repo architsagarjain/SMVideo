@@ -32,12 +32,14 @@ export const ad8: AdConfig = {
     {start: 38.12, end: 41.75, src: 'b_ts_photos.mp4', flash: 'soothing-yellow-light-shapes.mp4'}, // her Times Square billboard photos
     {start: 41.82, end: 46.6, src: 'b_night.mp4', line: '_Helping women | _feel _their best', times: [44.44, 45.14, 45.48, 45.9, 46.1], y: 640, mix: true, flash: 'abstract-orange-glow.mp4'},
   ],
-  testimonial: {at: 46.95, gap: 7.9, file: 'ad8/testimonial.mp4', t0: 0.3, native: 480, crop: [7, 112, 456, 260], lines: [
-    [{text: "I'm", s: 0.35}, {text: 'more', s: 0.53}, {text: 'positive', s: 0.63}, {text: 'about', s: 0.97}, {text: '2026,', s: 1.29}],
-    [{text: 'with', s: 1.95}, {text: 'the', s: 2.17}, {text: 'fact', s: 2.29}, {text: 'that', s: 2.63}, {text: 'I', s: 3.09}, {text: 'know', s: 3.27}],
-    [{text: "I'm", s: 3.55}, {text: 'already', s: 4.11}, {text: 'doing', s: 4.41}, {text: 'the', s: 4.67}, {text: 'things', s: 4.87}],
-    [{text: 'that', s: 5.19}, {text: 'people', s: 5.67}, {text: 'who', s: 5.91}, {text: 'started', s: 6.11}],
-    [{text: 'on', s: 6.45}, {text: '1st', s: 6.79}, {text: 'of', s: 7.11}, {text: 'January.', s: 7.21}],
+  testimonial: {at: 46.95, gap: 9.77, file: 'ad8/testimonial.mp4', t0: 0.3, native: 576, crop: [12, 138, 540, 309], lines: [
+    [{text: "My", s: 0.31}, {text: "skin,", s: 0.49}, {text: "I've", s: 0.97}, {text: "seen", s: 1.13}, {text: "changes,", s: 1.27}],
+    [{text: "like", s: 1.91}, {text: "I", s: 1.99}, {text: "don't", s: 2.29}, {text: "break", s: 2.51}, {text: "out", s: 2.71}],
+    [{text: "that", s: 3.07}, {text: "often.", s: 3.35}],
+    [{text: "Maybe", s: 4.45}, {text: "like", s: 4.71}, {text: "once", s: 4.95}, {text: "or", s: 5.19}, {text: "twice", s: 5.37}],
+    [{text: "when", s: 5.61}, {text: "my", s: 5.87}, {text: "periods", s: 6.11}, {text: "are", s: 6.33}, {text: "around,", s: 6.55}],
+    [{text: "my", s: 6.93}, {text: "skin", s: 7.09}, {text: "has", s: 7.29}, {text: "been", s: 7.49}, {text: "really", s: 7.63}, {text: "good,", s: 7.89}],
+    [{text: "even", s: 8.09}, {text: "if", s: 8.31}, {text: "I", s: 8.43}, {text: "skip", s: 8.63}, {text: "the", s: 8.81}, {text: "skin", s: 9.05}, {text: "care.", s: 9.21}],
   ]},
   cta: {start: 50.42, bookAt: 50.42, priceAt: 53.2, tapAt: 56.0, price: '₹99', closing: "Let's get started", color: BRAND, grot: true},
 };
