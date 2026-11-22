@@ -17,20 +17,28 @@ export const ad7: AdConfig = {
   cfg: adConfig('ad7', TM_AD7, captions, moves, [{start: 5.8, end: 8.0}, {start: 40.6, end: 999}]),
   mix: true,
   zoom: {start: 5.92, end: 7.75},
-  search: {start: 0.9, end: 3.66, query: 'free diet plans', typeFrom: 0.95, typeTo: 2.2, results: [{title: 'Fat-loss diet plan', at: 2.4}, {title: 'Home workout plan', at: 3.28}, {title: '7-day meal chart', at: 3.42}]},
+  search: {start: 0.9, end: 3.66, query: 'Free Diet Plans', typeFrom: 0.95, typeTo: 2.2, results: [{title: 'Fat-Loss Diet Plan', at: 2.4}, {title: 'Home Workout Plan', at: 3.28}, {title: '7-Day Meal Chart', at: 3.42}]},
   pills: [
-    {start: 15.1, end: 19.95, items: [{text: 'Having a plan', at: 15.2, kind: 'check'}, {text: 'Making it work for your life', at: 17.58, kind: 'dot'}]},
-    {start: 21.5, end: 26.1, items: [{text: 'Busy?', at: 21.82, kind: 'q'}, {text: 'Eating out?', at: 22.12, kind: 'q'}, {text: "Can't stick to it?", at: 23.8, kind: 'q'}]},
   ],
   behind: {start: 5.92, end: 7.75, lines: [{text: 'why pay for', at: 6.04, size: 130, serif: true}, {text: 'A COACH?', at: 6.92, size: 190}]},
   women: {start: 8.22, end: 10.6, popFrom: 8.26, at: 9.08, value: 500, label: 'women coached'},
-  neon: {start: 10.62, end: 13.5, at: 11.1},
-  cards: {start: 35.5, end: 38.85, dir: 'ad7', items: [{img: 'pizza', label: 'Pizza nights', at: 35.78, keep: true, stamp: 'YES'}, {img: 'chole', label: 'Chole bhature', at: 37.26, keep: true, stamp: 'YES'}]},
+  neon: {start: 10.62, end: 13.5, at: 11.1, y: 1010},
+  cards: {start: 35.5, end: 38.85, dir: 'ad7', items: [{img: 'pizza', label: 'Pizza Nights', at: 35.78, keep: true, stamp: 'YES'}, {img: 'chole', label: 'Chole Bhature', at: 37.26, keep: true, stamp: 'YES'}]},
   cuts: [
     {start: 0.85, end: 3.68, src: 'b_typing.mp4'}, // the search bar types over it
     {start: 3.7, end: 5.9, src: 'b_ipad.mp4', line: 'Everywhere | online.', times: [4.48, 5.22], y: 1185, mix: true, flash: 'abstract-orange-glow.mp4'},
-    {start: 10.62, end: 13.5, src: 'b_timessquare.mp4', flash: 'soothing-yellow-light-shapes.mp4'}, // neon sign on top
+    {start: 10.62, end: 13.5, src: 'b_ts_photos.mp4', flash: 'soothing-yellow-light-shapes.mp4'}, // her Times Square billboard photos
+    {start: 15.1, end: 20.0, src: 'b_notes.mp4', line: '_Having _a Plan', times: [15.2, 15.56, 15.8], lineEnd: 17.3, line2: '_Making _it Work | _for _your Life', times2: [17.58, 17.92, 18.18, 18.38, 18.58, 18.78], y: 420, mix: true, flash: 'soothing-yellow-light-shapes.mp4'},
+    {start: 21.7, end: 22.4, src: 'b_airport.mp4', line: 'Busy?', lineAt: 21.82, y: 380, mix: true},
+    {start: 22.4, end: 23.7, src: 'b_eatout.mp4', line: 'Eating Out?', lineAt: 22.45, y: 380, mix: true},
+    {start: 23.7, end: 26.1, src: 'b_bed.mp4', line: "Can't Stick | _to _the Routine?", lineAt: 23.8, y: 700, mix: true},
     {start: 28.28, end: 32.5, src: 'b_home.mp4', line: '_A workout + diet | _that fits _your routine', times: [29.1, 29.3, 29.46, 30.52, 30.74, 31.0, 31.28, 31.56], y: 1180, mix: true, flash: 'abstract-orange-glow.mp4'},
   ],
+  testimonial: {at: 38.7, gap: 4.85, file: 'ad7/testimonial.mp4', t0: 0.3, native: 480, crop: [7, 112, 456, 260], lines: [
+      [{text: 'I', s: 0.3}, {text: 'feel', s: 0.58}, {text: 'more', s: 0.88}, {text: 'happy', s: 1.1}],
+      [{text: 'in', s: 1.42}, {text: 'myself', s: 1.62}, {text: 'that', s: 2.08}, {text: "I'm", s: 2.4}, {text: 'doing', s: 2.56}, {text: 'it,', s: 2.76}],
+      [{text: 'and', s: 2.96}, {text: 'it', s: 3.1}, {text: 'has', s: 3.2}, {text: 'really', s: 3.36}, {text: 'improved', s: 3.6}],
+      [{text: 'other', s: 3.9}, {text: 'things.', s: 4.16}],
+    ]},
   cta: {start: 38.94, bookAt: 40.84, priceAt: 44.24, tapAt: 46.74, price: '₹99', closing: "Let's talk", color: BRAND, grot: true},
 };

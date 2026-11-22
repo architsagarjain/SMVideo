@@ -69,10 +69,15 @@ if TM is not None:
         parts.append(seg)
     joined = np.concatenate(parts).astype(np.float32)
 if TM is not None and TM["speed"] == 1.0:
-    # real-time: keep her voice exactly as recorded (no time-stretch pass)
-    voice = joined.astype(np.float64)
+    # real-time: keep her voice exactly as recorded (no time-stretch pass); each kept segment sits at its
+    # output time, so a gap in the map (an inserted clip) is silence here
     n_out = int(round(TM["frames"] / TM["fps"] * SR))
-    voice = np.pad(voice, ((0, max(0, n_out - len(voice))), (0, 0)))[:n_out]
+    voice = np.zeros((n_out, 2))
+    for g, part in zip(TM["segs"], parts):
+        i0 = int(round(g["o0"] * SR))
+        n = min(len(part), n_out - i0)
+        if n > 0:
+            voice[i0:i0 + n] += part[:n]
 elif TM is not None:
     sped = subprocess.run(["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-",
                            "-af", f"rubberband=tempo={TM['speed']}:pitchq=quality:transients=mixed:window=standard",
@@ -316,9 +321,43 @@ for b in C.BROLL:  # whoosh out of a cutaway
 C.cues(cue, rng)
 
 # ---------------------------------------------------------------------------
-# Mix: voice + effects only
+# Inserted clips (a client testimonial played in a gap of the time map), at the voice's level
+# ---------------------------------------------------------------------------
+def load(path, t0=0.0, dur=None):
+    args = ["ffmpeg", "-v", "error", "-ss", str(t0)] + (["-t", str(dur)] if dur else []) + ["-i", path, "-vn", "-ac", "2", "-ar", str(SR), "-af", "highpass=f=70", "-f", "f32le", "-"]
+    return np.frombuffer(subprocess.run(args, capture_output=True, check=True).stdout, dtype=np.float32).reshape(-1, 2).astype(np.float64)
+speech = np.abs(voice).mean(1)
+v_rms = np.sqrt((voice[np.abs(voice).max(1) > 0.01] ** 2).mean()) if (np.abs(voice).max(1) > 0.01).any() else 0.1
+for at_src, path, a0, a1, lead in getattr(C, "INSERTS", []):
+    clip = load(path, a0, a1 - a0)
+    r = np.sqrt((clip[np.abs(clip).max(1) > 0.01] ** 2).mean())
+    clip *= v_rms / (r + 1e-9)
+    fade = int(0.04 * SR)
+    clip[:fade] *= np.linspace(0, 1, fade)[:, None]
+    clip[-fade:] *= np.linspace(1, 0, fade)[:, None]
+    i0 = int(round((M(at_src) + lead) * SR))
+    n = min(len(clip), N - i0)
+    voice[i0:i0 + n] += clip[:n]
+
+# ---------------------------------------------------------------------------
+# Mix: voice + effects (+ a music bed ducked under speech when the reel asks for one)
 # ---------------------------------------------------------------------------
 mix = voice + sfx[:, None]
+if getattr(C, "MUSIC", None):
+    mpath, moff, mdb = C.MUSIC
+    mus = load(mpath, moff, DUR + 1)[:N]
+    mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
+    mus *= 10 ** ((-18 + mdb) / 20) / (np.sqrt((mus ** 2).mean()) + 1e-9)
+    # duck under speech: smoothed speech envelope -> -7 dB while she (or the client) talks
+    env = np.abs(voice).mean(1)
+    k = int(0.25 * SR)
+    env = np.convolve(env, np.ones(k) / k, mode="same")
+    talk = np.clip(env / (np.percentile(env[env > 1e-4], 60) + 1e-9), 0, 1)
+    duck = 10 ** (-7 * talk / 20)
+    fi, fo = int(0.8 * SR), int(1.6 * SR)
+    duck[:fi] *= np.linspace(0, 1, fi)
+    duck[-fo:] *= np.linspace(1, 0, fo)
+    mix = mix + mus * duck[:, None]
 if "--stems" in sys.argv:
     np.save(out.replace(".wav", "_stems.npy"), np.stack([voice.mean(1), sfx]).astype(np.float32))
 

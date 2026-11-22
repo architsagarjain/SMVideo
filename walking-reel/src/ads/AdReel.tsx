@@ -7,7 +7,7 @@ import {useT} from '../explainer/kit';
 import {ACCENT, Cut, Cutaways, WHITE, outline} from '../minimal/kit';
 import {EASE_IN, EASE_OUT, SANS, SERIF, lerp, tween} from '../theme';
 import {ANTON, chunkAt, popAt} from '../series/kit2';
-import {BRAND, Cards, FoodCards, FreePile, FreeStack, GROT, Logo, LogoReveal, MixLine, MixWord, Neon, NeonSign, Search, SearchBar, Women, WomenWall, ZoomBlur} from './extras';
+import {BRAND, Cards, FoodCards, FreePile, FreeStack, FreeType, FreeTypeView, Testimonial, TestimonialInsert, GROT, Logo, LogoReveal, MixLine, MixWord, Neon, NeonSign, Search, SearchBar, Women, WomenWall, ZoomBlur} from './extras';
 
 /**
  * Meta-ad reels (talking head against a plain wall, minimal style like the blood-tests / breakfast reels).
@@ -42,6 +42,8 @@ export type AdConfig = {
   free?: FreeStack;
   search?: Search;
   zoom?: Win;
+  freeType?: FreeType;
+  testimonial?: Testimonial;
 };
 
 const GREEN = '#17A34A';
@@ -301,6 +303,7 @@ export const graphicWins = (a: AdConfig): Win[] => [
   ...(a.cards ? [a.cards] : []),
   ...(a.neon ? [a.neon] : []),
   ...(a.free ? [a.free] : []),
+  ...(a.freeType ? [a.freeType] : []),
   ...(a.search ? [a.search] : []),
   ...a.cuts.filter((c) => c.line),
   {start: a.cta.bookAt - 0.05, end: 9999},
@@ -329,6 +332,7 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
       {a.counter ? <CounterView c={a.counter} /> : null}
       {a.beforeAfter ? <BeforeAfterView b={a.beforeAfter} /> : null}
       {a.free ? <FreePile f={a.free} /> : null}
+      {a.freeType ? <FreeTypeView f={a.freeType} /> : null}
       {a.women ? <WomenWall w={a.women} /> : null}
       {a.logo ? <LogoReveal l={a.logo} /> : null}
       {a.cards ? <Cards c={a.cards} /> : null}
@@ -338,6 +342,7 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
       {a.badge ? <BadgeView b={a.badge} /> : null}
       <CtaFront c={a.cta} />
       <AdCaps cfg={cfg} hide={graphicWins(a)} mix={a.mix} />
+      {a.testimonial ? <TestimonialInsert tm={a.tm} c={a.testimonial} /> : null}
     </>
   );
   return <Base cfg={cfg}>{scene}</Base>;

@@ -3,6 +3,8 @@ GFX = []
 BEHIND = []
 PANEL = None
 BROLL = []
+MUSIC = ("footage/ads/music/m801.mp3", 4.5, -14)  # Mixkit "Dreaming Big" (Mixkit Stock Music Free License), ducked under speech
+INSERTS = [(38.7, "footage/ads/testimonials/Client T 1.mp4", 0.0, 4.35, 0.25)]  # (source time of the gap, clip, from, to, lead-in)
 
 
 def cues(cue, rng):
@@ -26,8 +28,11 @@ def cues(cue, rng):
     cue(6.92, "pack:x_boom", -27)
     cue(9.08, "pack:x_camwhoosh", -27)
     cue(9.98, "pack:x_clickhit", -24)
-    for at in (15.2, 17.58, 21.82, 22.12, 23.8):
-        cue(at, "pack:x_blip", -26)
+    # B-roll: having a plan / making it work; busy? eating out? can't stick?
+    for at in (15.1, 21.7, 22.4, 23.7):
+        cue(at - 0.06, "pack:x_whip", -23)
+    for at in (15.5, 17.9, 22.0, 22.7, 24.1):
+        cue(at, "pack:x_clickhit", -26)
     for at in (35.78, 37.26):  # pizza nights / chole bhature photo cards, YES stamps
         cue(at, "pack:x_whip", -27)
         cue(at + 0.35, "pack:x_clickhit", -25)
@@ -37,3 +42,7 @@ def cues(cue, rng):
         cue(44.24 + j * 0.07, "pack:x_fast", -26)
     cue(44.58, "pack:x_clickhit", -23)
     cue(46.74, "pack:x_notify", -24)
+    # client testimonial: whoosh into the call, soft hit on the stars, whoosh back to her
+    cue(38.7, "pack:x_camwhoosh", -25)
+    cue(38.7, "pack:x_blip", -28, 0.3)
+    cue(38.7, "pack:x_whip", -27, 4.85 - 0.3)

@@ -1,8 +1,9 @@
 import React from 'react';
-import {AbsoluteFill, Img, staticFile} from 'remotion';
+import {AbsoluteFill, Img, OffthreadVideo, Sequence, staticFile, useCurrentFrame} from 'remotion';
+import {TimeMap, outAt} from '../series/timemap';
 import {loadFont} from '@remotion/fonts';
 import {useT} from '../explainer/kit';
-import {EASE_IN, EASE_OUT, SERIF, lerp, tween} from '../theme';
+import {EASE_IN, EASE_OUT, FPS, SERIF, lerp, tween} from '../theme';
 import {popAt} from '../series/kit2';
 
 /**
@@ -170,7 +171,7 @@ export const Cards: React.FC<{c: FoodCards}> = ({c}) => {
 // ---------------------------------------------------------------------------
 // "Featured in Times Square, New York": a neon sign that flickers on over the real Times Square footage.
 // ---------------------------------------------------------------------------
-export type Neon = {start: number; end: number; at: number};
+export type Neon = {start: number; end: number; at: number; y?: number};
 const flick = (t: number, at: number) => {
   if (t < at) return 0;
   const d = t - at;
@@ -186,8 +187,8 @@ export const NeonSign: React.FC<{n: Neon}> = ({n}) => {
   const word = 'TIMES SQUARE';
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <AbsoluteFill style={{background: 'radial-gradient(75% 22% at 50% 25%, rgba(0,0,0,0.55), rgba(0,0,0,0) 80%)'}} />
-      <div style={{position: 'absolute', left: 0, right: 0, top: 330, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6}}>
+      <AbsoluteFill style={{background: `radial-gradient(80% 16% at 50% ${(((n.y ?? 330) + 110) / 1920) * 100}%, rgba(0,0,0,0.6), rgba(0,0,0,0) 85%)`}} />
+      <div style={{position: 'absolute', left: 0, right: 0, top: n.y ?? 330, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6}}>
         <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 84, lineHeight: 1, color: WHITE, textShadow: CYAN, opacity: flick(t, n.at - 0.3)}}>featured in</span>
         <div style={{display: 'flex'}}>
           {word.split('').map((ch, i) => (
@@ -279,4 +280,87 @@ export const ZoomBlur: React.FC<{w?: {start: number; end: number}; scale?: numbe
   const s = lerp(i, 1, scale) * lerp(o, 1, 1 / scale);
   const blur = Math.sin(Math.PI * i) * 9 + Math.sin(Math.PI * o) * 7;
   return <AbsoluteFill style={{scale: s, transformOrigin: '540px 900px', filter: blur > 0.3 ? `blur(${blur}px)` : undefined}}>{children}</AbsoluteFill>;
+};
+
+// ---------------------------------------------------------------------------
+// Client testimonial: a full-screen insert (the timeline pauses her for it) - the real video call,
+// cropped to the call screen, with the client's words in the reference type under it.
+// ---------------------------------------------------------------------------
+export type Testimonial = {at: number; gap: number; file: string; t0: number; native: number; crop: [number, number, number, number]; lines: {text: string; s: number}[][]};
+const TLEAD = 0.25;
+export const TestimonialInsert: React.FC<{tm: TimeMap; c: Testimonial}> = ({tm, c}) => {
+  const from = Math.round(outAt(tm, c.at) * FPS);
+  return (
+    <Sequence from={from} durationInFrames={Math.round(c.gap * FPS)} layout="none">
+      <TestimonialBody c={c} />
+    </Sequence>
+  );
+};
+const TestimonialBody: React.FC<{c: Testimonial}> = ({c}) => {
+  const lt = useCurrentFrame() / FPS; // seconds into the insert
+  const inP = tween(lt, 0, TLEAD, EASE_OUT);
+  const outP = tween(lt, c.gap - TLEAD, TLEAD, EASE_IN);
+  const bloom = Math.max(1 - inP, outP);
+  const [cx, cy, cw, ch] = c.crop;
+  const W = 1000;
+  const sc = W / cw;
+  const H = ch * sc;
+  const src = c.t0 - TLEAD; // the call clip, lined up with its audio in the mix
+  const lines = c.lines.map((l) => l.map((w) => ({text: w.text, start: w.s - c.t0 + TLEAD})));
+  const words = lines.flat();
+  let li = 0;
+  for (let i = 0; i < lines.length; i++) if (lines[i][0].start - 0.05 <= lt) li = i;
+  const stars = popAt(lt, 0.3);
+  return (
+    <AbsoluteFill style={{opacity: 1 - bloom * 0.9, filter: `blur(${bloom * 16}px) brightness(${1 + bloom * 0.3})`}}>
+      <AbsoluteFill style={{background: 'radial-gradient(120% 70% at 50% 40%, #1F2A22 0%, #0D110E 70%)'}} />
+      <div style={{position: 'absolute', left: 0, right: 0, top: 380, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, scale: lerp(Math.min(1.05, stars), 0.7, 1), opacity: Math.min(1, stars * 3)}}>
+        <span style={{fontSize: 56, letterSpacing: 10, color: '#F5C451', textShadow: '0 4px 18px rgba(0,0,0,0.5)'}}>★★★★★</span>
+        <MixWord w="_real client, real call" size={64} />
+      </div>
+      <div style={{position: 'absolute', left: (1080 - W) / 2, top: 680, width: W, height: H, borderRadius: 34, overflow: 'hidden', boxShadow: `0 0 0 6px rgba(255,255,255,0.95), 0 30px 70px -20px rgba(0,0,0,0.8)`, scale: lerp(inP, 0.94, 1)}}>
+        <OffthreadVideo src={staticFile(c.file)} muted startFrom={Math.max(0, Math.round(src * FPS))} style={{position: 'absolute', left: -cx * sc, top: -cy * sc, width: c.native * sc, height: c.native * sc, maxWidth: 'none'}} />
+        <div style={{position: 'absolute', left: 22, top: 20, display: 'flex', alignItems: 'center', gap: 10, padding: '8px 18px', borderRadius: 999, background: 'rgba(0,0,0,0.55)'}}>
+          <span style={{width: 16, height: 16, borderRadius: '50%', background: '#E5484D'}} />
+          <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 28, color: WHITE, letterSpacing: 2}}>LIVE CALL</span>
+        </div>
+      </div>
+      <div style={{position: 'absolute', left: 40, right: 40, top: 560, display: 'flex', justifyContent: 'center'}}>
+        {lt >= words[0].start - 0.05 ? <MixLine words={lines[li]} size={74} t={lt} /> : null}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Ad A opening: "free diet plans and workouts pretty much anywhere" - big kinetic type with a ₹0 price tag.
+// ---------------------------------------------------------------------------
+export type FreeType = {start: number; end: number; l1: {text: string; at: number}[]; l2: {text: string; at: number}[]; tagAt: number; tag: string};
+export const FreeTypeView: React.FC<{f: FreeType}> = ({f}) => {
+  const t = useT();
+  const o = vis(t, f);
+  if (o <= 0) return null;
+  const row = (ws: {text: string; at: number}[], size: number) => (
+    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'baseline', columnGap: size * 0.22}}>
+      {ws.map((w, i) => {
+        const k = popAt(t, w.at);
+        return t >= w.at ? <MixWord key={i} w={w.text} size={size} style={{scale: lerp(Math.min(1.06, k), 0.5, 1), opacity: Math.min(1, k * 3), translate: `0 ${lerp(Math.min(1, k), 30, 0)}px`}} /> : null;
+      })}
+    </div>
+  );
+  const kt = popAt(t, f.tagAt);
+  return (
+    <AbsoluteFill style={{opacity: o}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 360, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10}}>
+        {row(f.l1, 140)}
+        {row(f.l2, 140)}
+      </div>
+      {t >= f.tagAt ? (
+        <div style={{position: 'absolute', left: 820, top: 228, width: 170, height: 170, borderRadius: '50%', background: BRAND, border: '6px solid #FFFFFF', boxSizing: 'border-box', boxShadow: '0 18px 36px -14px rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', scale: lerp(Math.min(1.1, kt), 2.2, 1), opacity: Math.min(1, kt * 3)}}>
+          <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 64, lineHeight: 0.95, color: WHITE, letterSpacing: -2}}>₹0</span>
+          <MixWord w={f.tag} size={30} />
+        </div>
+      ) : null}
+    </AbsoluteFill>
+  );
 };
