@@ -24,6 +24,7 @@ import { V9hi, V9hi_FRAMES } from './r9/V9hi';
 import { V10, V10_FRAMES } from './r9/V10';
 import { V11, V11_FRAMES } from './r9/V11';
 import { V12, V12_FRAMES } from './r9/V12';
+import { V12hi, V12hi_FRAMES } from './r9/V12hi';
 import { V13, V13_FRAMES } from './r9/V13';
 import { V14, V14_FRAMES } from './r9/V14';
 import { V15, V15_FRAMES } from './r9/V15';
@@ -56,6 +57,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Video10" component={V10} durationInFrames={V10_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video11" component={V11} durationInFrames={V11_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video12" component={V12} durationInFrames={V12_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="Video12Hinglish" component={V12hi} durationInFrames={V12hi_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video13" component={V13} durationInFrames={V13_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video14" component={V14} durationInFrames={V14_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video15" component={V15} durationInFrames={V15_FRAMES} fps={30} width={1080} height={1920} />
