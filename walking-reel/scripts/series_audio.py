@@ -343,7 +343,7 @@ for at_src, path, a0, a1, lead in getattr(C, "INSERTS", []):
 # Mix: voice + effects (+ a music bed ducked under speech when the reel asks for one)
 # ---------------------------------------------------------------------------
 mix = voice + sfx[:, None]
-if getattr(C, "MUSIC", None):
+if getattr(C, "MUSIC", None) and not os.environ.get("NO_MUSIC"):
     mpath, moff, mdb = C.MUSIC
     mus = load(mpath, moff, DUR + 1)[:N]
     mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
