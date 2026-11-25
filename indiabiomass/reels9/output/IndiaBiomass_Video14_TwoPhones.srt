@@ -1,0 +1,99 @@
+1
+00:00:00,233 --> 00:00:01,567
+Seven a.m.
+
+2
+00:00:01,733 --> 00:00:02,600
+Two people,
+
+3
+00:00:02,600 --> 00:00:03,600
+two districts apart.
+
+4
+00:00:03,600 --> 00:00:04,333
+In Punjab,
+
+5
+00:00:04,400 --> 00:00:05,400
+a pellet maker has
+
+6
+00:00:05,400 --> 00:00:07,100
+a warehouse full of stock,
+
+7
+00:00:07,200 --> 00:00:08,833
+and no one to sell to.
+
+8
+00:00:08,833 --> 00:00:09,633
+In Haryana,
+
+9
+00:00:09,633 --> 00:00:10,300
+a factory manager
+
+10
+00:00:10,300 --> 00:00:11,667
+needs fuel by Friday,
+
+11
+00:00:11,667 --> 00:00:13,767
+and no one to buy from.
+
+12
+00:00:13,900 --> 00:00:15,400
+She calls three traders.
+
+13
+00:00:15,500 --> 00:00:17,333
+He checks old WhatsApp groups.
+
+14
+00:00:17,567 --> 00:00:19,300
+She hears three different prices.
+
+15
+00:00:19,467 --> 00:00:20,867
+He gets no reply.
+
+16
+00:00:21,000 --> 00:00:21,900
+By evening,
+
+17
+00:00:21,933 --> 00:00:23,733
+his boiler runs short.
+
+18
+00:00:23,900 --> 00:00:25,300
+Her stock is still waiting.
+
+19
+00:00:26,667 --> 00:00:27,633
+They just never found each other.
+
+20
+00:00:27,633 --> 00:00:27,833
+That is the real
+
+21
+00:00:27,833 --> 00:00:29,767
+gap in India's biomass trade.
+
+22
+00:00:29,767 --> 00:00:30,567
+Not supply.
+
+23
+00:00:30,567 --> 00:00:31,400
+Not demand.
+
+24
+00:00:31,533 --> 00:00:32,500
+The connection.
+
+25
+00:00:32,867 --> 00:00:35,300
+IndiaBiomass is building it.
