@@ -30,6 +30,7 @@ import { V14, V14_FRAMES } from './r9/V14';
 import { V15, V15_FRAMES } from './r9/V15';
 import { V15hi, V15hi_FRAMES } from './r9/V15hi';
 import { V16, V16_FRAMES } from './r9/V16';
+import { V16hi, V16hi_FRAMES } from './r9/V16hi';
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -64,5 +65,6 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Video15" component={V15} durationInFrames={V15_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video15Hinglish" component={V15hi} durationInFrames={V15hi_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="Video16" component={V16} durationInFrames={V16_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="Video16Hinglish" component={V16hi} durationInFrames={V16hi_FRAMES} fps={30} width={1080} height={1920} />
   </>
 );
