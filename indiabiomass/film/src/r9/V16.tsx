@@ -1,62 +1,66 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { totalFrames, Shell8, timing, R8Data, Media } from '../r8/common8';
-import { r9, BrandBeat, Cut } from './common9';
+import { r9, BrandBeat } from './common9';
 import { lerp, E } from '../lib';
 import { C, F } from '../theme';
 import data from '../data/r9/v16.json';
 
-// Video 16 · Five things you didn't know. Look: rapid-fire. A huge number slams in on black for each fact
-// (in step with the voice: 1 to 5), then fast punch-in cuts on the shot; the fastest pacing of the series.
-// It ends on a grid of all five shots.
+// Video 16 · Five things you didn't know. Look: light and bright. Warm paper background, a numbered card per
+// fact (gold number badge, forest headline, one framed photo with a slow move), progress dots on top, and a
+// tidy grid of all the uses at the end. Numbers follow the voice: 1 to 5.
 const D = data as unknown as R8Data;
-const { L, W, FIN } = timing(D);
-const BLACK = '#080808';
+const { L, FIN } = timing(D);
+const PAPER = '#F4F0E6';
 const FACTS = [
-  { k: 'SUGAR MILLS RUN\nON THEIR OWN WASTE', sub: 'Bagasse → steam and power', shots: ['V16_1.jpg'], at: L(1) },
-  { k: 'RICE HUSK ASH →\nCEMENT AND STEEL', sub: 'From fuel to building material', shots: ['V16_2.jpg'], at: L(2) },
-  { k: 'COCONUT SHELLS →\nACTIVATED CARBON', sub: 'Used in water filters', shots: ['V16_6.jpg', 'V16_3.jpg'], at: L(3) },
-  { k: 'PADDY STRAW →\nCOMPRESSED BIOGAS', sub: 'CBG plants already run on it', shots: ['V16_4.jpg'], at: L(4) },
-  { k: 'PINE NEEDLES →\nBRIQUETTES', sub: 'In the hills', shots: ['V16_5.mp4'], at: L(5) },
+  { k: 'Sugar mills run on\ntheir own waste', sub: 'Bagasse → steam and power', shots: ['V16_1.jpg'], at: L(1) },
+  { k: 'Rice husk ash goes into\ncement and steel', sub: 'From fuel to building material', shots: ['V16_2.jpg'], at: L(2) },
+  { k: 'Coconut shells become\nactivated carbon', sub: 'Used in water filters', shots: ['V16_6.jpg', 'V16_3.jpg'], at: L(3) },
+  { k: 'Paddy straw becomes\ncompressed biogas', sub: 'CBG plants already run on it', shots: ['V16_4.jpg'], at: L(4) },
+  { k: 'Pine needles are pressed\ninto briquettes', sub: 'In the hills', shots: ['V16_5.mp4'], at: L(5) },
 ];
-// punch-in framings cycled for fast cuts on a single photo: [scale, x, y]
-const PUNCH: [number, number, number][] = [[1.15, 0, 0], [1.6, -120, 80], [1.45, 140, -60], [1.9, 40, 160], [1.3, -60, -120]];
-const SLAM = 9;   // frames of number-on-black before the shot
+const factAt = (f: number) => FACTS.reduce((a, x, i) => (f >= x.at - 6 ? i : a), -1);
+
+const Dots: React.FC = () => {
+  const f = useCurrentFrame();
+  const k = factAt(f);
+  if (k < 0 || f >= L(6)) return null;
+  return (
+    <div style={{ position: 'absolute', left: 0, right: 0, top: 150, display: 'flex', justifyContent: 'center', gap: 12 }}>
+      {FACTS.map((_, i) => <span key={i} style={{ width: i === k ? 48 : 16, height: 16, borderRadius: 8, background: i <= k ? C.forest : 'rgba(7,65,42,0.18)' }} />)}
+    </div>
+  );
+};
 
 const Fact: React.FC<{ i: number; to: number }> = ({ i, to }) => {
   const f = useCurrentFrame();
   const x = FACTS[i];
-  const s0 = x.at + SLAM;
-  const slam = lerp(f, [x.at - 2, x.at + 5], [0, 1], E.out);
-  // fast cuts every ~22 frames across the fact's shots
-  const cuts: { src: string; from: number; to: number; p: [number, number, number] }[] = [];
-  const step = 22;
-  for (let t = s0, k = 0; t < to; t += step, k++) {
-    const src = x.shots[Math.min(x.shots.length - 1, Math.floor(((t - s0) / (to - s0)) * x.shots.length))];
-    cuts.push({ src, from: t, to: Math.min(to, t + step), p: PUNCH[k % PUNCH.length] });
-  }
-  const badge = lerp(f, [s0, s0 + 8], [0, 1], E.out);
-  const head = lerp(f, [s0 + 2, s0 + 12], [0, 1], E.out);
+  const pop = lerp(f, [x.at - 4, x.at + 8], [0, 1], E.back);
+  const head = lerp(f, [x.at + 2, x.at + 14], [0, 1], E.out);
+  const card = lerp(f, [x.at + 6, x.at + 20], [0, 1], E.out);
+  const n = x.shots.length;
+  const span = (to - x.at) / n;
   return (
-    <AbsoluteFill style={{ background: BLACK }}>
-      {cuts.map((c, k) => (
-        <Cut key={k} from={c.from} to={c.to}>
-          {x.shots[0].endsWith('.mp4')
-            ? <Media src={r9(c.src)} from={s0} to={to} a={[1.2 + 0.1 * (k % 3), c.p[1] * 0.5, 0]} b={[1.1, 0, 0]} grade="cool" />
-            : <Media src={r9(c.src)} from={c.from} to={c.to} a={c.p} b={[c.p[0] * 1.06, c.p[1], c.p[2]]} grade="golden" />}
-        </Cut>
-      ))}
-      <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.25) 38%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.9) 82%)', opacity: f >= s0 ? 1 : 0 }} />
-      {/* flash on the cut from number to shot */}
-      <AbsoluteFill style={{ background: '#fff', opacity: lerp(f, [s0 - 1, s0, s0 + 4], [0, 0.7, 0]) }} />
-      {/* the number: full-screen slam, then shrinks into a badge */}
-      <div style={{ position: 'absolute', left: 0, top: 0, width: 1080, height: 1920, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}>
-        <div style={{ fontFamily: F.display, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.06em', color: C.harvest,
-          fontSize: 900 - 680 * badge, transform: `translate(${-330 * badge}px, ${-600 * badge}px) scale(${1.5 - 0.5 * slam})`, opacity: Math.min(1, slam * 1.4), textShadow: '0 20px 60px rgba(0,0,0,0.5)' }}>{i + 1}</div>
+    <AbsoluteFill>
+      {/* number badge + headline */}
+      <div style={{ position: 'absolute', left: 80, right: 80, top: 230, display: 'flex', alignItems: 'center', gap: 34 }}>
+        <div style={{ flex: 'none', width: 150, height: 150, borderRadius: 75, background: C.harvest, display: 'grid', placeItems: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 104, color: C.forest,
+          boxShadow: '0 14px 34px rgba(169,103,20,0.35)', transform: `scale(${Math.max(0, pop)})` }}>{i + 1}</div>
+        <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 56, lineHeight: 1.06, letterSpacing: '-0.025em', color: C.forest, whiteSpace: 'pre-line', opacity: head, transform: `translateX(${(1 - head) * 30}px)` }}>{x.k}</div>
       </div>
-      <div style={{ position: 'absolute', left: 60, right: 60, top: 520, opacity: head, transform: `translateX(${(1 - head) * 80}px)` }}>
-        {x.k.split('\n').map((ln) => <div key={ln} style={{ fontFamily: F.display, fontWeight: 800, fontSize: 82, lineHeight: 1.02, color: '#fff', letterSpacing: '-0.03em', textShadow: '0 6px 30px rgba(0,0,0,0.6)' }}>{ln}</div>)}
-        <div style={{ display: 'inline-block', marginTop: 20, fontFamily: F.label, fontWeight: 700, fontSize: 32, letterSpacing: '0.14em', color: BLACK, background: C.harvest, borderRadius: 12, padding: '10px 22px', opacity: lerp(f, [s0 + 10, s0 + 18], [0, 1]) }}>{x.sub.toUpperCase()}</div>
+      {/* framed photo */}
+      <div style={{ position: 'absolute', left: 80, width: 920, top: 500, height: 720, borderRadius: 34, overflow: 'hidden', border: '6px solid #fff', boxShadow: '0 30px 70px rgba(22,32,26,0.22)',
+        opacity: card, transform: `translateY(${(1 - card) * 40}px)` }}>
+        {x.shots.map((s, k) => {
+          const from = x.at + k * span, until = x.at + (k + 1) * span;
+          if (f < from - 8 || f > until + 8) return null;
+          const o = k === 0 ? 1 : lerp(f, [from - 8, from + 4], [0, 1]);
+          return <div key={s} style={{ position: 'absolute', inset: 0, opacity: o }}><Media src={r9(s)} from={from} to={until} a={[1.18, 0, 0]} b={[1.04, 0, 0]} grade="warm" /></div>;
+        })}
+      </div>
+      {/* sub line */}
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 1250, display: 'flex', justifyContent: 'center', opacity: lerp(f, [x.at + 16, x.at + 26], [0, 1]) }}>
+        <div style={{ fontFamily: F.label, fontWeight: 700, fontSize: 30, letterSpacing: '0.14em', color: C.forest, background: 'rgba(232,176,75,0.28)', borderRadius: 999, padding: '12px 30px' }}>{x.sub.toUpperCase()}</div>
       </div>
     </AbsoluteFill>
   );
@@ -64,62 +68,68 @@ const Fact: React.FC<{ i: number; to: number }> = ({ i, to }) => {
 
 const Hook: React.FC = () => {
   const f = useCurrentFrame();
-  const flick = Math.floor(f / 3) % 5;
   return (
-    <AbsoluteFill style={{ background: BLACK }}>
-      <div style={{ position: 'absolute', left: 60, right: 60, top: 560, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14 }}>
+    <AbsoluteFill>
+      <div style={{ position: 'absolute', left: 60, right: 60, top: 300, textAlign: 'center', opacity: lerp(f, [2, 12], [0, 1]) }}>
+        <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 132, lineHeight: 0.95, letterSpacing: '-0.04em', color: C.forest }}>5 THINGS</div>
+        <div style={{ fontFamily: F.display, fontWeight: 800, fontSize: 64, lineHeight: 1.05, letterSpacing: '-0.02em', color: C.ochre, marginTop: 14 }}>YOU PROBABLY DIDN'T KNOW<br />ABOUT BIOMASS</div>
+      </div>
+      <div style={{ position: 'absolute', left: 90, right: 90, top: 760, display: 'flex', justifyContent: 'space-between' }}>
         {[1, 2, 3, 4, 5].map((n, i) => {
-          const on = i === flick || f > 50;
+          const t = lerp(f, [8 + i * 4, 18 + i * 4], [0, 1], E.back);
           return (
-            <div key={n} style={{ height: 300, borderRadius: 18, display: 'grid', placeItems: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 170, letterSpacing: '-0.05em',
-              background: on ? C.harvest : '#1A1A1A', color: on ? BLACK : '#3A3A3A', transform: `scale(${lerp(f, [i * 3, i * 3 + 8], [0.4, 1], E.back)})` }}>{n}</div>
+            <div key={n} style={{ width: 160, height: 220, borderRadius: 26, background: i % 2 ? C.forest : C.harvest, display: 'grid', placeItems: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 120,
+              color: i % 2 ? PAPER : C.forest, boxShadow: '0 18px 40px rgba(22,32,26,0.18)', transform: `translateY(${(1 - Math.min(1, t)) * 60}px) scale(${0.7 + 0.3 * t})`, opacity: Math.min(1, t) }}>{n}</div>
           );
         })}
       </div>
-      <div style={{ position: 'absolute', left: 60, right: 60, top: 260, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 92, lineHeight: 1.0, color: '#fff', letterSpacing: '-0.03em', opacity: lerp(f, [4, 12], [0, 1]) }}>
-        5 THINGS YOU<br /><span style={{ color: C.harvest }}>DIDN&apos;T KNOW</span>
-      </div>
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 960, textAlign: 'center', fontFamily: F.label, fontWeight: 700, fontSize: 40, letterSpacing: '0.3em', color: '#fff', opacity: lerp(f, [W('biomass') - 4, W('biomass') + 4], [0, 1]) }}>ABOUT BIOMASS</div>
     </AbsoluteFill>
   );
 };
 
-/** All five shots shrink into a grid: one residue, many uses. */
+/** All the uses as a tidy grid: one residue, many ways. */
 const Grid: React.FC = () => {
   const f = useCurrentFrame();
   const t0 = L(6);
   const tiles = ['V16_1.jpg', 'V16_2.jpg', 'V16_3.jpg', 'V16_4.jpg', 'V16_5.mp4', 'V16_6.jpg'];
   return (
-    <AbsoluteFill style={{ background: BLACK }}>
-      <div style={{ position: 'absolute', left: 60, right: 60, top: 560, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
+    <AbsoluteFill>
+      <div style={{ position: 'absolute', left: 60, right: 60, top: 230, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 80, lineHeight: 1.02, letterSpacing: '-0.03em', color: C.forest }}>
+        <div style={{ opacity: lerp(f, [t0, t0 + 8], [0, 1]) * lerp(f, [L(7) - 4, L(7)], [1, 0]) }}>ONE RESIDUE.<br /><span style={{ color: C.ochre }}>A DOZEN WAYS.</span></div>
+      </div>
+      <div style={{ position: 'absolute', left: 60, right: 60, top: 230, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 80, lineHeight: 1.02, letterSpacing: '-0.03em', color: C.forest, opacity: lerp(f, [L(7), L(7) + 8], [0, 1]) }}>
+        WHO NEEDS IT,<br /><span style={{ color: C.ochre }}>AND WHERE?</span>
+      </div>
+      <div style={{ position: 'absolute', left: 70, right: 70, top: 500, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {tiles.map((s, i) => {
-          const t = lerp(f, [t0 + i * 3, t0 + i * 3 + 10], [0, 1], E.back);
+          const t = lerp(f, [t0 + i * 3, t0 + i * 3 + 12], [0, 1], E.back);
           return (
-            <div key={s} style={{ position: 'relative', height: 300, borderRadius: 18, overflow: 'hidden', opacity: Math.min(1, t), transform: `scale(${0.5 + 0.5 * t})`, border: `3px solid ${i === 5 ? C.harvest : 'transparent'}` }}>
-              <Media src={r9(s)} from={t0} to={FIN} a={[1.2, 0, 0]} b={[1.05, 0, 0]} grade="golden" />
+            <div key={s} style={{ position: 'relative', height: 330, borderRadius: 22, overflow: 'hidden', border: '5px solid #fff', boxShadow: '0 14px 34px rgba(22,32,26,0.18)', opacity: Math.min(1, t), transform: `scale(${0.6 + 0.4 * t})` }}>
+              <Media src={r9(s)} from={t0} to={FIN} a={[1.2, 0, 0]} b={[1.05, 0, 0]} grade="warm" />
             </div>
           );
         })}
-      </div>
-      <div style={{ position: 'absolute', left: 60, right: 60, top: 230, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 86, lineHeight: 1.02, color: '#fff', letterSpacing: '-0.03em' }}>
-        <div style={{ opacity: lerp(f, [t0, t0 + 8], [0, 1]) * lerp(f, [L(7) - 4, L(7)], [1, 0]) }}>ONE RESIDUE.<br /><span style={{ color: C.harvest }}>A DOZEN WAYS.</span></div>
-      </div>
-      <div style={{ position: 'absolute', left: 60, right: 60, top: 230, textAlign: 'center', fontFamily: F.display, fontWeight: 800, fontSize: 86, lineHeight: 1.02, color: '#fff', letterSpacing: '-0.03em', opacity: lerp(f, [L(7), L(7) + 8], [0, 1]) }}>
-        WHO NEEDS IT,<br /><span style={{ color: C.harvest }}>AND WHERE?</span>
       </div>
     </AbsoluteFill>
   );
 };
 
-export const V16: React.FC = () => (
-  <Shell8 d={D} bg={BLACK}>
-    <Cut from={0} to={L(1) - 2}><Hook /></Cut>
-    {FACTS.map((x, i) => {
-      const to = i < 4 ? FACTS[i + 1].at - 2 : L(6);
-      return <Cut key={i} from={x.at - 2} to={to}><Fact i={i} to={to} /></Cut>;
-    })}
-    <Cut from={L(6)} to={L(8)}><Grid /></Cut>
-    <Cut from={L(8)} to={FIN + 2}><BrandBeat at={L(8)} text={'INDIABIOMASS IS\nBUILDING THE WAY\nTO FIND OUT'} bg={BLACK} /></Cut>
-  </Shell8>
-);
+export const V16: React.FC = () => {
+  const f = useCurrentFrame();
+  return (
+    <Shell8 d={D} bg={PAPER} plate vignette={0.1}>
+      <AbsoluteFill style={{ background: `radial-gradient(ellipse 90% 70% at 50% 40%, #FBF8F1 0%, ${PAPER} 60%, #E9E3D4 100%)` }} />
+      {f < L(1) && <AbsoluteFill style={{ opacity: lerp(f, [L(1) - 8, L(1)], [1, 0]) }}><Hook /></AbsoluteFill>}
+      {FACTS.map((x, i) => {
+        const to = i < 4 ? FACTS[i + 1].at : L(6);
+        if (f < x.at - 8 || f >= to + 6) return null;
+        const o = Math.min(lerp(f, [x.at - 8, x.at], [0, 1]), lerp(f, [to - 2, to + 6], [1, 0]));
+        return <AbsoluteFill key={i} style={{ opacity: o }}><Fact i={i} to={to} /></AbsoluteFill>;
+      })}
+      <Dots />
+      {f >= L(6) - 6 && f < L(8) + 6 && <AbsoluteFill style={{ opacity: Math.min(lerp(f, [L(6) - 6, L(6) + 2], [0, 1]), lerp(f, [L(8), L(8) + 6], [1, 0])) }}><Grid /></AbsoluteFill>}
+      {f >= L(8) - 6 && <AbsoluteFill style={{ opacity: lerp(f, [L(8) - 6, L(8) + 2], [0, 1]) }}><BrandBeat at={L(8)} text={'INDIABIOMASS IS\nBUILDING THE WAY\nTO FIND OUT'} /></AbsoluteFill>}
+    </Shell8>
+  );
+};
 export const V16_FRAMES = totalFrames(D);
