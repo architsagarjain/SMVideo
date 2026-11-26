@@ -19,7 +19,7 @@ export type PillKind = 'check' | 'cross' | 'q' | 'dot';
 export type PillGroup = {start: number; end: number; items: {text: string; at: number; kind: PillKind}[]};
 export type Counter = {start: number; end: number; at: number; value: number; suffix: string; label: string};
 export type Badge = {start: number; end: number; at: number};
-export type BehindWord = {start: number; end: number; lines: {text: string; at: number; size: number; serif?: boolean}[]};
+export type BehindWord = {start: number; end: number; lines: {text: string; at: number; size: number; serif?: boolean; color?: string}[]};
 export type Cta = {start: number; bookAt: number; priceAt: number; tapAt: number; price: string; closing: string; color?: string; grot?: boolean};
 export type BeforeAfter = {start: number; end: number; beforeAt: number; afterAt: number; statsAt: number; before: string; after: string; stats: string[]; img0?: string; img1?: string};
 export type AdConfig = {
@@ -30,8 +30,12 @@ export type AdConfig = {
   pills: PillGroup[];
   counter?: Counter;
   badge?: Badge;
-  behind?: BehindWord;
-  cta: Cta;
+  behind?: BehindWord | BehindWord[];
+  cta?: Cta;
+  capY?: number; // caption top (default 640)
+  behindLine?: number; // where words rise from behind her head (default 800)
+  layers?: React.ReactNode; // reel-specific graphics, drawn above her
+  topLayers?: React.ReactNode; // reel-specific full-screen inserts, drawn on top
   beforeAfter?: BeforeAfter;
   /** Ad C: reference-style type (italic serif + heavy grotesque) and its richer graphics */
   mix?: boolean;
@@ -153,8 +157,9 @@ const BadgeView: React.FC<{b: Badge}> = ({b}) => {
 };
 
 /** Big words rising from behind her head (her cut-out is drawn over them). */
-const BEHIND_LINE = 800; // a little below the top of her head
-const BehindView: React.FC<{b: BehindWord}> = ({b}) => {
+const BEHIND_LINE_DEFAULT = 800; // a little below the top of her head
+const BehindView: React.FC<{b: BehindWord; line?: number}> = ({b, line}) => {
+  const BEHIND_LINE = line ?? BEHIND_LINE_DEFAULT;
   const t = useT();
   if (t < b.start || t > b.end + 0.25) return null;
   const out = tween(t, b.end - 0.15, 0.25, EASE_IN);
@@ -170,7 +175,7 @@ const BehindView: React.FC<{b: BehindWord}> = ({b}) => {
           {l.text.split('').map((ch, i) => {
             const p = popAt(t, l.at + i * 0.035);
             return (
-              <span key={i} style={{fontFamily: l.serif ? SERIF : ANTON, fontStyle: l.serif ? 'italic' : 'normal', fontSize: l.size, lineHeight: 1, color: WHITE, textShadow: '0 18px 44px rgba(0,0,0,0.35)', display: 'inline-block', whiteSpace: 'pre', translate: `0 ${lerp(Math.min(1.05, p), BEHIND_LINE - l.top + 20, 0)}px`}}>
+              <span key={i} style={{fontFamily: l.serif ? SERIF : ANTON, fontStyle: l.serif ? 'italic' : 'normal', fontSize: l.size, lineHeight: 1, color: l.color ?? WHITE, WebkitTextStroke: l.serif ? undefined : `${Math.round(l.size * 0.03)}px rgba(10,10,10,0.55)`, paintOrder: 'stroke fill', textShadow: '0 4px 18px rgba(0,0,0,0.55), 0 18px 44px rgba(0,0,0,0.35)', display: 'inline-block', whiteSpace: 'pre', translate: `0 ${lerp(Math.min(1.05, p), BEHIND_LINE - l.top + 20, 0)}px`}}>
                 {ch}
               </span>
             );
@@ -183,6 +188,7 @@ const BehindView: React.FC<{b: BehindWord}> = ({b}) => {
 
 /** End card: "Book a 1:1 call", then ₹99 rises from behind her head, then the pill turns gold with her closing line. */
 const CtaBehind: React.FC<{c: Cta}> = ({c}) => {
+  const BEHIND_LINE = BEHIND_LINE_DEFAULT;
   const t = useT();
   if (t < c.priceAt) return null;
   const size = 400;
@@ -271,7 +277,7 @@ const BeforeAfterView: React.FC<{b: BeforeAfter}> = ({b}) => {
 
 /** Captions for ads: bold sans with a dark outline (read with the sound off, over a light wall), in the
  *  safe zone just above her head; they step aside while a graphic is up. */
-const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]; mix?: boolean}> = ({cfg, hide, mix}) => {
+const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]; mix?: boolean; y?: number}> = ({cfg, hide, mix, y = 640}) => {
   const t = useT();
   // a graphic fades out for ~0.3 s after its window: captions wait for that
   const wins = hide.map((w) => ({start: w.start - 0.05, end: w.end + 0.35}));
@@ -289,9 +295,9 @@ const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]; mix?: boolean}> = ({cfg, h
   if (ve - vs < 0.55) return null;
   const k = tween(t, vs, 0.12);
   return (
-    <div style={{position: 'absolute', left: 50, right: 50, top: 640, textAlign: 'center', opacity: k, translate: `0 ${lerp(k, 8, 0)}px`}}>
+    <div style={{position: 'absolute', left: 50, right: 50, top: y, textAlign: 'center', opacity: k, translate: `0 ${lerp(k, 8, 0)}px`}}>
       {mix ? (
-        <MixLine words={chunk} size={70} t={t} />
+        <MixLine words={chunk} size={chunk.length > 4 ? 58 : 70} t={t} />
       ) : (
         <span style={{fontFamily: SANS, fontWeight: 800, fontSize: 74, lineHeight: 1.1, color: WHITE, WebkitTextStroke: '7px rgba(10,10,10,0.9)', paintOrder: 'stroke fill', textShadow: '0 4px 20px rgba(0,0,0,0.75), 0 1px 4px rgba(0,0,0,0.8)', whiteSpace: 'nowrap'}}>{chunk.map((w) => w.text).join(' ')}</span>
       )}
@@ -304,7 +310,7 @@ export const graphicWins = (a: AdConfig): Win[] => [
   ...a.pills,
   ...(a.counter ? [a.counter] : []),
   ...(a.badge ? [a.badge] : []),
-  ...(a.behind ? [a.behind] : []),
+  ...(Array.isArray(a.behind) ? a.behind : a.behind ? [a.behind] : []),
   ...(a.beforeAfter ? [a.beforeAfter] : []),
   ...(a.women ? [a.women] : []),
   ...(a.logo ? [a.logo] : []),
@@ -314,7 +320,7 @@ export const graphicWins = (a: AdConfig): Win[] => [
   ...(a.freeType ? [a.freeType] : []),
   ...(a.search ? [a.search] : []),
   ...a.cuts.filter((c) => c.line),
-  {start: a.cta.bookAt - 0.05, end: 9999},
+  ...(a.cta ? [{start: a.cta.bookAt - 0.05, end: 9999}] : []),
 ];
 
 export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
@@ -330,8 +336,10 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
           <Footage cfg={cfg} />
         )}
         <GradeOverlay cfg={cfg} />
-        {a.behind ? <BehindView b={a.behind} /> : null}
-        <CtaBehind c={a.cta} />
+        {(Array.isArray(a.behind) ? a.behind : a.behind ? [a.behind] : []).map((b, i) => (
+          <BehindView key={i} b={b} line={a.behindLine} />
+        ))}
+        {a.cta ? <CtaBehind c={a.cta} /> : null}
         <Subject cfg={cfg} />
       </ZoomBlur>
       {a.pills.map((g, i) => (
@@ -348,9 +356,11 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
       {a.search ? <SearchBar s={a.search} /> : null}
       {a.neon ? <NeonSign n={a.neon} /> : null}
       {a.badge ? <BadgeView b={a.badge} /> : null}
-      <CtaFront c={a.cta} />
+      {a.cta ? <CtaFront c={a.cta} /> : null}
+      {a.layers}
       {a.nameTag ? <NameTagView n={a.nameTag} /> : null}
-      <AdCaps cfg={cfg} hide={graphicWins(a)} mix={a.mix} />
+      <AdCaps cfg={cfg} hide={graphicWins(a)} mix={a.mix} y={a.capY} />
+      {a.topLayers}
       {a.testimonial ? <TestimonialInsert tm={a.tm} c={a.testimonial} /> : null}
       {(a.leaks ?? []).map((at, i) => (
         <LeakFlash key={i} tm={a.tm} at={at} seed={i * 7 + 3} />

@@ -1,0 +1,682 @@
+[
+ [
+  {
+   "text": "If",
+   "start": 0.0,
+   "end": 0.68
+  },
+  {
+   "text": "you",
+   "start": 0.68,
+   "end": 0.8
+  },
+  {
+   "text": "look",
+   "start": 0.8,
+   "end": 0.96
+  },
+  {
+   "text": "like",
+   "start": 0.96,
+   "end": 1.12
+  },
+  {
+   "text": "this",
+   "start": 1.12,
+   "end": 1.36
+  },
+  {
+   "text": "and",
+   "start": 1.36,
+   "end": 1.5
+  }
+ ],
+ [
+  {
+   "text": "you",
+   "start": 1.5,
+   "end": 1.62
+  },
+  {
+   "text": "think",
+   "start": 1.62,
+   "end": 1.72
+  },
+  {
+   "text": "you're",
+   "start": 1.72,
+   "end": 1.88
+  },
+  {
+   "text": "better",
+   "start": 1.88,
+   "end": 2.04
+  },
+  {
+   "text": "than",
+   "start": 2.04,
+   "end": 2.26
+  },
+  {
+   "text": "this,",
+   "start": 2.26,
+   "end": 2.66
+  }
+ ],
+ [
+  {
+   "text": "then",
+   "start": 2.82,
+   "end": 2.92
+  },
+  {
+   "text": "you're",
+   "start": 2.92,
+   "end": 3.12
+  },
+  {
+   "text": "not.",
+   "start": 3.12,
+   "end": 3.38
+  }
+ ],
+ [
+  {
+   "text": "Agar",
+   "start": 3.8,
+   "end": 3.94
+  },
+  {
+   "text": "aapko",
+   "start": 3.94,
+   "end": 4.16
+  },
+  {
+   "text": "is",
+   "start": 4.16,
+   "end": 4.36
+  },
+  {
+   "text": "type",
+   "start": 4.36,
+   "end": 4.56
+  },
+  {
+   "text": "ka",
+   "start": 4.56,
+   "end": 4.66
+  },
+  {
+   "text": "body",
+   "start": 4.66,
+   "end": 4.84
+  }
+ ],
+ [
+  {
+   "text": "fat",
+   "start": 4.84,
+   "end": 5.06
+  },
+  {
+   "text": "hai,",
+   "start": 5.06,
+   "end": 5.4
+  },
+  {
+   "text": "then",
+   "start": 5.52,
+   "end": 5.58
+  },
+  {
+   "text": "that",
+   "start": 5.58,
+   "end": 5.78
+  },
+  {
+   "text": "is",
+   "start": 5.78,
+   "end": 5.9
+  }
+ ],
+ [
+  {
+   "text": "the",
+   "start": 5.9,
+   "end": 6.12
+  },
+  {
+   "text": "most",
+   "start": 6.12,
+   "end": 6.42
+  },
+  {
+   "text": "dangerous",
+   "start": 6.42,
+   "end": 7.0
+  }
+ ],
+ [
+  {
+   "text": "type",
+   "start": 7.0,
+   "end": 7.34
+  },
+  {
+   "text": "of",
+   "start": 7.34,
+   "end": 7.56
+  },
+  {
+   "text": "body",
+   "start": 7.56,
+   "end": 7.74
+  },
+  {
+   "text": "fat.",
+   "start": 7.74,
+   "end": 8.02
+  }
+ ],
+ [
+  {
+   "text": "It's",
+   "start": 8.36,
+   "end": 8.64
+  },
+  {
+   "text": "called",
+   "start": 8.64,
+   "end": 8.9
+  },
+  {
+   "text": "the",
+   "start": 8.9,
+   "end": 9.16
+  },
+  {
+   "text": "skinny",
+   "start": 9.16,
+   "end": 9.5
+  },
+  {
+   "text": "fat",
+   "start": 9.5,
+   "end": 9.92
+  },
+  {
+   "text": "syndrome.",
+   "start": 9.92,
+   "end": 10.32
+  }
+ ],
+ [
+  {
+   "text": "Isme",
+   "start": 10.45,
+   "end": 10.91
+  },
+  {
+   "text": "patle",
+   "start": 10.91,
+   "end": 11.29
+  },
+  {
+   "text": "toh",
+   "start": 11.29,
+   "end": 11.49
+  },
+  {
+   "text": "zaroor",
+   "start": 11.49,
+   "end": 11.79
+  },
+  {
+   "text": "dikh",
+   "start": 11.79,
+   "end": 11.99
+  },
+  {
+   "text": "sakte",
+   "start": 11.99,
+   "end": 12.29
+  }
+ ],
+ [
+  {
+   "text": "ho,",
+   "start": 12.29,
+   "end": 12.41
+  },
+  {
+   "text": "but",
+   "start": 12.41,
+   "end": 12.57
+  },
+  {
+   "text": "aapki",
+   "start": 12.57,
+   "end": 12.83
+  },
+  {
+   "text": "belly",
+   "start": 12.83,
+   "end": 13.13
+  },
+  {
+   "text": "area",
+   "start": 13.13,
+   "end": 13.43
+  },
+  {
+   "text": "mein",
+   "start": 13.43,
+   "end": 13.61
+  }
+ ],
+ [
+  {
+   "text": "bahut",
+   "start": 13.61,
+   "end": 13.83
+  },
+  {
+   "text": "zyada",
+   "start": 13.83,
+   "end": 14.13
+  },
+  {
+   "text": "fat",
+   "start": 14.13,
+   "end": 14.31
+  },
+  {
+   "text": "hota",
+   "start": 14.31,
+   "end": 14.61
+  },
+  {
+   "text": "hai,",
+   "start": 14.61,
+   "end": 14.85
+  }
+ ],
+ [
+  {
+   "text": "which",
+   "start": 14.85,
+   "end": 15.13
+  },
+  {
+   "text": "is",
+   "start": 15.13,
+   "end": 15.35
+  },
+  {
+   "text": "also",
+   "start": 15.35,
+   "end": 15.55
+  }
+ ],
+ [
+  {
+   "text": "called",
+   "start": 15.55,
+   "end": 15.79
+  },
+  {
+   "text": "the",
+   "start": 15.79,
+   "end": 16.03
+  },
+  {
+   "text": "visceral",
+   "start": 16.03,
+   "end": 16.37
+  },
+  {
+   "text": "fat.",
+   "start": 16.37,
+   "end": 16.75
+  }
+ ],
+ [
+  {
+   "text": "And",
+   "start": 16.87,
+   "end": 17.17
+  },
+  {
+   "text": "it's",
+   "start": 17.17,
+   "end": 17.41
+  },
+  {
+   "text": "mostly",
+   "start": 17.41,
+   "end": 17.67
+  },
+  {
+   "text": "seen",
+   "start": 17.67,
+   "end": 17.95
+  },
+  {
+   "text": "in",
+   "start": 17.95,
+   "end": 18.11
+  },
+  {
+   "text": "Indians.",
+   "start": 18.11,
+   "end": 18.51
+  }
+ ],
+ [
+  {
+   "text": "That's",
+   "start": 18.73,
+   "end": 18.89
+  },
+  {
+   "text": "why",
+   "start": 18.89,
+   "end": 18.99
+  },
+  {
+   "text": "we",
+   "start": 18.99,
+   "end": 19.09
+  },
+  {
+   "text": "are",
+   "start": 19.09,
+   "end": 19.21
+  },
+  {
+   "text": "more",
+   "start": 19.21,
+   "end": 19.37
+  },
+  {
+   "text": "prone",
+   "start": 19.37,
+   "end": 19.67
+  }
+ ],
+ [
+  {
+   "text": "to",
+   "start": 19.67,
+   "end": 19.87
+  },
+  {
+   "text": "diabetes,",
+   "start": 19.87,
+   "end": 20.27
+  },
+  {
+   "text": "fatty",
+   "start": 20.57,
+   "end": 20.77
+  },
+  {
+   "text": "liver",
+   "start": 20.77,
+   "end": 21.05
+  },
+  {
+   "text": "and",
+   "start": 21.05,
+   "end": 21.55
+  }
+ ],
+ [
+  {
+   "text": "metabolic",
+   "start": 21.55,
+   "end": 22.03
+  },
+  {
+   "text": "diseases.",
+   "start": 22.03,
+   "end": 22.57
+  }
+ ],
+ [
+  {
+   "text": "And",
+   "start": 22.763,
+   "end": 23.303
+  },
+  {
+   "text": "if",
+   "start": 23.303,
+   "end": 23.423
+  },
+  {
+   "text": "you",
+   "start": 23.423,
+   "end": 23.523
+  },
+  {
+   "text": "think",
+   "start": 23.523,
+   "end": 23.783
+  },
+  {
+   "text": "excessive",
+   "start": 23.783,
+   "end": 24.283
+  },
+  {
+   "text": "cardio",
+   "start": 24.283,
+   "end": 24.723
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 24.723,
+   "end": 24.983
+  },
+  {
+   "text": "crash",
+   "start": 24.983,
+   "end": 25.303
+  },
+  {
+   "text": "dieting",
+   "start": 25.303,
+   "end": 25.643
+  },
+  {
+   "text": "would",
+   "start": 25.643,
+   "end": 25.783
+  },
+  {
+   "text": "work,",
+   "start": 25.783,
+   "end": 26.083
+  }
+ ],
+ [
+  {
+   "text": "then",
+   "start": 26.263,
+   "end": 26.303
+  },
+  {
+   "text": "you're",
+   "start": 26.303,
+   "end": 26.503
+  },
+  {
+   "text": "absolutely",
+   "start": 26.503,
+   "end": 26.963
+  },
+  {
+   "text": "wrong.",
+   "start": 26.963,
+   "end": 27.303
+  }
+ ],
+ [
+  {
+   "text": "You",
+   "start": 27.723,
+   "end": 27.843
+  },
+  {
+   "text": "need",
+   "start": 27.843,
+   "end": 27.983
+  },
+  {
+   "text": "to",
+   "start": 27.983,
+   "end": 28.163
+  },
+  {
+   "text": "focus",
+   "start": 28.163,
+   "end": 28.443
+  },
+  {
+   "text": "on",
+   "start": 28.443,
+   "end": 28.723
+  },
+  {
+   "text": "strength",
+   "start": 28.723,
+   "end": 29.063
+  }
+ ],
+ [
+  {
+   "text": "training",
+   "start": 29.063,
+   "end": 29.343
+  },
+  {
+   "text": "and",
+   "start": 29.343,
+   "end": 29.863
+  },
+  {
+   "text": "a",
+   "start": 29.863,
+   "end": 30.063
+  },
+  {
+   "text": "protein-rich",
+   "start": 30.063,
+   "end": 30.523
+  },
+  {
+   "text": "diet.",
+   "start": 30.523,
+   "end": 30.843
+  }
+ ],
+ [
+  {
+   "text": "And",
+   "start": 30.933,
+   "end": 31.653
+  },
+  {
+   "text": "if",
+   "start": 31.653,
+   "end": 31.773
+  },
+  {
+   "text": "you",
+   "start": 31.773,
+   "end": 31.893
+  },
+  {
+   "text": "are",
+   "start": 31.893,
+   "end": 32.013
+  },
+  {
+   "text": "skinny",
+   "start": 32.013,
+   "end": 32.253
+  },
+  {
+   "text": "fat",
+   "start": 32.253,
+   "end": 32.513
+  }
+ ],
+ [
+  {
+   "text": "and",
+   "start": 32.513,
+   "end": 32.713
+  },
+  {
+   "text": "want",
+   "start": 32.713,
+   "end": 32.913
+  },
+  {
+   "text": "to",
+   "start": 32.913,
+   "end": 33.093
+  },
+  {
+   "text": "transform,",
+   "start": 33.093,
+   "end": 33.493
+  },
+  {
+   "text": "just",
+   "start": 33.493,
+   "end": 33.933
+  },
+  {
+   "text": "comment",
+   "start": 33.933,
+   "end": 34.333
+  }
+ ],
+ [
+  {
+   "text": "\"CHANGE\"",
+   "start": 34.333,
+   "end": 34.693
+  },
+  {
+   "text": "and",
+   "start": 34.693,
+   "end": 34.973
+  },
+  {
+   "text": "I'll",
+   "start": 34.973,
+   "end": 35.173
+  },
+  {
+   "text": "help",
+   "start": 35.173,
+   "end": 35.333
+  },
+  {
+   "text": "you",
+   "start": 35.333,
+   "end": 35.473
+  },
+  {
+   "text": "out.",
+   "start": 35.473,
+   "end": 35.633
+  }
+ ]
+]

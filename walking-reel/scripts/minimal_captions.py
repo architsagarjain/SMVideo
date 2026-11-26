@@ -18,6 +18,7 @@ FIX = {
     'ad7': {(9.08, '500'): '500+', (9.58, 'plus'): None, (44.24, 'Rs.'): '₹99', (44.80, '99'): None, (38.06, 'bhatoori.'): 'bhature.'},
     'ad8': {(8.76, '500'): '500+', (9.38, 'plus'): None, (53.20, 'rupees'): '₹99', (27.42, 'favorite'): 'favourite', (24.12, 'Piquettes.'): 'PeakX.', (53.66, '99'): None,
             (50.92, 'one'): 'one-on-one', (51.08, 'on'): None, (51.24, 'one'): None},
+    'd4': {(33.093, 'transform'): 'transform,', (30.063, 'protein'): 'protein', (31.653, 'if'): 'if'},
 }
 END = {'m2': 120.6}  # the recording stops mid-sentence; end on "swaps."
 
@@ -76,7 +77,7 @@ for c in out:
         merged.append(c)
 out = merged
 # ads: never leave one word on its own ("another.") - it joins the chunk before it, or takes its last word
-if NAME.startswith('ad'):
+if NAME.startswith('ad') or NAME == 'd4':
     fixed = []
     for c in out:
         if fixed and len(c) == 1 and c[0]["start"] - fixed[-1][-1]["end"] < 0.6:
