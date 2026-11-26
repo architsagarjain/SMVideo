@@ -17,7 +17,7 @@ const moves = [
 ];
 
 export const VISCERAL = {start: 10.38, end: 16.75, thinAt: 10.9, fatAt: 13.6, nameAt: 16.03};
-export const BODIES = {start: 0.7, end: 3.65, aAt: 0.96, bAt: 2.04, eqAt: 2.92};
+export const BODIES = {start: 0.7, end: 5.45, aAt: 0.96, bAt: 2.04, eqAt: 2.92, focusAt: 3.8};
 export const SYNDROME = {start: 8.5, end: 10.38, y: 300, size: 110, rows: [[{text: 'Skinny', at: 9.16}, {text: 'Fat', at: 9.5, color: '#E5484D'}], [{text: '_syndrome', at: 9.92}]]};
 export const INDIA = {start: 17.3, end: 18.65, at: 17.41, flagAt: 18.11};
 export const DISEASES = {start: 19.3, end: 22.6, items: [{label: 'Diabetes', at: 19.87, kind: 'drop' as const}, {label: 'Fatty Liver', at: 20.57, kind: 'liver' as const}, {label: 'Metabolic Diseases', at: 21.55, kind: 'pulse' as const}]};
@@ -27,7 +27,7 @@ export const d4: AdConfig = {
   tm: TM_D4,
   cfg: adConfig('d4', TM_D4, captions, moves, [{start: 5.3, end: 8.3}, {start: 33.2, end: 999}]),
   mix: true,
-  capY: 1060,
+  capY: 1190,
   behindLine: 640,
   behind: [
     {start: 5.5, end: 8.1, lines: [{text: 'the most', at: 6.12, size: 110, serif: true}, {text: 'DANGEROUS', at: 6.42, size: 170, color: '#E5484D'}]},

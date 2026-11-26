@@ -32,7 +32,7 @@ const Body: React.FC<{w: number; belly: number; heavy?: number; color?: string; 
 };
 
 /** "If you look like this and you think you're better than this, then you're not." */
-export type BodyPair = {start: number; end: number; aAt: number; bAt: number; eqAt: number};
+export type BodyPair = {start: number; end: number; aAt: number; bAt: number; eqAt: number; focusAt: number};
 export const BodyCards: React.FC<{b: BodyPair}> = ({b}) => {
   const t = useT();
   const o = vis(t, b);
@@ -49,13 +49,23 @@ export const BodyCards: React.FC<{b: BodyPair}> = ({b}) => {
     );
   };
   const e = popAt(t, b.eqAt);
+  // "Agar aapko is type ka body fat hai": the skinny-fat card takes the stage, belly lit up
+  const f = tween(t, b.focusAt, 0.45, EASE_OUT);
+  const tag = popAt(t, b.focusAt + 0.25);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 285, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 26}}>
-        {card(b.aAt, 'Skinny Fat', 0.75, 0, t >= b.eqAt ? Math.min(1, e) : 0)}
-        <span style={{width: 70, textAlign: 'center', fontFamily: GROT, fontWeight: 800, fontSize: 96, color: RED, textShadow: '0 4px 14px rgba(0,0,0,0.35)', scale: lerp(Math.min(1.1, e), 1.8, 1), opacity: t >= b.eqAt ? 1 : 0}}>=</span>
-        {card(b.bAt, 'Overweight', 0.9, 1, 0)}
+      <div style={{position: 'absolute', left: 0, right: 0, top: 285, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: lerp(f, 26, 0)}}>
+        <div style={{scale: lerp(f, 1, 1.08), transformOrigin: '50% 0', translate: `0 ${lerp(f, 0, -10)}px`}}>{card(b.aAt, 'Skinny Fat', 0.75, 0, t >= b.eqAt ? Math.min(1, Math.max(e, f)) : 0)}</div>
+        <div style={{width: lerp(f, 70, 0), overflow: 'hidden', opacity: 1 - f}}>
+          <span style={{display: 'block', width: 70, textAlign: 'center', fontFamily: GROT, fontWeight: 800, fontSize: 96, color: RED, textShadow: '0 4px 14px rgba(0,0,0,0.35)', scale: lerp(Math.min(1.1, e), 1.8, 1), opacity: t >= b.eqAt ? 1 : 0}}>=</span>
+        </div>
+        <div style={{width: lerp(f, 250, 0), overflow: 'hidden', opacity: 1 - f}}>{card(b.bAt, 'Overweight', 0.9, 1, 0)}</div>
       </div>
+      {t >= b.focusAt + 0.25 ? (
+        <div style={{position: 'absolute', left: 0, right: 0, top: 268, display: 'flex', justifyContent: 'center', paddingLeft: 300}}>
+          <div style={{padding: '8px 22px', borderRadius: 999, background: AMBER, boxShadow: shadow, fontFamily: GROT, fontWeight: 800, fontSize: 34, color: INK, scale: lerp(Math.min(1.08, tag), 1.8, 1), opacity: Math.min(1, tag * 3)}}>This Type ↓</div>
+        </div>
+      ) : null}
     </AbsoluteFill>
   );
 };
@@ -219,7 +229,7 @@ export const CommentLine: React.FC<{at: number}> = ({at}) => {
       <div style={{position: 'absolute', left: 0, right: 0, top: 280, display: 'flex', justifyContent: 'center', opacity: k, translate: `0 ${lerp(k, 16, 0)}px`}}>
         <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 80, color: WHITE, textShadow: '0 3px 18px rgba(0,0,0,0.75), 0 1px 4px rgba(0,0,0,0.6)'}}>comment</span>
       </div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 1120, display: 'flex', justifyContent: 'center', opacity: tween(t, at + 0.9, 0.35, EASE_OUT), translate: `0 ${lerp(tween(t, at + 0.9, 0.35, EASE_OUT), 16, 0)}px`}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 1250, display: 'flex', justifyContent: 'center', opacity: tween(t, at + 0.9, 0.35, EASE_OUT), translate: `0 ${lerp(tween(t, at + 0.9, 0.35, EASE_OUT), 16, 0)}px`}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 14, padding: '14px 32px', borderRadius: 999, background: BRAND, boxShadow: shadow, fontFamily: GROT, fontWeight: 800, fontSize: 44, color: WHITE}}>
           I'll help you transform →
         </div>
