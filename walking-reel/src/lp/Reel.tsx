@@ -45,6 +45,22 @@ const Card: React.FC<{children: React.ReactNode; pad?: number}> = ({children, pa
   <div style={{background: 'rgba(255,255,255,0.96)', borderRadius: 26, boxShadow: shadow, padding: pad}}>{children}</div>
 );
 
+/** Dark-ink words rising in one by one, for use inside a white Card. */
+const InkLine: React.FC<{t: number; words: [string, number][]; accent?: boolean}> = ({t, words, accent}) => (
+  <div style={{display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', columnGap: 14}}>
+    {words.map(([w, at], i) => {
+      const p = Math.max(0, Math.min(1, (t - at + 0.06) / 0.22));
+      const serif = w.startsWith('_');
+      return (
+        <span key={i} style={{opacity: p, translate: `0 ${(1 - p) * 10}px`, display: 'inline-block', lineHeight: 1.05,
+          ...(serif
+            ? {fontFamily: SERIF, fontStyle: 'italic', fontSize: 56, color: accent ? BRAND : '#B0413E'}
+            : {fontFamily: GROT, fontWeight: 800, fontSize: 50, letterSpacing: -1.5, color: accent ? BRAND : INK})}}>{w.replace(/^_/, '')}</span>
+      );
+    })}
+  </div>
+);
+
 /** Small chapter tag top-left. */
 const CHAPTERS = [
   {a: 42.9, b: 80.9, text: 'Real Clients'},
@@ -299,10 +315,12 @@ const Scene: React.FC = () => {
           </div>
         </Card>
       </Panel>
-      <Panel side="left" a={281.4} b={290.9} top={300}>
-        <MixLine words={[{text: '_Not', start: 281.65}, {text: 'another', start: 282.23}, {text: 'extreme', start: 282.57}, {text: 'plan', start: 282.97}]} size={60} t={t} />
-        <div style={{height: 12}} />
-        <MixLine words={[{text: 'Realistic', start: 284.89}, {text: '_+', start: 285.37}, {text: 'Guidance', start: 286.35}]} size={60} t={t} />
+      <Panel side="left" a={281.4} b={290.9} top={330}>
+        <Card pad={34}>
+          <InkLine t={t} words={[['_Not', 281.65], ['another', 282.23], ['extreme', 282.57], ['plan', 282.97]]} />
+          <div style={{height: 18, borderBottom: '2px solid #ECE7DE', marginBottom: 18}} />
+          <InkLine t={t} words={[['Realistic', 284.89], ['_+', 285.37], ['Guidance', 286.35]]} accent />
+        </Card>
       </Panel>
 
       {/* ---------------- 7. Book your call ---------------- */}
