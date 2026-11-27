@@ -87,11 +87,6 @@ export const BodyTags: React.FC<{b: BodyPair}> = ({b}) => {
       <div style={{position: 'absolute', right: 36, top: 282, opacity: 1 - f}}>
         <Tag text="Overweight" k={kb} dot="#FFFFFF" align="right" />
       </div>
-      {t >= b.eqAt ? (
-        <div style={{position: 'absolute', left: 540 - 52, top: 360, width: 104, height: 104, borderRadius: '50%', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 14px 28px -10px rgba(0,0,0,0.55)', scale: lerp(Math.min(1.1, e), 2, 1) * lerp(f, 1, 0.6), opacity: Math.min(1, e * 3) * (1 - f)}}>
-          <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 84, lineHeight: 1, color: '#FFFFFF', marginTop: -8}}>=</span>
-        </div>
-      ) : null}
       {ring > 0 ? (
         <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
           <ellipse cx={162} cy={FIG_TOP + 0.385 * FIG_H} rx={74} ry={88} fill="none" stroke="#DDEB2F" strokeWidth={6} strokeDasharray={C * 1.1} strokeDashoffset={C * 1.1 * (1 - ring)} style={{filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.45))'}} />
@@ -182,7 +177,7 @@ export const VisceralInsert: React.FC<{v: Visceral; captions: {text: string; sta
         </div>
         <div style={{...MONO, fontSize: 20, letterSpacing: 4, opacity: 0.6, marginTop: 4, marginBottom: 10}}>{stage === 0 ? 'outside' : 'inside'}</div>
         <div style={{fontFamily: SERIF, fontSize: 92, lineHeight: 1, color: INK, opacity: hk, translate: `0 ${lerp(hk, 12, 0)}px`}}>
-          {stage === 3 ? <span style={{background: NEON, padding: '2px 12px'}}>{head}</span> : head}
+          {stage === 3 ? <span style={{display: 'inline-block', marginTop: 14, background: NEON, padding: '2px 12px'}}>{head}</span> : head}
         </div>
       </div>
       {/* leader line from the header to the ring */}

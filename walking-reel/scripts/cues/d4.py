@@ -12,7 +12,6 @@ def cues(cue, rng):
     cue(1.16, "pack:click", -27)
     cue(2.02, "pack:x_whip", -24)
     cue(2.24, "pack:click", -27)
-    cue(2.92, "pack:x_clickhit", -23)
     cue(3.8, "pack:x_whip", -27)
     cue(4.05, "pack:y_ping", -25)
     # "the most DANGEROUS" rises from behind her head
