@@ -7,10 +7,11 @@ BROLL = []
 
 def cues(cue, rng):
     # photo cards snap in like photos, "=" lands, then "This Type" on the skinny-fat card
-    cue(0.96, "pack:y_shutter2", -22)
-    cue(0.98, "pack:y_swoosh", -27)
-    cue(2.04, "pack:y_shutter2", -22)
-    cue(2.06, "pack:y_swoosh", -27)
+    # the two men slide into the room beside her
+    cue(0.94, "pack:x_whip", -24)
+    cue(1.16, "pack:click", -27)
+    cue(2.02, "pack:x_whip", -24)
+    cue(2.24, "pack:click", -27)
     cue(2.92, "pack:x_clickhit", -23)
     cue(3.8, "pack:x_whip", -27)
     cue(4.05, "pack:y_ping", -25)

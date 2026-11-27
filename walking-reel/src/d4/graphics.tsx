@@ -31,43 +31,71 @@ const Body: React.FC<{w: number; belly: number; heavy?: number; color?: string; 
   );
 };
 
-/** "If you look like this and you think you're better than this, then you're not." */
+/** "If you look like this and you think you're better than this, then you're not.":
+ *  two full-length men stand in the room behind her (her cut-out is drawn over their legs), one each side;
+ *  small technical tags like the body scan; a red "=" between; on "is type ka" the skinny-fat one is ringed. */
 export type BodyPair = {start: number; end: number; aAt: number; bAt: number; eqAt: number; focusAt: number};
-export const BodyCards: React.FC<{b: BodyPair}> = ({b}) => {
+const FIG_TOP = 330;
+const FIG_H = 1000;
+const TAG: React.CSSProperties = {fontFamily: GROT, fontWeight: 700, fontSize: 26, letterSpacing: 3, textTransform: 'uppercase', color: '#FFFFFF'};
+const Tag: React.FC<{text: string; k: number; dot: string; align: 'left' | 'right'; hl?: boolean}> = ({text, k, dot, align, hl}) => (
+  <div style={{display: 'flex', alignItems: 'center', gap: 10, flexDirection: align === 'left' ? 'row' : 'row-reverse', opacity: k, translate: `${lerp(k, align === 'left' ? -16 : 16, 0)}px 0`}}>
+    <span style={{width: 14, height: 14, borderRadius: '50%', background: dot, boxShadow: '0 0 0 3px rgba(20,20,20,0.85)'}} />
+    <span style={{...TAG, padding: '6px 12px', background: hl ? '#DDEB2F' : 'rgba(20,20,20,0.88)', color: hl ? '#141414' : '#FFFFFF'}}>{text}</span>
+  </div>
+);
+export const BodyFigures: React.FC<{b: BodyPair}> = ({b}) => {
   const t = useT();
-  const o = vis(t, b);
-  if (o <= 0) return null;
-  const card = (at: number, label: string, img: string, glow: number) => {
-    const k = popAt(t, at);
-    return t < at ? (
-      <div style={{width: 250}} />
-    ) : (
-      <div style={{position: 'relative', width: 250, height: 310, borderRadius: 24, overflow: 'hidden', background: '#FFFFFF', boxShadow: `0 0 0 5px #FFFFFF, ${shadow}`, scale: lerp(Math.min(1.06, k), 0.5, 1), opacity: Math.min(1, k * 3)}}>
-        <Img src={staticFile(`d4/img/${img}.jpg`)} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover'}} />
-        {glow > 0 ? <div style={{position: 'absolute', left: '22%', top: '46%', width: '62%', height: '30%', borderRadius: '50%', border: `5px solid ${AMBER}`, boxShadow: `0 0 18px ${AMBER}`, opacity: glow}} /> : null}
-        <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: '26px 0 10px', background: 'linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0))', textAlign: 'center'}}>
-          <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 32, color: '#FFFFFF'}}>{label}</span>
-        </div>
-      </div>
-    );
-  };
-  const e = popAt(t, b.eqAt);
-  // "Agar aapko is type ka body fat hai": the skinny-fat card takes the stage, belly lit up
-  const f = tween(t, b.focusAt, 0.45, EASE_OUT);
-  const tag = popAt(t, b.focusAt + 0.25);
+  if (t < b.start || t > b.end + 0.3) return null;
+  const out = tween(t, b.end - 0.1, 0.35, EASE_IN);
+  const ka = tween(t, b.aAt, 0.5, EASE_OUT);
+  const kb = tween(t, b.bAt, 0.5, EASE_OUT);
+  const f = tween(t, b.focusAt, 0.5, EASE_OUT);
+  const fig = (src: string, w: number, left: number, k: number, from: number, dim: number, scale: number) => (
+    <div style={{position: 'absolute', left, top: FIG_TOP, height: FIG_H, translate: `${lerp(k, from, 0) + lerp(out, 0, from)}px 0`, opacity: Math.min(1, k * 1.5) * (1 - out) * dim, filter: 'drop-shadow(0 24px 30px rgba(0,0,0,0.35))', scale, transformOrigin: '50% 40%'}}>
+      <Img src={staticFile(`d4/img/${src}`)} style={{height: FIG_H, width: w, display: 'block'}} />
+    </div>
+  );
+  const W_A = (218 / 1088) * FIG_H;
+  const W_B = (310 / 1086) * FIG_H;
   return (
-    <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 285, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: lerp(f, 26, 0)}}>
-        <div style={{scale: lerp(f, 1, 1.08), transformOrigin: '50% 0', translate: `0 ${lerp(f, 0, -10)}px`}}>{card(b.aAt, 'Skinny Fat', 'skinny', t >= b.eqAt ? Math.min(1, Math.max(e, f)) : 0)}</div>
-        <div style={{width: lerp(f, 70, 0), overflow: 'hidden', opacity: 1 - f}}>
-          <span style={{display: 'block', width: 70, textAlign: 'center', fontFamily: GROT, fontWeight: 800, fontSize: 96, color: RED, textShadow: '0 4px 14px rgba(0,0,0,0.35)', scale: lerp(Math.min(1.1, e), 1.8, 1), opacity: t >= b.eqAt ? 1 : 0}}>=</span>
-        </div>
-        <div style={{width: lerp(f, 250, 0), overflow: 'hidden', opacity: 1 - f}}>{card(b.bAt, 'Overweight', 'over', 0)}</div>
+    <AbsoluteFill>
+      {/* soft light behind each figure so they read against the room */}
+      <AbsoluteFill style={{opacity: Math.max(ka * (1 - out), 0) * 0.9, background: 'radial-gradient(22% 30% at 13% 38%, rgba(255,255,255,0.55), rgba(255,255,255,0) 100%)'}} />
+      <AbsoluteFill style={{opacity: kb * (1 - out) * (1 - f) * 0.9, background: 'radial-gradient(24% 30% at 85% 38%, rgba(255,255,255,0.55), rgba(255,255,255,0) 100%)'}} />
+      {fig('skinny_cut.png', W_A, 40, ka, -260, 1, lerp(f, 1, 1.04))}
+      {fig('over_cut.png', W_B, 1080 - 40 - W_B, kb, 300, 1 - f, 1)}
+    </AbsoluteFill>
+  );
+};
+/** The tags, the "=" and the belly ring sit in front of her (top band, clear of her face). */
+export const BodyTags: React.FC<{b: BodyPair}> = ({b}) => {
+  const t = useT();
+  if (t < b.start || t > b.end + 0.3) return null;
+  const out = tween(t, b.end - 0.1, 0.35, EASE_IN);
+  const ka = tween(t, b.aAt + 0.2, 0.35, EASE_OUT);
+  const kb = tween(t, b.bAt + 0.2, 0.35, EASE_OUT);
+  const e = popAt(t, b.eqAt);
+  const f = tween(t, b.focusAt, 0.5, EASE_OUT);
+  const ring = tween(t, b.focusAt + 0.1, 0.55, EASE_OUT);
+  const C = 2 * Math.PI * 80;
+  return (
+    <AbsoluteFill style={{opacity: 1 - out}}>
+      <div style={{position: 'absolute', left: 36, top: 282}}>
+        <Tag text={f > 0.5 ? 'Skinny Fat · This Type' : 'Skinny Fat'} k={ka} dot={f > 0.5 ? '#DDEB2F' : '#FFFFFF'} align="left" hl={f > 0.5} />
       </div>
-      {t >= b.focusAt + 0.25 ? (
-        <div style={{position: 'absolute', left: 0, right: 0, top: 268, display: 'flex', justifyContent: 'center', paddingLeft: 300}}>
-          <div style={{padding: '8px 22px', borderRadius: 999, background: AMBER, boxShadow: shadow, fontFamily: GROT, fontWeight: 800, fontSize: 34, color: INK, scale: lerp(Math.min(1.08, tag), 1.8, 1), opacity: Math.min(1, tag * 3)}}>This Type ↓</div>
+      <div style={{position: 'absolute', right: 36, top: 282, opacity: 1 - f}}>
+        <Tag text="Overweight" k={kb} dot="#FFFFFF" align="right" />
+      </div>
+      {t >= b.eqAt ? (
+        <div style={{position: 'absolute', left: 540 - 52, top: 360, width: 104, height: 104, borderRadius: '50%', background: RED, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 14px 28px -10px rgba(0,0,0,0.55)', scale: lerp(Math.min(1.1, e), 2, 1) * lerp(f, 1, 0.6), opacity: Math.min(1, e * 3) * (1 - f)}}>
+          <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 84, lineHeight: 1, color: '#FFFFFF', marginTop: -8}}>=</span>
         </div>
+      ) : null}
+      {ring > 0 ? (
+        <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+          <ellipse cx={162} cy={FIG_TOP + 0.385 * FIG_H} rx={74} ry={88} fill="none" stroke="#DDEB2F" strokeWidth={6} strokeDasharray={C * 1.1} strokeDashoffset={C * 1.1 * (1 - ring)} style={{filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.45))'}} />
+        </svg>
       ) : null}
     </AbsoluteFill>
   );
@@ -227,13 +255,9 @@ export const DiseaseCards: React.FC<{d: Diseases}> = ({d}) => {
   const t = useT();
   const o = vis(t, d);
   if (o <= 0) return null;
-  const head = tween(t, d.start, 0.35, EASE_OUT);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 268, display: 'flex', justifyContent: 'center', opacity: head, translate: `0 ${lerp(head, 10, 0)}px`}}>
-        <MixWord w="_more prone to" size={52} />
-      </div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 336, display: 'flex', justifyContent: 'center', gap: 18}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 300, display: 'flex', justifyContent: 'center', gap: 18}}>
         {d.items.map((it, i) => {
           const k = popAt(t, it.at);
           const [bg, fg] = TINT[it.kind];
@@ -246,7 +270,7 @@ export const DiseaseCards: React.FC<{d: Diseases}> = ({d}) => {
                 </div>
               </div>
               <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1}}>
-                {words.length > 1 && it.label.length > 12 ? (
+                {words.length > 1 ? (
                   <>
                     <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 34, color: INK, letterSpacing: -0.5}}>{words[0]}</span>
                     <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 34, color: fg}}>{words.slice(1).join(' ')}</span>

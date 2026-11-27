@@ -1,6 +1,6 @@
 import React from 'react';
 import {AdReel, graphicWins} from '../ads/AdReel';
-import {BodyCards, CommentLine, DiseaseCards, IndiaLine, TitleView, VisceralInsert} from './graphics';
+import {BodyFigures, BodyTags, CommentLine, DiseaseCards, IndiaLine, TitleView, VisceralInsert} from './graphics';
 import captions from './captions.json';
 import {BODIES, COMMENT_AT, DISEASES, INDIA, SYNDROME, VISCERAL, d4} from './config';
 
@@ -8,13 +8,14 @@ const a = {
   ...d4,
   layers: (
     <>
-      <BodyCards b={BODIES} />
+      <BodyTags b={BODIES} />
       <TitleView d={SYNDROME} />
       <IndiaLine w={INDIA} />
       <DiseaseCards d={DISEASES} />
       <CommentLine at={COMMENT_AT} />
     </>
   ),
+  under: <BodyFigures b={BODIES} />,
   topLayers: <VisceralInsert v={VISCERAL} captions={captions} />,
 };
 // captions step aside under the graphics

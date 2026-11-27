@@ -35,6 +35,7 @@ export type AdConfig = {
   capY?: number; // caption top (default 640)
   behindLine?: number; // where words rise from behind her head (default 800)
   layers?: React.ReactNode; // reel-specific graphics, drawn above her
+  under?: React.ReactNode; // reel-specific graphics drawn behind her cut-out
   topLayers?: React.ReactNode; // reel-specific full-screen inserts, drawn on top
   beforeAfter?: BeforeAfter;
   /** Ad C: reference-style type (italic serif + heavy grotesque) and its richer graphics */
@@ -340,6 +341,7 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
           <BehindView key={i} b={b} line={a.behindLine} />
         ))}
         {a.cta ? <CtaBehind c={a.cta} /> : null}
+        {a.under}
         <Subject cfg={cfg} />
       </ZoomBlur>
       {a.pills.map((g, i) => (
