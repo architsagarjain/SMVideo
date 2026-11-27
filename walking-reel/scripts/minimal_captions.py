@@ -19,6 +19,15 @@ FIX = {
     'ad8': {(8.76, '500'): '500+', (9.38, 'plus'): None, (53.20, 'rupees'): '₹99', (27.42, 'favorite'): 'favourite', (24.12, 'Piquettes.'): 'PeakX.', (53.66, '99'): None,
             (50.92, 'one'): 'one-on-one', (51.08, 'on'): None, (51.24, 'one'): None},
     'd4': {(33.093, 'transform'): 'transform,', (30.063, 'protein'): 'protein', (31.653, 'if'): 'if'},
+    'dahi': {(2.38, 'dhai'): 'dahi', (7.573, 'Buna'): 'bhuna', (7.933, 'Jira'): 'jeera', (15.533, 'The'): 'Dahi', (16.133, 'heat'): None,
+             (20.901, 'The'): 'Dahi', (21.541, 'heat'): None, (25.041, '1'): '10 on 10', (25.121, ',010'): None,
+             (31.975, 'come'): 'comment', (32.275, 'in'): None, (32.435, 'dahi'): '"DAHI"'},
+    'choc': {(16.666, 'lint'): 'Lindt', (17.246, '70'): '70%', (17.706, '%'): None, (26.556, 'Bonewell.'): 'Bournville.', (28.036, 'foldable'): 'affordable',
+             (46.849, 'Kraft'): 'craft', (57.516, 'Smur'): 'Smoor', (74.051, 'the'): 'The', (74.111, 'whole'): 'Whole', (74.371, 'truth'): 'Truth',
+             (83.697, 'bitter'): 'Bitter', (83.917, '75'): '75%', (84.537, '%'): None, (98.811, 'cacao'): '"CACAO"'},
+    'lp': {(1.22, 'Garwal,'): 'Agarwal,', (3.54, 'Peakex.'): 'PeakX.', (11.82, 'NFS.'): 'INFS.', (13.46, '500'): '500+', (13.96, 'plus'): None,
+           (46.577, 'client'): 'clients', (88.084, 'rupees'): '₹99.', (88.424, '99.'): None, (91.684, 'PeekX'): 'PeakX', (148.684, 'PICACS.'): 'PeakX.',
+           (290.21, 'TKX.'): 'PeakX.', (297.497, 'rupees'): '₹99.', (297.897, '99.'): None, (315.897, 'in'): None, (22.04, 'favorite'): 'favourite'},
 }
 END = {'m2': 120.6}  # the recording stops mid-sentence; end on "swaps."
 
@@ -46,7 +55,7 @@ i = 0
 while i < len(ws):
     w = ws[i]
     # a ratio "A to B" travels as one unit
-    if NUM.match(w["text"]) and i + 2 < len(ws) and ws[i + 1]["text"] == "to" and NUM.match(ws[i + 2]["text"]):
+    if NUM.match(w["text"]) and i + 2 < len(ws) and ws[i + 1]["text"] in ("to", "on") and NUM.match(ws[i + 2]["text"]):
         unit = ws[i:i + 3]
         i += 3
     else:
@@ -77,7 +86,7 @@ for c in out:
         merged.append(c)
 out = merged
 # ads: never leave one word on its own ("another.") - it joins the chunk before it, or takes its last word
-if NAME.startswith('ad') or NAME == 'd4':
+if NAME.startswith('ad') or NAME in ('d4', 'dahi', 'choc', 'lp'):
     fixed = []
     for c in out:
         if fixed and len(c) == 1 and c[0]["start"] - fixed[-1][-1]["end"] < 0.6:

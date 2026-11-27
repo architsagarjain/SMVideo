@@ -4,6 +4,11 @@ import {M1_FRAMES} from './m1/config';
 import {M2Reel} from './m2/Reel';
 import {Ad6Reel} from './ad6/Reel';
 import {D4Reel} from './d4/Reel';
+import {DahiReel} from './dahi/Reel';
+import {ChocReel} from './choc/Reel';
+import {LpReel, LP_FRAMES} from './lp/Reel';
+import {CHOC_FRAMES} from './choc/config';
+import {DAHI_FRAMES} from './dahi/config';
 import {D4_FRAMES} from './d4/config';
 import {LeakClip} from './ads/extras';
 import {AD6_FRAMES} from './ad6/config';
@@ -60,6 +65,9 @@ export const Root: React.FC = () => {
     <Composition id="BloodTests" component={M1Reel} durationInFrames={M1_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="BreakfastSwaps" component={M2Reel} durationInFrames={M2_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="LeakClip" component={LeakClip} durationInFrames={34} fps={FPS} width={WIDTH} height={HEIGHT} defaultProps={{seed: 0}} />
+    <Composition id="LandingPage" component={LpReel} durationInFrames={LP_FRAMES} fps={FPS} width={1920} height={1080} />
+    <Composition id="DarkChocolate" component={ChocReel} durationInFrames={CHOC_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="DahiReel" component={DahiReel} durationInFrames={DAHI_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="SkinnyFat" component={D4Reel} durationInFrames={D4_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="AdCoachA" component={Ad6Reel} durationInFrames={AD6_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="AdCoachB" component={Ad7Reel} durationInFrames={AD7_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />

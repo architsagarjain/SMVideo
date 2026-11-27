@@ -36,6 +36,7 @@ export type AdConfig = {
   behindLine?: number; // where words rise from behind her head (default 800)
   layers?: React.ReactNode; // reel-specific graphics, drawn above her
   under?: React.ReactNode; // reel-specific graphics drawn behind her cut-out
+  shift?: {start: number; end: number; dy: number}; // move her footage down (split-screen moments)
   topLayers?: React.ReactNode; // reel-specific full-screen inserts, drawn on top
   beforeAfter?: BeforeAfter;
   /** Ad C: reference-style type (italic serif + heavy grotesque) and its richer graphics */
@@ -306,6 +307,13 @@ const AdCaps: React.FC<{cfg: ReelConfig; hide: Win[]; mix?: boolean; y?: number}
   );
 };
 
+const ShiftWrap: React.FC<{s?: {start: number; end: number; dy: number}; children: React.ReactNode}> = ({s, children}) => {
+  const t = useT();
+  if (!s || t < s.start - 0.01 || t > s.end + 0.4) return <>{children}</>;
+  const k = Math.min(tween(t, s.start, 0.4, EASE_OUT), 1 - tween(t, s.end, 0.4, EASE_OUT));
+  return <AbsoluteFill style={{translate: `0 ${s.dy * k}px`}}>{children}</AbsoluteFill>;
+};
+
 /** Windows where a graphic sits above her head: captions step aside there. */
 export const graphicWins = (a: AdConfig): Win[] => [
   ...a.pills,
@@ -328,6 +336,7 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
   const {cfg} = a;
   const scene = (
     <>
+      <ShiftWrap s={a.shift}>
       <ZoomBlur w={a.zoom}>
         {a.dolly ? (
           <Dolly win={a.dolly}>
@@ -344,6 +353,7 @@ export const AdReel: React.FC<{a: AdConfig}> = ({a}) => {
         {a.under}
         <Subject cfg={cfg} />
       </ZoomBlur>
+      </ShiftWrap>
       {a.pills.map((g, i) => (
         <Pills key={i} g={g} mix={a.mix} />
       ))}
