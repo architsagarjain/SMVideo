@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
+import {AbsoluteFill, Img, OffthreadVideo, Sequence, staticFile} from 'remotion';
 import {useT} from '../explainer/kit';
 import {EASE_IN, EASE_OUT, FPS, SERIF, lerp, tween} from '../theme';
 import {popAt} from '../series/kit2';
@@ -37,14 +37,17 @@ export const BodyCards: React.FC<{b: BodyPair}> = ({b}) => {
   const t = useT();
   const o = vis(t, b);
   if (o <= 0) return null;
-  const card = (at: number, label: string, belly: number, heavy: number, glow: number) => {
+  const card = (at: number, label: string, img: string, glow: number) => {
     const k = popAt(t, at);
     return t < at ? (
       <div style={{width: 250}} />
     ) : (
-      <div style={{width: 250, height: 300, borderRadius: 26, background: 'rgba(255,255,255,0.96)', boxShadow: shadow, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', paddingBottom: 12, boxSizing: 'border-box', scale: lerp(Math.min(1.06, k), 0.5, 1), opacity: Math.min(1, k * 3)}}>
-        <Body w={124} belly={belly} heavy={heavy} fatGlow={glow} />
-        <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 30, color: INK, marginTop: 4}}>{label}</span>
+      <div style={{position: 'relative', width: 250, height: 310, borderRadius: 24, overflow: 'hidden', background: '#FFFFFF', boxShadow: `0 0 0 5px #FFFFFF, ${shadow}`, scale: lerp(Math.min(1.06, k), 0.5, 1), opacity: Math.min(1, k * 3)}}>
+        <Img src={staticFile(`d4/img/${img}.jpg`)} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover'}} />
+        {glow > 0 ? <div style={{position: 'absolute', left: '22%', top: '46%', width: '62%', height: '30%', borderRadius: '50%', border: `5px solid ${AMBER}`, boxShadow: `0 0 18px ${AMBER}`, opacity: glow}} /> : null}
+        <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: '26px 0 10px', background: 'linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0))', textAlign: 'center'}}>
+          <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 32, color: '#FFFFFF'}}>{label}</span>
+        </div>
       </div>
     );
   };
@@ -55,11 +58,11 @@ export const BodyCards: React.FC<{b: BodyPair}> = ({b}) => {
   return (
     <AbsoluteFill style={{opacity: o}}>
       <div style={{position: 'absolute', left: 0, right: 0, top: 285, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: lerp(f, 26, 0)}}>
-        <div style={{scale: lerp(f, 1, 1.08), transformOrigin: '50% 0', translate: `0 ${lerp(f, 0, -10)}px`}}>{card(b.aAt, 'Skinny Fat', 0.75, 0, t >= b.eqAt ? Math.min(1, Math.max(e, f)) : 0)}</div>
+        <div style={{scale: lerp(f, 1, 1.08), transformOrigin: '50% 0', translate: `0 ${lerp(f, 0, -10)}px`}}>{card(b.aAt, 'Skinny Fat', 'skinny', t >= b.eqAt ? Math.min(1, Math.max(e, f)) : 0)}</div>
         <div style={{width: lerp(f, 70, 0), overflow: 'hidden', opacity: 1 - f}}>
           <span style={{display: 'block', width: 70, textAlign: 'center', fontFamily: GROT, fontWeight: 800, fontSize: 96, color: RED, textShadow: '0 4px 14px rgba(0,0,0,0.35)', scale: lerp(Math.min(1.1, e), 1.8, 1), opacity: t >= b.eqAt ? 1 : 0}}>=</span>
         </div>
-        <div style={{width: lerp(f, 250, 0), overflow: 'hidden', opacity: 1 - f}}>{card(b.bAt, 'Overweight', 0.9, 1, 0)}</div>
+        <div style={{width: lerp(f, 250, 0), overflow: 'hidden', opacity: 1 - f}}>{card(b.bAt, 'Overweight', 'over', 0)}</div>
       </div>
       {t >= b.focusAt + 0.25 ? (
         <div style={{position: 'absolute', left: 0, right: 0, top: 268, display: 'flex', justifyContent: 'center', paddingLeft: 300}}>
@@ -100,8 +103,8 @@ export type Visceral = {start: number; end: number; thinAt: number; bellyAt: num
 const CREAM = '#ECE8E0';
 const NEON = '#DDEB2F';
 const MONO: React.CSSProperties = {fontFamily: GROT, fontWeight: 700, fontSize: 24, letterSpacing: 3, textTransform: 'uppercase', color: INK};
-const BELLY = {x: 532, y: 1360, r: 165};
-const SCALE = 0.8; // her figure, scaled about (540, 600) so the belly comes up into view
+const ANAT = {x: 170, y: 560, w: 740, h: 955};
+const BELLY = {x: 170 + 740 * 0.508, y: 560 + 955 * 0.635, r: 150};
 const DOTS: [number, number, number, boolean][] = [
   [-0.5, -0.2, 0.0, true], [0.35, -0.45, 0.06, false], [0.1, 0.25, 0.12, true], [-0.3, 0.5, 0.18, false], [0.6, 0.15, 0.24, false],
   [-0.65, 0.15, 0.3, false], [0.25, -0.1, 0.36, true], [-0.1, -0.55, 0.42, false], [0.45, 0.5, 0.48, true], [-0.4, -0.5, 0.54, false],
@@ -129,16 +132,15 @@ export const VisceralInsert: React.FC<{v: Visceral; captions: {text: string; sta
   // the caption being spoken, as a black label (reference style)
   let ci = -1;
   for (let i = 0; i < captions.length; i++) if (captions[i][0].start - 0.04 <= t) ci = i;
-  const cap = ci >= 0 && t <= captions[ci][captions[ci].length - 1].end + 0.4 && captions[ci][0].start >= v.start - 0.1 ? captions[ci] : null;
+  const capRaw = ci >= 0 && t <= captions[ci][captions[ci].length - 1].end + 0.4 && captions[ci][0].start >= v.start - 0.1 ? captions[ci] : null;
+  const cap = capRaw && !capRaw.some((w) => /visceral/i.test(w.text)) ? capRaw : null;
   return (
     <AbsoluteFill style={{opacity: Math.min(inP, 1 - outP)}}>
       <AbsoluteFill style={{background: `radial-gradient(90% 60% at 50% 45%, #F4F1EA 0%, ${CREAM} 70%)`}} />
-      {/* her, live, black and white */}
-      <Sequence from={Math.round(v.start * FPS)} durationInFrames={Math.round((v.end - v.start + 0.4) * FPS)} layout="none">
-        <AbsoluteFill style={{scale: lerp(fig, 0.84, SCALE), transformOrigin: '540px 600px', opacity: fig, filter: `grayscale(1) contrast(1.15) brightness(${lerp(outP, 1, 1.6)})`, WebkitMaskImage: 'linear-gradient(to bottom, #000 78%, transparent 96%)', maskImage: 'linear-gradient(to bottom, #000 78%, transparent 96%)'}}>
-          <OffthreadVideo src={staticFile('d4/subject_1080.webm')} transparent muted startFrom={Math.round(v.start * FPS)} style={{width: '100%', height: '100%'}} />
-        </AbsoluteFill>
-      </Sequence>
+      {/* the anatomy image: grey "outside" first, colour (the yellow visceral fat) comes in on "bahut zyada fat" */}
+      <div style={{position: 'absolute', left: ANAT.x, top: ANAT.y, width: ANAT.w, height: ANAT.h, borderRadius: 30, overflow: 'hidden', boxShadow: '0 30px 60px -24px rgba(0,0,0,0.55)', opacity: fig, scale: lerp(fig, 0.94, 1)}}>
+        <Img src={staticFile('d4/img/anatomy.jpg')} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: `grayscale(${1 - tween(t, v.fatAt, 0.8, EASE_OUT)}) brightness(${lerp(outP, 1, 1.6)})`, scale: lerp(tween(t, v.start, v.end - v.start, (x) => x), 1.0, 1.06)}} />
+      </div>
       {/* frame */}
       <Bracket x={70} y={270} fx={1} fy={1} k={br} />
       <Bracket x={1010} y={270} fx={-1} fy={1} k={br} />
@@ -150,29 +152,19 @@ export const VisceralInsert: React.FC<{v: Visceral; captions: {text: string; sta
           <span style={{width: 16, height: 16, borderRadius: '50%', border: `3px solid ${INK}`, background: stage >= 1 ? NEON : 'transparent', boxSizing: 'border-box'}} />
           <span style={MONO}>Skinny Fat</span>
         </div>
-        <div style={{...MONO, fontSize: 20, letterSpacing: 4, opacity: 0.6, marginTop: 8}}>{stage === 0 ? 'outside' : 'inside'}</div>
+        <div style={{...MONO, fontSize: 20, letterSpacing: 4, opacity: 0.6, marginTop: 4, marginBottom: 10}}>{stage === 0 ? 'outside' : 'inside'}</div>
         <div style={{fontFamily: SERIF, fontSize: 92, lineHeight: 1, color: INK, opacity: hk, translate: `0 ${lerp(hk, 12, 0)}px`}}>
-          {stage === 3 ? <span style={{background: NEON, padding: '0 10px'}}>{head}</span> : head}
+          {stage === 3 ? <span style={{background: NEON, padding: '2px 12px'}}>{head}</span> : head}
         </div>
       </div>
       {/* leader line from the header to the ring */}
       <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
-        <path d={`M 118 ${470} L 118 ${BELLY.y} L ${BELLY.x - BELLY.r} ${BELLY.y}`} fill="none" stroke={INK} strokeWidth={2} strokeOpacity={0.55} pathLength={1} strokeDasharray={1} strokeDashoffset={1 - lead} />
+        <path d={`M 118 ${490} L 118 ${BELLY.y} L ${BELLY.x - BELLY.r} ${BELLY.y}`} fill="none" stroke={INK} strokeWidth={2} strokeOpacity={0.55} pathLength={1} strokeDasharray={1} strokeDashoffset={1 - lead} />
         <circle cx={BELLY.x} cy={BELLY.y} r={BELLY.r * pulse} fill="none" stroke={NEON} strokeWidth={6} strokeDasharray={C} strokeDashoffset={C * (1 - ring)} transform={`rotate(-90 ${BELLY.x} ${BELLY.y})`} style={{filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.35))'}} />
         {ring > 0.95 ? <circle cx={BELLY.x} cy={BELLY.y} r={7} fill={NEON} stroke={INK} strokeWidth={2} /> : null}
-        {DOTS.map(([dx, dy, d, y], i) => {
-          const k = popAt(t, v.fatAt + d);
-          if (t < v.fatAt + d) return null;
-          return <circle key={i} cx={BELLY.x + dx * BELLY.r} cy={BELLY.y + dy * BELLY.r} r={lerp(Math.min(1.1, k), 2, y ? 13 : 11)} fill={y ? NEON : '#FFFFFF'} stroke={INK} strokeWidth={2.5} />;
-        })}
       </svg>
-      {t >= v.nameAt ? (
-        <div style={{position: 'absolute', left: BELLY.x + BELLY.r + 18, top: BELLY.y - BELLY.r - 10, padding: '8px 16px', background: INK, scale: lerp(Math.min(1.08, name), 1.6, 1), opacity: Math.min(1, name * 3), transformOrigin: 'left center'}}>
-          <span style={{...MONO, color: NEON, fontSize: 26}}>Visceral Fat</span>
-        </div>
-      ) : null}
       {cap ? (
-        <div style={{position: 'absolute', left: 0, right: 0, top: 1700, display: 'flex', justifyContent: 'center'}}>
+        <div style={{position: 'absolute', left: 0, right: 0, top: 1560, display: 'flex', justifyContent: 'center'}}>
           <div style={{padding: '10px 18px', background: INK}}>
             <span style={{...MONO, color: '#FFFFFF', fontSize: 30, letterSpacing: 2}}>{cap.map((w) => w.text.replace(/[,.]$/, '')).join(' ')}</span>
           </div>
@@ -230,19 +222,39 @@ const Icon: React.FC<{kind: 'drop' | 'liver' | 'pulse'}> = ({kind}) => (
   </svg>
 );
 export type Diseases = {start: number; end: number; items: {label: string; at: number; kind: 'drop' | 'liver' | 'pulse'}[]};
+const TINT = {drop: ['#FDECEC', RED], liver: ['#F8EDE4', '#B5542E'], pulse: ['#FDEBF1', '#E5484D']} as const;
 export const DiseaseCards: React.FC<{d: Diseases}> = ({d}) => {
   const t = useT();
   const o = vis(t, d);
   if (o <= 0) return null;
+  const head = tween(t, d.start, 0.35, EASE_OUT);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 290, display: 'flex', justifyContent: 'center', gap: 22}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 268, display: 'flex', justifyContent: 'center', opacity: head, translate: `0 ${lerp(head, 10, 0)}px`}}>
+        <MixWord w="_more prone to" size={52} />
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 336, display: 'flex', justifyContent: 'center', gap: 18}}>
         {d.items.map((it, i) => {
           const k = popAt(t, it.at);
+          const [bg, fg] = TINT[it.kind];
+          const words = it.label.split(' ');
           return (
-            <div key={i} style={{width: 300, height: 250, borderRadius: 26, background: 'rgba(255,255,255,0.96)', boxShadow: shadow, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, scale: lerp(Math.min(1.06, k), 0.4, 1), opacity: t < it.at ? 0 : Math.min(1, k * 3), translate: `0 ${lerp(Math.min(1, k), -60, 0)}px`}}>
-              <Icon kind={it.kind} />
-              <span style={{fontFamily: GROT, fontWeight: 800, fontSize: it.label.length > 12 ? 30 : 38, color: INK, textAlign: 'center', lineHeight: 1.05}}>{it.label}</span>
+            <div key={i} style={{width: 296, height: 228, borderRadius: 30, background: 'rgba(255,255,255,0.97)', boxShadow: '0 1px 0 rgba(255,255,255,0.9) inset, 0 20px 40px -18px rgba(0,0,0,0.45)', border: '1px solid rgba(20,20,20,0.06)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, scale: lerp(Math.min(1.05, k), 0.6, 1), opacity: t < it.at ? 0 : Math.min(1, k * 3), translate: `0 ${lerp(Math.min(1, k), 30, 0)}px`}}>
+              <div style={{width: 96, height: 96, borderRadius: '50%', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 0 6px ${bg}66`}}>
+                <div style={{scale: 0.66}}>
+                  <Icon kind={it.kind} />
+                </div>
+              </div>
+              <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1}}>
+                {words.length > 1 && it.label.length > 12 ? (
+                  <>
+                    <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 34, color: INK, letterSpacing: -0.5}}>{words[0]}</span>
+                    <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 34, color: fg}}>{words.slice(1).join(' ')}</span>
+                  </>
+                ) : (
+                  <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 36, color: INK, letterSpacing: -0.5}}>{it.label}</span>
+                )}
+              </div>
             </div>
           );
         })}
