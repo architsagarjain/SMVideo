@@ -128,7 +128,7 @@ const Scene: React.FC = () => {
           <div style={{display: 'flex', gap: 14}}>
             {[{n: 'NASM', at: 10.04}, {n: 'ISSA', at: 10.88}, {n: 'INFS', at: 11.82}].map((c, i) => (
               <div key={c.n} style={{flex: 1, opacity: t >= c.at ? 1 : 0, scale: t >= c.at ? lerp(Math.min(1.05, popAt(t, c.at)), 0.6, 1) : 0.6}}>
-                <Slot n={i + 1} label={`${c.n} certificate / logo`} style={{height: 170, borderRadius: 14}} />
+                <Slot n={c.n} label="certificate / logo" style={{height: 170, borderRadius: 14}} />
                 <div style={{textAlign: 'center', fontFamily: GROT, fontWeight: 800, fontSize: 30, marginTop: 8}}>{c.n}</div>
               </div>
             ))}
@@ -171,7 +171,7 @@ const Scene: React.FC = () => {
       {/* ---------------- 2. Real clients ---------------- */}
       <Panel side="right" a={46.0} b={56.9}>
         <Card pad={22}>
-          <Slot n={2} label="Client 1 before / after (with consent)" style={{height: 330, borderRadius: 16}} />
+          <Slot n={1} label="Client 1 before / after (with consent)" style={{height: 330, borderRadius: 16}} />
           <div style={{marginTop: 14, display: 'flex', alignItems: 'baseline', gap: 14}}>
             {t >= 53.97 ? <span style={{fontFamily: ANTON, fontSize: 70, color: INK}}>72 → 66 kg</span> : null}
           </div>
@@ -180,7 +180,7 @@ const Scene: React.FC = () => {
       </Panel>
       <Panel side="right" a={57.0} b={65.6}>
         <Card pad={22}>
-          <Slot n={3} label="Client 2 before / after (with consent)" style={{height: 330, borderRadius: 16}} />
+          <Slot n={2} label="Client 2 before / after (with consent)" style={{height: 330, borderRadius: 16}} />
           <div style={{marginTop: 14}}>{t >= 61.4 ? <span style={{fontFamily: ANTON, fontSize: 70, color: INK}}>85 → 79 kg</span> : null}</div>
           <div style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 34, color: '#5A5650'}}>Mother of 3 · runs her business · 3 months</div>
         </Card>
@@ -210,26 +210,26 @@ const Scene: React.FC = () => {
       </Panel>
       <Panel side="left" a={90.0} b={103.6}>
         <div style={{display: 'flex', gap: 16}}>
-          <Slot n={4} label="PeakX Planner screen" style={{flex: 1, height: 420, borderRadius: 20, boxShadow: shadow}} />
+          <Slot n={3} label="PeakX Planner screen" style={{flex: 1, height: 420, borderRadius: 20, boxShadow: shadow}} />
           <div style={{flex: 1, opacity: t >= 93.44 ? 1 : 0.0}}>
-            <Slot n={5} label="Women's Shredding Guide cover" style={{height: 420, borderRadius: 20, boxShadow: shadow}} />
+            <Slot n={4} label="Women's Shredding Guide cover" style={{height: 420, borderRadius: 20, boxShadow: shadow}} />
           </div>
         </div>
       </Panel>
 
       {/* ---------------- 4. My story ---------------- */}
       <Panel side="right" a={106.3} b={113.6}>
-        <Slot n={6} label="You playing badminton (national level)" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={5} label="You playing badminton (national level)" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
       </Panel>
       <Panel side="left" a={108.3} b={119.9}>
-        <Slot n={7} label="Knee injury / bed-rest photo" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={6} label="Knee injury / bed-rest photo" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
         {t >= 116.5 ? <div style={{marginTop: 14, fontFamily: ANTON, fontSize: 64, color: '#FFFFFF', textShadow: '0 4px 16px rgba(0,0,0,0.6)'}}>+15 KG</div> : null}
       </Panel>
       <Panel side="right" a={120.7} b={130.0}>
-        <Slot n={8} label="Your early Instagram posts (2022)" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={7} label="Your early Instagram posts (2022)" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
       </Panel>
       <Panel side="left" a={127.6} b={136.0}>
-        <Slot n={9} label="DMs from women asking for help (names blurred)" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={8} label="DMs from women asking for help (names blurred)" style={{height: 520, borderRadius: 24, boxShadow: shadow}} />
       </Panel>
       <Panel side="right" a={136.9} b={142.2}>
         <Card>
@@ -237,7 +237,7 @@ const Scene: React.FC = () => {
           <div style={{display: 'flex', gap: 14}}>
             {['NASM', 'ISSA', 'INFS'].map((n, i) => (
               <div key={n} style={{flex: 1}}>
-                <Slot n={i + 1} label={`${n}`} style={{height: 150, borderRadius: 14}} />
+                <Slot n={n} label="certificate" style={{height: 150, borderRadius: 14}} />
               </div>
             ))}
           </div>
@@ -267,23 +267,23 @@ const Scene: React.FC = () => {
         </Card>
       </Panel>
       <Panel side="left" a={152.0} b={169.9}>
-        <Slot n={10} label="Onboarding form / goals questionnaire" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={9} label="Onboarding form / goals questionnaire" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
       </Panel>
       <Panel side="left" a={170.0} b={192.9}>
-        <Slot n={11} label="Sample meal plan / food swaps" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={10} label="Sample meal plan / food swaps" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
         {t >= 178.5 ? <div style={{marginTop: 12, display: 'flex', gap: 10}}>{['Rice', 'Roti', 'Meals out'].map((x) => <span key={x} style={{padding: '6px 16px', borderRadius: 999, background: BRAND, fontFamily: GROT, fontWeight: 800, fontSize: 26, color: '#FFFFFF'}}>{`✓ ${x}`}</span>)}</div> : null}
       </Panel>
       <Panel side="left" a={193.0} b={202.9}>
-        <Slot n={12} label="Weekly check-in screen" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={11} label="Weekly check-in screen" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
       </Panel>
       <Panel side="left" a={203.0} b={210.5}>
-        <Slot n={13} label="WhatsApp support chat (blurred)" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={12} label="WhatsApp support chat (blurred)" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
       </Panel>
       <Panel side="left" a={210.6} b={219.5}>
         <Slot kind="VIDEO" n={3} label="Client workout clip + your form feedback" style={{height: 600, borderRadius: 24, boxShadow: shadow}} dark />
       </Panel>
       <Panel side="left" a={219.6} b={236.5}>
-        <Slot n={14} label="Bloodwork report (blurred)" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
+        <Slot n={13} label="Bloodwork report (blurred)" style={{height: 600, borderRadius: 24, boxShadow: shadow}} />
       </Panel>
 
       {/* ---------------- 6. Who this is for ---------------- */}
