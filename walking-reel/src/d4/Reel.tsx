@@ -1,6 +1,7 @@
 import React from 'react';
 import {AdReel, graphicWins} from '../ads/AdReel';
 import {BodyCards, CommentLine, DiseaseCards, IndiaLine, TitleView, VisceralInsert} from './graphics';
+import captions from './captions.json';
 import {BODIES, COMMENT_AT, DISEASES, INDIA, SYNDROME, VISCERAL, d4} from './config';
 
 const a = {
@@ -14,7 +15,7 @@ const a = {
       <CommentLine at={COMMENT_AT} />
     </>
   ),
-  topLayers: <VisceralInsert v={VISCERAL} />,
+  topLayers: <VisceralInsert v={VISCERAL} captions={captions} />,
 };
 // captions step aside under the graphics
 const extraHide = [SYNDROME, INDIA, DISEASES, VISCERAL, {start: COMMENT_AT - 0.4, end: 999}];

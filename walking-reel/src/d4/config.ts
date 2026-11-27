@@ -16,7 +16,7 @@ const moves = [
   punch(26.26, 27.6, 1.16), // "then you're absolutely wrong."
 ];
 
-export const VISCERAL = {start: 10.38, end: 16.75, thinAt: 10.9, fatAt: 13.6, nameAt: 16.03};
+export const VISCERAL = {start: 10.38, end: 16.75, thinAt: 10.91, bellyAt: 12.83, fatAt: 13.61, nameAt: 15.98};
 export const BODIES = {start: 0.7, end: 5.45, aAt: 0.96, bAt: 2.04, eqAt: 2.92, focusAt: 3.8};
 export const SYNDROME = {start: 8.5, end: 10.38, y: 300, size: 110, rows: [[{text: 'Skinny', at: 9.16}, {text: 'Fat', at: 9.5, color: '#E5484D'}], [{text: '_syndrome', at: 9.92}]]};
 export const INDIA = {start: 17.3, end: 18.65, at: 17.41, flagAt: 18.11};

@@ -19,12 +19,16 @@ def cues(cue, rng):
     cue(8.36, "pack:x_fast", -26)
     for at in (9.16, 9.5, 9.92):
         cue(at, "pack:x_blip", -26)
-    # visceral fat diagram: whoosh in, fat fills, name stamps, whoosh out
+    # body scan: whoosh into the cream page, brackets snap, ring locks on, points pop, label stamps, whoosh out
     cue(10.36, "pack:x_camwhoosh", -24)
-    cue(10.9, "pack:y_bubble", -25)
-    cue(13.6, "pack:x_deep", -26)
-    cue(16.03, "pack:x_clickhit", -22)
-    cue(16.0, "pack:x_boom", -29)
+    cue(10.6, "pack:click", -27)
+    cue(10.91, "pack:y_mouse", -26)
+    cue(12.83, "pack:x_whip", -26)
+    cue(13.4, "pack:x_clickhit", -26)
+    for j in range(7):
+        cue(13.61 + j * 0.12, "pack:x_blip", -30)
+    cue(15.98, "pack:x_clickhit", -22)
+    cue(16.0, "pack:x_boom", -30)
     cue(16.72, "pack:x_whip", -26)
     # mostly seen in Indians, then the three diseases
     cue(18.11, "pack:y_ding", -27)

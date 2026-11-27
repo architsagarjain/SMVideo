@@ -1,7 +1,7 @@
 import React from 'react';
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill, OffthreadVideo, Sequence, staticFile} from 'remotion';
 import {useT} from '../explainer/kit';
-import {EASE_IN, EASE_OUT, SERIF, lerp, tween} from '../theme';
+import {EASE_IN, EASE_OUT, FPS, SERIF, lerp, tween} from '../theme';
 import {popAt} from '../series/kit2';
 import {BRAND, GROT, MixWord} from '../ads/extras';
 
@@ -94,55 +94,87 @@ export const TitleView: React.FC<{d: Title}> = ({d}) => {
 };
 
 /** "Isme patle toh zaroor dikh sakte ho, but aapki belly area mein bahut zyada fat hota hai - visceral fat":
- *  a full-screen diagram: thin on the outside, fat packed around the organs inside. */
-export type Visceral = {start: number; end: number; thinAt: number; fatAt: number; nameAt: number};
-const Organs: React.FC<{fat: number; pulse: number}> = ({fat, pulse}) => (
-  <svg width={520} height={420} viewBox="0 0 260 210" style={{display: 'block'}}>
-    {/* belly outline */}
-    <path d="M40 10 C20 60 18 150 50 200 L210 200 C242 150 240 60 220 10 Z" fill="#F3D9C6" stroke="#E2B89C" strokeWidth={3} />
-    {/* visceral fat around the organs */}
-    <g opacity={fat} style={{transformOrigin: '130px 105px', scale: `${1 + pulse * 0.03}`}}>
-      <ellipse cx={130} cy={105} rx={92} ry={78} fill={AMBER} opacity={0.9} />
-      {[[70, 60], [190, 58], [64, 150], [196, 152], [130, 30], [130, 184]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r={20} fill="#F7B84A" />
-      ))}
-    </g>
-    {/* organs */}
-    <path d="M92 50 C110 34 150 36 166 52 C176 66 160 80 140 78 C120 76 100 74 92 62 Z" fill="#C85C5C" />
-    <path d="M86 96 C86 84 174 84 174 96 C174 106 86 106 86 116 C86 128 174 126 174 138 C174 150 86 150 86 160" fill="none" stroke="#B8545A" strokeWidth={14} strokeLinecap="round" />
-  </svg>
+ *  a full-screen "body scan" (after the reference reel): cream page, her live cut-out in black and white,
+ *  corner brackets, small technical labels, a yellow target ring that locks onto her belly and fills with points. */
+export type Visceral = {start: number; end: number; thinAt: number; bellyAt: number; fatAt: number; nameAt: number};
+const CREAM = '#ECE8E0';
+const NEON = '#DDEB2F';
+const MONO: React.CSSProperties = {fontFamily: GROT, fontWeight: 700, fontSize: 24, letterSpacing: 3, textTransform: 'uppercase', color: INK};
+const BELLY = {x: 532, y: 1360, r: 165};
+const SCALE = 0.8; // her figure, scaled about (540, 600) so the belly comes up into view
+const DOTS: [number, number, number, boolean][] = [
+  [-0.5, -0.2, 0.0, true], [0.35, -0.45, 0.06, false], [0.1, 0.25, 0.12, true], [-0.3, 0.5, 0.18, false], [0.6, 0.15, 0.24, false],
+  [-0.65, 0.15, 0.3, false], [0.25, -0.1, 0.36, true], [-0.1, -0.55, 0.42, false], [0.45, 0.5, 0.48, true], [-0.4, -0.5, 0.54, false],
+  [0.0, 0.6, 0.6, false], [0.7, -0.25, 0.66, true], [-0.2, 0.1, 0.72, false], [0.15, -0.7, 0.78, false],
+];
+const Bracket: React.FC<{x: number; y: number; fx: 1 | -1; fy: 1 | -1; k: number}> = ({x, y, fx, fy, k}) => (
+  <div style={{position: 'absolute', left: x, top: y, width: 46 * k, height: 46 * k, borderLeft: fx === 1 ? `3px solid ${INK}` : undefined, borderRight: fx === -1 ? `3px solid ${INK}` : undefined, borderTop: fy === 1 ? `3px solid ${INK}` : undefined, borderBottom: fy === -1 ? `3px solid ${INK}` : undefined, translate: `${fx === -1 ? -46 * k : 0}px ${fy === -1 ? -46 * k : 0}px`, opacity: 0.75}} />
 );
-export const VisceralInsert: React.FC<{v: Visceral}> = ({v}) => {
+export const VisceralInsert: React.FC<{v: Visceral; captions: {text: string; start: number; end: number}[][]}> = ({v, captions}) => {
   const t = useT();
-  if (t < v.start || t > v.end + 0.25) return null;
-  const inP = tween(t, v.start, 0.25, EASE_OUT);
-  const outP = tween(t, v.end - 0.05, 0.25, EASE_IN);
-  const bloom = Math.max(1 - inP, outP);
-  const fat = tween(t, v.fatAt, 0.6, EASE_OUT);
-  const thin = popAt(t, v.thinAt);
+  if (t < v.start || t > v.end + 0.3) return null;
+  const inP = tween(t, v.start, 0.3, EASE_OUT);
+  const outP = tween(t, v.end - 0.1, 0.35, EASE_IN);
+  const fig = tween(t, v.start + 0.1, 0.5, EASE_OUT);
+  const br = tween(t, v.start + 0.15, 0.45, EASE_OUT);
+  const ring = tween(t, v.bellyAt, 0.6, EASE_OUT);
+  const lead = tween(t, v.bellyAt + 0.25, 0.4, EASE_OUT);
   const name = popAt(t, v.nameAt);
-  const pulse = t > v.fatAt ? Math.sin((t - v.fatAt) * 6) * 0.5 + 0.5 : 0;
+  const pulse = t > v.nameAt ? 1 + 0.04 * Math.sin((t - v.nameAt) * 7) : 1;
+  const stage = t >= v.nameAt ? 3 : t >= v.fatAt ? 2 : t >= v.bellyAt ? 1 : 0;
+  const head = ['Looks Thin', 'Belly Area', 'Too Much Fat', 'Visceral Fat'][stage];
+  const at = [v.thinAt, v.bellyAt, v.fatAt, v.nameAt][stage];
+  const hk = tween(t, at, 0.3, EASE_OUT);
+  const C = 2 * Math.PI * BELLY.r;
+  // the caption being spoken, as a black label (reference style)
+  let ci = -1;
+  for (let i = 0; i < captions.length; i++) if (captions[i][0].start - 0.04 <= t) ci = i;
+  const cap = ci >= 0 && t <= captions[ci][captions[ci].length - 1].end + 0.4 && captions[ci][0].start >= v.start - 0.1 ? captions[ci] : null;
   return (
-    <AbsoluteFill style={{opacity: 1 - bloom * 0.9, filter: `blur(${bloom * 16}px)`}}>
-      <AbsoluteFill style={{background: 'radial-gradient(120% 70% at 50% 45%, #2A2420 0%, #110E0C 75%)'}} />
-      <div style={{position: 'absolute', left: 0, right: 0, top: 300, display: 'flex', justifyContent: 'center', gap: 40, alignItems: 'flex-start'}}>
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, opacity: Math.min(1, thin * 3), scale: lerp(Math.min(1.05, thin), 0.6, 1)}}>
-          <MixWord w="_outside" size={56} />
-          <Body w={150} belly={0.15} color="#E9E4DC" />
-          <span style={{padding: '6px 20px', borderRadius: 999, background: BRAND, fontFamily: GROT, fontWeight: 800, fontSize: 34, color: WHITE}}>Looks Thin ✓</span>
+    <AbsoluteFill style={{opacity: Math.min(inP, 1 - outP)}}>
+      <AbsoluteFill style={{background: `radial-gradient(90% 60% at 50% 45%, #F4F1EA 0%, ${CREAM} 70%)`}} />
+      {/* her, live, black and white */}
+      <Sequence from={Math.round(v.start * FPS)} durationInFrames={Math.round((v.end - v.start + 0.4) * FPS)} layout="none">
+        <AbsoluteFill style={{scale: lerp(fig, 0.84, SCALE), transformOrigin: '540px 600px', opacity: fig, filter: `grayscale(1) contrast(1.15) brightness(${lerp(outP, 1, 1.6)})`, WebkitMaskImage: 'linear-gradient(to bottom, #000 78%, transparent 96%)', maskImage: 'linear-gradient(to bottom, #000 78%, transparent 96%)'}}>
+          <OffthreadVideo src={staticFile('d4/subject_1080.webm')} transparent muted startFrom={Math.round(v.start * FPS)} style={{width: '100%', height: '100%'}} />
+        </AbsoluteFill>
+      </Sequence>
+      {/* frame */}
+      <Bracket x={70} y={270} fx={1} fy={1} k={br} />
+      <Bracket x={1010} y={270} fx={-1} fy={1} k={br} />
+      <Bracket x={70} y={1640} fx={1} fy={-1} k={br} />
+      <Bracket x={1010} y={1640} fx={-1} fy={-1} k={br} />
+      {/* header */}
+      <div style={{position: 'absolute', left: 110, top: 300, display: 'flex', flexDirection: 'column', gap: 6, opacity: br}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+          <span style={{width: 16, height: 16, borderRadius: '50%', border: `3px solid ${INK}`, background: stage >= 1 ? NEON : 'transparent', boxSizing: 'border-box'}} />
+          <span style={MONO}>Skinny Fat</span>
         </div>
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, opacity: tween(t, v.fatAt - 0.3, 0.4)}}>
-          <MixWord w="_inside" size={56} />
-          <div style={{borderRadius: 30, overflow: 'hidden', boxShadow: `0 0 ${60 * fat}px rgba(245,165,36,${0.45 * fat})`}}>
-            <Organs fat={fat} pulse={pulse} />
-          </div>
-          <span style={{padding: '6px 20px', borderRadius: 999, background: AMBER, fontFamily: GROT, fontWeight: 800, fontSize: 34, color: INK, opacity: Math.min(1, fat * 2)}}>Fat Around the Organs</span>
+        <div style={{...MONO, fontSize: 20, letterSpacing: 4, opacity: 0.6, marginTop: 8}}>{stage === 0 ? 'outside' : 'inside'}</div>
+        <div style={{fontFamily: SERIF, fontSize: 92, lineHeight: 1, color: INK, opacity: hk, translate: `0 ${lerp(hk, 12, 0)}px`}}>
+          {stage === 3 ? <span style={{background: NEON, padding: '0 10px'}}>{head}</span> : head}
         </div>
       </div>
+      {/* leader line from the header to the ring */}
+      <svg width={1080} height={1920} style={{position: 'absolute', inset: 0}}>
+        <path d={`M 118 ${470} L 118 ${BELLY.y} L ${BELLY.x - BELLY.r} ${BELLY.y}`} fill="none" stroke={INK} strokeWidth={2} strokeOpacity={0.55} pathLength={1} strokeDasharray={1} strokeDashoffset={1 - lead} />
+        <circle cx={BELLY.x} cy={BELLY.y} r={BELLY.r * pulse} fill="none" stroke={NEON} strokeWidth={6} strokeDasharray={C} strokeDashoffset={C * (1 - ring)} transform={`rotate(-90 ${BELLY.x} ${BELLY.y})`} style={{filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.35))'}} />
+        {ring > 0.95 ? <circle cx={BELLY.x} cy={BELLY.y} r={7} fill={NEON} stroke={INK} strokeWidth={2} /> : null}
+        {DOTS.map(([dx, dy, d, y], i) => {
+          const k = popAt(t, v.fatAt + d);
+          if (t < v.fatAt + d) return null;
+          return <circle key={i} cx={BELLY.x + dx * BELLY.r} cy={BELLY.y + dy * BELLY.r} r={lerp(Math.min(1.1, k), 2, y ? 13 : 11)} fill={y ? NEON : '#FFFFFF'} stroke={INK} strokeWidth={2.5} />;
+        })}
+      </svg>
       {t >= v.nameAt ? (
-        <div style={{position: 'absolute', left: 0, right: 0, top: 1060, display: 'flex', justifyContent: 'center', scale: lerp(Math.min(1.08, name), 1.8, 1), opacity: Math.min(1, name * 3)}}>
-          <div style={{padding: '14px 40px', borderRadius: 22, background: RED, boxShadow: shadow}}>
-            <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 92, letterSpacing: 2, color: WHITE}}>VISCERAL FAT</span>
+        <div style={{position: 'absolute', left: BELLY.x + BELLY.r + 18, top: BELLY.y - BELLY.r - 10, padding: '8px 16px', background: INK, scale: lerp(Math.min(1.08, name), 1.6, 1), opacity: Math.min(1, name * 3), transformOrigin: 'left center'}}>
+          <span style={{...MONO, color: NEON, fontSize: 26}}>Visceral Fat</span>
+        </div>
+      ) : null}
+      {cap ? (
+        <div style={{position: 'absolute', left: 0, right: 0, top: 1700, display: 'flex', justifyContent: 'center'}}>
+          <div style={{padding: '10px 18px', background: INK}}>
+            <span style={{...MONO, color: '#FFFFFF', fontSize: 30, letterSpacing: 2}}>{cap.map((w) => w.text.replace(/[,.]$/, '')).join(' ')}</span>
           </div>
         </div>
       ) : null}
