@@ -55,8 +55,8 @@ export const RankCards: React.FC = () => {
         const top = r.r === 1;
         return (
           <AbsoluteFill key={r.r} style={{opacity: o}}>
-            <div style={{position: 'absolute', left: 40, right: 40, top: 280, height: 400, borderRadius: 32, background: 'rgba(255,255,255,0.97)', boxShadow: `${top ? `0 0 0 6px ${GOLD}, ` : ''}${shadow}`, display: 'flex', gap: 26, padding: 20, boxSizing: 'border-box', translate: `${lerp(k, 120, 0)}px 0`}}>
-              <Slot img={r.img} n={`${11 - r.r}`} label={`${r.brand}${r.pct ? ' ' + r.pct : ''} pack shot`} style={{width: 300, height: 360, borderRadius: 20, flexShrink: 0}} />
+            <div style={{position: 'absolute', left: 30, right: 30, top: 170, height: 520, borderRadius: 34, background: 'rgba(255,255,255,0.97)', boxShadow: `${top ? `0 0 0 6px ${GOLD}, ` : ''}${shadow}`, display: 'flex', gap: 24, padding: 20, boxSizing: 'border-box', translate: `${lerp(k, 120, 0)}px 0`}}>
+              <Slot img={r.img} n={`${11 - r.r}`} label={`${r.brand}${r.pct ? ' ' + r.pct : ''} pack shot`} style={{width: 440, height: 480, borderRadius: 22, flexShrink: 0}} />
               <div style={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10, minWidth: 0}}>
                 <div style={{display: 'flex', alignItems: 'baseline', gap: 12}}>
                   <span style={{fontFamily: ANTON, fontSize: 110, lineHeight: 0.95, color: top ? GOLD : COCOA, scale: lerp(Math.min(1.08, rk), 1.6, 1), opacity: Math.min(1, rk * 3), transformOrigin: 'left bottom'}}>{`#${r.r}`}</span>
