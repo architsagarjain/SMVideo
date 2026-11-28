@@ -26,7 +26,9 @@ const moves = [punch(0.0, 2.6, 1.03), punch(3.02, 4.05, 1.05), punch(29.035, 31.
 
 export const dahi: AdConfig = {
   tm: TM_DAHI,
-  cfg: adConfig('dahi', TM_DAHI, captions, moves, []),
+  cfg: adConfig('dahi', TM_DAHI, captions, moves, [{start: 31.4, end: 999}]),
+  behindLine: 830,
+  behind: [{start: CTA_AT + 0.3, end: 999, lines: [{text: 'DAHI', at: CTA_AT + 0.6, size: 330, color: '#3DBE57'}]}],
   mix: true,
   capY: 1480,
   shift: {start: SPLIT.start, end: SPLIT.end, dy: SPLIT.dy},
