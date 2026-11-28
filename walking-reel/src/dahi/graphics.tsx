@@ -19,7 +19,7 @@ export const Hook: React.FC = () => {
   const o = 1 - tween(t, HOOK.end, 0.25, EASE_IN);
   return (
     <AbsoluteFill style={{opacity: o}}>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 1150, display: 'flex', justifyContent: 'center'}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 330, display: 'flex', justifyContent: 'center'}}>
         <div style={{padding: '10px 34px', background: RED, borderRadius: 14, boxShadow: shadow, scale: lerp(Math.min(1.08, k), 2, 1), opacity: Math.min(1, k * 3)}}>
           <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 92, color: '#FFFFFF', letterSpacing: 2}}>WRONG WAY?</span>
         </div>
@@ -58,7 +58,7 @@ export const RatingPanel: React.FC = () => {
             </div>
             {t >= r.scoreAt ? (
               <div style={{position: 'absolute', right: 44, bottom: 40, width: 220, height: 220, borderRadius: '50%', background: r.good ? BRAND : '#F5A524', border: '8px solid #FFFFFF', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: shadow, scale: lerp(Math.min(1.1, k), 2.2, 1), opacity: Math.min(1, k * 3)}}>
-                <span style={{fontFamily: GROT, fontWeight: 800, fontSize: 78, lineHeight: 1, color: '#FFFFFF', letterSpacing: -2}}>{r.score.split('/')[0]}</span>
+                <span style={{fontFamily: GROT, fontWeight: 800, fontSize: r.score.split('/')[0].length > 2 ? 60 : 78, lineHeight: 1, color: '#FFFFFF', letterSpacing: -2}}>{r.score.split('/')[0]}</span>
                 <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 34, color: '#FFFFFF'}}>{`out of ${r.score.split('/')[1]}`}</span>
               </div>
             ) : null}
@@ -81,15 +81,14 @@ export const Cta: React.FC = () => {
   const s = tween(t, CTA_AT, 0.35, EASE_OUT);
   return (
     <AbsoluteFill>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 1110, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 200, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4}}>
         <div style={{opacity: s, translate: `0 ${lerp(s, 14, 0)}px`}}>
-          <MixWord w="_comment" size={70} />
+          <MixWord w="_comment" size={70} color={INK} style={{textShadow: "none"}} />
         </div>
-        {t >= CTA_AT + 0.6 ? <MixWord w="DAHI" size={190} serif={false} style={{scale: lerp(Math.min(1.08, k), 1.8, 1), opacity: Math.min(1, k * 3)}} /> : null}
+        {t >= CTA_AT + 0.6 ? <MixWord w="DAHI" size={190} serif={false} color={INK} style={{WebkitTextStroke: "0px transparent", textShadow: "0 6px 24px rgba(255,255,255,0.6)", scale: lerp(Math.min(1.08, k), 1.8, 1), opacity: Math.min(1, k * 3)}} /> : null}
         <div style={{marginTop: 18, padding: '12px 30px', borderRadius: 999, background: BRAND, boxShadow: shadow, fontFamily: GROT, fontWeight: 800, fontSize: 40, color: '#FFFFFF', opacity: tween(t, CTA_AT + 1.1, 0.35)}}>The best way to eat dahi → your DMs</div>
       </div>
     </AbsoluteFill>
   );
 };
 export const HIDE = [{start: SPLIT.start - 0.05, end: SPLIT.end + 0.3}, {start: HOOK.at - 0.05, end: HOOK.end}, {start: CTA_AT - 0.3, end: 999}];
-void INK;
