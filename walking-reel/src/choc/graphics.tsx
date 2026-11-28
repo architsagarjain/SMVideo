@@ -109,7 +109,7 @@ export const CommentPill: React.FC = () => {
   const p = tween(t, CTA_AT + 1.4, 0.35, EASE_OUT);
   return (
     <AbsoluteFill>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 300, display: 'flex', justifyContent: 'center', opacity: s}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 425, display: 'flex', justifyContent: 'center', opacity: s}}>
         <span style={{fontFamily: SERIF, fontStyle: 'italic', fontSize: 80, color: '#FFFFFF', textShadow: '0 3px 18px rgba(0,0,0,0.75)'}}>comment</span>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 1260, display: 'flex', justifyContent: 'center', opacity: p, translate: `0 ${lerp(p, 16, 0)}px`}}>
